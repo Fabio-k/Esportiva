@@ -18,10 +18,23 @@ public class UserService {
 
     public User save(User user, Address address){
         Address userAddress = addressRepository.save(address);
-        user.setAddress(address);
+        user.setAddress(userAddress);
         user.setStatus(Status.ACTIVE);
-        user.setCode(CodeGenerator.generateCode(8));
+        user.setCode(generateUniqueCode());
         user.setRole(Role.USER);
         return userRepository.save(user);
+    }
+
+    private String generateUniqueCode(){
+        String code;
+        int attempts = 0;
+        do {
+            code = CodeGenerator.generateCode(8);
+            attempts++;
+            if (attempts > 30){
+                throw new RuntimeException("Falha ao tentar gerar código do usuário");
+            }
+        }while (userRepository.findByCode(code).isPresent());
+        return code;
     }
 }
