@@ -2,14 +2,14 @@ package org.fatec.esportiva.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.fatec.esportiva.model.enums.ResidencyType;
 import org.fatec.esportiva.model.enums.StreetType;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 @Setter
 public class Address {
@@ -26,6 +26,7 @@ public class Address {
         this.observation = observation;
     }
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

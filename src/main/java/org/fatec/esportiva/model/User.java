@@ -18,6 +18,7 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
+@Table(name = "users")
 public class User implements UserDetails {
 
     public User(Role role, String name, String email, String password, String code, String registrationNumber, Status status, Gender gender) {
@@ -31,6 +32,7 @@ public class User implements UserDetails {
         this.gender = gender;
     }
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -48,6 +50,7 @@ public class User implements UserDetails {
     private String password;
 
     @NotNull
+    @Column(unique = true)
     private String code;
 
     @NotNull
@@ -63,6 +66,7 @@ public class User implements UserDetails {
 
     @OneToOne
     @JoinColumn(name = "address_id")
+    @NotNull
     private Address address;
 
     @Override
