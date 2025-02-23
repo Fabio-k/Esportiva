@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Esportiva</title>
+</head>
+<body>
+<h1>Lista de Usuários</h1>
+<form th:if="${users.size > 0}" th:action="@{/users/login}" th:object="${user}" method="post">
+    <select id="users" th:field="*{id}">
+        <option value="">Selecione o usuário</option>
+        <option th:each="user: ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+    </select>
+    <button type="submit">Entrar</button>
+</form>
+<span th:if="${users.size == 0}">Não há usuários na aplicação</span>
+</body>
+</html>
