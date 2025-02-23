@@ -55,6 +55,7 @@ public class User implements UserDetails {
     private String code;
 
     @NotNull
+    @Column(name = "registration_number")
     private String registrationNumber;
 
     @Enumerated(EnumType.STRING)

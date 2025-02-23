@@ -35,10 +35,12 @@ public class Address {
 
     @Enumerated(EnumType.STRING)
     @NotNull
+    @Column(name = "residency_type")
     private ResidencyType residencyType;
 
     @Enumerated(EnumType.STRING)
     @NotNull
+    @Column(name = "street_type")
     private StreetType streetType;
 
     @NotNull
