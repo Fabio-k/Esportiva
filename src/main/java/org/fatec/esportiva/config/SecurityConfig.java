@@ -29,6 +29,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                         .anyRequest().authenticated()
                 )
+                .formLogin(login -> login
+                        .loginPage("/users")
+                        .permitAll()
+                )
                 .build();
     }
 
