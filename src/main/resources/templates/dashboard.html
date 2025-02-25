@@ -12,12 +12,20 @@
             <th>Código</th>
             <th>Email</th>
             <th>Status</th>
+            <th></th>
             </thead>
             <tbody>
             <tr th:each="user : ${users}">
                 <td th:text="${user.code}"></td>
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.status.name}"></td>
+                <td>
+                    <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post"
+                          onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" class="btn btn-danger">Deletar</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

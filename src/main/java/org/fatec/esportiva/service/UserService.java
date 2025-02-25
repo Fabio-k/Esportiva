@@ -1,5 +1,6 @@
 package org.fatec.esportiva.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.model.Address;
 import org.fatec.esportiva.model.User;
@@ -21,6 +22,7 @@ public class UserService {
     private final AddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public User save(User user, Address address){
         address.setId(null);
         Address userAddress = addressRepository.save(address);
@@ -36,6 +38,10 @@ public class UserService {
         List<User> users = userRepository.findAllByRole(Role.USER);
 
         return  users;
+    }
+
+    public void deleteUser(User user){
+        userRepository.delete(user);
     }
 
     private String generateUniqueCode(){

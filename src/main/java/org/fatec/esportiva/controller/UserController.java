@@ -16,10 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -59,6 +56,13 @@ public class UserController {
         User user = userRepository.findById(userLoginRequest.getId()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         authenticateUser(user, request);
         redirectAttributes.addFlashAttribute("mensagem", "usuário cadastrado com sucesso!");
+        return "redirect:/dashboard";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String delete(@PathVariable Long id){
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        userService.deleteUser(user);
         return "redirect:/dashboard";
     }
 
