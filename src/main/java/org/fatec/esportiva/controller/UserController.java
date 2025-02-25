@@ -31,9 +31,7 @@ public class UserController {
 
     @GetMapping
     public String getUsers(Model model){
-        List<UserResponse> users = userRepository.findAll().stream()
-                .map(UserMapper::toUserResponse)
-                .collect(Collectors.toList());
+        List<User> users = userRepository.findAll();
         model.addAttribute("user", new UserLoginRequest());
         model.addAttribute("users", users);
         return "users";
