@@ -2,6 +2,7 @@ package org.fatec.esportiva.mapper;
 
 import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.model.User;
+import org.fatec.esportiva.request.UserDto;
 import org.fatec.esportiva.request.UserRequest;
 import org.fatec.esportiva.response.UserResponse;
 
@@ -15,6 +16,17 @@ public class UserMapper {
                 .gender(request.gender())
                 .password(request.password())
                 .registrationNumber(request.registrationNumber())
+                .build();
+    }
+
+    public User toUser(UserDto userDto){
+        return User.builder()
+                .name(userDto.getName())
+                .role(userDto.getRole())
+                .email(userDto.getEmail())
+                .gender(userDto.getGender())
+                .password(userDto.getPassword())
+                .registrationNumber(userDto.getRegistrationNumber())
                 .build();
     }
 

@@ -47,6 +47,9 @@ public class Address {
     private String number;
 
     @NotNull
+    private String street;
+
+    @NotNull
     private String neighborhood;
 
     @NotNull
