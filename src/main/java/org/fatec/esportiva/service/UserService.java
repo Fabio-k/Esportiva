@@ -24,7 +24,6 @@ public class UserService {
 
     @Transactional
     public User save(User user, Address address){
-        address.setId(null);
         Address userAddress = addressRepository.save(address);
         user.setAddress(userAddress);
         user.setStatus(Status.ACTIVE);
@@ -34,10 +33,32 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
+    public User update(Long id, User user){
+        User actualUser = this.findUser(id);
+        user.setId(id);
+        user.setCode(actualUser.getCode());
+
+        if(user.getPassword() == null){
+            user.setPassword(actualUser.getPassword());
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        user.setRole(Role.USER);
+        addressRepository.save(user.getAddress());
+        return  userRepository.save(user);
+    }
+
     public List<User> getUsers(){
         List<User> users = userRepository.findAllByRole(Role.USER);
 
         return  users;
+    }
+
+    public User findUser(Long id){
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return user;
     }
 
     public void deleteUser(User user){

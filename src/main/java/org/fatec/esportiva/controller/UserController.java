@@ -6,12 +6,9 @@ import org.fatec.esportiva.mapper.UserMapper;
 import org.fatec.esportiva.model.Address;
 import org.fatec.esportiva.model.User;
 import org.fatec.esportiva.repository.UserRepository;
-import org.fatec.esportiva.request.AddressRequest;
 import org.fatec.esportiva.request.UserDto;
 import org.fatec.esportiva.request.UserLoginRequest;
-import org.fatec.esportiva.request.UserRequest;
 import org.fatec.esportiva.service.UserService;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -53,7 +50,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute UserLoginRequest userLoginRequest, HttpServletRequest request, RedirectAttributes redirectAttributes){
-        User user = userRepository.findById(userLoginRequest.getId()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        User user = userService.findUser(userLoginRequest.getId());
         authenticateUser(user, request);
         redirectAttributes.addFlashAttribute("mensagem", "usuário cadastrado com sucesso!");
         return "redirect:/dashboard";
@@ -61,8 +58,22 @@ public class UserController {
 
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id){
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+       User user = userService.findUser(id);
         userService.deleteUser(user);
+        return "redirect:/dashboard";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Long id, Model model){
+        User user = userService.findUser(id);
+        model.addAttribute("user", user);
+        model.addAttribute("body", "users/edit.html :: content");
+        return "layout";
+    }
+
+    @PatchMapping("/update/{id}")
+    public String update(@PathVariable Long id, @ModelAttribute User user){
+        userService.update(id, user);
         return "redirect:/dashboard";
     }
 
