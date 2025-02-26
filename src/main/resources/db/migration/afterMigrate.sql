@@ -5,8 +5,8 @@ INSERT INTO address (cep, residency_type, street, street_type, number, neighborh
 ('30130-000', 'APARTMENT', 'praça das flores', 'SQUARE', '789', 'Savassi', 'Belo Horizonte', 'MG', 'Brasil', 'Ao lado do shopping');
 
 -- Inserindo usuários e associando aos endereços
-INSERT INTO users (role, name, email, password, code, registration_number, status, gender, address_id) VALUES
-('ADMIN', 'Carlos Silva', 'carlos@email.com', 'senha123', 'USR001', '2024001', 'ACTIVE', 'MALE', 1),
-('USER', 'Mariana Souza', 'mariana@email.com', 'senha123', 'USR002', '2024002', 'ACTIVE', 'FEMALE', 2),
-('USER', 'Pedro Oliveira', 'pedro@email.com', 'senha123', 'USR003', '2024003', 'INACTIVE', 'MALE', 3);
+INSERT INTO users (role, name, email, code, registration_number, status, gender, address_id) VALUES
+('ADMIN', 'Carlos Silva', 'carlos@email.com', 'USR001', '2024001', 'ACTIVE', 'MALE', 1),
+('USER', 'Mariana Souza', 'mariana@email.com', 'USR002', '2024002', 'ACTIVE', 'FEMALE', 2),
+('USER', 'Pedro Oliveira', 'pedro@email.com', 'USR003', '2024003', 'INACTIVE', 'MALE', 3);
 

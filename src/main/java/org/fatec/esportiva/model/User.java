@@ -27,7 +27,6 @@ public class User implements UserDetails {
         this.role = role;
         this.name = name;
         this.email = email;
-        this.password = password;
         this.code = code;
         this.registrationNumber = registrationNumber;
         this.status = status;
@@ -47,9 +46,6 @@ public class User implements UserDetails {
     @Column(unique = true)
     @NotNull
     private String email;
-
-    @NotNull
-    private String password;
 
     @NotNull
     @Column(unique = true)
@@ -79,7 +75,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return "";
     }
 
     @Override

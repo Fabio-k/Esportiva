@@ -14,7 +14,6 @@ public class UserMapper {
                 .role(request.role())
                 .email(request.email())
                 .gender(request.gender())
-                .password(request.password())
                 .registrationNumber(request.registrationNumber())
                 .build();
     }
@@ -25,7 +24,6 @@ public class UserMapper {
                 .role(userDto.getRole())
                 .email(userDto.getEmail())
                 .gender(userDto.getGender())
-                .password(userDto.getPassword())
                 .registrationNumber(userDto.getRegistrationNumber())
                 .build();
     }

@@ -20,7 +20,6 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public User save(User user, Address address){
@@ -29,7 +28,6 @@ public class UserService {
         user.setStatus(Status.ACTIVE);
         user.setCode(generateUniqueCode());
         user.setRole(Role.USER);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -38,12 +36,6 @@ public class UserService {
         User actualUser = this.findUser(id);
         user.setId(id);
         user.setCode(actualUser.getCode());
-
-        if(user.getPassword() == null){
-            user.setPassword(actualUser.getPassword());
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
 
         user.setRole(Role.USER);
         addressRepository.save(user.getAddress());
