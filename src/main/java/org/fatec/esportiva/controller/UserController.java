@@ -2,10 +2,12 @@ package org.fatec.esportiva.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.fatec.esportiva.mapper.AddressMapper;
+import org.fatec.esportiva.mapper.UserAddressMapper;
 import org.fatec.esportiva.mapper.UserMapper;
-import org.fatec.esportiva.model.Address;
 import org.fatec.esportiva.model.User;
 import org.fatec.esportiva.repository.UserRepository;
+import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.UserDto;
 import org.fatec.esportiva.request.UserLoginRequest;
 import org.fatec.esportiva.service.UserService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,15 +39,20 @@ public class UserController {
     @GetMapping("/new")
     public String newUser(Model model){
         UserDto userDto = new UserDto();
-        userDto.setAddress(new Address());
-        model.addAttribute("user", new UserDto());
+        userDto.getAddresses().add(new AddressDto());
+        model.addAttribute("user", userDto);
         model.addAttribute("body", "users/new.html :: content");
         return "layout";
     }
 
     @PostMapping("save")
     public String save(@ModelAttribute UserDto userDto){
-        User savedUser = userService.save(UserMapper.toUser(userDto), userDto.getAddress());
+        User user = UserMapper.toUser(userDto);
+        user.setAddresses(userDto.getAddresses().stream()
+                .flatMap(adr -> UserAddressMapper.toUserAddresses(user, adr).stream())
+                        .collect(Collectors.toList())
+        );
+        User savedUser = userService.save(user);
         return "redirect:/dashboard";
     }
 

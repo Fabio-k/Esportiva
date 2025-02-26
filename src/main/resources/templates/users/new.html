@@ -36,61 +36,8 @@
 
     <h3 class="text-xl font-semibold mt-6">Endereço</h3>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div>
-        <label for="cep" class="block font-medium">CEP:</label>
-        <input type="text" id="cep" th:field="*{address.cep}" required class="w-full p-2 border rounded" />
-      </div>
-      <div>
-        <label for="number" class="block font-medium">Numero:</label>
-        <input type="text" id="number" th:field="*{address.number}" required class="w-full p-2 border rounded" />
-      </div>
-      <div>
-        <label for="residencyType" class="block font-medium">Tipo de Residência:</label>
-        <select id="residencyType" th:field="*{address.residencyType}" class="w-full p-2 border rounded">
-          <option th:each="rt : ${T(org.fatec.esportiva.model.enums.ResidencyType).values()}" th:value="${rt}" th:text="${rt}"></option>
-        </select>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label for="streetType" class="block font-medium">Tipo de logradouro:</label>
-        <select id="streetType" th:field="*{address.streetType}" class="w-full p-2 border rounded">
-          <option th:each="st : ${T(org.fatec.esportiva.model.enums.StreetType).values()}" th:value="${st}" th:text="${st}"></option>
-        </select>
-      </div>
-      <div>
-        <label for="street" class="block font-medium">Rua:</label>
-        <input type="text" id="street" th:field="*{address.street}" required class="w-full p-2 border rounded" />
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label for="neighborhood" class="block font-medium">Bairro:</label>
-        <input type="text" id="neighborhood" th:field="*{address.neighborhood}" required class="w-full p-2 border rounded" />
-      </div>
-      <div>
-        <label for="city" class="block font-medium">Cidade:</label>
-        <input type="text" id="city" th:field="*{address.city}" required class="w-full p-2 border rounded" />
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label for="state" class="block font-medium">Estado:</label>
-        <input type="text" id="state" th:field="*{address.state}" required class="w-full p-2 border rounded" />
-      </div>
-      <div>
-        <label for="country" class="block font-medium">País:</label>
-        <input type="text" id="country" th:field="*{address.country}" required class="w-full p-2 border rounded" />
-      </div>
-    </div>
-
-    <div class="mb-[30px]">
-      <label for="observation" class="block font-medium">Observação:</label>
-      <textarea id="observation" th:field="*{address.observation}" class="w-full p-2 border rounded"></textarea>
+    <div id="addresses">
+      <div th:replace="fragments/addressForm :: form"></div>
     </div>
 
     <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Salvar</button>

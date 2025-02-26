@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<div th:fragment="form">
+    <div th:each="address, i : *{addresses}">
+        <div>
+            <label for="residence">Residencial</label>
+            <input id="residence" type="checkbox" th:field="*{addresses[__${i.index}__].types}" value="RESIDENCE" />
+            <label for="billing">Cobrança</label>
+            <input id="billing" type="checkbox" th:field="*{addresses[__${i.index}__].types}" value="BILLING" />
+            <label for="shipping">Entrega</label>
+            <input id="shipping" type="checkbox" th:field="*{addresses[__${i.index}__].types}" value="SHIPPING" />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label for="cep" class="block font-medium">CEP:</label>
+                <input type="text" id="cep" th:field="*{addresses[__${i.index}__].cep}" required class="w-full p-2 border rounded" />
+            </div>
+            <div>
+                <label for="residencyType" class="block font-medium">Tipo de Residência:</label>
+                <select id="residencyType" th:field="*{addresses[__${i.index}__].residencyType}" class="w-full p-2 border rounded">
+                    <option th:each="rt : ${T(org.fatec.esportiva.model.enums.ResidencyType).values()}" th:value="${rt}" th:text="${rt}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="streetType" class="block font-medium">Tipo de logradouro:</label>
+                <select id="streetType" th:field="*{addresses[__${i.index}__].streetType}" class="w-full p-2 border rounded">
+                    <option th:each="st : ${T(org.fatec.esportiva.model.enums.StreetType).values()}" th:value="${st}" th:text="${st}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="street" class="block font-medium">Logradouro:</label>
+                <input type="text" id="street" th:field="*{addresses[__${i.index}__].street}" required class="w-full p-2 border rounded" />
+            </div>
+            <div>
+                <label for="number" class="block font-medium">Numero:</label>
+                <input type="text" id="number" th:field="*{addresses[__${i.index}__].number}" required class="w-full p-2 border rounded" />
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="neighborhood" class="block font-medium">Bairro:</label>
+                <input type="text" id="neighborhood" th:field="*{addresses[__${i.index}__].neighborhood}" required class="w-full p-2 border rounded" />
+            </div>
+            <div>
+                <label for="city" class="block font-medium">Cidade:</label>
+                <input type="text" id="city" th:field="*{addresses[__${i.index}__].city}" required class="w-full p-2 border rounded" />
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="state" class="block font-medium">Estado:</label>
+                <input type="text" id="state" th:field="*{addresses[__${i.index}__].state}" required class="w-full p-2 border rounded" />
+            </div>
+            <div>
+                <label for="country" class="block font-medium">País:</label>
+                <input type="text" id="country" th:field="*{addresses[__${i.index}__].country}" required class="w-full p-2 border rounded" />
+            </div>
+        </div>
+
+        <div class="mb-[30px]">
+            <label for="observation" class="block font-medium">Observação:</label>
+            <textarea id="observation" th:field="*{addresses[__${i.index}__].observation}" class="w-full p-2 border rounded"></textarea>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -63,7 +63,4 @@ public class Address {
 
     private String observation;
 
-    @OneToOne(mappedBy = "address")
-    private User user;
-
 }

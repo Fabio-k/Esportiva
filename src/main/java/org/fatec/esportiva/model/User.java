@@ -6,7 +6,6 @@ import lombok.*;
 import org.fatec.esportiva.model.enums.Gender;
 import org.fatec.esportiva.model.enums.Role;
 import org.fatec.esportiva.model.enums.Status;
-import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -63,10 +62,8 @@ public class User implements UserDetails {
     @NotNull
     private Gender gender;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_id")
-    @NotNull
-    private Address address;
+   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserAddress> addresses;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

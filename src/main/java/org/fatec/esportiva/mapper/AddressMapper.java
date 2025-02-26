@@ -2,6 +2,7 @@ package org.fatec.esportiva.mapper;
 
 import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.model.Address;
+import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.AddressRequest;
 
 @UtilityClass
@@ -17,6 +18,21 @@ public class AddressMapper {
                 .streetType(request.streetType())
                 .residencyType(request.residencyType())
                 .observation(request.observation())
+                .build();
+    }
+
+    public Address toAddress(AddressDto addressDto){
+        return Address.builder()
+                .cep(addressDto.getCep())
+                .street(addressDto.getStreet())
+                .city(addressDto.getCity())
+                .country(addressDto.getCountry())
+                .state(addressDto.getState())
+                .neighborhood(addressDto.getNeighborhood())
+                .number(addressDto.getNumber())
+                .streetType(addressDto.getStreetType())
+                .residencyType(addressDto.getResidencyType())
+                .observation(addressDto.getObservation())
                 .build();
     }
 }

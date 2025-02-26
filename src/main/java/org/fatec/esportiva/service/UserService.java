@@ -22,9 +22,7 @@ public class UserService {
     private final AddressRepository addressRepository;
 
     @Transactional
-    public User save(User user, Address address){
-        Address userAddress = addressRepository.save(address);
-        user.setAddress(userAddress);
+    public User save(User user){
         user.setStatus(Status.ACTIVE);
         user.setCode(generateUniqueCode());
         user.setRole(Role.USER);
@@ -38,7 +36,6 @@ public class UserService {
         user.setCode(actualUser.getCode());
 
         user.setRole(Role.USER);
-        addressRepository.save(user.getAddress());
         return  userRepository.save(user);
     }
 
