@@ -56,5 +56,68 @@
         <span th:if="${currentUser}" th:text="${currentUser.name}"></span>
     </header>
     <main th:replace="~{__${body}__}"></main>
+    <script th:inline="javascript">
+        updateRemoveButton();
+
+        function updateRemoveButton(){
+            document.querySelectorAll(".removeAddressButton").forEach(btn => {
+                btn.onclick = function() {
+                    let container = document.getElementById("addresses")
+                    let index = container.children.length;
+                    if(index < 2){
+                        return;
+                    }
+                    this.parentElement.remove();
+                    reindexAddress();
+                }
+            })
+        }
+
+        function reindexAddress(){
+            let addresses = document.querySelectorAll(".address-item");
+            addresses.forEach((address, index) =>{
+                   address.querySelectorAll("input, textarea, select").forEach(input => {
+                        let name = input.name.replace(/\[\d+]/, `[${index}]`)
+                        let id = input.id.replace(/_\d+$/,  `_${index}`)
+                        input.name = name;
+                        input.id = id;
+                        input.setAttribute("for", id)
+                   })
+                   address.querySelectorAll("label").forEach(label => {
+                    let labelFor = label.htmlFor.replace(/_\d+$/,`_${index}`);
+                    label.htmlFor = labelFor;
+                   })
+
+            })
+        }
+
+        function addAddress(){
+            let container = document.getElementById("addresses")
+            let index = container.children.length;
+            let firstAddress = container.querySelector(".address-item");
+            if(!firstAddress){
+                return;
+            }
+
+            let newAddress = firstAddress.cloneNode(true);
+
+            newAddress.querySelectorAll("input, textarea, select").forEach(input => {
+                input.value = "";
+                let name = input.name.replace(/\[\d+]/, `[${index}]`)
+                let id = input.id.replace(/_\d+$/,  `_${index}`)
+                input.name = name;
+                input.id = id;
+                input.setAttribute("for", id)
+            })
+
+            newAddress.querySelectorAll("label").forEach(label => {
+                label.htmlFor = label.htmlFor.replace(/_\d+$/,`_${index}`);
+             })
+
+             container.appendChild(newAddress);
+
+             updateRemoveButton();
+        }
+    </script>
 </body>
 </html>
