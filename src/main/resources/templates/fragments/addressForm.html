@@ -7,6 +7,7 @@
 <body>
 
     <div class="address-item" th:fragment="form" th:each="address, i : *{addresses}">
+        <input type="hidden" th:field="*{addresses[__${i.index}__].id}">
         <div>
             <label th:for="'residence_' + ${i.index}">Residencial</label>
             <input th:id="'residence_' + ${i.index}" type="checkbox" th:field="*{addresses[__${i.index}__].types}" value="RESIDENCE" />
@@ -38,6 +39,7 @@
             <div>
                 <label th:for="'street_' + ${i.index}" class="block font-medium">Logradouro:</label>
                 <input type="text" th:id="'street_' + ${i.index}" th:field="*{addresses[__${i.index}__].street}" required class="w-full p-2 border rounded" />
+                <p th:if="${#fields.hasErrors('street')}" th:errors="*{street}" />
             </div>
             <div>
                 <label th:for="'number_' + ${i.index}" class="block font-medium">Numero:</label>

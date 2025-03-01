@@ -10,5 +10,7 @@ CREATE TABLE ADDRESS (
     city varchar(30) NOT NULL,
     state varchar(30) NOT NULL,
     country varchar(30) NOT NULL,
-    observation varchar(200)
+    observation varchar(200),
+    user_id BIGINT NOT NULL,
+    CONSTRAINT fk_UAR_user FOREIGN KEY (user_id) REFERENCES users(id)
 )

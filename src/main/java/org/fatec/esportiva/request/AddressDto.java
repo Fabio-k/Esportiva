@@ -1,5 +1,7 @@
 package org.fatec.esportiva.request;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.fatec.esportiva.model.enums.AddressType;
 import org.fatec.esportiva.model.enums.ResidencyType;
@@ -13,6 +15,7 @@ import java.util.HashSet;
 @AllArgsConstructor
 @Builder
 public class AddressDto {
+    private Long id;
     private String cep;
     private ResidencyType residencyType;
     private StreetType streetType;

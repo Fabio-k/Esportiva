@@ -3,8 +3,12 @@ package org.fatec.esportiva.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.fatec.esportiva.model.enums.AddressType;
 import org.fatec.esportiva.model.enums.ResidencyType;
 import org.fatec.esportiva.model.enums.StreetType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -62,5 +66,15 @@ public class Address {
     private String country;
 
     private String observation;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "address_type", joinColumns = @JoinColumn(name = "address_id"))
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private List<AddressType> addressTypeList = new ArrayList<>();
 
 }

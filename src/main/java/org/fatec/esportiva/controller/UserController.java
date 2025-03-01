@@ -3,7 +3,6 @@ package org.fatec.esportiva.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.mapper.AddressMapper;
-import org.fatec.esportiva.mapper.UserAddressMapper;
 import org.fatec.esportiva.mapper.UserMapper;
 import org.fatec.esportiva.model.User;
 import org.fatec.esportiva.repository.UserRepository;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,14 +43,11 @@ public class UserController {
         return "layout";
     }
 
-    @PostMapping("save")
+    @PostMapping("/save")
     public String save(@ModelAttribute UserDto userDto){
         User user = UserMapper.toUser(userDto);
-        user.setAddresses(userDto.getAddresses().stream()
-                .flatMap(adr -> UserAddressMapper.toUserAddresses(user, adr).stream())
-                        .collect(Collectors.toList())
-        );
-        User savedUser = userService.save(user);
+        user.setAddresses(AddressMapper.toAddressList(user, userDto.getAddresses()));
+        userService.save(user);
         return "redirect:/dashboard";
     }
 
@@ -74,14 +69,17 @@ public class UserController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model){
         User user = userService.findUser(id);
-        model.addAttribute("user", user);
+        UserDto userDto = UserMapper.toUserDto(user);
+        userDto.setAddresses(AddressMapper.toAddressDtoList(user.getAddresses()));
+        model.addAttribute("id", user.getId());
+        model.addAttribute("user", userDto);
         model.addAttribute("body", "users/edit.html :: content");
         return "layout";
     }
 
     @PatchMapping("/update/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute User user){
-        userService.update(id, user);
+    public String update(@PathVariable Long id, @ModelAttribute UserDto userDto){
+        userService.update(id, userDto);
         return "redirect:/dashboard";
     }
 
