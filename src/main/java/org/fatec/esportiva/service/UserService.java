@@ -6,7 +6,7 @@ import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.model.Address;
 import org.fatec.esportiva.model.User;
 import org.fatec.esportiva.model.enums.Role;
-import org.fatec.esportiva.model.enums.Status;
+import org.fatec.esportiva.model.enums.UserStatus;
 import org.fatec.esportiva.repository.UserRepository;
 import org.fatec.esportiva.request.UserDto;
 import org.fatec.esportiva.util.CodeGenerator;
@@ -24,23 +24,24 @@ public class UserService {
     private final AddressService addressService;
 
     @Transactional
-    public User save(User user){
-        user.setStatus(Status.ACTIVE);
+    public User save(User user) {
+        user.setStatus(UserStatus.ACTIVE);
         user.setCode(generateUniqueCode());
         user.setRole(Role.USER);
         return userRepository.save(user);
     }
 
     @Transactional
-    public User update(Long id, UserDto userDto){
+    public User update(Long id, UserDto userDto) {
         User existingUser = this.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         existingUser.setName(userDto.getName());
         existingUser.setEmail(userDto.getEmail());
         existingUser.setRegistrationNumber(userDto.getRegistrationNumber());
 
         List<Address> updatedAddresses = userDto.getAddresses().stream().map(addressDto -> {
-            if (addressDto.getId() != null){
-                Address address = addressService.findById(addressDto.getId()).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+            if (addressDto.getId() != null) {
+                Address address = addressService.findById(addressDto.getId())
+                        .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
                 updateAddressData(address, AddressMapper.toAddress(existingUser, addressDto));
                 address.getAddressTypeList().clear();
                 address.getAddressTypeList().addAll(addressDto.getTypes());
@@ -51,43 +52,42 @@ public class UserService {
 
         existingUser.getAddresses().clear();
         existingUser.getAddresses().addAll(updatedAddresses);
-        return  userRepository.save(existingUser);
+        return userRepository.save(existingUser);
     }
 
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         List<User> users = userRepository.findAllByRole(Role.USER);
 
-        return  users;
+        return users;
     }
 
-    public User findUser(Long id){
+    public User findUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         return user;
     }
 
-    public Optional<User> findById(Long id){
+    public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
 
-    public void deleteUser(User user){
+    public void deleteUser(User user) {
         userRepository.delete(user);
     }
 
-    private String generateUniqueCode(){
+    private String generateUniqueCode() {
         String code;
         int attempts = 0;
         do {
             code = CodeGenerator.generateCode(8);
             attempts++;
-            if (attempts > 30){
+            if (attempts > 30) {
                 throw new RuntimeException("Falha ao tentar gerar código do usuário");
             }
-        }while (userRepository.findByCode(code).isPresent());
+        } while (userRepository.findByCode(code).isPresent());
         return code.toUpperCase();
     }
 
-
-    private void updateAddressData(Address currentAddress, Address updatedAddress){
+    private void updateAddressData(Address currentAddress, Address updatedAddress) {
         currentAddress.setCity(updatedAddress.getCity());
         currentAddress.setCep(updatedAddress.getCep());
         currentAddress.setNumber(updatedAddress.getNumber());
@@ -99,12 +99,12 @@ public class UserService {
         currentAddress.setStreetType(updatedAddress.getStreetType());
     }
 
-    public User getAuthenticatedUser() throws Exception{
+    public User getAuthenticatedUser() throws Exception {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!(principal instanceof  User)){
+        if (!(principal instanceof User)) {
             throw new Exception("Erro na autenticação");
         }
         User user = (User) principal;
-        return  user;
+        return user;
     }
 }

@@ -3,7 +3,7 @@ package org.fatec.esportiva.request;
 import lombok.*;
 import org.fatec.esportiva.model.enums.Gender;
 import org.fatec.esportiva.model.enums.Role;
-import org.fatec.esportiva.model.enums.Status;
+import org.fatec.esportiva.model.enums.UserStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class UserDto {
     private String email;
     private String code;
     private String registrationNumber;
-    private Status status;
+    private UserStatus status;
     private Gender gender;
     private List<AddressDto> addresses = new ArrayList<>();
 }

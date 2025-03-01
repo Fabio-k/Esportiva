@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.fatec.esportiva.model.enums.Gender;
 import org.fatec.esportiva.model.enums.Role;
-import org.fatec.esportiva.model.enums.Status;
+import org.fatec.esportiva.model.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +22,8 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
 
-    public User(Role role, String name, String email, String password, String code, String registrationNumber, Status status, Gender gender) {
+    public User(Role role, String name, String email, String password, String code, String registrationNumber,
+            UserStatus status, Gender gender) {
         this.role = role;
         this.name = name;
         this.email = email;
@@ -56,13 +57,13 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Status status;
+    private UserStatus status;
 
     @Enumerated(EnumType.STRING)
     @NotNull
     private Gender gender;
 
-   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
 
     @Override

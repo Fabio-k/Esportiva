@@ -1,5 +1,5 @@
 package org.fatec.esportiva.model.enums;
 
-public enum Status {
+public enum UserStatus {
     ACTIVE, INACTIVE
 }
