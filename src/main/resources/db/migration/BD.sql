@@ -1,5 +1,5 @@
 -- Gerado por Oracle SQL Developer Data Modeler 20.2.0.167.1538
---   em:        2025-03-01 13:42:47 BRT
+--   em:        2025-03-01 20:26:42 BRT
 --   site:      Oracle Database 11g
 --   tipo:      Oracle Database 11g
 
@@ -14,7 +14,8 @@ CREATE TABLE cartoes_de_credito (
     car_bandeira          VARCHAR2(20 CHAR) NOT NULL,
     car_nome_impresso     VARCHAR2(30 CHAR) NOT NULL,
     car_codigo_seguranca  INTEGER NOT NULL,
-    clientes_cli_id       INTEGER NOT NULL
+    clientes_cli_id       INTEGER NOT NULL,
+    car_preferencial      CHAR(1) NOT NULL
 );
 
 ALTER TABLE cartoes_de_credito ADD CONSTRAINT cartoes_de_credito_pk PRIMARY KEY ( car_numero,
@@ -76,14 +77,15 @@ CREATE TABLE emails (
 ALTER TABLE emails ADD CONSTRAINT emails_pk PRIMARY KEY ( ema_email );
 
 CREATE TABLE enderecos (
-    end_id                  INTEGER NOT NULL,
-    end_numero              INTEGER NOT NULL,
-    end_tipo_residencia     VARCHAR2(20 CHAR) NOT NULL,
-    end_observacao          VARCHAR2(50 CHAR),
-    end_tipo_logradouro     VARCHAR2(20 CHAR) NOT NULL,
-    end_categoria_endereco  VARCHAR2(20 CHAR) NOT NULL,
-    clientes_cli_id         INTEGER NOT NULL,
-    cep_cep_id              INTEGER NOT NULL
+    end_id                   INTEGER NOT NULL,
+    end_numero               INTEGER NOT NULL,
+    end_tipo_residencia      VARCHAR2(20 CHAR) NOT NULL,
+    end_observacao           VARCHAR2(50 CHAR),
+    end_tipo_logradouro      VARCHAR2(20 CHAR) NOT NULL,
+    end_categoria_endereco   VARCHAR2(20 CHAR) NOT NULL,
+    clientes_cli_id          INTEGER NOT NULL,
+    cep_cep_id               INTEGER NOT NULL,
+    end_frase_identificacao  VARCHAR2(40 CHAR) NOT NULL
 );
 
 ALTER TABLE enderecos ADD CONSTRAINT enderecos_pk PRIMARY KEY ( end_id );
@@ -138,7 +140,8 @@ ALTER TABLE produtos ADD CONSTRAINT produtos_pk PRIMARY KEY ( pro_id );
 
 CREATE TABLE telefones (
     tel_telefone     VARCHAR2(13 CHAR) NOT NULL,
-    clientes_cli_id  INTEGER NOT NULL
+    clientes_cli_id  INTEGER NOT NULL,
+    tel_tipo         VARCHAR2(20 CHAR) NOT NULL
 );
 
 ALTER TABLE telefones ADD CONSTRAINT telefones_pk PRIMARY KEY ( tel_telefone );
@@ -209,7 +212,7 @@ ALTER TABLE transacoes
 
 
 
--- Relatório do Resumo do Oracle SQL Developer Data Modeler: 
+-- RelatÃ³rio do Resumo do Oracle SQL Developer Data Modeler: 
 -- 
 -- CREATE TABLE                            15
 -- CREATE INDEX                             0
