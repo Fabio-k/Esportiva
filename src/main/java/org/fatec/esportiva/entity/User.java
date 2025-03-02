@@ -1,11 +1,11 @@
-package org.fatec.esportiva.model;
+package org.fatec.esportiva.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.fatec.esportiva.model.enums.Gender;
-import org.fatec.esportiva.model.enums.Role;
-import org.fatec.esportiva.model.enums.UserStatus;
+import org.fatec.esportiva.entity.enums.Gender;
+import org.fatec.esportiva.entity.enums.Role;
+import org.fatec.esportiva.entity.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

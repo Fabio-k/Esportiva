@@ -1,4 +1,4 @@
-package org.fatec.esportiva.model.enums;
+package org.fatec.esportiva.entity.enums;
 
 public enum UserStatus {
     ACTIVE, INACTIVE

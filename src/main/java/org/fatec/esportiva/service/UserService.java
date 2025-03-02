@@ -3,17 +3,16 @@ package org.fatec.esportiva.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.mapper.AddressMapper;
-import org.fatec.esportiva.model.Address;
-import org.fatec.esportiva.model.User;
-import org.fatec.esportiva.model.enums.Role;
-import org.fatec.esportiva.model.enums.UserStatus;
+import org.fatec.esportiva.entity.Address;
+import org.fatec.esportiva.entity.User;
+import org.fatec.esportiva.entity.enums.Role;
+import org.fatec.esportiva.entity.enums.UserStatus;
 import org.fatec.esportiva.repository.UserRepository;
 import org.fatec.esportiva.request.UserDto;
 import org.fatec.esportiva.util.CodeGenerator;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +36,8 @@ public class UserService {
         existingUser.setName(userDto.getName());
         existingUser.setEmail(userDto.getEmail());
         existingUser.setRegistrationNumber(userDto.getRegistrationNumber());
+        existingUser.setGender(userDto.getGender());
+        existingUser.setStatus(userDto.getStatus());
 
         List<Address> updatedAddresses = userDto.getAddresses().stream().map(addressDto -> {
             if (addressDto.getId() != null) {

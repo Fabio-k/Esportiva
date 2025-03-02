@@ -1,8 +1,8 @@
 package org.fatec.esportiva.mapper;
 
 import lombok.experimental.UtilityClass;
-import org.fatec.esportiva.model.Address;
-import org.fatec.esportiva.model.User;
+import org.fatec.esportiva.entity.Address;
+import org.fatec.esportiva.entity.User;
 import org.fatec.esportiva.request.AddressDto;
 
 import java.util.ArrayList;

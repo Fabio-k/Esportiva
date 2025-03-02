@@ -10,41 +10,7 @@
 <header th:replace="fragments/layout.html :: header"></header>
 <main th:fragment="content" class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
   <h2 class="text-2xl font-semibold mb-4">Cadastro de Usuário</h2>
-  <form th:action="@{/users/save}" th:object="${user}" method="post">
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label for="name" class="block font-medium">Nome:</label>
-        <input type="text" id="name" th:field="*{name}" required class="w-full p-2 border rounded" />
-      </div>
-      <div>
-        <label for="gender" class="block font-medium">Gênero:</label>
-        <select id="gender" th:field="*{gender}" class="w-full p-2 border rounded">
-          <option th:each="g : ${T(org.fatec.esportiva.model.enums.Gender).values()}" th:value="${g}" th:text="${g}"></option>
-        </select>
-      </div>
-    </div>
-
-    <div>
-      <label for="email" class="block font-medium">E-mail:</label>
-      <input type="email" id="email" th:field="*{email}" required class="w-full p-2 border rounded" />
-    </div>
-
-    <div>
-      <label for="registrationNumber" class="block font-medium">CPF:</label>
-      <input type="text" id="registrationNumber" th:field="*{registrationNumber}" required class="w-full p-2 border rounded" />
-    </div>
-
-    <h3 class="text-xl font-semibold mt-6">Endereço</h3>
-
-    <div id="addresses">
-      <div th:replace="fragments/addressForm :: form"></div>
-    </div>
-
-    <button type="button" th:onclick="addAddress()">Adicionar endereço</button>
-
-    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Salvar</button>
-  </form>
+  <div th:replace="fragments/form.html :: form"></div>
 </main>
 </body>
 </html>
