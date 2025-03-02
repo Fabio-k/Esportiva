@@ -1,7 +1,7 @@
 package org.fatec.esportiva.repository;
 
-import org.fatec.esportiva.model.User;
-import org.fatec.esportiva.model.enums.Role;
+import org.fatec.esportiva.entity.User;
+import org.fatec.esportiva.entity.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;

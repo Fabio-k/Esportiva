@@ -1,7 +1,7 @@
 package org.fatec.esportiva.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.model.User;
+import org.fatec.esportiva.entity.User;
 import org.fatec.esportiva.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

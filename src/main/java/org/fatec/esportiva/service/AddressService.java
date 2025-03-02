@@ -1,7 +1,7 @@
 package org.fatec.esportiva.service;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.model.Address;
+import org.fatec.esportiva.entity.Address;
 import org.fatec.esportiva.repository.AddressRepository;
 import org.springframework.stereotype.Service;
 

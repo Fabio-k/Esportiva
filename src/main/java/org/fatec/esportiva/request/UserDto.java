@@ -1,9 +1,13 @@
 package org.fatec.esportiva.request;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.fatec.esportiva.model.enums.Gender;
-import org.fatec.esportiva.model.enums.Role;
-import org.fatec.esportiva.model.enums.UserStatus;
+import org.fatec.esportiva.entity.enums.Gender;
+import org.fatec.esportiva.entity.enums.Role;
+import org.fatec.esportiva.entity.enums.UserStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +18,22 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class UserDto {
-    private Role role;
+    @NotBlank(message = "Nome não pode ficar em branco")
     private String name;
+
+    @NotBlank(message = "email não pode ficar em branco")
+    @Email(message = "email deve ser válido")
     private String email;
+
     private String code;
+    @NotBlank(message = "CPF não pode ficar em branco")
     private String registrationNumber;
+
     private UserStatus status;
+
+    @NotNull(message = "Genêro não pode ficar em branco")
     private Gender gender;
+
+    @Valid
     private List<AddressDto> addresses = new ArrayList<>();
 }

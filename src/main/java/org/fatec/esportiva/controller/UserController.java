@@ -1,10 +1,11 @@
 package org.fatec.esportiva.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.mapper.UserMapper;
-import org.fatec.esportiva.model.User;
+import org.fatec.esportiva.entity.User;
 import org.fatec.esportiva.repository.UserRepository;
 import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.UserDto;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -36,15 +38,22 @@ public class UserController {
 
     @GetMapping("/new")
     public String newUser(Model model){
-        UserDto userDto = new UserDto();
-        userDto.getAddresses().add(new AddressDto());
-        model.addAttribute("user", userDto);
+        model.addAttribute("formAction", "/users/save");
+        if (!model.containsAttribute("user")) {
+            UserDto userDto = new UserDto();
+            userDto.getAddresses().add(new AddressDto());
+            model.addAttribute("user", userDto);
+        }
         model.addAttribute("body", "users/new.html :: content");
         return "layout";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute UserDto userDto){
+    public String save(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model){
+        if (result.hasErrors()){
+            model.addAttribute("body", "users/new.html :: content");
+            return "layout";
+        }
         User user = UserMapper.toUser(userDto);
         user.setAddresses(AddressMapper.toAddressList(user, userDto.getAddresses()));
         userService.save(user);
@@ -68,17 +77,24 @@ public class UserController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model){
-        User user = userService.findUser(id);
-        UserDto userDto = UserMapper.toUserDto(user);
-        userDto.setAddresses(AddressMapper.toAddressDtoList(user.getAddresses()));
-        model.addAttribute("id", user.getId());
-        model.addAttribute("user", userDto);
+        if(!model.containsAttribute("user")){
+            User user = userService.findUser(id);
+            UserDto userDto = UserMapper.toUserDto(user);
+            userDto.setAddresses(AddressMapper.toAddressDtoList(user.getAddresses()));
+            model.addAttribute("user", userDto);
+        }
+        model.addAttribute("id", id);
+        model.addAttribute("formAction", "/users/update/" + id);
         model.addAttribute("body", "users/edit.html :: content");
         return "layout";
     }
 
     @PatchMapping("/update/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute UserDto userDto){
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            model.addAttribute("body", "users/edit.html :: content");
+            return "layout";
+        }
         userService.update(id, userDto);
         return "redirect:/dashboard";
     }
