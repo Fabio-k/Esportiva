@@ -22,17 +22,6 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
 
-    public User(Role role, String name, String email, String password, String code, String registrationNumber,
-            UserStatus status, Gender gender) {
-        this.role = role;
-        this.name = name;
-        this.email = email;
-        this.code = code;
-        this.registrationNumber = registrationNumber;
-        this.status = status;
-        this.gender = gender;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

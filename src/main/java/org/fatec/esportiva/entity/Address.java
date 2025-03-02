@@ -18,18 +18,6 @@ import java.util.List;
 @Setter
 public class Address {
 
-    public Address(String cep, ResidencyType residencyType, StreetType streetType, String number, String neighborhood, String city, String state, String country, String observation) {
-        this.cep = cep;
-        this.residencyType = residencyType;
-        this.streetType = streetType;
-        this.number = number;
-        this.neighborhood = neighborhood;
-        this.city = city;
-        this.state = state;
-        this.country = country;
-        this.observation = observation;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

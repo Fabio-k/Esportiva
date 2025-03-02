@@ -4,12 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,14 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Table(name = "grupo_precificacao")
 public class PricingGroup {
 
-    public PricingGroup(
-            int id,
-            float precificacao,
-            String nome) {
-        this.id = id;
-        this.valor_precificacao = precificacao;
-        this.nome = nome;
-    }
 
     @Id
     @Column(name = "grp_id")

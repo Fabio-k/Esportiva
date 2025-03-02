@@ -4,13 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-
-import org.fatec.esportiva.entity.enums.ProductStatus;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
 @AllArgsConstructor
@@ -20,15 +14,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Setter
 @Table(name = "transacoes")
 public class Transactions {
-
-    public Transactions(
-            int id,
-            Date data_compra,
-            int clientes_cli_id) {
-        this.id = id;
-        this.data_compra = data_compra;
-        this.clientes_cli_id = clientes_cli_id;
-    }
 
     @Id
     @Column(name = "tra_id")

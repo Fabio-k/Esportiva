@@ -3,14 +3,8 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.util.Collection;
-import java.util.List;
-import java.time.LocalDateTime;
-
 import org.fatec.esportiva.entity.enums.OrderStatus;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 
 @Entity
 @AllArgsConstructor
@@ -20,17 +14,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Setter
 @Table(name = "pedidos")
 public class Order {
-
-    public Order(
-            OrderStatus status,
-            int quantidade,
-            int transacoes_tra_id,
-            int produtos_pro_id) {
-        this.status = status;
-        this.quantidade = quantidade;
-        this.transacoes_tra_id = transacoes_tra_id;
-        this.produtos_pro_id = produtos_pro_id;
-    }
 
     @Id
     @Enumerated(EnumType.STRING)

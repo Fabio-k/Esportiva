@@ -4,12 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.fatec.esportiva.entity.enums.CreditCardBrand;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 
 @Entity
 @AllArgsConstructor
@@ -19,18 +15,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Setter
 @Table(name = "cartoes_de_credito")
 public class CreditCard {
-
-    public CreditCard(String numero,
-            CreditCardBrand bandeira,
-            String nome_impresso,
-            int codigo_seguranca,
-            boolean preferencial,
-            int cli_id) {
-        this.numero = numero;
-        this.bandeira = bandeira;
-        this.nome_impresso = nome_impresso;
-        this.codigo_seguranca = codigo_seguranca;
-        this.preferencial = preferencial;
 
     @Id
     @Column(name = "car_numero")
