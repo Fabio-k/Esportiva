@@ -17,10 +17,12 @@ import org.fatec.esportiva.entity.enums.CreditCardBrand;
 public class CreditCard {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "car_numero")
     private String numero;
 
-    @Id
     @Enumerated(EnumType.STRING)
     @Column(name = "car_bandeira")
     private CreditCardBrand bandeira;
