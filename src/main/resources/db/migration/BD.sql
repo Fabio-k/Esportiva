@@ -14,8 +14,8 @@ CREATE TABLE cartoes_de_credito (
     car_bandeira          VARCHAR2(20 CHAR) NOT NULL,
     car_nome_impresso     VARCHAR2(30 CHAR) NOT NULL,
     car_codigo_seguranca  INTEGER NOT NULL,
-    clientes_cli_id       INTEGER NOT NULL,
-    car_preferencial      CHAR(1) NOT NULL
+    car_preferencial      CHAR(1) NOT NULL,
+    clientes_cli_id       INTEGER NOT NULL
 );
 
 ALTER TABLE cartoes_de_credito ADD CONSTRAINT cartoes_de_credito_pk PRIMARY KEY ( car_numero,
@@ -29,13 +29,13 @@ CREATE TABLE categorias_produto (
 ALTER TABLE categorias_produto ADD CONSTRAINT categorias_produto_pk PRIMARY KEY ( cat_id );
 
 CREATE TABLE cep (
+    cep_id          INTEGER NOT NULL,
     cep_cep         VARCHAR2(8 CHAR) NOT NULL,
     cep_logradouro  VARCHAR2(50 CHAR) NOT NULL,
     cep_bairro      VARCHAR2(50 CHAR) NOT NULL,
     cep_cidade      VARCHAR2(50 CHAR) NOT NULL,
     cep_estado      VARCHAR2(50 CHAR) NOT NULL,
-    cep_pais        VARCHAR2(50 CHAR) NOT NULL,
-    cep_id          INTEGER NOT NULL
+    cep_pais        VARCHAR2(50 CHAR) NOT NULL
 );
 
 ALTER TABLE cep ADD CONSTRAINT cep_pk PRIMARY KEY ( cep_id );
@@ -53,7 +53,7 @@ ALTER TABLE clientes ADD CONSTRAINT clientes_pk PRIMARY KEY ( cli_id );
 
 CREATE TABLE cupons_promocao (
     cpr_id                INTEGER NOT NULL,
-    promocao_porcentagem  FLOAT NOT NULL,
+    cpr_promocao_porcentagem  FLOAT NOT NULL,
     clientes_cli_id       INTEGER NOT NULL,
     produtos_pro_id       INTEGER NOT NULL
 );
@@ -78,14 +78,14 @@ ALTER TABLE emails ADD CONSTRAINT emails_pk PRIMARY KEY ( ema_email );
 
 CREATE TABLE enderecos (
     end_id                   INTEGER NOT NULL,
+    cep_cep_id               INTEGER NOT NULL,
     end_numero               INTEGER NOT NULL,
     end_tipo_residencia      VARCHAR2(20 CHAR) NOT NULL,
     end_observacao           VARCHAR2(50 CHAR),
     end_tipo_logradouro      VARCHAR2(20 CHAR) NOT NULL,
     end_categoria_endereco   VARCHAR2(20 CHAR) NOT NULL,
-    clientes_cli_id          INTEGER NOT NULL,
-    cep_cep_id               INTEGER NOT NULL,
-    end_frase_identificacao  VARCHAR2(40 CHAR) NOT NULL
+    end_frase_identificacao  VARCHAR2(40 CHAR) NOT NULL,
+    clientes_cli_id          INTEGER NOT NULL
 );
 
 ALTER TABLE enderecos ADD CONSTRAINT enderecos_pk PRIMARY KEY ( end_id );
@@ -140,8 +140,8 @@ ALTER TABLE produtos ADD CONSTRAINT produtos_pk PRIMARY KEY ( pro_id );
 
 CREATE TABLE telefones (
     tel_telefone     VARCHAR2(13 CHAR) NOT NULL,
-    clientes_cli_id  INTEGER NOT NULL,
-    tel_tipo         VARCHAR2(20 CHAR) NOT NULL
+    tel_tipo         VARCHAR2(20 CHAR) NOT NULL,
+    clientes_cli_id  INTEGER NOT NULL
 );
 
 ALTER TABLE telefones ADD CONSTRAINT telefones_pk PRIMARY KEY ( tel_telefone );
