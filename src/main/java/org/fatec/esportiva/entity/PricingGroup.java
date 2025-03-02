@@ -1,4 +1,4 @@
-package org.fatec.esportiva.model;
+package org.fatec.esportiva.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package org.fatec.esportiva.model;
+package org.fatec.esportiva.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.Collection;
 import java.util.List;
 
-import org.fatec.esportiva.model.enums.CreditCardBrand;
+import org.fatec.esportiva.entity.enums.CreditCardBrand;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

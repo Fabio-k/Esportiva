@@ -1,4 +1,4 @@
-package org.fatec.esportiva.model;
+package org.fatec.esportiva.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.fatec.esportiva.model.enums.ProductStatus;
+import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
