@@ -1,5 +1,5 @@
 -- Gerado por Oracle SQL Developer Data Modeler 20.2.0.167.1538
---   em:        2025-03-01 20:26:42 BRT
+--   em:        2025-03-02 21:25:43 BRT
 --   site:      Oracle Database 11g
 --   tipo:      Oracle Database 11g
 
@@ -9,7 +9,15 @@
 
 -- predefined type, no DDL - XMLTYPE
 
+CREATE TABLE administrador (
+    adm_id    INTEGER NOT NULL,
+    adm_nome  VARCHAR2(30 CHAR) NOT NULL
+);
+
+ALTER TABLE administrador ADD CONSTRAINT administrador_pk PRIMARY KEY ( adm_id );
+
 CREATE TABLE cartoes_de_credito (
+    car_id                INTEGER NOT NULL,
     car_numero            VARCHAR2(19 CHAR) NOT NULL,
     car_bandeira          VARCHAR2(20 CHAR) NOT NULL,
     car_nome_impresso     VARCHAR2(30 CHAR) NOT NULL,
@@ -18,8 +26,13 @@ CREATE TABLE cartoes_de_credito (
     clientes_cli_id       INTEGER NOT NULL
 );
 
-ALTER TABLE cartoes_de_credito ADD CONSTRAINT cartoes_de_credito_pk PRIMARY KEY ( car_numero,
-                                                                                  car_bandeira );
+ALTER TABLE cartoes_de_credito ADD CONSTRAINT cartoes_de_credito_pk PRIMARY KEY ( car_id );
+
+CREATE TABLE categorias_end (
+    cae_cat_end VARCHAR2(20 CHAR) NOT NULL
+);
+
+ALTER TABLE categorias_end ADD CONSTRAINT categorias_endereco_pk PRIMARY KEY ( cae_cat_end );
 
 CREATE TABLE categorias_produto (
     cat_id    INTEGER NOT NULL,
@@ -42,18 +55,18 @@ ALTER TABLE cep ADD CONSTRAINT cep_pk PRIMARY KEY ( cep_id );
 
 CREATE TABLE clientes (
     cli_id               INTEGER NOT NULL,
-    cli_data_nascimento  DATE NOT NULL,
-    cli_cpf              VARCHAR2(11 CHAR) NOT NULL,
-    cli_status           VARCHAR2(10 CHAR) NOT NULL,
     cli_nome             VARCHAR2(50 CHAR) NOT NULL,
-    cli_genero           VARCHAR2(10 CHAR) NOT NULL
+    cli_cpf              VARCHAR2(11 CHAR) NOT NULL,
+    cli_data_nascimento  DATE NOT NULL,
+    cli_genero           VARCHAR2(10 CHAR) NOT NULL,
+    cli_status           VARCHAR2(10 CHAR) NOT NULL
 );
 
 ALTER TABLE clientes ADD CONSTRAINT clientes_pk PRIMARY KEY ( cli_id );
 
 CREATE TABLE cupons_promocao (
     cpr_id                INTEGER NOT NULL,
-    cpr_promocao_porcentagem  FLOAT NOT NULL,
+    promocao_porcentagem  FLOAT NOT NULL,
     clientes_cli_id       INTEGER NOT NULL,
     produtos_pro_id       INTEGER NOT NULL
 );
@@ -78,17 +91,24 @@ ALTER TABLE emails ADD CONSTRAINT emails_pk PRIMARY KEY ( ema_email );
 
 CREATE TABLE enderecos (
     end_id                   INTEGER NOT NULL,
-    cep_cep_id               INTEGER NOT NULL,
     end_numero               INTEGER NOT NULL,
     end_tipo_residencia      VARCHAR2(20 CHAR) NOT NULL,
-    end_observacao           VARCHAR2(50 CHAR),
     end_tipo_logradouro      VARCHAR2(20 CHAR) NOT NULL,
-    end_categoria_endereco   VARCHAR2(20 CHAR) NOT NULL,
     end_frase_identificacao  VARCHAR2(40 CHAR) NOT NULL,
-    clientes_cli_id          INTEGER NOT NULL
+    end_observacao           VARCHAR2(50 CHAR),
+    clientes_cli_id          INTEGER NOT NULL,
+    cep_cep_id               INTEGER NOT NULL
 );
 
 ALTER TABLE enderecos ADD CONSTRAINT enderecos_pk PRIMARY KEY ( end_id );
+
+CREATE TABLE funcao (
+    enderecos_end_id            INTEGER NOT NULL,
+    categorias_end_cae_cat_end  VARCHAR2(20 CHAR) NOT NULL
+);
+
+ALTER TABLE funcao ADD CONSTRAINT categorizado_pk PRIMARY KEY ( enderecos_end_id,
+                                                                categorias_end_cae_cat_end );
 
 CREATE TABLE grupo_precificacao (
     grp_id                  INTEGER NOT NULL,
@@ -100,9 +120,9 @@ ALTER TABLE grupo_precificacao ADD CONSTRAINT grupo_precificacao_pk PRIMARY KEY 
 
 CREATE TABLE logs (
     log_id                  INTEGER NOT NULL,
-    log_operacao            VARCHAR2(10 CHAR) NOT NULL,
     log_usuario             VARCHAR2(10 CHAR) NOT NULL,
     log_data_hora           DATE NOT NULL,
+    log_operacao            VARCHAR2(10 CHAR) NOT NULL,
     log_conteudo_alteracao  VARCHAR2(50 CHAR) NOT NULL
 );
 
@@ -125,14 +145,14 @@ ALTER TABLE pertence ADD CONSTRAINT pertence_pk PRIMARY KEY ( produtos_pro_id,
 
 CREATE TABLE produtos (
     pro_id                        INTEGER NOT NULL,
+    pro_nome_produto              VARCHAR2(30 CHAR) NOT NULL,
+    pro_data_entrada              DATE NOT NULL,
     pro_quantidade_estoque        INTEGER NOT NULL,
     pro_quantidade_bloqueada      INTEGER NOT NULL,
     pro_valor_precificacao        FLOAT NOT NULL,
-    pro_justificativa_inativacao  VARCHAR2(50 CHAR) NOT NULL,
-    pro_categoria_inativacao      VARCHAR2(20 CHAR) NOT NULL,
     pro_valor_custo               FLOAT NOT NULL,
-    pro_data_entrada              DATE NOT NULL,
-    pro_nome_produto              VARCHAR2(30 CHAR) NOT NULL,
+    pro_categoria_inativacao      VARCHAR2(20 CHAR) NOT NULL,
+    pro_justificativa_inativacao  VARCHAR2(50 CHAR) NOT NULL,
     grupo_precificacao_grp_id     INTEGER
 );
 
@@ -182,6 +202,14 @@ ALTER TABLE enderecos
     ADD CONSTRAINT enderecos_clientes_fk FOREIGN KEY ( clientes_cli_id )
         REFERENCES clientes ( cli_id );
 
+ALTER TABLE funcao
+    ADD CONSTRAINT funcao_categorias_end_fk FOREIGN KEY ( categorias_end_cae_cat_end )
+        REFERENCES categorias_end ( cae_cat_end );
+
+ALTER TABLE funcao
+    ADD CONSTRAINT funcao_enderecos_fk FOREIGN KEY ( enderecos_end_id )
+        REFERENCES enderecos ( end_id );
+
 ALTER TABLE pedidos
     ADD CONSTRAINT pedidos_produtos_fk FOREIGN KEY ( produtos_pro_id )
         REFERENCES produtos ( pro_id );
@@ -214,9 +242,9 @@ ALTER TABLE transacoes
 
 -- Relatório do Resumo do Oracle SQL Developer Data Modeler: 
 -- 
--- CREATE TABLE                            15
+-- CREATE TABLE                            18
 -- CREATE INDEX                             0
--- ALTER TABLE                             28
+-- ALTER TABLE                             33
 -- CREATE VIEW                              0
 -- ALTER VIEW                               0
 -- CREATE PACKAGE                           0
