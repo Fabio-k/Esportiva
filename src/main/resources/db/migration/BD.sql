@@ -1,5 +1,5 @@
 -- Gerado por Oracle SQL Developer Data Modeler 20.2.0.167.1538
---   em:        2025-03-02 21:25:43 BRT
+--   em:        2025-03-03 09:37:43 BRT
 --   site:      Oracle Database 11g
 --   tipo:      Oracle Database 11g
 
@@ -32,7 +32,7 @@ CREATE TABLE categorias_end (
     cae_cat_end VARCHAR2(20 CHAR) NOT NULL
 );
 
-ALTER TABLE categorias_end ADD CONSTRAINT categorias_endereco_pk PRIMARY KEY ( cae_cat_end );
+ALTER TABLE categorias_end ADD CONSTRAINT categorias_end_pk PRIMARY KEY ( cae_cat_end );
 
 CREATE TABLE categorias_produto (
     cat_id    INTEGER NOT NULL,
@@ -59,7 +59,10 @@ CREATE TABLE clientes (
     cli_cpf              VARCHAR2(11 CHAR) NOT NULL,
     cli_data_nascimento  DATE NOT NULL,
     cli_genero           VARCHAR2(10 CHAR) NOT NULL,
-    cli_status           VARCHAR2(10 CHAR) NOT NULL
+    cli_status           VARCHAR2(10 CHAR) NOT NULL,
+    cli_telefone         VARCHAR2(13) NOT NULL,
+    cli_telefone_tipo    VARCHAR2(20 CHAR) NOT NULL,
+    cli_email            VARCHAR2(50 CHAR) NOT NULL
 );
 
 ALTER TABLE clientes ADD CONSTRAINT clientes_pk PRIMARY KEY ( cli_id );
@@ -82,13 +85,6 @@ CREATE TABLE cupons_troca (
 
 ALTER TABLE cupons_troca ADD CONSTRAINT cupons_troca_pk PRIMARY KEY ( ctr_id );
 
-CREATE TABLE emails (
-    ema_email        VARCHAR2(50 CHAR) NOT NULL,
-    clientes_cli_id  INTEGER NOT NULL
-);
-
-ALTER TABLE emails ADD CONSTRAINT emails_pk PRIMARY KEY ( ema_email );
-
 CREATE TABLE enderecos (
     end_id                   INTEGER NOT NULL,
     end_numero               INTEGER NOT NULL,
@@ -107,8 +103,8 @@ CREATE TABLE funcao (
     categorias_end_cae_cat_end  VARCHAR2(20 CHAR) NOT NULL
 );
 
-ALTER TABLE funcao ADD CONSTRAINT categorizado_pk PRIMARY KEY ( enderecos_end_id,
-                                                                categorias_end_cae_cat_end );
+ALTER TABLE funcao ADD CONSTRAINT funcao_pk PRIMARY KEY ( enderecos_end_id,
+                                                          categorias_end_cae_cat_end );
 
 CREATE TABLE grupo_precificacao (
     grp_id                  INTEGER NOT NULL,
@@ -158,14 +154,6 @@ CREATE TABLE produtos (
 
 ALTER TABLE produtos ADD CONSTRAINT produtos_pk PRIMARY KEY ( pro_id );
 
-CREATE TABLE telefones (
-    tel_telefone     VARCHAR2(13 CHAR) NOT NULL,
-    tel_tipo         VARCHAR2(20 CHAR) NOT NULL,
-    clientes_cli_id  INTEGER NOT NULL
-);
-
-ALTER TABLE telefones ADD CONSTRAINT telefones_pk PRIMARY KEY ( tel_telefone );
-
 CREATE TABLE transacoes (
     tra_id           INTEGER NOT NULL,
     tra_data_compra  DATE NOT NULL,
@@ -188,10 +176,6 @@ ALTER TABLE cupons_promocao
 
 ALTER TABLE cupons_troca
     ADD CONSTRAINT cupons_troca_clientes_fk FOREIGN KEY ( clientes_cli_id )
-        REFERENCES clientes ( cli_id );
-
-ALTER TABLE emails
-    ADD CONSTRAINT emails_clientes_fk FOREIGN KEY ( clientes_cli_id )
         REFERENCES clientes ( cli_id );
 
 ALTER TABLE enderecos
@@ -230,10 +214,6 @@ ALTER TABLE produtos
     ADD CONSTRAINT produtos_grupo_precificacao_fk FOREIGN KEY ( grupo_precificacao_grp_id )
         REFERENCES grupo_precificacao ( grp_id );
 
-ALTER TABLE telefones
-    ADD CONSTRAINT telefones_clientes_fk FOREIGN KEY ( clientes_cli_id )
-        REFERENCES clientes ( cli_id );
-
 ALTER TABLE transacoes
     ADD CONSTRAINT transacoes_clientes_fk FOREIGN KEY ( clientes_cli_id )
         REFERENCES clientes ( cli_id );
@@ -242,9 +222,9 @@ ALTER TABLE transacoes
 
 -- Relatório do Resumo do Oracle SQL Developer Data Modeler: 
 -- 
--- CREATE TABLE                            18
+-- CREATE TABLE                            16
 -- CREATE INDEX                             0
--- ALTER TABLE                             33
+-- ALTER TABLE                             29
 -- CREATE VIEW                              0
 -- ALTER VIEW                               0
 -- CREATE PACKAGE                           0
