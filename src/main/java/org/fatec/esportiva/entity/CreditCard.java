@@ -6,7 +6,6 @@ import lombok.*;
 
 import org.fatec.esportiva.entity.enums.CreditCardBrand;
 
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,9 +19,11 @@ public class CreditCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(name = "car_numero")
     private String numero;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "car_bandeira")
     private CreditCardBrand bandeira;

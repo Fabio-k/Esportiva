@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.Role;
@@ -26,12 +27,14 @@ public class UserDto {
     private String email;
 
     private String code;
+
     @NotBlank(message = "CPF não pode ficar em branco")
+    @Pattern(regexp = "^[0-9]{11}$", message = "O CPF deve conter 11 dígitos numéricos")
     private String registrationNumber;
 
     private UserStatus status;
 
-    @NotNull(message = "Genêro não pode ficar em branco")
+    @NotNull(message = "Gênero não pode ficar em branco")
     private Gender gender;
 
     @Valid
