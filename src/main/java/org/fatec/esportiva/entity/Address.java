@@ -16,48 +16,44 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
+@Table(name = "enderecos")
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "end_id")
     private Long id;
 
     @NotNull
-    private String cep;
+    @Column(name = "end_numero")
+    private String number;
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    @Column(name = "residency_type")
+    @Column(name = "end_tipo_residencia")
     private ResidencyType residencyType;
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    @Column(name = "street_type")
+    @Column(name = "end_tipo_logradouro")
     private StreetType streetType;
 
     @NotNull
-    private String number;
+    @Column(name = "end_frase_identificacao")
+    private String identificationPhrase;
 
-    @NotNull
-    private String street;
-
-    @NotNull
-    private String neighborhood;
-
-    @NotNull
-    private String city;
-
-    @NotNull
-    private String state;
-
-    @NotNull
-    private String country;
-
+    @Column(name = "end_observacao")
     private String observation;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "clientes_cli_id")
+    private Clients clients;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "cep_cep_id")
+    private Cep cep;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "address_type", joinColumns = @JoinColumn(name = "address_id"))

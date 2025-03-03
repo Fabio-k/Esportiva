@@ -4,11 +4,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.mapper.AddressMapper;
-import org.fatec.esportiva.mapper.UserMapper;
-import org.fatec.esportiva.entity.User;
+import org.fatec.esportiva.mapper.ClientMapper;
+import org.fatec.esportiva.entity.Clients;
 import org.fatec.esportiva.repository.UserRepository;
 import org.fatec.esportiva.request.AddressDto;
-import org.fatec.esportiva.request.UserDto;
+import org.fatec.esportiva.request.ClientDto;
 import org.fatec.esportiva.request.UserLoginRequest;
 import org.fatec.esportiva.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,18 +29,18 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public String getUsers(Model model){
-        List<User> users = userRepository.findAll();
+    public String getUsers(Model model) {
+        List<Clients> users = userRepository.findAll();
         model.addAttribute("user", new UserLoginRequest());
         model.addAttribute("users", users);
         return "users";
     }
 
     @GetMapping("/new")
-    public String newUser(Model model){
+    public String newUser(Model model) {
         model.addAttribute("formAction", "/users/save");
         if (!model.containsAttribute("user")) {
-            UserDto userDto = new UserDto();
+            ClientDto userDto = new ClientDto();
             userDto.getAddresses().add(new AddressDto());
             model.addAttribute("user", userDto);
         }
@@ -49,37 +49,38 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String save(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model){
-        if (result.hasErrors()){
+    public String save(@Valid @ModelAttribute("user") ClientDto userDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
             model.addAttribute("body", "users/new.html :: content");
             return "layout";
         }
-        User user = UserMapper.toUser(userDto);
+        Clients user = ClientMapper.toUser(userDto);
         user.setAddresses(AddressMapper.toAddressList(user, userDto.getAddresses()));
         userService.save(user);
         return "redirect:/dashboard";
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserLoginRequest userLoginRequest, HttpServletRequest request, RedirectAttributes redirectAttributes){
-        User user = userService.findUser(userLoginRequest.getId());
+    public String login(@ModelAttribute UserLoginRequest userLoginRequest, HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
+        Clients user = userService.findUser(userLoginRequest.getId());
         authenticateUser(user, request);
         redirectAttributes.addFlashAttribute("mensagem", "usuário cadastrado com sucesso!");
         return "redirect:/dashboard";
     }
 
     @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Long id){
-       User user = userService.findUser(id);
+    public String delete(@PathVariable Long id) {
+        Clients user = userService.findUser(id);
         userService.deleteUser(user);
         return "redirect:/dashboard";
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Long id, Model model){
-        if(!model.containsAttribute("user")){
-            User user = userService.findUser(id);
-            UserDto userDto = UserMapper.toUserDto(user);
+    public String edit(@PathVariable Long id, Model model) {
+        if (!model.containsAttribute("user")) {
+            Clients user = userService.findUser(id);
+            ClientDto userDto = ClientMapper.toUserDto(user);
             userDto.setAddresses(AddressMapper.toAddressDtoList(user.getAddresses()));
             model.addAttribute("user", userDto);
         }
@@ -90,8 +91,9 @@ public class UserController {
     }
 
     @PatchMapping("/update/{id}")
-    public String update(@PathVariable Long id, @Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("user") ClientDto userDto,
+            BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("body", "users/edit.html :: content");
             return "layout";
         }
@@ -99,8 +101,9 @@ public class UserController {
         return "redirect:/dashboard";
     }
 
-    private void authenticateUser(User user, HttpServletRequest request){
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+    private void authenticateUser(Clients user, HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null,
+                user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
         request.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
     }

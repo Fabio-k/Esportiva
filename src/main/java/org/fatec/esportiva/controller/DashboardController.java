@@ -1,7 +1,7 @@
 package org.fatec.esportiva.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.entity.User;
+import org.fatec.esportiva.entity.Clients;
 import org.fatec.esportiva.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +17,12 @@ public class DashboardController {
     private final UserService userService;
 
     @GetMapping
-    public String home(Model model) throws Exception{
-        User user = userService.getAuthenticatedUser();
-        List<User> users = userService.getUsers();
+    public String home(Model model) throws Exception {
+        Clients user = userService.getAuthenticatedUser();
+        List<Clients> users = userService.getUsers();
         model.addAttribute("currentUser", user);
         model.addAttribute("users", users);
-        model.addAttribute("body","dashboard.html :: content");
+        model.addAttribute("body", "dashboard.html :: content");
         return "layout";
     }
 }

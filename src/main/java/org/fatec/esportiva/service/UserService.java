@@ -4,11 +4,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.entity.Address;
-import org.fatec.esportiva.entity.User;
-import org.fatec.esportiva.entity.enums.Role;
+import org.fatec.esportiva.entity.Clients;
 import org.fatec.esportiva.entity.enums.UserStatus;
 import org.fatec.esportiva.repository.UserRepository;
-import org.fatec.esportiva.request.UserDto;
+import org.fatec.esportiva.request.ClientDto;
 import org.fatec.esportiva.util.CodeGenerator;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,19 +22,17 @@ public class UserService {
     private final AddressService addressService;
 
     @Transactional
-    public User save(User user) {
+    public Clients save(Clients user) {
         user.setStatus(UserStatus.ACTIVE);
-        user.setCode(generateUniqueCode());
-        user.setRole(Role.USER);
         return userRepository.save(user);
     }
 
     @Transactional
-    public User update(Long id, UserDto userDto) {
-        User existingUser = this.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public Clients update(Long id, ClientDto userDto) {
+        Clients existingUser = this.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         existingUser.setName(userDto.getName());
         existingUser.setEmail(userDto.getEmail());
-        existingUser.setRegistrationNumber(userDto.getRegistrationNumber());
+        existingUser.setCpf(userDto.getCpf());
         existingUser.setGender(userDto.getGender());
         existingUser.setStatus(userDto.getStatus());
 
@@ -56,22 +53,16 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-    public List<User> getUsers() {
-        List<User> users = userRepository.findAllByRole(Role.USER);
-
-        return users;
-    }
-
-    public User findUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public Clients findUser(Long id) {
+        Clients user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         return user;
     }
 
-    public Optional<User> findById(Long id) {
+    public Optional<Clients> findById(Long id) {
         return userRepository.findById(id);
     }
 
-    public void deleteUser(User user) {
+    public void deleteUser(Clients user) {
         userRepository.delete(user);
     }
 
@@ -89,23 +80,19 @@ public class UserService {
     }
 
     private void updateAddressData(Address currentAddress, Address updatedAddress) {
-        currentAddress.setCity(updatedAddress.getCity());
         currentAddress.setCep(updatedAddress.getCep());
         currentAddress.setNumber(updatedAddress.getNumber());
-        currentAddress.setNeighborhood(updatedAddress.getNeighborhood());
-        currentAddress.setState(updatedAddress.getState());
-        currentAddress.setCountry(updatedAddress.getCountry());
         currentAddress.setObservation(updatedAddress.getObservation());
         currentAddress.setResidencyType(updatedAddress.getResidencyType());
         currentAddress.setStreetType(updatedAddress.getStreetType());
     }
 
-    public User getAuthenticatedUser() throws Exception {
+    public Clients getAuthenticatedUser() throws Exception {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(principal instanceof User)) {
+        if (!(principal instanceof Clients)) {
             throw new Exception("Erro na autenticação");
         }
-        User user = (User) principal;
+        Clients user = (Clients) principal;
         return user;
     }
 }
