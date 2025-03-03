@@ -1,3 +1,4 @@
+-- Desativa as restrições da chave estrangeira. Isso permite inserir os dados sem se preocupar com a ordem das tabelas
 SET session_replication_role = 'replica';
 
 -- Clientes
@@ -163,5 +164,5 @@ INSERT INTO administrador (adm_nome) VALUES
 ('Fábio'),
 ('Lucas');
 
-
+-- Ativa as restrições da chave estrangeira novamente
 SET session_replication_role = 'origin';
