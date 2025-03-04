@@ -105,9 +105,9 @@ CREATE TABLE grupo_precificacao (
 CREATE TABLE logs (
     log_id                  SERIAL PRIMARY KEY,
     log_usuario             VARCHAR(10) NOT NULL,
-    log_data_hora           DATE NOT NULL,
+    log_data_hora           TIMESTAMP NOT NULL,
     log_operacao            VARCHAR(10) NOT NULL,
-    log_conteudo_alteracao  VARCHAR(50) NOT NULL
+    log_conteudo_alteracao  JSON NOT NULL
 );
 
 CREATE TABLE pedidos (

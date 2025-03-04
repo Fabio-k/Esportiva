@@ -1,4 +1,6 @@
--- Desativa as restrições da chave estrangeira. Isso permite inserir os dados sem se preocupar com a ordem das tabelas
+-- Desativa todos os triggers, isso inclui as restrições da chave estrangeira
+-- Isso permite inserir os dados sem se preocupar com a ordem das tabelas
+-- https://stackoverflow.com/questions/3942258/how-do-i-temporarily-disable-triggers-in-postgresql
 SET session_replication_role = 'replica';
 
 -- Clientes
@@ -148,7 +150,7 @@ INSERT INTO pertence (produtos_pro_id, categorias_produto_cat_id) VALUES
 ('6', '3'),
 ('6', '5');
 
-
+SELECT setval('logs_log_id_seq', 1, false);
 
 
 
@@ -165,4 +167,4 @@ INSERT INTO administrador (adm_nome) VALUES
 ('Lucas');
 
 -- Ativa as restrições da chave estrangeira novamente
-SET session_replication_role = 'origin';
+SET session_replication_role = DEFAULT;
