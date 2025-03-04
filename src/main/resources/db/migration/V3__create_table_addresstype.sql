@@ -1,8 +1,0 @@
-CREATE TABLE ADDRESS_TYPE (
-    id BIGSERIAL PRIMARY KEY,
-
-    type VARCHAR NOT NULL,
-
-    address_id BIGINT NOT NULL,
-    CONSTRAINT fk_UAR_address FOREIGN KEY (address_id) REFERENCES address(id)
-);

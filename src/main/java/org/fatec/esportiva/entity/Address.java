@@ -6,9 +6,12 @@ import lombok.*;
 import org.fatec.esportiva.entity.enums.AddressType;
 import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -16,53 +19,48 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
+@Table(name = "enderecos")
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "end_id")
     private Long id;
 
     @NotNull
-    private String cep;
+    @Column(name = "end_frase_identificacao")
+    private String name;
+
+    @NotNull
+    @Column(name = "end_numero")
+    private String number;
+
+    @Column(name= "end_observacao")
+    private String observation;
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    @Column(name = "residency_type")
+    @Column(name = "end_tipo_residencia")
     private ResidencyType residencyType;
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    @Column(name = "street_type")
+    @Column(name = "end_tipo_logradouro")
     private StreetType streetType;
 
-    @NotNull
-    private String number;
-
-    @NotNull
-    private String street;
-
-    @NotNull
-    private String neighborhood;
-
-    @NotNull
-    private String city;
-
-    @NotNull
-    private String state;
-
-    @NotNull
-    private String country;
-
-    private String observation;
+    @ManyToOne
+    @JoinColumn(name = "end_cep_id")
+    private Cep cep;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "end_cli_id")
+    private Client client;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "address_type", joinColumns = @JoinColumn(name = "address_id"))
-    @Column(name = "type")
-    @Enumerated(EnumType.STRING)
-    private List<AddressType> addressTypeList = new ArrayList<>();
-
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "funcao",
+            joinColumns = {@JoinColumn(name="fun_end_id")},
+            inverseJoinColumns = {@JoinColumn(name = "fun_cae_cat_id")}
+    )
+    Set<AddressCategory> addressCategories = new HashSet<>();
 }

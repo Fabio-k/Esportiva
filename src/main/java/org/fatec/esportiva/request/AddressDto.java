@@ -18,6 +18,9 @@ import java.util.HashSet;
 public class AddressDto {
     private Long id;
 
+    @NotBlank(message = "Nome do endereço não deve ficar em branco")
+    private String name;
+
     @NotBlank(message = "CEP não pode ficar em branco")
     private String cep;
 
