@@ -1,14 +1,14 @@
 package org.fatec.esportiva.mapper;
 
 import lombok.experimental.UtilityClass;
-import org.fatec.esportiva.entity.Clients;
+import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.request.ClientDto;
 
 @UtilityClass
 public class ClientMapper {
 
-    public Clients toUser(ClientDto userDto) {
-        return Clients.builder()
+    public Client toUser(ClientDto userDto) {
+        return Client.builder()
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .cpf(userDto.getCpf())
@@ -20,7 +20,7 @@ public class ClientMapper {
                 .build();
     }
 
-    public ClientDto toUserDto(Clients user) {
+    public ClientDto toUserDto(Client user) {
         return ClientDto.builder()
                 .name(user.getName())
                 .email(user.getEmail())
