@@ -13,8 +13,12 @@ import lombok.*;
 @Setter
 @Table(name = "categorias_end")
 public class AddressCategory {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cae_cat_id")
+    private Integer id;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "cae_cat_end")
     private AddressType addressType;
 }

@@ -6,9 +6,12 @@ import lombok.*;
 import org.fatec.esportiva.entity.enums.AddressType;
 import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -25,8 +28,15 @@ public class Address {
     private Long id;
 
     @NotNull
+    @Column(name = "end_frase_identificacao")
+    private String name;
+
+    @NotNull
     @Column(name = "end_numero")
     private String number;
+
+    @Column(name= "end_observacao")
+    private String observation;
 
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -38,27 +48,19 @@ public class Address {
     @Column(name = "end_tipo_logradouro")
     private StreetType streetType;
 
-    @NotNull
-    @Column(name = "end_frase_identificacao")
-    private String identificationPhrase;
-
-    @Column(name = "end_observacao")
-    private String observation;
-
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "clientes_cli_id")
-    private Clients clients;
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "cep_cep_id")
+    @JoinColumn(name = "end_cep_id")
     private Cep cep;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "address_type", joinColumns = @JoinColumn(name = "address_id"))
-    @Column(name = "type")
-    @Enumerated(EnumType.STRING)
-    private List<AddressType> addressTypeList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "end_cli_id")
+    private Client client;
 
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "funcao",
+            joinColumns = {@JoinColumn(name="fun_end_id")},
+            inverseJoinColumns = {@JoinColumn(name = "fun_cae_cat_id")}
+    )
+    Set<AddressCategory> addressCategories = new HashSet<>();
 }
