@@ -57,9 +57,9 @@
     </svg>
     <form th:if="${users.size > 0}" th:action="@{/users/login}" th:object="${user}" method="post">
         <div>
-            <select id="users" th:field="*{id}">
+            <select id="users" th:field="*{email}">
                 <option value="">Selecione o usuário</option>
-                <option th:each="user: ${users}" th:value="${user.id}" th:text="${user.role.name == 'ADMIN' ? user.name + ' (admin)' : user.name}"></option>
+                <option th:each="user: ${users}" th:value="${user.email}" th:text="${user.name}"></option>
             </select>
         </div>
         <button type="submit">Entrar</button>
