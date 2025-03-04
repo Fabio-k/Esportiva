@@ -11,7 +11,8 @@
 
 CREATE TABLE administrador (
     adm_id    SERIAL PRIMARY KEY,
-    adm_nome  VARCHAR(30) NOT NULL
+    adm_nome  VARCHAR(30) NOT NULL,
+    adm_email VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE cartoes_de_credito (
@@ -25,6 +26,7 @@ CREATE TABLE cartoes_de_credito (
 );
 
 CREATE TABLE categorias_end (
+    cae_cat_id SERIAL PRIMARY KEY,
     cae_cat_end VARCHAR(20) NOT NULL
 );
 

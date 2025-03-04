@@ -18,7 +18,7 @@ INSERT INTO clientes (cli_nome, cli_cpf, cli_data_nascimento, cli_genero, cli_st
 -- CEP
 -- https://www.4devs.com.br/gerador_de_cep
 SELECT setval('cep_cep_id_seq', 1, false);
-INSERT INTO cep(cep_cep, cep_logradouro, cep_bairro, cep_cidade, cep_estado, cep_pais) VALUES      
+INSERT INTO cep(cep_cep, cep_logradouro, cep_bairro, cep_cidade, cep_estado, cep_pais) VALUES
 ('13424794', 'Rua das Laranjeiras', 'Vila das Rosas', 'Pindamonhangaba', 'São Paulo', 'Brasil'),
 ('08490690', 'Avenida Rodrigo Souza', 'Vila Madalena', 'São Paulo', 'São Paulo', 'Brasil'),
 ('13337550', 'Estrada dos Desalmados', 'Bela Vista', 'Ponta Grossa', 'Minas Gerais', 'Brasil'),
@@ -162,9 +162,9 @@ SELECT setval('logs_log_id_seq', 1, false);
 
 -- Administrador
 SELECT setval('administrador_adm_id_seq', 1, false);
-INSERT INTO administrador (adm_nome) VALUES
-('Fábio'),
-('Lucas');
+INSERT INTO administrador (adm_nome, adm_email) VALUES
+('Fábio', 'fabio@email.com'),
+('Lucas', 'lucas@email.com');
 
 -- Ativa as restrições da chave estrangeira novamente
 SET session_replication_role = DEFAULT;
