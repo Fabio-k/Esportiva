@@ -40,13 +40,13 @@ CREATE TABLE enderecos (
 );
 
 CREATE TABLE categorias_end (
-    cae_cat_id SERIAL PRIMARY KEY,
-    cae_cat_end VARCHAR(20) NOT NULL
+    cae_id SERIAL PRIMARY KEY,
+    cae_nome VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE funcao (
     fun_end_id            INTEGER NOT NULL,
-    fun_cae_cat_id  INTEGER NOT NULL,
+    fun_cae_id  INTEGER NOT NULL,
     CONSTRAINT fk_fun_end FOREIGN KEY (fun_end_id) REFERENCES enderecos(end_id),
-    CONSTRAINT fk_fun_cae_cat_id FOREIGN KEY (fun_cae_cat_id) REFERENCES categorias_end(cae_cat_id)
+    CONSTRAINT fk_fun_cae_id FOREIGN KEY (fun_cae_id) REFERENCES categorias_end(cae_id)
 );

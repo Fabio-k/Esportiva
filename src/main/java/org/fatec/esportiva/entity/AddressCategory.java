@@ -15,10 +15,10 @@ import lombok.*;
 public class AddressCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cae_cat_id")
+    @Column(name = "cae_id")
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "cae_cat_end")
+    @Column(name = "cae_nome")
     private AddressType addressType;
 }

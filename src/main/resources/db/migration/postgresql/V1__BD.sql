@@ -15,6 +15,7 @@ CREATE TABLE administrador (
     adm_email VARCHAR(30) NOT NULL
 );
 
+
 CREATE TABLE cartoes_de_credito (
     car_id                SERIAL PRIMARY KEY,
     car_numero            VARCHAR(19) NOT NULL,
@@ -22,15 +23,15 @@ CREATE TABLE cartoes_de_credito (
     car_nome_impresso     VARCHAR(30) NOT NULL,
     car_codigo_seguranca  INTEGER NOT NULL,
     car_preferencial      BOOLEAN NOT NULL,
-    clientes_cli_id       INTEGER NOT NULL
+    cli_cli_id            INTEGER NOT NULL
 );
+
 
 CREATE TABLE categorias_end (
-    cae_cat_id SERIAL PRIMARY KEY,
-    cae_cat_end VARCHAR(20) NOT NULL
+    cae_id SERIAL PRIMARY KEY,
+    cae_nome VARCHAR(20) NOT NULL
 );
 
-ALTER TABLE categorias_end ADD CONSTRAINT categorias_end_pk PRIMARY KEY ( cae_cat_end );
 
 CREATE TABLE categorias_produto (
     cat_id    SERIAL PRIMARY KEY,
@@ -65,8 +66,8 @@ CREATE TABLE clientes (
 CREATE TABLE cupons_promocao (
     cpr_id                SERIAL PRIMARY KEY,
     cpr_promocao_porcentagem  FLOAT NOT NULL,
-    clientes_cli_id       INTEGER NOT NULL,
-    produtos_pro_id       INTEGER NOT NULL
+    cli_cli_id            INTEGER NOT NULL,
+    pro_pro_id            INTEGER NOT NULL
 );
 
 
@@ -74,7 +75,7 @@ CREATE TABLE cupons_troca (
     ctr_id           SERIAL PRIMARY KEY,
     ctr_valor        FLOAT NOT NULL,
     ctr_quantidade   INTEGER NOT NULL,
-    clientes_cli_id  INTEGER NOT NULL
+    cli_cli_id       INTEGER NOT NULL
 );
 
 
@@ -85,18 +86,18 @@ CREATE TABLE enderecos (
     end_tipo_logradouro      VARCHAR(20) NOT NULL,
     end_frase_identificacao  VARCHAR(40) NOT NULL,
     end_observacao           VARCHAR(50),
-    clientes_cli_id          INTEGER NOT NULL,
+    cli_cli_id               INTEGER NOT NULL,
     cep_cep_id               INTEGER NOT NULL
 );
 
 
 CREATE TABLE funcao (
-    enderecos_end_id            INTEGER NOT NULL,
-    categorias_end_cae_cat_end  VARCHAR(20) NOT NULL
+    end_end_id  INTEGER NOT NULL,
+    cae_cae_id  INTEGER NOT NULL
 );
 
-ALTER TABLE funcao ADD CONSTRAINT funcao_pk PRIMARY KEY ( enderecos_end_id,
-                                                          categorias_end_cae_cat_end );
+ALTER TABLE funcao ADD CONSTRAINT funcao_pk PRIMARY KEY ( end_end_id,
+                                                          cae_cae_id );
 
 CREATE TABLE grupo_precificacao (
     grp_id                  SERIAL PRIMARY KEY,
@@ -115,17 +116,17 @@ CREATE TABLE logs (
 CREATE TABLE pedidos (
     ped_status         VARCHAR(20) NOT NULL,
     ped_quantidade     INTEGER NOT NULL,
-    transacoes_tra_id  INTEGER NOT NULL,
-    produtos_pro_id    INTEGER
+    tra_tra_id         INTEGER NOT NULL,
+    pro_pro_id         INTEGER
 );
 
 CREATE TABLE pertence (
-    produtos_pro_id            INTEGER NOT NULL,
-    categorias_produto_cat_id  INTEGER NOT NULL
+    pro_pro_id  INTEGER NOT NULL,
+    cat_cat_id  INTEGER NOT NULL
 );
 
-ALTER TABLE pertence ADD CONSTRAINT pertence_pk PRIMARY KEY ( produtos_pro_id,
-                                                              categorias_produto_cat_id );
+ALTER TABLE pertence ADD CONSTRAINT pertence_pk PRIMARY KEY ( pro_pro_id,
+                                                              cat_cat_id );
 
 CREATE TABLE produtos (
     pro_id                        SERIAL PRIMARY KEY,
@@ -137,31 +138,31 @@ CREATE TABLE produtos (
     pro_valor_custo               FLOAT NOT NULL,
     pro_categoria_inativacao      VARCHAR(23) NOT NULL,
     pro_justificativa_inativacao  VARCHAR(50) NOT NULL,
-    grupo_precificacao_grp_id     INTEGER
+    grp_grp_id                    INTEGER
 );
 
 
 CREATE TABLE transacoes (
     tra_id           SERIAL PRIMARY KEY,
     tra_data_compra  DATE NOT NULL,
-    clientes_cli_id  INTEGER NOT NULL
+    cli_cli_id       INTEGER NOT NULL
 );
 
 
 ALTER TABLE cartoes_de_credito
-    ADD CONSTRAINT cartoes_de_credito_clientes_fk FOREIGN KEY ( clientes_cli_id )
+    ADD CONSTRAINT cartoes_de_credito_clientes_fk FOREIGN KEY ( cli_cli_id )
         REFERENCES clientes ( cli_id );
 
 ALTER TABLE cupons_promocao
-    ADD CONSTRAINT cupons_promocao_clientes_fk FOREIGN KEY ( clientes_cli_id )
+    ADD CONSTRAINT cupons_promocao_clientes_fk FOREIGN KEY ( cli_cli_id )
         REFERENCES clientes ( cli_id );
 
 ALTER TABLE cupons_promocao
-    ADD CONSTRAINT cupons_promocao_produtos_fk FOREIGN KEY ( produtos_pro_id )
+    ADD CONSTRAINT cupons_promocao_produtos_fk FOREIGN KEY ( pro_pro_id )
         REFERENCES produtos ( pro_id );
 
 ALTER TABLE cupons_troca
-    ADD CONSTRAINT cupons_troca_clientes_fk FOREIGN KEY ( clientes_cli_id )
+    ADD CONSTRAINT cupons_troca_clientes_fk FOREIGN KEY ( cli_cli_id )
         REFERENCES clientes ( cli_id );
 
 ALTER TABLE enderecos
@@ -169,39 +170,39 @@ ALTER TABLE enderecos
         REFERENCES cep ( cep_id );
 
 ALTER TABLE enderecos
-    ADD CONSTRAINT enderecos_clientes_fk FOREIGN KEY ( clientes_cli_id )
+    ADD CONSTRAINT enderecos_clientes_fk FOREIGN KEY ( cli_cli_id )
         REFERENCES clientes ( cli_id );
 
 ALTER TABLE funcao
-    ADD CONSTRAINT funcao_categorias_end_fk FOREIGN KEY ( categorias_end_cae_cat_end )
-        REFERENCES categorias_end ( cae_cat_end );
+    ADD CONSTRAINT funcao_categorias_end_fk FOREIGN KEY ( cae_cae_id )
+        REFERENCES categorias_end ( cae_id );
 
 ALTER TABLE funcao
-    ADD CONSTRAINT funcao_enderecos_fk FOREIGN KEY ( enderecos_end_id )
+    ADD CONSTRAINT funcao_enderecos_fk FOREIGN KEY ( end_end_id )
         REFERENCES enderecos ( end_id );
 
 ALTER TABLE pedidos
-    ADD CONSTRAINT pedidos_produtos_fk FOREIGN KEY ( produtos_pro_id )
+    ADD CONSTRAINT pedidos_produtos_fk FOREIGN KEY ( pro_pro_id )
         REFERENCES produtos ( pro_id );
 
 ALTER TABLE pedidos
-    ADD CONSTRAINT pedidos_transacoes_fk FOREIGN KEY ( transacoes_tra_id )
+    ADD CONSTRAINT pedidos_transacoes_fk FOREIGN KEY ( tra_tra_id )
         REFERENCES transacoes ( tra_id );
 
 ALTER TABLE pertence
-    ADD CONSTRAINT pertence_categorias_produto_fk FOREIGN KEY ( categorias_produto_cat_id )
+    ADD CONSTRAINT pertence_categorias_produto_fk FOREIGN KEY ( cat_cat_id )
         REFERENCES categorias_produto ( cat_id );
 
 ALTER TABLE pertence
-    ADD CONSTRAINT pertence_produtos_fk FOREIGN KEY ( produtos_pro_id )
+    ADD CONSTRAINT pertence_produtos_fk FOREIGN KEY ( pro_pro_id )
         REFERENCES produtos ( pro_id );
 
 ALTER TABLE produtos
-    ADD CONSTRAINT produtos_grupo_precificacao_fk FOREIGN KEY ( grupo_precificacao_grp_id )
+    ADD CONSTRAINT produtos_grupo_precificacao_fk FOREIGN KEY ( grp_grp_id )
         REFERENCES grupo_precificacao ( grp_id );
 
 ALTER TABLE transacoes
-    ADD CONSTRAINT transacoes_clientes_fk FOREIGN KEY ( clientes_cli_id )
+    ADD CONSTRAINT transacoes_clientes_fk FOREIGN KEY ( cli_cli_id )
         REFERENCES clientes ( cli_id );
 
 

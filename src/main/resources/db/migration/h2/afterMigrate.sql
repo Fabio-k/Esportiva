@@ -15,12 +15,12 @@ INSERT INTO enderecos (end_numero, end_tipo_residencia, end_tipo_logradouro, end
 ('666', 'HOUSE', 'SQUARE', 'Lar', 'Fundos', '2', '3'),
 ('111', 'APARTMENT', 'ALLEY', 'Reduto de paz', '', '3', '4');
 
-INSERT INTO categorias_end (cae_cat_end) VALUES
+INSERT INTO categorias_end (cae_nome) VALUES
 ('RESIDENCE'),
 ('BILLING'),
 ('SHIPPING');
 
-INSERT INTO funcao (fun_end_id, fun_cae_cat_id) VALUES
+INSERT INTO funcao (fun_end_id, fun_cae_id) VALUES
 ('1', '1'),
 ('2', '1'),
 ('2', '3'),
