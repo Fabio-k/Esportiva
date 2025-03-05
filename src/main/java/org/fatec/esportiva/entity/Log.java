@@ -20,16 +20,16 @@ public class Log {
     private Long id;
 
     @NotNull
-    @Column(name = "log_operacao")
-    private String operation;
-
-    @NotNull
     @Column(name = "log_usuario")
     private String user;
 
     @NotNull
     @Column(name = "log_data_hora")
     private LocalDateTime timestamp;
+
+    @NotNull
+    @Column(name = "log_operacao")
+    private String operation;
 
     @NotNull
     @Column(name = "log_conteudo_alteracao")

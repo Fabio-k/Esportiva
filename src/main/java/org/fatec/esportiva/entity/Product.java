@@ -22,6 +22,14 @@ public class Product {
     private Long id;
 
     @NotNull
+    @Column(name = "pro_nome_produto")
+    private String name;
+
+    @NotNull
+    @Column(name = "pro_data_entrada")
+    private Date entryDate;
+
+    @NotNull
     @Column(name = "pro_quantidade_estoque")
     private int stockQuantity;
 
@@ -34,24 +42,16 @@ public class Product {
     private float profitMargin;
 
     @NotNull
-    @Column(name = "pro_justificativa_inativacao")
-    private String inactivationJustification;
+    @Column(name = "pro_valor_custo")
+    private float costValue;
 
     @NotNull
     @Column(name = "pro_categoria_inativacao")
     private ProductStatus inactivationCategory;
 
     @NotNull
-    @Column(name = "pro_valor_custo")
-    private float costValue;
-
-    @NotNull
-    @Column(name = "pro_data_entrada")
-    private Date entryDate;
-
-    @NotNull
-    @Column(name = "pro_nome_produto")
-    private String name;
+    @Column(name = "pro_justificativa_inativacao")
+    private String inactivationJustification;
 
     @ManyToOne
     @JoinColumn(name = "pro_grp_id")
