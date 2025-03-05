@@ -13,10 +13,9 @@ import lombok.*;
 @Table(name = "grupo_precificacao")
 public class PricingGroup {
 
-
     @Id
     @Column(name = "grp_id")
-    private int id;
+    private Long id;
 
     @NotNull
     @Column(name = "grp_valor_precificacao")

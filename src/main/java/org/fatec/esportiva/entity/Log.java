@@ -17,7 +17,7 @@ public class Log {
 
     @Id
     @Column(name = "log_id")
-    private int id;
+    private Long id;
 
     @NotNull
     @Column(name = "log_operacao")

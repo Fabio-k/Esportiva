@@ -15,7 +15,7 @@ public class ExchangeVoucher {
 
     @Id
     @Column(name = "ctr_id")
-    private int id;
+    private Long id;
 
     @NotNull
     @Column(name = "ctr_valor")
@@ -27,5 +27,5 @@ public class ExchangeVoucher {
 
     @NotNull
     @Column(name = "clientes_cli_id")
-    private int clientes_cli_id;
+    private Long cli_cli_id;
 }

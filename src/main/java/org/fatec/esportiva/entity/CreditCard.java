@@ -42,5 +42,5 @@ public class CreditCard {
 
     @NotNull
     @Column(name = "clientes_cli_id")
-    private int cli_id;
+    private Long cli_id;
 }

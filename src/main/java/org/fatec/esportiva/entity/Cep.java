@@ -20,7 +20,7 @@ public class Cep {
     @Id
     @Column(name = "cep_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Pattern(regexp = "^[0-9]{5}-[0-9]{3}$|^[0-9]{8}$", message = "Por favor, forneça um CEP válido")
     @NotNull
