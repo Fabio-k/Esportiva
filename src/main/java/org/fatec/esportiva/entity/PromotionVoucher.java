@@ -22,10 +22,12 @@ public class PromotionVoucher {
     private float promocao_porcentagem;
 
     @NotNull
-    @Column(name = "cli_cli_id")
-    private Long cli_cli_id;
+    @ManyToOne
+    @JoinColumn(name = "cli_cli_id")
+    private Client client;
 
     @NotNull
-    @Column(name = "pro_pro_id")
-    private Long pro_pro_id;
+    @ManyToOne
+    @JoinColumn(name = "pro_pro_id")
+    private Product product;
 }

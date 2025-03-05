@@ -53,6 +53,7 @@ public class Product {
     @Column(name = "pro_nome_produto")
     private String nome_produto;
 
-    @Column(name = "grp_grp_id")
-    private Long grp_grp_id;
+    @ManyToOne
+    @JoinColumn(name = "grp_grp_id")
+    private PricingGroup pricingGroup;
 }

@@ -23,7 +23,7 @@ public class Transactions {
     @Column(name = "tra_data_compra")
     private Date data_compra;
 
-    @NotNull
-    @Column(name = "cli_cli_id")
-    private Long cli_cli_id;
+    @ManyToOne
+    @JoinColumn(name = "cli_cli_id")
+    private Client client;
 }

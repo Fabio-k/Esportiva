@@ -26,6 +26,7 @@ public class ExchangeVoucher {
     private int quantidade;
 
     @NotNull
-    @Column(name = "cli_cli_id")
-    private Long cli_cli_id;
+    @ManyToOne
+    @JoinColumn(name = "cli_cli_id")
+    private Client client;
 }

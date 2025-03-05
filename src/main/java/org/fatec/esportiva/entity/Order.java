@@ -24,9 +24,11 @@ public class Order {
     private int quantidade;
 
     @NotNull
-    @Column(name = "tra_tra_id")
-    private Long tra_tra_id;
+    @ManyToOne
+    @JoinColumn(name = "tra_tra_id")
+    private Transactions transaction;
 
-    @Column(name = "pro_pro_id")
-    private Long pro_pro_id;
+    @ManyToOne
+    @JoinColumn(name = "pro_pro_id")
+    private Product product;
 }
