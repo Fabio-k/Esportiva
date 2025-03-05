@@ -44,8 +44,7 @@ public class AddressMapper {
                 .types(new HashSet<>(address.getAddressCategories()
                         .stream()
                         .map(cat -> cat.getAddressType())
-                        .collect(Collectors.toSet()))
-                )
+                        .collect(Collectors.toSet())))
                 .build();
     }
 

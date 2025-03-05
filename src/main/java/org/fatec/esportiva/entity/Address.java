@@ -52,7 +52,7 @@ public class Address {
     @JoinColumn(name = "end_cli_id")
     private Client client;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany
     @JoinTable(name = "funcao", joinColumns = { @JoinColumn(name = "fun_end_id") }, inverseJoinColumns = {
             @JoinColumn(name = "fun_cae_id") })
     Set<AddressCategory> addressCategories = new HashSet<>();

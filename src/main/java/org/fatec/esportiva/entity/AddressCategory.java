@@ -5,6 +5,9 @@ import org.fatec.esportiva.entity.enums.AddressType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,4 +24,7 @@ public class AddressCategory {
     @Enumerated(EnumType.STRING)
     @Column(name = "cae_nome")
     private AddressType addressType;
+
+    @ManyToMany(mappedBy = "addressCategories")
+    private Set<Address> addresses = new HashSet<>();
 }
