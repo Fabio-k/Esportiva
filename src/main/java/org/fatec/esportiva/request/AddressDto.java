@@ -19,7 +19,7 @@ import java.util.HashSet;
 public class AddressDto {
     private Long id;
 
-    @NotBlank(message = "Endereço: Frase de identificação do seu endereço não deve ficar em branco")
+    @NotBlank(message = "Endereço: Frase de identificação não deve ficar em branco")
     private String addressIdentificationPhrase;
 
     @NotBlank(message = "Endereço: CEP não pode ficar em branco")

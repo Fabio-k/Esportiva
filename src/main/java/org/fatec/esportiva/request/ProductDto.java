@@ -2,6 +2,7 @@ package org.fatec.esportiva.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
@@ -18,42 +19,41 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class ProductDto {
+    private Long id;
 
-    @NotBlank
-    private int id;
-
-    @Min(value = 0, message = "A quantidade no estoque não pode ser negativa!")
-    @NotBlank
-    private int stock_quantity;
-
-    @Min(value = 0, message = "A quantidade no reservada não pode ser negativa!")
-    @NotBlank
-    private int blocked_quantity;
-
-    @Min(value = 0, message = "O valor da margem de precificação deve ser maior que 0%!")
-    @NotBlank
-    private float pricing_value;
-
-    @NotBlank
-    private String deactivation_justification;
-
-    @NotBlank
-    private ProductStatus deactivation_category;
-
-    @Min(value = 0, message = "O custo do produto não pode ser negativo!")
-    @NotBlank
-    private float cost;
-
-    @PastOrPresent(message = "O produto somente pode ser inserido no sistema até o presente momento")
-    @NotBlank
-    private Date entry_date;
-
-    @NotBlank
+    @NotBlank(message = "Produto: Nome não pode ficar em branco")
     private String product_name;
 
-    @NotBlank
-    private int pricing_group_id;
+    @NotNull(message = "Produto: Data de entrada não pode ficar em branco")
+    @PastOrPresent(message = "Produto: Data de entrada pode ser até o presente momento")
+    private Date entry_date;
 
-    @NotBlank
+    @NotNull(message = "Produto: Quantidade no estoque não pode ficar em branco")
+    @Min(value = 0, message = "Produto: Quantidade no estoque não pode ser negativa")
+    private int stock_quantity;
+
+    @NotNull(message = "Produto: Quantidade reservada pelos carrinhos de compra não pode ficar em branco")
+    @Min(value = 0, message = "Produto: Quantidade reservada pelos carrinhos de compra não pode ser negativa")
+    private int blocked_quantity;
+
+    @NotNull(message = "Produto: Margem de lucro não pode ficar em branco")
+    @Min(value = 0, message = "Produto: Margem de lucro deve ser maior que 0%")
+    private float pricing_value;
+
+    @NotNull(message = "Produto: Custo não pode ficar em branco")
+    @Min(value = 0, message = "Produto: O custo não pode ser negativo")
+    private float cost;
+
+    // Pode ter justificativa vazia (Quando não está desativado, por exemplo)
+    @NotNull(message = "Produto: A justificativa de desativação não pode ser nula, mas pode ser uma string vazia")
+    private String deactivation_justification;
+
+    @NotNull(message = "Produto: Categoria de desativação não pode ficar em branco")
+    private ProductStatus deactivation_category;
+
+    @NotNull(message = "Produto: Referencia para uma categoria de inativação não pode ficar em branco")
+    private Long pricing_group_id;
+
+    @NotNull(message = "Produto: Referencia a uma categoria de produto não pode ficar em branco")
     private List<ProductCategory> product_category = new ArrayList<>();
 }

@@ -15,19 +15,20 @@ import org.fatec.esportiva.entity.enums.CreditCardBrand;
 public class CreditCardDto {
     private Long id;
 
-    @Pattern(regexp = "^[0-9]{13,19}$", message = "O campo deve conter um número de cartão de crédito válido")
-    @NotBlank
+    @NotBlank(message = "Cartão de crédito: Número não pode ficar em branco")
+    @Pattern(regexp = "^[0-9]{13,19}$", message = "Cartão de crédito: O campo deve conter um número de cartão de crédito válido")
     private String number;
 
-    @NotNull
+    @NotNull(message = "Cartão de crédito: Bandeira não pode ficar em branco")
     private CreditCardBrand brand;
 
-    @NotBlank
+    @NotBlank(message = "Cartão de crédito: Nome do cliente não pode ficar em branco")
     private String name;
 
-    @Pattern(regexp = "^[0-9]+$", message = "O código de segurança somente contém dígitos")
-    @NotBlank
+    @NotBlank(message = "Cartão de crédito: Código de segurança não pode ficar em branco")
+    @Pattern(regexp = "^[0-9]+$", message = "Cartão de crédito: O código de segurança somente contém dígitos")
     private String securityCode;
 
+    @NotNull(message = "Cartão de crédito: Flag de cartão preferencial não pode ficar em branco")
     private boolean preferential;
 }

@@ -1,6 +1,6 @@
 package org.fatec.esportiva.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
@@ -16,14 +16,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class TransactionDto {
+    private Long id;
 
-    @NotBlank
-    private int id;
-
-    @PastOrPresent(message = "O produto somente pode ser comprado até a presente data!")
-    @NotBlank
+    @NotNull(message = "Transação: A compra do carrinho não pode ter data em branco")
+    @PastOrPresent(message = "Transação: A compra do carrinho somente pode ser efetuada até o presente momento")
     private Date purchase_date;
 
-    @NotBlank
+    @NotNull(message = "Transação: Todo carrinho tem pelo menos um pedido associado")
     private List<Order> orders = new ArrayList<>();
 }
