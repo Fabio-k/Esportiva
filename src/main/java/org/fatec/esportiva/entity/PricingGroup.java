@@ -19,9 +19,9 @@ public class PricingGroup {
 
     @NotNull
     @Column(name = "grp_valor_precificacao")
-    private float valor_precificacao;
+    private float profitMargin;
 
     @NotNull
     @Column(name = "grp_nome")
-    private String nome;
+    private String name;
 }

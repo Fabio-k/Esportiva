@@ -19,7 +19,7 @@ public class PromotionVoucher {
 
     @NotNull
     @Column(name = "cpr_promocao_porcentagem")
-    private float promocao_porcentagem;
+    private float discountPercentagem;
 
     @NotNull
     @ManyToOne

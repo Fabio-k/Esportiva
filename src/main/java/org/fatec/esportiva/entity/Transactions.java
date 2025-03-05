@@ -21,7 +21,7 @@ public class Transactions {
 
     @NotNull
     @Column(name = "tra_data_compra")
-    private Date data_compra;
+    private Date purchaseDate;
 
     @ManyToOne
     @JoinColumn(name = "cli_cli_id")

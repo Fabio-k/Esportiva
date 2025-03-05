@@ -19,5 +19,5 @@ public class ProductCategory {
 
     @NotNull
     @Column(name = "cat_nome")
-    private String nome;
+    private String name;
 }

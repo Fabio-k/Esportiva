@@ -21,7 +21,7 @@ public class Order {
 
     @NotNull
     @Column(name = "ped_quantidade")
-    private int quantidade;
+    private int quantity;
 
     @NotNull
     @ManyToOne

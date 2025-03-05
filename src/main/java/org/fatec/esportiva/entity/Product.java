@@ -23,35 +23,35 @@ public class Product {
 
     @NotNull
     @Column(name = "pro_quantidade_estoque")
-    private int quantidade_estoque;
+    private int stockQuantity;
 
     @NotNull
     @Column(name = "pro_quantidade_bloqueada")
-    private int quantidade_bloqueada;
+    private int blockedQuantity;
 
     @NotNull
     @Column(name = "pro_valor_precificacao")
-    private float valor_precificacao;
+    private float profitMargin;
 
     @NotNull
     @Column(name = "pro_justificativa_inativacao")
-    private String justificativa_inativacao;
+    private String inactivationJustification;
 
     @NotNull
     @Column(name = "pro_categoria_inativacao")
-    private ProductStatus categoria_inativacao;
+    private ProductStatus inactivationCategory;
 
     @NotNull
     @Column(name = "pro_valor_custo")
-    private float valor_custo;
+    private float costValue;
 
     @NotNull
     @Column(name = "pro_data_entrada")
-    private Date data_entrada;
+    private Date entryDate;
 
     @NotNull
     @Column(name = "pro_nome_produto")
-    private String nome_produto;
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "grp_grp_id")

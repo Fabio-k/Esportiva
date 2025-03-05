@@ -19,11 +19,11 @@ public class ExchangeVoucher {
 
     @NotNull
     @Column(name = "ctr_valor")
-    private float valor;
+    private float value;
 
     @NotNull
     @Column(name = "ctr_quantidade")
-    private int quantidade;
+    private int quantity;
 
     @NotNull
     @ManyToOne
