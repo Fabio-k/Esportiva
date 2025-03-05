@@ -27,7 +27,7 @@ INSERT INTO cep(cep_cep, cep_logradouro, cep_bairro, cep_cidade, cep_estado, cep
 
 -- Endereço
 SELECT setval('enderecos_end_id_seq', 1, false);
-INSERT INTO enderecos (end_numero, end_tipo_residencia, end_tipo_logradouro, end_frase_identificacao, end_observacao, clientes_cli_id, cep_cep_id) VALUES
+INSERT INTO enderecos (end_numero, end_tipo_residencia, end_tipo_logradouro, end_frase_identificacao, end_observacao, cli_cli_id, cep_cep_id) VALUES
 ('123', 'HOUSE', 'STREET', 'Minha Casa', '', '1', '1'),
 ('234', 'OTHER', 'AVENUE', 'Trabalho', 'Horário comercial: 07:30 - 17:10', '1', '2'),
 ('666', 'HOUSE', 'SQUARE', 'Lar', 'Fundos', '2', '3'),
@@ -35,23 +35,23 @@ INSERT INTO enderecos (end_numero, end_tipo_residencia, end_tipo_logradouro, end
 
 
 -- Categoria de endereço
-INSERT INTO categorias_end (cae_cat_end) VALUES
+INSERT INTO categorias_end (cae_nome) VALUES
 ('RESIDENCE'),
 ('BILLING'),
 ('SHIPPING');
 
 
 -- Relaciona o Endereço com sua categoria
-INSERT INTO funcao (enderecos_end_id, categorias_end_cae_cat_end) VALUES
-('1', 'RESIDENCE'),
-('2', 'BILLING'),
-('2', 'SHIPPING'),
-('3', 'RESIDENCE'),
-('3', 'BILLING'),
-('3', 'SHIPPING'),
-('4', 'RESIDENCE'),
-('4', 'BILLING'),
-('4', 'SHIPPING');
+INSERT INTO funcao (end_end_id, cae_cae_id) VALUES
+('1', '1'),
+('2', '2'),
+('2', '3'),
+('3', '1'),
+('3', '2'),
+('3', '3'),
+('4', '1'),
+('4', '2'),
+('4', '3');
 
 
 -- ###########################################################################################
@@ -60,7 +60,7 @@ INSERT INTO funcao (enderecos_end_id, categorias_end_cae_cat_end) VALUES
 -- Cartão de Crédito
 -- https://www.invertexto.com/gerador-de-cartao-de-credito
 SELECT setval('cartoes_de_credito_car_id_seq', 1, false);
-INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car_codigo_seguranca, car_preferencial, clientes_cli_id) VALUES
+INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car_codigo_seguranca, car_preferencial, cli_cli_id) VALUES
 ('4372412662447605', 'VISA', 'Carlos Silva', '757', (TRUE), '1'),
 ('5115199853098847', 'MASTERCARD', 'Carlos Silva', '543', (FALSE), '1'),
 ('344773538685170', 'AMERICAN_EXPRESS', 'Mariana Duarte', '161', (TRUE), '2'),
@@ -72,7 +72,7 @@ INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car
 
 -- Cupons de Troca
 SELECT setval('cupons_troca_ctr_id_seq', 1, false);
-INSERT INTO cupons_troca (ctr_valor, ctr_quantidade, clientes_cli_id) VALUES
+INSERT INTO cupons_troca (ctr_valor, ctr_quantidade, cli_cli_id) VALUES
 ('10', '1', '2'),
 ('30', '2', '3'),
 ('20', '1', '3');
@@ -80,7 +80,7 @@ INSERT INTO cupons_troca (ctr_valor, ctr_quantidade, clientes_cli_id) VALUES
 
 -- Cupons de Promoção
 SELECT setval('cupons_promocao_cpr_id_seq', 1, false);
-INSERT INTO cupons_promocao (cpr_promocao_porcentagem, clientes_cli_id, produtos_pro_id) VALUES
+INSERT INTO cupons_promocao (cpr_promocao_porcentagem, cli_cli_id, pro_pro_id) VALUES
 ('10', '2', '1'),
 ('50', '2', '2'),
 ('25', '3', '3');
@@ -91,13 +91,13 @@ INSERT INTO cupons_promocao (cpr_promocao_porcentagem, clientes_cli_id, produtos
 
 -- Transações
 SELECT setval('transacoes_tra_id_seq', 1, false);
-INSERT INTO transacoes (tra_data_compra, clientes_cli_id) VALUES
+INSERT INTO transacoes (tra_data_compra, cli_cli_id) VALUES
 ('11/12/2024', '1'),
 ('15/12/2024', '1');
 
 
 -- Pedidos que ficam dentro da transação
-INSERT INTO pedidos (ped_status, ped_quantidade, transacoes_tra_id, produtos_pro_id) VALUES
+INSERT INTO pedidos (ped_status, ped_quantidade, tra_tra_id, pro_pro_id) VALUES
 ('ENTREGUE', '3', '1', '1'),
 ('ENTREGUE', '1', '1', '2'),
 ('EM_PROCESSAMENTO', '5', '2', '1');
@@ -108,7 +108,7 @@ INSERT INTO pedidos (ped_status, ped_quantidade, transacoes_tra_id, produtos_pro
 
 -- Produto
 SELECT setval('produtos_pro_id_seq', 1, false);
-INSERT INTO produtos (pro_nome_produto, pro_data_entrada, pro_quantidade_estoque, pro_quantidade_bloqueada, pro_valor_precificacao, pro_valor_custo, pro_categoria_inativacao, pro_justificativa_inativacao, grupo_precificacao_grp_id) VALUES
+INSERT INTO produtos (pro_nome_produto, pro_data_entrada, pro_quantidade_estoque, pro_quantidade_bloqueada, pro_valor_precificacao, pro_valor_custo, pro_categoria_inativacao, pro_justificativa_inativacao, grp_grp_id) VALUES
 ('Taco de Beisebol', '12-12-2022', '50', '0', '15', '50', 'ATIVO', '', '1'),
 ('Bola de Beisebol', '02-07-2020', '0', '0', '20', '120', 'FORA_DE_MERCADO', 'Sistema: Baixa venda', '1'),
 ('Taco de Beisebol de grafeno', '12-12-2022', '10', '0', '30', '100', 'DESATIVADO_MANUALMENTE', 'O produto possui sanções estrangeiras', '1'),
@@ -137,7 +137,7 @@ INSERT INTO categorias_produto (cat_nome) VALUES
 
 
 -- Relaciona os produtos com suas categorias
-INSERT INTO pertence (produtos_pro_id, categorias_produto_cat_id) VALUES
+INSERT INTO pertence (pro_pro_id, cat_cat_id) VALUES
 ('1', '2'),
 ('1', '5'),
 ('2', '2'),
@@ -150,21 +150,18 @@ INSERT INTO pertence (produtos_pro_id, categorias_produto_cat_id) VALUES
 ('6', '3'),
 ('6', '5');
 
+
+-- ###########################################################################################
+
+
+-- Inicia a sequência do log em 1
 SELECT setval('logs_log_id_seq', 1, false);
-
-
-
-
-
-
-
-
 
 -- Administrador
 SELECT setval('administrador_adm_id_seq', 1, false);
 INSERT INTO administrador (adm_nome, adm_email) VALUES
-('Fábio', 'fabio@email.com'),
-('Lucas', 'lucas@email.com');
+('Fábio', 'fabio@esportiva.com.br'),
+('Lucas', 'lucas@esportiva.com.br');
 
 -- Ativa as restrições da chave estrangeira novamente
 SET session_replication_role = DEFAULT;
