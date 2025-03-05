@@ -50,3 +50,15 @@ CREATE TABLE funcao (
     CONSTRAINT fk_fun_end FOREIGN KEY (fun_end_id) REFERENCES enderecos(end_id),
     CONSTRAINT fk_fun_cae_id FOREIGN KEY (fun_cae_id) REFERENCES categorias_end(cae_id)
 );
+
+
+CREATE TABLE cartoes_de_credito (
+    car_id                SERIAL PRIMARY KEY,
+    car_numero            VARCHAR(19) NOT NULL,
+    car_bandeira          VARCHAR(20) NOT NULL,
+    car_nome_impresso     VARCHAR(30) NOT NULL,
+    car_codigo_seguranca  INTEGER NOT NULL,
+    car_preferencial      BOOLEAN NOT NULL,
+    car_cli_id       INTEGER NOT NULL,
+    CONSTRAINT fk_car_cli FOREIGN KEY (car_cli_id) REFERENCES clientes(cli_id)
+);

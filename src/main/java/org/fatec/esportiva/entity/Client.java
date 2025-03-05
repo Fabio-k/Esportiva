@@ -64,6 +64,9 @@ public class Client implements UserDetails {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CreditCard> creditCards;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

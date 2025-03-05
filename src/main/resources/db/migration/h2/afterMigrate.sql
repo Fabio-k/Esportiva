@@ -3,6 +3,12 @@ INSERT INTO clientes (cli_nome, cli_cpf, cli_data_nascimento, cli_genero, cli_st
 ('Mariana Duarte', '71374904090', '1971-02-15', 'FEMALE', 'ACTIVE', '11974526335', 'TELEPHONE', 'marina.duarte@outlook.com'),
 ('Vanessa Von Hausten', '94551842060', '2001-11-01', 'FEMALE', 'INACTIVE', '11932301004', 'VoIP_PHONE', 'vanessa123@terra.com.br');
 
+INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car_codigo_seguranca, car_preferencial, car_cli_id) VALUES
+('4372412662447605', 'VISA', 'Carlos Silva', '757', (TRUE), '1'),
+('5115199853098847', 'MASTERCARD', 'Carlos Silva', '543', (FALSE), '1'),
+('344773538685170', 'AMERICAN_EXPRESS', 'Mariana Duarte', '7161', (TRUE), '2'),
+('6011737478309686', 'DISCOVER', 'Vanessa V. Hausten', '647', (TRUE), '3');
+
 INSERT INTO cep(cep_cep, cep_logradouro, cep_bairro, cep_cidade, cep_estado, cep_pais) VALUES
 ('13424794', 'Rua das Laranjeiras', 'Vila das Rosas', 'Pindamonhangaba', 'São Paulo', 'Brasil'),
 ('08490690', 'Avenida Rodrigo Souza', 'Vila Madalena', 'São Paulo', 'São Paulo', 'Brasil'),

@@ -52,4 +52,7 @@ public class ClientDto {
 
     @Valid
     private List<AddressDto> addresses = new ArrayList<>();
+
+    @Valid
+    private List<CreditCardDto> creditCards = new ArrayList<>();
 }

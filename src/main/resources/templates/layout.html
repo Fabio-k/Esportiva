@@ -60,25 +60,26 @@
     </header>
     <main th:replace="~{__${body}__}"></main>
     <script th:inline="javascript">
-        updateRemoveButton();
+        updateRemoveButton("address");
+        updateRemoveButton("creditCard");
 
-        function updateRemoveButton(){
-            document.querySelectorAll(".removeAddressButton").forEach(btn => {
+        function updateRemoveButton(type){
+            document.querySelectorAll(`.${type}RemoveButton`).forEach(btn => {
                 btn.onclick = function() {
-                    let container = document.getElementById("addresses")
-                    let addressItem = this.closest(".address-item")
+                    let container = document.getElementById(`${type}Container`)
+                    let addressItem = this.closest(`.${type}Item`)
                     let index = container.children.length;
                     if(index < 2){
                         return;
                     }
                     addressItem.remove();
-                    reindexAddress();
+                    reindexAddress(type);
                 }
             })
         }
 
-        function reindexAddress(){
-            let addresses = document.querySelectorAll(".address-item");
+        function reindexAddress(type){
+            let addresses = document.querySelectorAll(`.${type}Item`);
             addresses.forEach((address, index) =>{
                    address.querySelectorAll("input, textarea, select").forEach(input => {
                         let name = input.name.replace(/\[\d+]/, `[${index}]`)
@@ -95,10 +96,10 @@
             })
         }
 
-        function addAddress(){
-            let container = document.getElementById("addresses")
+        function addItem(type){
+            let container = document.getElementById(`${type}Container`)
             let index = container.children.length;
-            let firstAddress = container.querySelector(".address-item");
+            let firstAddress = container.querySelector(`.${type}Item`);
             if(!firstAddress){
                 return;
             }
@@ -122,7 +123,7 @@
 
              container.appendChild(newAddress);
 
-             updateRemoveButton();
+             updateRemoveButton(type);
         }
     </script>
 </body>

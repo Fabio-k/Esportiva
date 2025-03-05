@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.mapper.ClientMapper;
+import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.ClientDto;
+import org.fatec.esportiva.request.CreditCardDto;
 import org.fatec.esportiva.request.UserLoginRequest;
 import org.fatec.esportiva.service.AddressService;
 import org.fatec.esportiva.service.AuthService;
@@ -45,6 +47,7 @@ public class UserController {
         if (!model.containsAttribute("user")) {
             ClientDto clientDto = new ClientDto();
             clientDto.getAddresses().add(new AddressDto());
+            clientDto.getCreditCards().add(new CreditCardDto());
             model.addAttribute("user", clientDto);
         }
         model.addAttribute("body", "users/new.html :: content");
@@ -82,6 +85,7 @@ public class UserController {
             Client user = clientService.findClient(id);
             ClientDto userDto = ClientMapper.toUserDto(user);
             userDto.setAddresses(AddressMapper.toAddressDtoList(user.getAddresses()));
+            userDto.setCreditCards(user.getCreditCards().stream().map(CreditCardMapper::toCreditCardDto).toList());
             model.addAttribute("user", userDto);
         }
         model.addAttribute("id", id);
