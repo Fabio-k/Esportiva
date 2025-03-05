@@ -30,7 +30,7 @@
             </div>
             <div th:if="${id} != null">
                 <label for="name" class="block font-medium">Status:</label>
-                <input type="text" id="status" th:field="*{status}" class="w-full py-1 px-2 border rounded" />
+                <input type="text" id="status" th:field="*{status}" class="w-full py-1 px-2 border rounded" readonly />
                 <span class="error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
             </div>
         </div>
