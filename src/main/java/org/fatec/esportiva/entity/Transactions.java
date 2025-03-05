@@ -17,13 +17,13 @@ public class Transactions {
 
     @Id
     @Column(name = "tra_id")
-    private int id;
+    private Long id;
 
     @NotNull
     @Column(name = "tra_data_compra")
     private Date data_compra;
 
     @NotNull
-    @Column(name = "clientes_cli_id")
-    private int clientes_cli_id;
+    @Column(name = "cli_cli_id")
+    private Long cli_cli_id;
 }

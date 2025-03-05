@@ -8,7 +8,6 @@ import java.util.Date;
 
 import org.fatec.esportiva.entity.enums.ProductStatus;
 
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +19,7 @@ public class Product {
 
     @Id
     @Column(name = "pro_id")
-    private int id;
+    private Long id;
 
     @NotNull
     @Column(name = "pro_quantidade_estoque")
@@ -54,6 +53,6 @@ public class Product {
     @Column(name = "pro_nome_produto")
     private String nome_produto;
 
-    @Column(name = "grupo_precificacao_grp_id")
-    private int grupo_precificacao_grp_id;
+    @Column(name = "grp_grp_id")
+    private Long grp_grp_id;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.fatec.esportiva.entity.enums.Gender;
+import org.fatec.esportiva.entity.enums.PhoneType;
 import org.fatec.esportiva.entity.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -56,10 +57,10 @@ public class Client implements UserDetails {
     @Column(name = "cli_telefone")
     private String telephone;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
     @Column(name = "cli_telefone_tipo")
-    private String telephoneType;
-
+    private PhoneType telephoneType;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
@@ -85,6 +86,6 @@ public class Client implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.status == UserStatus.ACTIVE;
+        return this.status == UserStatus.ATIVO;
     }
 }

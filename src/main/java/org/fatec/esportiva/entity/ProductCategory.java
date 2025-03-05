@@ -15,7 +15,7 @@ public class ProductCategory {
 
     @Id
     @Column(name = "cat_id")
-    private int id;
+    private Long id;
 
     @NotNull
     @Column(name = "cat_nome")

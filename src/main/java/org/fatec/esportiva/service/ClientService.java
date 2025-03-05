@@ -25,7 +25,7 @@ public class ClientService {
         Client client = ClientMapper.toUser(clientDto);
         client.setAddresses(addressService.createAddresses(client, clientDto.getAddresses()));
         client.setCreditCards(creditCardService.createCreditCards(client, clientDto.getCreditCards()));
-        client.setStatus(UserStatus.ACTIVE);
+        client.setStatus(UserStatus.ATIVO);
         return clientRepository.save(client);
     }
 
@@ -53,7 +53,7 @@ public class ClientService {
         return clientRepository.save(existingUser);
     }
 
-    public List<Client> getClients(){
+    public List<Client> getClients() {
         List<Client> clients = clientRepository.findAll();
         return clients;
     }

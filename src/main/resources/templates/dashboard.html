@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}">
 </head>
+
 <body>
-<main th:fragment="content">
-    <div class="flex w-[80%] mx-auto flex-col">
-        <a th:href="@{users/new}" class="p-2 rounded mb-[10px] text-white self-end w-fit" style="background-color: var(--primary);">Novo usuário</a>
-        <table class="w-full">
-            <thead>
-            <th>Código</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th></th>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.status.name}"></td>
-                <td>
-                    <a th:href="@{/users/edit/{id}(id=${user.id})}">Editar</a>
-                    <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post"
-                          onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
-                        <input type="hidden" name="_method" value="delete"/>
-                        <button type="submit" class="btn btn-danger">Deletar</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</main>
+    <main th:fragment="content">
+        <div class="flex w-[80%] mx-auto flex-col">
+            <a th:href="@{users/new}" class="p-2 rounded mb-[10px] text-white self-end w-fit"
+                style="background-color: var(--primary);">Novo usuário</a>
+            <table class="w-full">
+                <thead>
+                    <th>Código</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.status.name}"></td>
+                        <td>
+                            <a th:href="@{/users/edit/{id}(id=${user.id})}">Editar</a>
+                            <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post"
+                                onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
+                                <input type="hidden" name="_method" value="delete" />
+                                <button type="submit" class="btn btn-danger">Deletar</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
 </body>
+
 </html>

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <title>Document</title>
 </head>
+
 <body>
 
     <form th:fragment="form" th:action="${formAction}" th:object="${user}" method="post">
@@ -14,7 +16,8 @@
             <div>
                 <label for="gender" class="block font-medium">Gênero:</label>
                 <select id="gender" th:field="*{gender}" class="w-full py-1 px-2 border rounded">
-                    <option th:each="g : ${T(org.fatec.esportiva.entity.enums.Gender).values()}" th:value="${g}" th:text="${g}"></option>
+                    <option th:each="g : ${T(org.fatec.esportiva.entity.enums.Gender).values()}" th:value="${g}"
+                        th:text="${g}"></option>
                 </select>
                 <span class="error" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></span>
             </div>
@@ -30,12 +33,13 @@
         <div th:replace="fragments/input :: input('cpf', 'CPF', 'text', 'cpf')"></div>
 
         <div th:replace="fragments/input :: input('dateBirth', 'Data de nascimento', 'date', 'dateBirth')"></div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label for="telephoneType" class="block font-medium">Tipo de telefone:</label>
                 <select id="telephoneType" th:field="*{telephoneType}" class="w-full py-1 px-2 border rounded">
-                    <option th:each="g : ${T(org.fatec.esportiva.entity.enums.PhoneType).values()}" th:value="${g}" th:text="${g}"></option>
+                    <option th:each="g : ${T(org.fatec.esportiva.entity.enums.PhoneType).values()}" th:value="${g}"
+                        th:text="${g}"></option>
                 </select>
                 <span class="error" th:if="${#fields.hasErrors('telephoneType')}" th:errors="*{telephoneType}"></span>
             </div>
@@ -56,90 +60,120 @@
                     <div class="flex items-center space-x-2 gap-6">
                         <div>
                             <label th:for="'residence_' + ${i.index}">Residencial</label>
-                            <input th:id="'residence_' + ${i.index}" type="checkbox" th:field="*{addresses[__${i.index}__].types}" value="RESIDENCE" />
+                            <input th:id="'residence_' + ${i.index}" type="checkbox"
+                                th:field="*{addresses[__${i.index}__].types}" value="RESIDENCIA" />
                         </div>
                         <div>
                             <label th:for="'billing_' + ${i.index}">Cobrança</label>
-                            <input th:id="'billing_' + ${i.index}" type="checkbox" th:field="*{addresses[__${i.index}__].types}" value="BILLING" />
+                            <input th:id="'billing_' + ${i.index}" type="checkbox"
+                                th:field="*{addresses[__${i.index}__].types}" value="COBRANCA" />
                         </div>
                         <div>
                             <label th:for="'shipping_' + ${i.index}">Entrega</label>
-                            <input th:id="'shipping_' + ${i.index}" type="checkbox" th:field="*{addresses[__${i.index}__].types}" value="SHIPPING" />
+                            <input th:id="'shipping_' + ${i.index}" type="checkbox"
+                                th:field="*{addresses[__${i.index}__].types}" value="ENTREGA" />
                         </div>
                     </div>
-                    <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].types')}" th:errors="*{addresses[__${i.index}__].types}"></span>
+                    <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].types')}"
+                        th:errors="*{addresses[__${i.index}__].types}"></span>
                 </div>
 
                 <div class="mb-4">
                     <label th:for="'name_' + ${i.index}" class="block font-medium">Nome do endereço:</label>
-                    <input type="text" th:id="'name_' + ${i.index}" th:field="*{addresses[__${i.index}__].name}"  class="w-full py-1 px-2 border rounded" />
-                    <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].name')}" th:errors="*{addresses[__${i.index}__].name}"></span>
+                    <input type="text" th:id="'name_' + ${i.index}" th:field="*{addresses[__${i.index}__].name}"
+                        class="w-full py-1 px-2 border rounded" />
+                    <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].name')}"
+                        th:errors="*{addresses[__${i.index}__].name}"></span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
                         <label th:for="'cep_' + ${i.index}" class="block font-medium">CEP:</label>
-                        <input type="text" th:id="'cep_' + ${i.index}" th:field="*{addresses[__${i.index}__].cep}"  class="w-full py-1 px-2 border rounded" />
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].cep')}" th:errors="*{addresses[__${i.index}__].cep}"></span>
+                        <input type="text" th:id="'cep_' + ${i.index}" th:field="*{addresses[__${i.index}__].cep}"
+                            class="w-full py-1 px-2 border rounded" />
+                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].cep')}"
+                            th:errors="*{addresses[__${i.index}__].cep}"></span>
                     </div>
                     <div>
-                        <label th:for="'residencyType_' + ${i.index}" class="block font-medium">Tipo de Residência:</label>
-                        <select th:id="'residencyType_' + ${i.index}" th:field="*{addresses[__${i.index}__].residencyType}" class="w-full py-1 px-2 border rounded">
-                            <option th:each="rt : ${T(org.fatec.esportiva.entity.enums.ResidencyType).values()}" th:value="${rt}" th:text="${rt}"></option>
+                        <label th:for="'residencyType_' + ${i.index}" class="block font-medium">Tipo de
+                            Residência:</label>
+                        <select th:id="'residencyType_' + ${i.index}"
+                            th:field="*{addresses[__${i.index}__].residencyType}"
+                            class="w-full py-1 px-2 border rounded">
+                            <option th:each="rt : ${T(org.fatec.esportiva.entity.enums.ResidencyType).values()}"
+                                th:value="${rt}" th:text="${rt}"></option>
                         </select>
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].residencyType')}" th:errors="*{addresses[__${i.index}__].residencyType}"></span>
+                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].residencyType')}"
+                            th:errors="*{addresses[__${i.index}__].residencyType}"></span>
                     </div>
                     <div>
                         <label th:for="'streetType_' + ${i.index}" class="block font-medium">Tipo de logradouro:</label>
-                        <select th:id="'streetType_' + ${i.index}" th:field="*{addresses[__${i.index}__].streetType}" class="w-full py-1 px-2 border rounded">
-                            <option th:each="st : ${T(org.fatec.esportiva.entity.enums.StreetType).values()}" th:value="${st}" th:text="${st}"></option>
+                        <select th:id="'streetType_' + ${i.index}" th:field="*{addresses[__${i.index}__].streetType}"
+                            class="w-full py-1 px-2 border rounded">
+                            <option th:each="st : ${T(org.fatec.esportiva.entity.enums.StreetType).values()}"
+                                th:value="${st}" th:text="${st}"></option>
                         </select>
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].streetType')}" th:errors="*{addresses[__${i.index}__].streetType}"></span>
+                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].streetType')}"
+                            th:errors="*{addresses[__${i.index}__].streetType}"></span>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label th:for="'street_' + ${i.index}" class="block font-medium">Logradouro:</label>
-                        <input type="text" th:id="'street_' + ${i.index}" th:field="*{addresses[__${i.index}__].street}"  class="w-full py-1 px-2 border rounded" />
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].street')}" th:errors="*{addresses[__${i.index}__].street}"></span>
+                        <input type="text" th:id="'street_' + ${i.index}" th:field="*{addresses[__${i.index}__].street}"
+                            class="w-full py-1 px-2 border rounded" />
+                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].street')}"
+                            th:errors="*{addresses[__${i.index}__].street}"></span>
                     </div>
                     <div>
                         <label th:for="'number_' + ${i.index}" class="block font-medium">Numero:</label>
-                        <input type="text" th:id="'number_' + ${i.index}" th:field="*{addresses[__${i.index}__].number}"  class="w-full py-1 px-2 border rounded" />
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].number')}" th:errors="*{addresses[__${i.index}__].number}"></span>
+                        <input type="text" th:id="'number_' + ${i.index}" th:field="*{addresses[__${i.index}__].number}"
+                            class="w-full py-1 px-2 border rounded" />
+                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].number')}"
+                            th:errors="*{addresses[__${i.index}__].number}"></span>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label th:for="'neighborhood_' + ${i.index}" class="block font-medium">Bairro:</label>
-                        <input type="text" th:id="'neighborhood_' + ${i.index}" th:field="*{addresses[__${i.index}__].neighborhood}"  class="w-full py-1 px-2 border rounded" />
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].neighborhood')}" th:errors="*{addresses[__${i.index}__].neighborhood}"></span>
+                        <input type="text" th:id="'neighborhood_' + ${i.index}"
+                            th:field="*{addresses[__${i.index}__].neighborhood}"
+                            class="w-full py-1 px-2 border rounded" />
+                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].neighborhood')}"
+                            th:errors="*{addresses[__${i.index}__].neighborhood}"></span>
                     </div>
                     <div>
                         <label th:for="'city_' + ${i.index}" class="block font-medium">Cidade:</label>
-                        <input type="text" th:id="'city_' + ${i.index}" th:field="*{addresses[__${i.index}__].city}"  class="w-full py-1 px-2 border rounded" />
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].city')}" th:errors="*{addresses[__${i.index}__].city}"></span>
+                        <input type="text" th:id="'city_' + ${i.index}" th:field="*{addresses[__${i.index}__].city}"
+                            class="w-full py-1 px-2 border rounded" />
+                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].city')}"
+                            th:errors="*{addresses[__${i.index}__].city}"></span>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label th:for="'state_' + ${i.index}" class="block font-medium">Estado:</label>
-                        <input type="text" th:id="'state_' + ${i.index}" th:field="*{addresses[__${i.index}__].state}"  class="w-full py-1 px-2 border rounded" />
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].state')}" th:errors="*{addresses[__${i.index}__].state}"></span>
+                        <input type="text" th:id="'state_' + ${i.index}" th:field="*{addresses[__${i.index}__].state}"
+                            class="w-full py-1 px-2 border rounded" />
+                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].state')}"
+                            th:errors="*{addresses[__${i.index}__].state}"></span>
                     </div>
                     <div>
                         <label th:for="'country_' + ${i.index}" class="block font-medium">País:</label>
-                        <input type="text" th:id="'country_' + ${i.index}" th:field="*{addresses[__${i.index}__].country}"  class="w-full py-1 px-2 border rounded" />
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].country')}" th:errors="*{addresses[__${i.index}__].country}"></span>
+                        <input type="text" th:id="'country_' + ${i.index}"
+                            th:field="*{addresses[__${i.index}__].country}" class="w-full py-1 px-2 border rounded" />
+                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].country')}"
+                            th:errors="*{addresses[__${i.index}__].country}"></span>
                     </div>
                 </div>
 
                 <div>
                     <label th:for="'observation_' + ${i.index}" class="block font-medium">Observação:</label>
-                    <textarea th:id="'observation_' + ${i.index}" th:field="*{addresses[__${i.index}__].observation}" class="w-full py-1 px-2 border rounded"></textarea>
+                    <textarea th:id="'observation_' + ${i.index}" th:field="*{addresses[__${i.index}__].observation}"
+                        class="w-full py-1 px-2 border rounded"></textarea>
                 </div>
             </div>
         </div>
@@ -178,7 +212,9 @@
             <button class="bg-blue-300 hover:bg-blue-400 rounded-md py-2 px-4 cursor-pointer" type="button" th:onclick="addItem('creditCard')">Novo Cartão de crédito</button>
         </div>
 
-        <button type="submit" class="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white font-bold py-2 px-4 rounded">Salvar</button>
+        <button type="submit"
+            class="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white font-bold py-2 px-4 rounded">Salvar</button>
     </form>
 </body>
+
 </html>

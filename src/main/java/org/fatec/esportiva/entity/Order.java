@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,9 +24,9 @@ public class Order {
     private int quantidade;
 
     @NotNull
-    @Column(name = "transacoes_tra_id")
-    private int transacoes_tra_id;
+    @Column(name = "tra_tra_id")
+    private Long tra_tra_id;
 
-    @Column(name = "produtos_pro_id")
-    private int produtos_pro_id;
+    @Column(name = "pro_pro_id")
+    private Long pro_pro_id;
 }
