@@ -72,10 +72,10 @@ CREATE TABLE cupons_promocao (
 
 
 CREATE TABLE cupons_troca (
-    ctr_id           SERIAL PRIMARY KEY,
-    ctr_valor        FLOAT NOT NULL,
-    ctr_quantidade   INTEGER NOT NULL,
-    ctr_cli_id       INTEGER NOT NULL
+    ctr_id          SERIAL PRIMARY KEY,
+    ctr_valor       FLOAT NOT NULL,
+    ctr_quantidade  INTEGER NOT NULL,
+    ctr_cli_id      INTEGER NOT NULL
 );
 
 
@@ -96,8 +96,8 @@ CREATE TABLE funcao (
     fun_cae_id  INTEGER NOT NULL
 );
 
-ALTER TABLE funcao ADD CONSTRAINT funcao_pk PRIMARY KEY ( end_end_id,
-                                                          cae_cae_id );
+ALTER TABLE funcao ADD CONSTRAINT funcao_pk PRIMARY KEY ( fun_end_id,
+                                                          fun_cae_id );
 
 CREATE TABLE grupo_precificacao (
     grp_id            SERIAL PRIMARY KEY,
@@ -115,10 +115,11 @@ CREATE TABLE logs (
 );
 
 CREATE TABLE pedidos (
-    ped_status         VARCHAR(20) NOT NULL,
-    ped_quantidade     INTEGER NOT NULL,
-    ped_tra_id         INTEGER NOT NULL,
-    ped_pro_id         INTEGER
+    ped_id          SERIAL PRIMARY KEY,
+    ped_status      VARCHAR(20) NOT NULL,
+    ped_quantidade  INTEGER NOT NULL,
+    ped_tra_id      INTEGER NOT NULL,
+    ped_pro_id      INTEGER
 );
 
 CREATE TABLE pertence (
@@ -126,8 +127,8 @@ CREATE TABLE pertence (
     per_cat_id  INTEGER NOT NULL
 );
 
-ALTER TABLE pertence ADD CONSTRAINT pertence_pk PRIMARY KEY ( pro_pro_id,
-                                                              cat_cat_id );
+ALTER TABLE pertence ADD CONSTRAINT pertence_pk PRIMARY KEY ( per_pro_id,
+                                                              per_cat_id );
 
 CREATE TABLE produtos (
     pro_id                        SERIAL PRIMARY KEY,

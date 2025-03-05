@@ -97,6 +97,7 @@ INSERT INTO transacoes (tra_data_compra, tra_cli_id) VALUES
 
 
 -- Pedidos que ficam dentro da transação
+SELECT setval('pedidos_ped_id_seq', 1, false);
 INSERT INTO pedidos (ped_status, ped_quantidade, ped_tra_id, ped_pro_id) VALUES
 ('ENTREGUE', '3', '1', '1'),
 ('ENTREGUE', '1', '1', '2'),
@@ -108,7 +109,7 @@ INSERT INTO pedidos (ped_status, ped_quantidade, ped_tra_id, ped_pro_id) VALUES
 
 -- Produto
 SELECT setval('produtos_pro_id_seq', 1, false);
-INSERT INTO produtos (pro_nome_produto, pro_data_entrada, pro_quantidade_estoque, pro_quantidade_bloqueada, pro_valor_precificacao, pro_valor_custo, pro_categoria_inativacao, pro_justificativa_inativacao, pro_grp_id) VALUES
+INSERT INTO produtos (pro_nome_produto, pro_data_entrada, pro_quantidade_estoque, pro_quantidade_bloqueada, pro_margem_lucro, pro_valor_custo, pro_categoria_inativacao, pro_justificativa_inativacao, pro_grp_id) VALUES
 ('Taco de Beisebol', '12-12-2022', '50', '0', '15', '50', 'ATIVO', '', '1'),
 ('Bola de Beisebol', '02-07-2020', '0', '0', '20', '120', 'FORA_DE_MERCADO', 'Sistema: Baixa venda', '1'),
 ('Taco de Beisebol de grafeno', '12-12-2022', '10', '0', '30', '100', 'DESATIVADO_MANUALMENTE', 'O produto possui sanções estrangeiras', '1'),
@@ -119,7 +120,7 @@ INSERT INTO produtos (pro_nome_produto, pro_data_entrada, pro_quantidade_estoque
 
 -- Grupo de precificação (Margem de lucro em porcentagem)
 SELECT setval('grupo_precificacao_grp_id_seq', 1, false);
-INSERT INTO grupo_precificacao (grp_valor_precificacao, grp_nome) VALUES
+INSERT INTO grupo_precificacao (grp_margem_lucro, grp_nome) VALUES
 ('10', 'STANDARD'),
 ('20', 'PLUS'),
 ('30', 'DELUXE'),

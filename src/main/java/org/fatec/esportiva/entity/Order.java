@@ -15,6 +15,9 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 public class Order {
 
     @Id
+    @Column(name = "ped_id")
+    private Long id;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "ped_status")
     private OrderStatus status;

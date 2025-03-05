@@ -33,7 +33,7 @@ CREATE TRIGGER log_insert_update_cep
 AFTER INSERT OR UPDATE ON cep
 FOR EACH ROW EXECUTE FUNCTION registrar_logs();
 
--- CEP
+-- Cartão de crédito
 CREATE TRIGGER log_insert_update_cartoes_de_credito
 AFTER INSERT OR UPDATE ON cartoes_de_credito
 FOR EACH ROW EXECUTE FUNCTION registrar_logs();
