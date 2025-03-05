@@ -10,7 +10,6 @@ import org.fatec.esportiva.entity.Address;
 import org.fatec.esportiva.entity.enums.UserStatus;
 import org.fatec.esportiva.mapper.ClientMapper;
 import org.fatec.esportiva.repository.AddressCategoryRepository;
-import org.fatec.esportiva.repository.AdminRepository;
 import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.request.ClientDto;
 import org.springframework.stereotype.Service;

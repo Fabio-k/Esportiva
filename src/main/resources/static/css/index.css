@@ -1,0 +1,44 @@
+html,
+body {
+    margin: 0;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    min-height: 100vh
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    border: 2px solid gray;
+    border-radius: 15px;
+    padding: 20px;
+    margin: auto;
+    align-items: center;
+}
+
+form {
+    width: -webkit-fill-available;
+}
+
+select {
+    padding: 10px 10px;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+button {
+    width: 100%;
+    text-align: center;
+    border-radius: 15px;
+    padding: 8px 8px;
+    cursor: pointer;
+}
+
+svg {
+    margin-bottom: 40px;
+}
