@@ -3,14 +3,10 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.fatec.esportiva.entity.enums.AddressType;
 import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
-import org.hibernate.annotations.Cascade;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -56,7 +52,7 @@ public class Address {
     @JoinColumn(name = "end_cli_id")
     private Client client;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany
     @JoinTable(name = "funcao", joinColumns = { @JoinColumn(name = "fun_end_id") }, inverseJoinColumns = {
             @JoinColumn(name = "fun_cae_id") })
     Set<AddressCategory> addressCategories = new HashSet<>();

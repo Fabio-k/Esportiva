@@ -44,4 +44,29 @@ public class AddressService {
 
         return addresses;
     }
+
+    public List<Address> updateOrCreateAddress(Client client, List<AddressDto> addressDtoList){
+        return addressDtoList.stream().map(addressDto -> {
+            Cep cep = cepService.findOrCreateByCep(addressDto);
+            Set<AddressCategory> addressCategories = addressCategoryRepository.findByAddressTypeIn(addressDto.getTypes());
+            if (addressDto.getId() != null) {
+                Address address = findById(addressDto.getId())
+                        .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+
+                address.setName(addressDto.getName());
+                address.setCep(cep);
+                address.setNumber(addressDto.getNumber());
+                address.setObservation(addressDto.getObservation());
+                address.setResidencyType(addressDto.getResidencyType());
+                address.setStreetType(addressDto.getStreetType());
+
+                address.setAddressCategories(addressCategories);
+                return address;
+            }
+
+            Address address = AddressMapper.toAddress(client, addressDto, cep);
+            address.setAddressCategories(addressCategories);
+            return address;
+        }).toList();
+    }
 }
