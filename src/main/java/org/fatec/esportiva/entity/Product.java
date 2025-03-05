@@ -30,7 +30,7 @@ public class Product {
     private int blockedQuantity;
 
     @NotNull
-    @Column(name = "pro_valor_precificacao")
+    @Column(name = "pro_margem_lucro")
     private float profitMargin;
 
     @NotNull
@@ -54,6 +54,6 @@ public class Product {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "grp_grp_id")
+    @JoinColumn(name = "pro_grp_id")
     private PricingGroup pricingGroup;
 }

@@ -25,10 +25,10 @@ public class Order {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "tra_tra_id")
+    @JoinColumn(name = "ped_tra_id")
     private Transactions transaction;
 
     @ManyToOne
-    @JoinColumn(name = "pro_pro_id")
+    @JoinColumn(name = "ped_pro_id")
     private Product product;
 }

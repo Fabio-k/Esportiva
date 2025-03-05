@@ -27,7 +27,7 @@ INSERT INTO cep(cep_cep, cep_logradouro, cep_bairro, cep_cidade, cep_estado, cep
 
 -- Endereço
 SELECT setval('enderecos_end_id_seq', 1, false);
-INSERT INTO enderecos (end_numero, end_tipo_residencia, end_tipo_logradouro, end_frase_identificacao, end_observacao, cli_cli_id, cep_cep_id) VALUES
+INSERT INTO enderecos (end_numero, end_tipo_residencia, end_tipo_logradouro, end_frase_identificacao, end_observacao, end_cli_id, end_cep_id) VALUES
 ('123', 'CASA', 'RUA', 'Minha Casa', '', '1', '1'),
 ('234', 'OUTROS', 'AVENIDA', 'Trabalho', 'Horário comercial: 07:30 - 17:10', '1', '2'),
 ('666', 'CASA', 'VIELA', 'Lar', 'Fundos', '2', '3'),
@@ -42,7 +42,7 @@ INSERT INTO categorias_end (cae_nome) VALUES
 
 
 -- Relaciona o Endereço com sua categoria
-INSERT INTO funcao (end_end_id, cae_cae_id) VALUES
+INSERT INTO funcao (fun_end_id, fun_cae_id) VALUES
 ('1', '1'),
 ('2', '2'),
 ('2', '3'),
@@ -60,7 +60,7 @@ INSERT INTO funcao (end_end_id, cae_cae_id) VALUES
 -- Cartão de Crédito
 -- https://www.invertexto.com/gerador-de-cartao-de-credito
 SELECT setval('cartoes_de_credito_car_id_seq', 1, false);
-INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car_codigo_seguranca, car_preferencial, cli_cli_id) VALUES
+INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car_codigo_seguranca, car_preferencial, car_cli_id) VALUES
 ('4372412662447605', 'VISA', 'Carlos Silva', '757', (TRUE), '1'),
 ('5115199853098847', 'MASTERCARD', 'Carlos Silva', '543', (FALSE), '1'),
 ('344773538685170', 'AMERICAN_EXPRESS', 'Mariana Duarte', '7161', (TRUE), '2'),
@@ -72,7 +72,7 @@ INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car
 
 -- Cupons de Troca
 SELECT setval('cupons_troca_ctr_id_seq', 1, false);
-INSERT INTO cupons_troca (ctr_valor, ctr_quantidade, cli_cli_id) VALUES
+INSERT INTO cupons_troca (ctr_valor, ctr_quantidade, ctr_cli_id) VALUES
 ('10', '1', '2'),
 ('30', '2', '3'),
 ('20', '1', '3');
@@ -80,7 +80,7 @@ INSERT INTO cupons_troca (ctr_valor, ctr_quantidade, cli_cli_id) VALUES
 
 -- Cupons de Promoção
 SELECT setval('cupons_promocao_cpr_id_seq', 1, false);
-INSERT INTO cupons_promocao (cpr_promocao_porcentagem, cli_cli_id, pro_pro_id) VALUES
+INSERT INTO cupons_promocao (cpr_desconto_porcentagem, cpr_cli_id, cpr_pro_id) VALUES
 ('10', '2', '1'),
 ('50', '2', '2'),
 ('25', '3', '3');
@@ -91,13 +91,13 @@ INSERT INTO cupons_promocao (cpr_promocao_porcentagem, cli_cli_id, pro_pro_id) V
 
 -- Transações
 SELECT setval('transacoes_tra_id_seq', 1, false);
-INSERT INTO transacoes (tra_data_compra, cli_cli_id) VALUES
+INSERT INTO transacoes (tra_data_compra, tra_cli_id) VALUES
 ('11/12/2024', '1'),
 ('15/12/2024', '1');
 
 
 -- Pedidos que ficam dentro da transação
-INSERT INTO pedidos (ped_status, ped_quantidade, tra_tra_id, pro_pro_id) VALUES
+INSERT INTO pedidos (ped_status, ped_quantidade, ped_tra_id, ped_pro_id) VALUES
 ('ENTREGUE', '3', '1', '1'),
 ('ENTREGUE', '1', '1', '2'),
 ('EM_PROCESSAMENTO', '5', '2', '1');
@@ -108,7 +108,7 @@ INSERT INTO pedidos (ped_status, ped_quantidade, tra_tra_id, pro_pro_id) VALUES
 
 -- Produto
 SELECT setval('produtos_pro_id_seq', 1, false);
-INSERT INTO produtos (pro_nome_produto, pro_data_entrada, pro_quantidade_estoque, pro_quantidade_bloqueada, pro_valor_precificacao, pro_valor_custo, pro_categoria_inativacao, pro_justificativa_inativacao, grp_grp_id) VALUES
+INSERT INTO produtos (pro_nome_produto, pro_data_entrada, pro_quantidade_estoque, pro_quantidade_bloqueada, pro_valor_precificacao, pro_valor_custo, pro_categoria_inativacao, pro_justificativa_inativacao, pro_grp_id) VALUES
 ('Taco de Beisebol', '12-12-2022', '50', '0', '15', '50', 'ATIVO', '', '1'),
 ('Bola de Beisebol', '02-07-2020', '0', '0', '20', '120', 'FORA_DE_MERCADO', 'Sistema: Baixa venda', '1'),
 ('Taco de Beisebol de grafeno', '12-12-2022', '10', '0', '30', '100', 'DESATIVADO_MANUALMENTE', 'O produto possui sanções estrangeiras', '1'),
@@ -137,7 +137,7 @@ INSERT INTO categorias_produto (cat_nome) VALUES
 
 
 -- Relaciona os produtos com suas categorias
-INSERT INTO pertence (pro_pro_id, cat_cat_id) VALUES
+INSERT INTO pertence (per_pro_id, per_cat_id) VALUES
 ('1', '2'),
 ('1', '5'),
 ('2', '2'),

@@ -24,6 +24,6 @@ public class Transactions {
     private Date purchaseDate;
 
     @ManyToOne
-    @JoinColumn(name = "cli_cli_id")
+    @JoinColumn(name = "tra_cli_id")
     private Client client;
 }

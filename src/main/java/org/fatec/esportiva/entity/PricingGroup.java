@@ -18,10 +18,10 @@ public class PricingGroup {
     private Long id;
 
     @NotNull
-    @Column(name = "grp_valor_precificacao")
-    private float profitMargin;
-
-    @NotNull
     @Column(name = "grp_nome")
     private String name;
+
+    @NotNull
+    @Column(name = "grp_margem_lucro")
+    private float profitMargin;
 }
