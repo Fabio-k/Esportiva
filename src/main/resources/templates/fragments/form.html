@@ -9,7 +9,7 @@
 <body>
 
     <form th:fragment="form" th:action="${formAction}" th:object="${user}" method="post">
-        <input type="hidden" name="_method" th:value="${id} ? 'PATCH' : 'POST'"/>
+        <input type="hidden" name="_method" th:value="${id} ? 'PATCH' : 'POST'" />
         <h3 class="text-xl font-semibold mt-6 mb-4">Dados Pessoais</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div th:replace="fragments/input :: input('name', 'Nome', 'text', 'name')"></div>
@@ -23,7 +23,7 @@
             </div>
             <div th:if="${id} != null">
                 <label for="status" class="block font-medium">Status:</label>
-                <input type="text" id="status" th:field="*{status}"  class="w-full py-1 px-2 border rounded" />
+                <input type="text" id="status" th:field="*{status}" class="w-full py-1 px-2 border rounded" />
                 <span class="error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
             </div>
         </div>
@@ -50,10 +50,11 @@
         <h3 class="text-xl font-semibold mt-6 mb-4">Endereço(s)</h3>
 
         <div id="addressContainer" class="flex flex-col gap-10 mb-4">
-            <div class="addressItem p-5 border-2 border-gray-300 rounded-md"  th:each="address, i : *{addresses}">
+            <div class="addressItem p-5 border-2 border-gray-300 rounded-md" th:each="address, i : *{addresses}">
                 <input type="hidden" th:field="*{addresses[__${i.index}__].id}">
                 <div class="flex justify-end">
-                    <button type="button" class="addressRemoveButton font-semibold text-gray-500 hover:text-red-400 cursor-pointer">Remover</button>
+                    <button type="button"
+                        class="addressRemoveButton font-semibold text-gray-500 hover:text-red-400 cursor-pointer">Remover</button>
                 </div>
 
                 <div class="mb-4">
@@ -79,11 +80,15 @@
                 </div>
 
                 <div class="mb-4">
-                    <label th:for="'name_' + ${i.index}" class="block font-medium">Nome do endereço:</label>
-                    <input type="text" th:id="'name_' + ${i.index}" th:field="*{addresses[__${i.index}__].name}"
+                    <label th:for="'addressIdentificationPhrase_' + ${i.index}" class="block font-medium">Frase de
+                        identificação do
+                        endereço:</label>
+                    <input type="text" th:id="'addressIdentificationPhrase_' + ${i.index}"
+                        th:field="*{addresses[__${i.index}__].addressIdentificationPhrase}"
                         class="w-full py-1 px-2 border rounded" />
-                    <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].name')}"
-                        th:errors="*{addresses[__${i.index}__].name}"></span>
+                    <span class="error"
+                        th:if="${#fields.hasErrors('addresses[__${i.index}__].addressIdentificationPhrase')}"
+                        th:errors="*{addresses[__${i.index}__].addressIdentificationPhrase}"></span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -179,37 +184,50 @@
         </div>
 
         <div class="flex justify-center mb-10">
-            <button class="bg-blue-300 hover:bg-blue-400 rounded-md py-2 px-4 cursor-pointer" type="button" th:onclick="addItem('address')">Novo endereço</button>
+            <button class="bg-blue-300 hover:bg-blue-400 rounded-md py-2 px-4 cursor-pointer" type="button"
+                th:onclick="addItem('address')">Novo endereço</button>
         </div>
 
         <h3 class="text-xl font-semibold mt-6 mb-4">Cartões de crédito</h3>
         <div id="creditCardContainer" class="flex flex-col gap-10 mb-4">
-            <div class="creditCardItem p-5 border-2 border-gray-300 rounded-md" th:each="creditCard, c : *{creditCards}">
+            <div class="creditCardItem p-5 border-2 border-gray-300 rounded-md"
+                th:each="creditCard, c : *{creditCards}">
                 <input type="hidden" th:field="*{creditCards[__${c.index}__].id}">
 
                 <div class="flex justify-end">
-                    <button type="button" class="creditCardRemoveButton font-semibold text-gray-500 hover:text-red-400 cursor-pointer">Remover</button>
+                    <button type="button"
+                        class="creditCardRemoveButton font-semibold text-gray-500 hover:text-red-400 cursor-pointer">Remover</button>
                 </div>
 
-                <div th:replace="fragments/input :: input('creditCardName_' + ${c.index}, 'Nome do titular', 'text', creditCards[__${c.index}__].name)"></div>
+                <div
+                    th:replace="fragments/input :: input('creditCardName_' + ${c.index}, 'Nome do titular', 'text', creditCards[__${c.index}__].name)">
+                </div>
 
                 <div class="grid grid-col-1 md:grid-cols-2 gap-4">
-                    <div th:replace="fragments/input :: input('creditCardNumber_' + ${c.index}, 'Número', 'text', creditCards[__${c.index}__].number)"></div>
-                    <div th:replace="fragments/input :: input('creditCardSecurityCode_' + ${c.index}, 'CVV', 'text', creditCards[__${c.index}__].securityCode)"></div>
+                    <div
+                        th:replace="fragments/input :: input('creditCardNumber_' + ${c.index}, 'Número', 'text', creditCards[__${c.index}__].number)">
+                    </div>
+                    <div
+                        th:replace="fragments/input :: input('creditCardSecurityCode_' + ${c.index}, 'CVV', 'text', creditCards[__${c.index}__].securityCode)">
+                    </div>
                 </div>
 
                 <div class="mb-4">
                     <label th:for="'creditCardBrand_' + ${c.index}" class="block font-medium">Bandeira:</label>
-                    <select th:id="'creditCardBrand_' + ${c.index}" th:field="*{creditCards[__${c.index}__].brand}" class="w-full py-1 px-2 border rounded">
-                        <option th:each="ccb : ${T(org.fatec.esportiva.entity.enums.CreditCardBrand).values()}" th:value="${ccb}" th:text="${ccb}"></option>
+                    <select th:id="'creditCardBrand_' + ${c.index}" th:field="*{creditCards[__${c.index}__].brand}"
+                        class="w-full py-1 px-2 border rounded">
+                        <option th:each="ccb : ${T(org.fatec.esportiva.entity.enums.CreditCardBrand).values()}"
+                            th:value="${ccb}" th:text="${ccb}"></option>
                     </select>
-                    <span class="error" th:if="${#fields.hasErrors('creditCards[__${c.index}__].brand')}" th:errors="*{creditCards[__${c.index}__].brand}"></span>
+                    <span class="error" th:if="${#fields.hasErrors('creditCards[__${c.index}__].brand')}"
+                        th:errors="*{creditCards[__${c.index}__].brand}"></span>
                 </div>
             </div>
         </div>
 
         <div class="flex justify-center mb-10">
-            <button class="bg-blue-300 hover:bg-blue-400 rounded-md py-2 px-4 cursor-pointer" type="button" th:onclick="addItem('creditCard')">Novo Cartão de crédito</button>
+            <button class="bg-blue-300 hover:bg-blue-400 rounded-md py-2 px-4 cursor-pointer" type="button"
+                th:onclick="addItem('creditCard')">Novo Cartão de crédito</button>
         </div>
 
         <button type="submit"

@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class AddressMapper {
 
-    public Address toAddress(Client client, AddressDto addressDto, Cep cep){
+    public Address toAddress(Client client, AddressDto addressDto, Cep cep) {
         return Address.builder()
                 .id(addressDto.getId())
                 .client(client)
                 .cep(cep)
-                .name(addressDto.getName())
+                .addressIdentificationPhrase(addressDto.getAddressIdentificationPhrase())
                 .number(addressDto.getNumber())
                 .streetType(addressDto.getStreetType())
                 .residencyType(addressDto.getResidencyType())
@@ -26,11 +26,11 @@ public class AddressMapper {
                 .build();
     }
 
-    public AddressDto toAddressDto(Address address){
+    public AddressDto toAddressDto(Address address) {
         Cep cep = address.getCep();
         return AddressDto.builder()
                 .id(address.getId())
-                .name(address.getName())
+                .addressIdentificationPhrase(address.getAddressIdentificationPhrase())
                 .number(address.getNumber())
                 .cep(cep.getCep())
                 .street(cep.getStreet())
@@ -48,7 +48,7 @@ public class AddressMapper {
                 .build();
     }
 
-    public  List<AddressDto> toAddressDtoList(List<Address> addresses){
+    public List<AddressDto> toAddressDtoList(List<Address> addresses) {
         return addresses.stream().map(address -> AddressMapper.toAddressDto(address)).toList();
     }
 }

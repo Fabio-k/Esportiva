@@ -25,7 +25,7 @@ public class Address {
 
     @NotNull
     @Column(name = "end_frase_identificacao")
-    private String name;
+    private String addressIdentificationPhrase;
 
     @NotNull
     @Column(name = "end_numero")

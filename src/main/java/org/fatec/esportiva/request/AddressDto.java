@@ -19,8 +19,8 @@ import java.util.HashSet;
 public class AddressDto {
     private Long id;
 
-    @NotBlank(message = "Endereço: Logradouro não deve ficar em branco")
-    private String name;
+    @NotBlank(message = "Endereço: Frase de identificação do seu endereço não deve ficar em branco")
+    private String addressIdentificationPhrase;
 
     @NotBlank(message = "Endereço: CEP não pode ficar em branco")
     @Pattern(regexp = "^[0-9]{5}-[0-9]{3}$|^[0-9]{8}$", message = "Endereço: O CEP deve estar em um formato válido: XXXXX-XXX | XXXXXXXX")
