@@ -63,7 +63,7 @@ SELECT setval('cartoes_de_credito_car_id_seq', 1, false);
 INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car_codigo_seguranca, car_preferencial, cli_cli_id) VALUES
 ('4372412662447605', 'VISA', 'Carlos Silva', '757', (TRUE), '1'),
 ('5115199853098847', 'MASTERCARD', 'Carlos Silva', '543', (FALSE), '1'),
-('344773538685170', 'AMERICAN_EXPRESS', 'Mariana Duarte', '161', (TRUE), '2'),
+('344773538685170', 'AMERICAN_EXPRESS', 'Mariana Duarte', '7161', (TRUE), '2'),
 ('6011737478309686', 'DISCOVER', 'Vanessa V. Hausten', '647', (TRUE), '3');
 
 

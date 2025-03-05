@@ -21,7 +21,7 @@ CREATE TABLE cartoes_de_credito (
     car_numero            VARCHAR(19) NOT NULL,
     car_bandeira          VARCHAR(20) NOT NULL,
     car_nome_impresso     VARCHAR(30) NOT NULL,
-    car_codigo_seguranca  INTEGER NOT NULL,
+    car_codigo_seguranca  VARCHAR(4) NOT NULL,
     car_preferencial      BOOLEAN NOT NULL,
     cli_cli_id            INTEGER NOT NULL
 );

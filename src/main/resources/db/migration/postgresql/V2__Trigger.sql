@@ -5,6 +5,7 @@ BEGIN
     -- TG_OP é uma variável especial do PostgreSQL que registra a operação efetuada
     -- https://www.postgresql.org/docs/current/plpgsql-trigger.html#PLPGSQL-DML-TRIGGER-TG-OP
     IF (TG_OP = 'INSERT') OR (TG_OP = 'UPDATE') THEN
+        -- current_user -> https://www.postgresql.org/docs/9.1/functions-info.html
         -- now() -> https://www.postgresql.org/docs/current/functions-datetime.html
         -- row_to_json() -> https://www.postgresql.org/docs/9.5/functions-json.html
         INSERT INTO logs(log_usuario, log_data_hora, log_operacao, log_conteudo_alteracao)
