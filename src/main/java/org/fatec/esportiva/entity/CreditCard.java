@@ -41,6 +41,6 @@ public class CreditCard {
     private boolean preferencial;
 
     @NotNull
-    @Column(name = "clientes_cli_id")
+    @Column(name = "cli_cli_id")
     private Long cli_id;
 }

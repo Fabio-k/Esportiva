@@ -1,5 +1,5 @@
 package org.fatec.esportiva.entity.enums;
 
 public enum Gender {
-    MALE, FEMALE, NON_BINARY, PREFER_NOT_TO_SAY
+    MASCULINO, FEMININO, NAO_BINARIO, PREFERE_NAO_DIZER
 }

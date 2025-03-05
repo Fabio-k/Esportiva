@@ -62,10 +62,8 @@ public class Client implements UserDetails {
     @Column(name = "cli_telefone_tipo")
     private PhoneType telephoneType;
 
-
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -84,6 +82,6 @@ public class Client implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.status == UserStatus.ACTIVE;
+        return this.status == UserStatus.ATIVO;
     }
 }

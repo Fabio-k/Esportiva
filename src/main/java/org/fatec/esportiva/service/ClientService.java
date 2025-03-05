@@ -31,7 +31,7 @@ public class ClientService {
     public Client save(ClientDto clientDto) {
         Client client = ClientMapper.toUser(clientDto);
         client.setAddresses(addressService.createAddresses(client, clientDto.getAddresses()));
-        client.setStatus(UserStatus.ACTIVE);
+        client.setStatus(UserStatus.ATIVO);
         return clientRepository.save(client);
     }
 
@@ -54,7 +54,8 @@ public class ClientService {
                         .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
                 updateAddressData(address, AddressMapper.toAddress(existingUser, addressDto, cep));
-                Set<AddressCategory> addressCategories = addressCategoryRepository.findByAddressTypeIn(addressDto.getTypes());
+                Set<AddressCategory> addressCategories = addressCategoryRepository
+                        .findByAddressTypeIn(addressDto.getTypes());
                 address.setAddressCategories(addressCategories);
                 return address;
             }
@@ -66,7 +67,7 @@ public class ClientService {
         return clientRepository.save(existingUser);
     }
 
-    public List<Client> getClients(){
+    public List<Client> getClients() {
         List<Client> clients = clientRepository.findAll();
         return clients;
     }
@@ -91,6 +92,5 @@ public class ClientService {
         currentAddress.setResidencyType(updatedAddress.getResidencyType());
         currentAddress.setStreetType(updatedAddress.getStreetType());
     }
-
 
 }

@@ -7,9 +7,9 @@ SET session_replication_role = 'replica';
 -- https://www.4devs.com.br/gerador_de_cpf
 SELECT setval('clientes_cli_id_seq', 1, false);
 INSERT INTO clientes (cli_nome, cli_cpf, cli_data_nascimento, cli_genero, cli_status, cli_telefone, cli_telefone_tipo, cli_email) VALUES
-('Carlos Silva', '43757832060', '30-03-1986', 'MALE', 'ACTIVE', '11945653333', 'CELLPHONE', 'carlos@gmail.com'),
-('Mariana Duarte', '71374904090', '15-02-1971', 'FEMALE', 'ACTIVE', '11974526335', 'TELEPHONE', 'marina.duarte@outlook.com'),
-('Vanessa Von Hausten', '94551842060', '01-11-2001', 'FEMALE', 'INACTIVE', '11932301004', 'VoIP_PHONE', 'vanessa123@terra.com.br');
+('Carlos Silva', '43757832060', '30-03-1986', 'MASCULINO', 'ATIVO', '11945653333', 'TELEFONE', 'carlos@gmail.com'),
+('Mariana Duarte', '71374904090', '15-02-1971', 'FEMININO', 'ATIVO', '11974526335', 'TELEFONE', 'marina.duarte@outlook.com'),
+('Vanessa Von Hausten', '94551842060', '01-11-2001', 'FEMININO', 'INATIVO', '11932301004', 'TELEFONE_VoIP', 'vanessa123@terra.com.br');
 
 
 -- ###########################################################################################
@@ -28,17 +28,17 @@ INSERT INTO cep(cep_cep, cep_logradouro, cep_bairro, cep_cidade, cep_estado, cep
 -- Endereço
 SELECT setval('enderecos_end_id_seq', 1, false);
 INSERT INTO enderecos (end_numero, end_tipo_residencia, end_tipo_logradouro, end_frase_identificacao, end_observacao, cli_cli_id, cep_cep_id) VALUES
-('123', 'HOUSE', 'STREET', 'Minha Casa', '', '1', '1'),
-('234', 'OTHER', 'AVENUE', 'Trabalho', 'Horário comercial: 07:30 - 17:10', '1', '2'),
-('666', 'HOUSE', 'SQUARE', 'Lar', 'Fundos', '2', '3'),
-('111', 'APARTMENT', 'ALLEY', 'Reduto de paz', '', '3', '4');
+('123', 'CASA', 'RUA', 'Minha Casa', '', '1', '1'),
+('234', 'OUTROS', 'AVENIDA', 'Trabalho', 'Horário comercial: 07:30 - 17:10', '1', '2'),
+('666', 'CASA', 'VIELA', 'Lar', 'Fundos', '2', '3'),
+('111', 'APARTAMENTO', 'RODOVIA', 'Reduto de paz', '', '3', '4');
 
 
 -- Categoria de endereço
 INSERT INTO categorias_end (cae_nome) VALUES
-('RESIDENCE'),
-('BILLING'),
-('SHIPPING');
+('RESIDENCIA'),
+('COBRANCA'),
+('ENTREGA');
 
 
 -- Relaciona o Endereço com sua categoria
