@@ -40,9 +40,7 @@
     <header th:replace="fragments/header.html :: header"></header>
     <main>
         <div class="flex w-[85%] mx-auto flex-col">
-            <!-- Botão para adicionar um novo usuário -->
-            <a th:href="@{users/new}" class="p-2 rounded mb-[10px] text-white self-end w-fit"
-                style="background-color: var(--primary);">Novo usuário</a>
+            <a th:href="@{/admin/clients/new}" class="p-2 rounded mb-[10px] text-white self-end w-fit bg-blue-500">Novo usuário</a>
 
             <table class="w-full">
                 <thead>
@@ -70,13 +68,13 @@
 
                         <td>
                             <!-- Botão de editar é um link -->
-                            <a th:href="@{/users/edit/{id}(id=${user.id})}"
+                            <a th:href="@{/admin/clients/edit/{id}(id=${user.id})}"
                                 style="display: inline-flex; align-items: center;">
                                 <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis">Editar
                             </a>
 
                             <!-- Botão de deletar cria um pop-up para a própria página -->
-                            <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post"
+                            <form th:action="@{/admin/clients/delete/{id}(id=${user.id})}" method="post"
                                 onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
                                 <input type="hidden" name="_method" value="delete" />
                                 <button type="submit" class="btn btn-danger"

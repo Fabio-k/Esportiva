@@ -30,4 +30,10 @@ public class CreditCardDto {
     private String securityCode;
 
     private boolean preferential;
+
+    public void setNumber(String number){
+        if(number != null){
+            this.number = number.replaceAll("\\D", "");
+        }
+    }
 }

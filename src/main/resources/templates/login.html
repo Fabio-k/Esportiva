@@ -59,7 +59,7 @@
     <main>
         <div th:replace="~{fragments/esportivalogo :: esportivaLogo}"></div>
 
-        <form th:if="${users.size > 0}" th:action="@{/users/login}" th:object="${user}" method="post">
+        <form th:if="${users.size > 0}" th:action="@{/login/auth}" th:object="${user}" method="post">
             <div>
                 <select id="users" th:field="*{email}">
                     <option value="">Selecione o usuário</option>

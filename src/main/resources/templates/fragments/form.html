@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-turbo="false">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -7,30 +7,42 @@
 </head>
 
 <body>
-
     <form th:fragment="form" th:action="${formAction}" th:object="${user}" method="post">
         <input type="hidden" name="_method" th:value="${id} ? 'PATCH' : 'POST'" />
         <h3 class="text-xl font-semibold mt-6 mb-4">Dados Pessoais</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div th:replace="fragments/input :: input('name', 'Nome', 'text', 'name')"></div>
+            <div>
+                <label th:for="name" class="block font-medium" th:text="'Nome:'"></label>
+                <input th:type="text" th:id="name" th:field="*{name}" class="w-full py-1 px-2 border border-gray-300 rounded" />
+            </div>
             <div>
                 <label for="gender" class="block font-medium">Gênero:</label>
                 <select id="gender" th:field="*{gender}" class="w-full py-1 px-2 border border-gray-300 rounded">
                     <option th:each="g : ${T(org.fatec.esportiva.entity.enums.Gender).values()}" th:value="${g}"
                         th:text="${g}"></option>
                 </select>
-                <span class="error" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></span>
             </div>
             <div th:if="${id} != null">
                 <label for="status" class="block font-medium">Status:</label>
-                <input type="text" id="status" th:field="*{status}" class="w-full py-1 px-2 border border-gray-300 rounded" />
-                <span class="error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
+                <select id="status" th:field="*{status}" class="w-full py-1 px-2 border border-gray-300 rounded">
+                    <option th:each="s : ${T(org.fatec.esportiva.entity.enums.UserStatus).values()}" th:value="${s}"
+                            th:text="${s}"></option>
+                </select>
             </div>
+        </div>
+        <div class="mb-4">
+            <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            <span class="error" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></span>
+            <span class="error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
         </div>
 
         <div th:replace="fragments/input :: input('email', 'E-mail', 'text', 'email')"></div>
 
-        <div th:replace="fragments/input :: input('cpf', 'CPF', 'text', 'cpf')"></div>
+        <div class="mb-4">
+            <label th:for="cpf" class="block font-medium" th:text="'CPF:'"></label>
+            <input th:type="text" th:id="cpf" th:field="*{cpf}" oninput="cpfMask(this)" maxlength="14" class="w-full py-1 px-2 border border-gray-300 rounded" />
+            <span class="error" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></span>
+        </div>
 
         <div th:replace="fragments/input :: input('dateBirth', 'Data de nascimento', 'date', 'dateBirth')"></div>
 
@@ -44,7 +56,11 @@
                 <span class="error" th:if="${#fields.hasErrors('telephoneType')}" th:errors="*{telephoneType}"></span>
             </div>
 
-            <div th:replace="fragments/input :: input('telephone', 'Telefone', 'text', 'telephone')"></div>
+            <div class="mb-4">
+                <label th:for="telephone" class="block font-medium" th:text="'Telefone:'"></label>
+                <input th:type="text" th:id="telephone" th:field="*{telephone}" oninput="telephoneMask(this)" maxlength="15" class="w-full py-1 px-2 border border-gray-300 rounded" />
+                <span class="error" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></span>
+            </div>
         </div>
 
         <h3 class="text-xl font-semibold mt-6 mb-4">Endereço(s)</h3>
@@ -91,8 +107,11 @@
                         th:errors="*{addresses[__${i.index}__].addressIdentificationPhrase}"></span>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div th:replace="fragments/input :: input('cep_' + ${i.index}, 'CEP', 'text', 'addresses[__${i.index}__].cep')"></div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label th:for="cep_ + ${i.index}" class="block font-medium" th:text="'CEP:'"></label>
+                        <input th:type="text" th:id="cep_ + ${i.index}" th:field="*{addresses[__${i.index}__].cep}" oninput="cepMask(this)" maxlength="9" class="w-full py-1 px-2 border border-gray-300 rounded" />
+                    </div>
                     <div>
                         <label th:for="'residencyType_' + ${i.index}" class="block font-medium">Tipo de
                             Residência:</label>
@@ -102,8 +121,6 @@
                             <option th:each="rt : ${T(org.fatec.esportiva.entity.enums.ResidencyType).values()}"
                                 th:value="${rt}" th:text="${rt}"></option>
                         </select>
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].residencyType')}"
-                            th:errors="*{addresses[__${i.index}__].residencyType}"></span>
                     </div>
                     <div>
                         <label th:for="'streetType_' + ${i.index}" class="block font-medium">Tipo de logradouro:</label>
@@ -112,10 +129,17 @@
                             <option th:each="st : ${T(org.fatec.esportiva.entity.enums.StreetType).values()}"
                                 th:value="${st}" th:text="${st}"></option>
                         </select>
-                        <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].streetType')}"
-                            th:errors="*{addresses[__${i.index}__].streetType}"></span>
                     </div>
                 </div>
+
+                <div class="w-full mb-4">
+                    <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].cep')}" th:errors="*{addresses[__${i.index}__].cep}"></span>
+                    <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].residencyType')}"
+                          th:errors="*{addresses[__${i.index}__].residencyType}"></span>
+                    <span class="error" th:if="${#fields.hasErrors('addresses[__${i.index}__].streetType')}"
+                          th:errors="*{addresses[__${i.index}__].streetType}"></span>
+                </div>
+
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div th:replace="fragments/input :: input('street_' + ${i.index}, 'Logradouro', 'text', 'addresses[__${i.index}__].street')"></div>
@@ -141,7 +165,7 @@
         </div>
 
         <div class="mb-10">
-            <button class=" hover:bg-gray-100 rounded-md py-2 px-4 cursor-pointer" type="button"
+            <button class=" hover:bg-gray-100 rounded-md py-2 px-4 cursor-pointer font-semibold" type="button"
                 th:onclick="addItem('address')">Novo endereço</button>
         </div>
 
@@ -161,8 +185,10 @@
                 </div>
 
                 <div class="grid grid-col-1 md:grid-cols-2 gap-4">
-                    <div
-                        th:replace="fragments/input :: input('creditCardNumber_' + ${c.index}, 'Número', 'text', creditCards[__${c.index}__].number)">
+                    <div class="mb-4">
+                        <label th:for="'creditCardNumber_' + ${c.index}" class="block font-medium" th:text="'Número:'"></label>
+                        <input th:type="text" th:id="'creditCardNumber_' + ${c.index}" th:field="*{creditCards[__${c.index}__].number}" oninput="creditCardNumberMask(this)" maxlength="19" class="w-full py-1 px-2 border border-gray-300 rounded" />
+                        <span class="error" th:if="${#fields.hasErrors('creditCards[__${c.index}__].number')}" th:errors="*{creditCards[__${c.index}__].number}"></span>
                     </div>
                     <div
                         th:replace="fragments/input :: input('creditCardSecurityCode_' + ${c.index}, 'CVV', 'text', creditCards[__${c.index}__].securityCode)">
@@ -183,7 +209,7 @@
         </div>
 
         <div class="mb-10">
-            <button class="hover:bg-gray-100 rounded-md py-2 px-4 cursor-pointer" type="button"
+            <button class="hover:bg-gray-100 rounded-md py-2 px-4 cursor-pointer font-semibold" type="button"
                     th:onclick="addItem('creditCard')">Novo Cartão de crédito</button>
         </div>
 

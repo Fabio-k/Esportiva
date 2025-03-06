@@ -58,4 +58,16 @@ public class ClientDto {
 
     @Valid
     private List<CreditCardDto> creditCards = new ArrayList<>();
+
+    public void setTelephone(String telefone) {
+        if (telefone != null) {
+            this.telephone = telefone.replaceAll("\\D", ""); // Remove tudo que não é número
+        }
+    }
+
+    public void setCpf(String cpf) {
+        if (cpf != null) {
+            this.cpf = cpf.replaceAll("\\D", ""); // Remove tudo que não é número
+        }
+    }
 }

@@ -55,4 +55,10 @@ public class AddressDto {
 
     @NotEmpty(message = "Endereço deve pertencer ao menos a um tipo de residência")
     private HashSet<AddressType> types = new HashSet<>();
+
+    public void setCep(String cep){
+        if (cep != null) {
+            this.cep = cep.replaceAll("\\D", ""); // Remove tudo que não é número
+        }
+    }
 }
