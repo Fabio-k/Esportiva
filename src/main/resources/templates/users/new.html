@@ -7,14 +7,86 @@
   <title>Cadastro de Usuário</title>
   <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        .error {
+            color: red;
+        }
+  </style>
 </head>
 
-<body class="bg-gray-100 p-8">
-  <header th:replace="fragments/layout.html :: header"></header>
-  <main th:fragment="content" class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+<body class="bg-gray-100">
+  <header th:replace="fragments/header.html :: header"></header>
+  <main th:fragment="content" class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md mb-10">
     <h2 class="text-2xl font-semibold mb-4">Cadastro de Usuário</h2>
     <div th:replace="fragments/form.html :: form"></div>
   </main>
+  <script th:inline="javascript">
+    updateRemoveButton("address");
+    updateRemoveButton("creditCard");
+
+    function updateRemoveButton(type){
+        document.querySelectorAll(`.${type}RemoveButton`).forEach(btn => {
+            btn.onclick = function() {
+                let container = document.getElementById(`${type}Container`)
+                let addressItem = this.closest(`.${type}Item`)
+                let index = container.children.length;
+                if (index < 2) {
+                    return;
+                }
+                addressItem.remove();
+                reindexAddress(type);
+            }
+        })
+    }
+
+    function reindexAddress(type){
+        let addresses = document.querySelectorAll(`.${type}Item`);
+        addresses.forEach((address, index) =>{
+               address.querySelectorAll("input, textarea, select").forEach(input => {
+                    let name = input.name.replace(/\[\d+]/, `[${index}]`)
+                    let id = input.id.replace(/_\d+$/,  `_${index}`)
+                    input.name = name;
+                    input.id = id;
+                    input.setAttribute("for", id)
+               })
+               address.querySelectorAll("label").forEach(label => {
+                let labelFor = label.htmlFor.replace(/_\d+$/,`_${index}`);
+                label.htmlFor = labelFor;
+            })
+
+        })
+    }
+
+    function addItem(type){
+        let container = document.getElementById(`${type}Container`)
+        let index = container.children.length;
+        let firstAddress = container.querySelector(`.${type}Item`);
+        if(!firstAddress){
+            return;
+        }
+
+        let newAddress = firstAddress.cloneNode(true);
+
+        newAddress.querySelectorAll("input, textarea, select").forEach(input => {
+            input.value = "";
+            let name = input.name.replace(/\[\d+]/, `[${index}]`)
+            let id = input.id.replace(/_\d+$/, `_${index}`)
+            input.name = name;
+            input.id = id;
+            input.setAttribute("for", id)
+        })
+
+        newAddress.querySelectorAll("label").forEach(label => {
+            label.htmlFor = label.htmlFor.replace(/_\d+$/, `_${index}`);
+        })
+
+        newAddress.querySelectorAll("span.error").forEach(span => span.textContent = "");
+
+        container.appendChild(newAddress);
+
+         updateRemoveButton(type);
+    }
+  </script>
 </body>
 
 </html>

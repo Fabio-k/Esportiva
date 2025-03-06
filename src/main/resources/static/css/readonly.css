@@ -1,6 +1,7 @@
 /* Aplica um fundo cinza para campos somente leitura */
 h3 {
-    font-size: xx-large;
+    font-size: large;
+    font-weight: 500;
 }
 
 .background-cinza {
@@ -16,5 +17,5 @@ input[readonly] {
     color: #6c757d;
 
     /* Cor da borda */
-    border: 1px solid #ced4da;
+    border: 2px solid #ced4da;
 }

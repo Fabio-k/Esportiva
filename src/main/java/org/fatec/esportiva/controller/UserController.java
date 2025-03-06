@@ -50,15 +50,13 @@ public class UserController {
             clientDto.getCreditCards().add(new CreditCardDto());
             model.addAttribute("user", clientDto);
         }
-        model.addAttribute("body", "users/new.html :: content");
-        return "layout";
+        return "users/new";
     }
 
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("user") ClientDto clientDto, BindingResult result, Model model){
         if (result.hasErrors()){
-            model.addAttribute("body", "users/new.html :: content");
-            return "layout";
+            return "users/edit";
         }
         clientService.save(clientDto);
         return "redirect:/dashboard";
@@ -90,15 +88,13 @@ public class UserController {
         }
         model.addAttribute("id", id);
         model.addAttribute("formAction", "/users/update/" + id);
-        model.addAttribute("body", "users/edit.html :: content");
-        return "layout";
+        return "users/edit";
     }
 
     @PatchMapping("/update/{id}")
-    public String update(@PathVariable Long id, @Valid @ModelAttribute("user") ClientDto userDto, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
-            model.addAttribute("body", "users/edit.html :: content");
-            return "layout";
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("user") ClientDto userDto, BindingResult result, Model model){
+        if(result.hasErrors()){
+            return "users/edit";
         }
         clientService.update(id, userDto);
         return "redirect:/dashboard";

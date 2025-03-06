@@ -23,9 +23,7 @@ public class DashboardController {
     public String home(Model model) throws Exception{
         UserDetails user = authService.getAuthenticatedUser();
         List<Client> clients = userService.getClients();
-        model.addAttribute("currentUser", user);
         model.addAttribute("users", clients);
-        model.addAttribute("body","dashboard.html :: content");
-        return "layout";
+        return "dashboard.html";
     }
 }

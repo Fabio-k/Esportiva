@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
 
 <head>
   <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <header th:fragment="header">
+  <header th:fragment="header" class="flex items-center justify-between w-full mb-10 shadow-md p-4 bg-white">
     <a th:href="@{/users}">
       <svg width="297" height="73" viewBox="0 0 297 73" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -26,7 +26,7 @@
       </svg>
     </a>
 
-    <span th:if="${currentUser}" th:text="${currentUser.name}"></span>
+    <span sec:authentication="principal.name"></span>
   </header>
 </body>
 
