@@ -24,35 +24,33 @@ import java.util.List;
 public class ClientDto {
     private Long id;
 
-    @NotBlank(message = "Cliente: Nome não pode ficar em branco")
+    @NotBlank(message = "Nome não pode ficar em branco")
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "O nome deve conter apenas letras e espaços")
     private String name;
 
-    @NotBlank(message = "Cliente: E-mail não pode ficar em branco")
-    @Email(message = "Cliente: E-mail deve ser em um formato válido: <nome>@<domínio>")
-    @Pattern(regexp = "^(?!.*@esportiva).*", message = "Cliente: O e-mail não deve ser do domínio 'esportiva'. Ele é reservado somente para os administradores!")
+    @NotBlank(message = "E-mail não pode ficar em branco")
+    @Email(message = "E-mail deve ser em um formato válido: <nome>@<domínio>")
+    @Pattern(regexp = "^(?!.*@esportiva).*", message = "O e-mail não deve ser do domínio 'esportiva'. Ele é reservado somente para os administradores!")
     private String email;
 
-    @NotBlank(message = "Cliente: CPF não pode ficar em branco")
+    @NotBlank(message = "CPF não pode ficar em branco")
     @Pattern(regexp = "^[0-9]{11}$", message = "O CPF deve conter 11 dígitos numéricos")
     private String cpf;
 
-    @NotNull(message = "Cliente: Status não pode ficar em branco")
     private UserStatus status;
 
-    @NotNull(message = "Cliente: Gênero não pode ficar em branco")
+    @NotNull(message = "Gênero não pode ficar em branco")
     private Gender gender;
 
-    @NotNull(message = "Cliente: A data de nascimento não pode ficar em branco")
-    @Past(message = "Cliente: A data de nascimento deve estar no passado")
+    @NotNull(message = "A data de nascimento não pode ficar em branco")
+    @Past(message = "A data de nascimento deve estar no passado")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateBirth;
 
-    @NotBlank(message = "Cliente: O número de telefone não pode ficar em branco")
-    @Pattern(regexp = "^\\(\\d{2}\\) \\d{5}-\\d{4}$|^\\d{11}$", message = "Cliente: O número de telefone deve estar em um formato válido: (XX) XXXXX-XXXX | XXXXXXXXXXX")
+    @NotBlank(message = "O número de telefone não pode ficar em branco")
     private String telephone;
 
-    @NotNull(message = "Cliente: O tipo de telefone não pode ficar em branco")
+    @NotNull(message = "O tipo de telefone não pode ficar em branco")
     private PhoneType telephoneType;
 
     @Valid

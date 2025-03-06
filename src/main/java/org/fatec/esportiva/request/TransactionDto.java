@@ -18,10 +18,10 @@ import java.util.List;
 public class TransactionDto {
     private Long id;
 
-    @NotNull(message = "Transação: A compra do carrinho não pode ter data em branco")
-    @PastOrPresent(message = "Transação: A compra do carrinho somente pode ser efetuada até o presente momento")
+    @NotNull(message = "A compra do carrinho não pode ter data em branco")
+    @PastOrPresent(message = "A compra do carrinho somente pode ser efetuada até o presente momento")
     private Date purchase_date;
 
-    @NotNull(message = "Transação: Todo carrinho tem pelo menos um pedido associado")
+    @NotNull(message = "Todo carrinho tem pelo menos um pedido associado")
     private List<Order> orders = new ArrayList<>();
 }
