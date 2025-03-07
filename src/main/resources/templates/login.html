@@ -65,7 +65,7 @@
                     <option th:each="user: ${users}" th:value="${user.email}" th:text="${user.name}"></option>
                 </select>
             </div>
-            <button type="submit">Entrar</button>
+            <button id="submitButton" type="submit">Entrar</button>
         </form>
         <span th:if="${users.size == 0}">Não há usuários na aplicação</span>
     </main>
