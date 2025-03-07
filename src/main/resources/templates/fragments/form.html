@@ -165,7 +165,7 @@
         </div>
 
         <div class="mb-10">
-            <button class=" hover:bg-gray-100 rounded-md py-2 px-4 cursor-pointer font-semibold" type="button"
+            <button id="addAddressButton" class=" hover:bg-gray-100 rounded-md py-2 px-4 cursor-pointer font-semibold" type="button"
                 th:onclick="addItem('address')">Novo endereço</button>
         </div>
 
@@ -209,12 +209,12 @@
         </div>
 
         <div class="mb-10">
-            <button class="hover:bg-gray-100 rounded-md py-2 px-4 cursor-pointer font-semibold" type="button"
+            <button id="addCreditCardButton" class="hover:bg-gray-100 rounded-md py-2 px-4 cursor-pointer font-semibold" type="button"
                     th:onclick="addItem('creditCard')">Novo Cartão de crédito</button>
         </div>
 
         <div class="flex justify-end">
-            <button type="submit"
+            <button type="submit" id="submitButton"
                     class="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white font-bold py-2 px-10 rounded-xl">Salvar</button>
         </div>
 

@@ -1,95 +1,115 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Esportiva</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}" />
     <style>
-        table {
-            border: 2px solid gray;
-            border-radius: 10px;
-            border-collapse: collapse;
-        }
+      table {
+        border: 2px solid gray;
+        border-radius: 10px;
+        border-collapse: collapse;
+      }
 
-        th {
-            border-bottom: 2px solid gray;
-        }
+      th {
+        border-bottom: 2px solid gray;
+      }
 
-        th,
-        td {
-            text-align: left;
-            padding: 14px 8px;
-        }
+      th,
+      td {
+        text-align: left;
+        padding: 14px 8px;
+      }
 
-        tr {
-            border: none;
-        }
+      tr {
+        border: none;
+      }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
 
-        .error {
-            color: red;
-        }
+      .error {
+        color: red;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <header th:replace="fragments/header.html :: header"></header>
     <main>
-        <div class="flex w-[85%] mx-auto flex-col">
-            <a th:href="@{/admin/clients/new}" class="p-2 rounded mb-[10px] text-white self-end w-fit bg-blue-500">Novo usuário</a>
+      <div class="flex w-[85%] mx-auto flex-col">
+        <a
+          id="createClientButton"
+          th:href="@{/admin/clients/new}"
+          class="p-2 rounded mb-[10px] text-white self-end w-fit bg-blue-500"
+          >Novo usuário</a
+        >
 
-            <table class="w-full">
-                <thead>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Data de nascimento</th>
-                    <th>Gênero</th>
-                    <th>Telefone</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th></th>
-                </thead>
+        <table class="w-full">
+          <thead>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Data de nascimento</th>
+            <th>Gênero</th>
+            <th>Telefone</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th></th>
+          </thead>
 
-                <tbody>
-                    <tr th:each="user : ${users}">
-                        <td th:text="${user.id}"></td>
-                        <td th:text="${user.name}"></td>
-                        <td th:text="${user.cpf}"></td>
-                        <td th:text="${user.dateBirth}"></td>
-                        <td th:text="${user.gender}"></td>
-                        <td th:text="${user.telephone}"></td>
-                        <td th:text="${user.email}"></td>
-                        <td th:text="${user.status.name}"></td>
+          <tbody>
+            <tr th:each="user : ${users}">
+              <td th:text="${user.id}"></td>
+              <td th:text="${user.name}"></td>
+              <td th:text="${user.cpf}"></td>
+              <td th:text="${user.dateBirth}"></td>
+              <td th:text="${user.gender}"></td>
+              <td th:text="${user.telephone}"></td>
+              <td th:text="${user.email}"></td>
+              <td th:text="${user.status.name}"></td>
 
-                        <td>
-                            <!-- Botão de editar é um link -->
-                            <a th:href="@{/admin/clients/edit/{id}(id=${user.id})}"
-                                style="display: inline-flex; align-items: center;">
-                                <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis">Editar
-                            </a>
+              <td>
+                <!-- Botão de editar é um link -->
+                <a
+                  th:href="@{/admin/clients/edit/{id}(id=${user.id})}"
+                  style="display: inline-flex; align-items: center"
+                >
+                  <img
+                    th:src="@{/images/pencil.svg}"
+                    width="15"
+                    height="15"
+                    alt="Ícone de lápis"
+                  />Editar
+                </a>
 
-                            <!-- Botão de deletar cria um pop-up para a própria página -->
-                            <form th:action="@{/admin/clients/delete/{id}(id=${user.id})}" method="post"
-                                onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
-                                <input type="hidden" name="_method" value="delete" />
-                                <button type="submit" class="btn btn-danger"
-                                    style="display: inline-flex; align-items: center;"><img
-                                        th:src="@{/images/trash-can.svg}" width="15" height="15"
-                                        alt="Ícone de lixeira">Deletar</button>
-                            </form>
-                        </td>
-
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
+                <!-- Botão de deletar cria um pop-up para a própria página -->
+                <form
+                  th:action="@{/admin/clients/delete/{id}(id=${user.id})}"
+                  method="post"
+                  onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')"
+                >
+                  <input type="hidden" name="_method" value="delete" />
+                  <button
+                    type="submit"
+                    class="btn btn-danger"
+                    style="display: inline-flex; align-items: center"
+                  >
+                    <img
+                      th:src="@{/images/trash-can.svg}"
+                      width="15"
+                      height="15"
+                      alt="Ícone de lixeira"
+                    />Deletar
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </main>
-</body>
-
+  </body>
 </html>

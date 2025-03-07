@@ -8,6 +8,7 @@ import org.fatec.esportiva.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,10 @@ public class LoginController {
     }
 
     @PostMapping("/auth")
-    public String login(@ModelAttribute UserLoginRequest userLoginRequest, HttpServletRequest request, RedirectAttributes redirectAttributes){
+    public String login(@ModelAttribute UserLoginRequest userLoginRequest, HttpServletRequest request, BindingResult result){
+        if (result.hasErrors()){
+            return "login";
+        }
         UserDetails user = userService.findByEmail(userLoginRequest.getEmail()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         authService.authenticateUser(user, request);
         return "redirect:/admin/clients";
