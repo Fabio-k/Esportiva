@@ -70,7 +70,7 @@
                 <input type="hidden" th:field="*{addresses[__${i.index}__].id}">
                 <div class="flex justify-end">
                     <button type="button"
-                        class="addressRemoveButton font-semibold text-gray-500 hover:text-red-400 cursor-pointer">Remover</button>
+                        class="addressRemoveButton font-semibold text-gray-500 hover:text-red-400 cursor-pointer" onclick="removeItem(this, 'address')">Remover</button>
                 </div>
 
                 <div class="mb-4">
@@ -110,7 +110,7 @@
                 <div class="grid grid-cols-3 gap-4">
                     <div>
                         <label th:for="cep_ + ${i.index}" class="block font-medium" th:text="'CEP:'"></label>
-                        <input th:type="text" th:id="cep_ + ${i.index}" th:field="*{addresses[__${i.index}__].cep}" oninput="cepMask(this)" maxlength="9" class="w-full py-1 px-2 border border-gray-300 rounded" />
+                        <input th:type="text" th:id="cep_ + ${i.index}" th:field="*{addresses[__${i.index}__].cep}" oninput="cepMaskAndSearch(this)" maxlength="9" class="w-full py-1 px-2 border border-gray-300 rounded" />
                     </div>
                     <div>
                         <label th:for="'residencyType_' + ${i.index}" class="block font-medium">Tipo de
@@ -177,7 +177,7 @@
 
                 <div class="flex justify-end">
                     <button type="button"
-                        class="creditCardRemoveButton font-semibold text-gray-500 hover:text-red-400 cursor-pointer">Remover</button>
+                        class="creditCardRemoveButton font-semibold text-gray-500 hover:text-red-400 cursor-pointer" onclick="removeItem(this, 'creditCard')">Remover</button>
                 </div>
 
                 <div
