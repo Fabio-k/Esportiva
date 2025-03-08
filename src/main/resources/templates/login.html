@@ -38,7 +38,6 @@
             padding: 10px 10px;
             border-radius: 5px;
             width: 100%;
-            margin-bottom: 20px;
         }
 
         button {
@@ -52,6 +51,10 @@
         img {
             margin-bottom: 40px;
         }
+
+        #userSelect{
+            margin-bottom: 40px;
+        }
     </style>
 </head>
 
@@ -59,11 +62,13 @@
     <main>
         <img th:src="@{/images/logo.svg}">
         <form th:if="${users.size > 0}" th:action="@{/login/auth}" th:object="${user}" method="post">
-            <div>
+            <div id="userSelect">
                 <select id="users" th:field="*{email}">
                     <option value="">Selecione o usuário</option>
                     <option th:each="user: ${users}" th:value="${user.email}" th:text="${user.name}"></option>
                 </select>
+                <span class="error" th:if="${#fields.hasErrors('email')}"
+                      th:errors="*{email}"></span>
             </div>
             <button id="submitButton" type="submit">Entrar</button>
         </form>
