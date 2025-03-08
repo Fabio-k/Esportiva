@@ -27,10 +27,10 @@ function removeItem(btn, type) {
     return;
   }
   addressItem.remove();
-  reindexAddress(type);
+  reindexItems(type);
 }
 
-function reindexAddress(type) {
+function reindexItems(type) {
   let addresses = document.querySelectorAll(`.${type}Item`);
   addresses.forEach((address, index) => {
     address.querySelectorAll("input, textarea, select").forEach((input) => {
@@ -38,7 +38,6 @@ function reindexAddress(type) {
       let id = input.id.replace(/_\d+$/, `_${index}`);
       input.name = name;
       input.id = id;
-      input.setAttribute("for", id);
     });
     address.querySelectorAll("label").forEach((label) => {
       let labelFor = label.htmlFor.replace(/_\d+$/, `_${index}`);
@@ -63,7 +62,6 @@ function addItem(type) {
     let id = input.id.replace(/_\d+$/, `_${index}`);
     input.name = name;
     input.id = id;
-    input.setAttribute("for", id);
   });
 
   newAddress.querySelectorAll("label").forEach((label) => {
@@ -109,7 +107,6 @@ async function getCepInformation(value) {
       throw new Error(`response status: ${response.status}`);
     }
     const result = await response.json();
-    console.log(result);
     return result;
   } catch (error) {
     console.log(error);

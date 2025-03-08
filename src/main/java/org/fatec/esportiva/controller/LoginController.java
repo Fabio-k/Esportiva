@@ -1,6 +1,7 @@
 package org.fatec.esportiva.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.request.UserLoginRequest;
 import org.fatec.esportiva.service.AuthService;
@@ -26,15 +27,19 @@ public class LoginController {
     @GetMapping
     public String getUsers(Model model){
         List<UserDetails> users = userService.getUsers();
-        model.addAttribute("user", new UserLoginRequest());
+        if(!model.containsAttribute("user")){
+            model.addAttribute("user", new UserLoginRequest());
+        }
         model.addAttribute("users", users);
         return "login";
     }
 
     @PostMapping("/auth")
-    public String login(@ModelAttribute UserLoginRequest userLoginRequest, HttpServletRequest request, BindingResult result){
+    public String login(@Valid @ModelAttribute("user") UserLoginRequest userLoginRequest, BindingResult result, HttpServletRequest request, Model model){
         if (result.hasErrors()){
-            return "redirect:/login";
+            List<UserDetails> users = userService.getUsers();
+            model.addAttribute("users", users);
+            return "login";
         }
         UserDetails user = userService.findByEmail(userLoginRequest.getEmail()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         authService.authenticateUser(user, request);
