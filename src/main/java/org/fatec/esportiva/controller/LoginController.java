@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class LoginController {
     @PostMapping("/auth")
     public String login(@ModelAttribute UserLoginRequest userLoginRequest, HttpServletRequest request, BindingResult result){
         if (result.hasErrors()){
-            return "login";
+            return "redirect:/login";
         }
         UserDetails user = userService.findByEmail(userLoginRequest.getEmail()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         authService.authenticateUser(user, request);

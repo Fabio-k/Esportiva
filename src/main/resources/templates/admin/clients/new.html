@@ -15,14 +15,14 @@
 </head>
 
 <body class="bg-gray-100">
-  <header th:replace="fragments/header.html :: header"></header>
+  <header th:replace="~{fragments/header.html :: header}"></header>
   <main th:fragment="content" class="max-w-3xl mx-auto mb-10">
     <div class="mb-5">
       <a th:href="@{/admin/clients}" class="p-2 rounded mb-[10px] text-white self-end w-fit bg-blue-500">Voltar</a>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h2 class="text-2xl font-semibold mb-4">Cadastro de Usuário</h2>
-      <div th:replace="fragments/form.html :: form"></div>
+      <div th:replace="~{fragments/form.html :: form}"></div>
     </div>
   </main>
   <script th:src="@{/js/form.js}"></script>
