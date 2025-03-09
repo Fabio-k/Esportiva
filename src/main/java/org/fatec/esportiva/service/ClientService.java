@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.enums.UserStatus;
 import org.fatec.esportiva.mapper.ClientMapper;
-import org.fatec.esportiva.repository.AddressCategoryRepository;
 import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.request.ClientDto;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,8 @@ public class ClientService {
         existingUser.setTelephone(userDto.getTelephone());
 
         List<Address> updatedAddresses = addressService.updateOrCreateAddress(existingUser, userDto.getAddresses());
-        List<CreditCard> updatedCreditCards = creditCardService.updateOrCreateCreditCards(existingUser, userDto.getCreditCards());
+        List<CreditCard> updatedCreditCards = creditCardService.updateOrCreateCreditCards(existingUser,
+                userDto.getCreditCards());
 
         existingUser.getAddresses().clear();
         existingUser.getAddresses().addAll(updatedAddresses);

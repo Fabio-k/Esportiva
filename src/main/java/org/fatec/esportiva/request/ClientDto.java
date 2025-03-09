@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import lombok.Builder.Default;
+
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.PhoneType;
 import org.fatec.esportiva.entity.enums.UserStatus;
@@ -54,9 +56,11 @@ public class ClientDto {
     private PhoneType telephoneType;
 
     @Valid
+    @Default
     private List<AddressDto> addresses = new ArrayList<>();
 
     @Valid
+    @Default
     private List<CreditCardDto> creditCards = new ArrayList<>();
 
     public void setTelephone(String telefone) {

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
+import lombok.Builder.Default;
 
 import org.fatec.esportiva.entity.ProductCategory;
 import org.fatec.esportiva.entity.enums.ProductStatus;
@@ -55,5 +56,6 @@ public class ProductDto {
     private Long pricing_group_id;
 
     @NotNull(message = "Referencia a uma categoria de produto não pode ficar em branco")
+    @Default
     private List<ProductCategory> product_category = new ArrayList<>();
 }

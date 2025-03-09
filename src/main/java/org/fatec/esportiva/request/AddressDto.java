@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import lombok.Builder.Default;
+
 import org.fatec.esportiva.entity.enums.AddressType;
 import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
@@ -53,10 +55,11 @@ public class AddressDto {
 
     private String observation;
 
+    @Default
     @NotEmpty(message = "Endereço deve pertencer ao menos a um tipo de residência")
     private HashSet<AddressType> types = new HashSet<>();
 
-    public void setCep(String cep){
+    public void setCep(String cep) {
         if (cep != null) {
             this.cep = cep.replaceAll("\\D", ""); // Remove tudo que não é número
         }

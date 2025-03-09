@@ -3,6 +3,7 @@ package org.fatec.esportiva.request;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
+import lombok.Builder.Default;
 
 import org.fatec.esportiva.entity.Order;
 
@@ -23,5 +24,6 @@ public class TransactionDto {
     private Date purchase_date;
 
     @NotNull(message = "Todo carrinho tem pelo menos um pedido associado")
+    @Default
     private List<Order> orders = new ArrayList<>();
 }

@@ -2,8 +2,8 @@ package org.fatec.esportiva.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import lombok.Builder.Default;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +46,7 @@ public class Cep {
     @Column(name = "cep_pais")
     private String country;
 
+    @Default
     @OneToMany(mappedBy = "cep")
     private List<Address> addresses = new ArrayList<>();
 }
