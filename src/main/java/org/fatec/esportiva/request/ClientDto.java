@@ -22,8 +22,9 @@ import java.util.List;
 public class ClientDto {
     private Long id;
 
+    // À-ÿ -> Permite inserir os caracteres com acentos, por exemplo: João
     @NotBlank(message = "Nome não pode ficar em branco")
-    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "O nome deve conter apenas letras e espaços")
+    @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "O nome deve conter apenas letras e espaços")
     private String name;
 
     @NotBlank(message = "E-mail não pode ficar em branco")

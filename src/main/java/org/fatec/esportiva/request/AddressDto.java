@@ -25,7 +25,7 @@ public class AddressDto {
     private String addressIdentificationPhrase;
 
     @NotBlank(message = "CEP não pode ficar em branco")
-    @Pattern(regexp = "^[0-9]{5}-[0-9]{3}$|^[0-9]{8}$", message = "O CEP deve estar em um formato válido: XXXXX-XXX | XXXXXXXX")
+    @Pattern(regexp = "^[0-9]{8}$", message = "O CEP deve estar em um formato válido: XXXXXXXX")
     private String cep;
 
     @NotNull(message = "Tipo de residência não pode ficar em branco")
