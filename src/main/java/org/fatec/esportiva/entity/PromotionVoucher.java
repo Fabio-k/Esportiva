@@ -25,9 +25,4 @@ public class PromotionVoucher {
     @ManyToOne
     @JoinColumn(name = "cpr_cli_id")
     private Client client;
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "cpr_pro_id")
-    private Product product;
 }
