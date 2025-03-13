@@ -65,11 +65,11 @@
               <td th:text="${user.id}"></td>
               <td th:text="${user.name}"></td>
               <td th:text="${user.cpf}"></td>
-              <td th:text="${user.dateBirth}"></td>
-              <td th:text="${user.gender}"></td>
+              <td th:text="${user.displayDateBirth()}"></td>
+              <td th:text="${user.gender.getDisplayName()}"></td>
               <td th:text="${user.telephone}"></td>
               <td th:text="${user.email}"></td>
-              <td th:text="${user.status.name}"></td>
+              <td th:text="${user.status.getDisplayName()}"></td>
 
               <td>
                 <!-- Botão de editar é um link -->

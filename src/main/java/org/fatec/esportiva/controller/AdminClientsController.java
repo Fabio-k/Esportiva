@@ -32,7 +32,7 @@ public class AdminClientsController {
     }
 
     @GetMapping("/new")
-    public String newUser(Model model){
+    public String newClient(Model model){
         model.addAttribute("formAction", "/admin/clients/save");
         if (!model.containsAttribute("user")) {
             ClientDto clientDto = new ClientDto();

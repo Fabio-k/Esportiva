@@ -71,7 +71,7 @@ public class AdminCreateClient extends E2E {
         fillInputField(By.id("email"), "roberto@email.com");
         fillInputField(By.id("dateBirth"), "16081990");
         selectByText(By.id("telephoneType"), "TELEFONE");
-        selectByText(By.id("gender"), "MASCULINO");
+        selectByText(By.id("gender"), "Masculino");
 
         WebElement residentialCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("residence_0")));
         residentialCheckbox.click();
@@ -92,8 +92,8 @@ public class AdminCreateClient extends E2E {
         shippingCheckbox.click();
         fillInputField(By.id("addressIdentificationPhrase_1"), "empresa");
         fillInputField(By.id("cep_1"), "44423939");
-        selectByText(By.id("residencyType_1"), "APARTAMENTO");
-        selectByText(By.id("streetType_1"), "RUA");
+        selectByText(By.id("residencyType_1"), "Apartamento");
+        selectByText(By.id("streetType_1"), "Rua");
         fillInputField(By.id("street_1"), "rua francisco franco");
         fillInputField(By.id("neighborhood_1"), "Jardim das Flores");
         fillInputField(By.id("city_1"), "Belo Horizonte");

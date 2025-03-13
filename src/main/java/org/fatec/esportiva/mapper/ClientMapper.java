@@ -22,6 +22,7 @@ public class ClientMapper {
 
     public ClientDto toUserDto(Client user) {
         return ClientDto.builder()
+                .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .cpf(user.getCpf())
