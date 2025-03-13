@@ -3,6 +3,8 @@ package org.fatec.esportiva.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Client;
+import org.fatec.esportiva.entity.enums.Gender;
+import org.fatec.esportiva.entity.enums.UserStatus;
 import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.mapper.ClientMapper;
 import org.fatec.esportiva.mapper.CreditCardMapper;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -25,14 +26,21 @@ public class AdminClientsController {
     private final ClientService clientService;
 
     @GetMapping
-    public String home(Model model, RedirectAttributes redirectAttributes) throws Exception{
-        List<Client> clients = clientService.getClients();
+    public String getClients(Model model,
+                             @RequestParam(value = "name", required = false) String name,
+                             @RequestParam(value="cpf", required = false) String cpf,
+                             @RequestParam(value="email", required = false) String email,
+                             @RequestParam(value="status", required = false) UserStatus status,
+                             @RequestParam(value="gender", required = false) Gender gender
+                             ){
+
+        List<ClientDto> clients = clientService.getClients(name, email, cpf, status, gender);
         model.addAttribute("users", clients);
         return "admin/clients/index";
     }
 
     @GetMapping("/new")
-    public String newUser(Model model){
+    public String newClient(Model model){
         model.addAttribute("formAction", "/admin/clients/save");
         if (!model.containsAttribute("user")) {
             ClientDto clientDto = new ClientDto();

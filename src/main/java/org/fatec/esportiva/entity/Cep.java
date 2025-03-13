@@ -19,7 +19,8 @@ public class Cep {
 
     @Id
     @Column(name = "cep_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
+            (strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull

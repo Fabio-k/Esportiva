@@ -18,15 +18,17 @@
             <div>
                 <label for="gender" class="block font-medium">Gênero:</label>
                 <select id="gender" th:field="*{gender}" class="w-full py-1 px-2 border border-gray-300 rounded">
+                    <option value="">Selecione o Gênero</option>
                     <option th:each="g : ${T(org.fatec.esportiva.entity.enums.Gender).values()}" th:value="${g}"
-                        th:text="${g}"></option>
+                        th:text="${g.getDisplayName()}"></option>
                 </select>
             </div>
             <div th:if="${id} != null">
                 <label for="status" class="block font-medium">Status:</label>
                 <select id="status" th:field="*{status}" class="w-full py-1 px-2 border border-gray-300 rounded">
+                    <option value="">Selecione o Status</option>
                     <option th:each="s : ${T(org.fatec.esportiva.entity.enums.UserStatus).values()}" th:value="${s}"
-                            th:text="${s}"></option>
+                            th:text="${s.getDisplayName()}"></option>
                 </select>
             </div>
         </div>
@@ -50,8 +52,9 @@
             <div>
                 <label for="telephoneType" class="block font-medium">Tipo de telefone:</label>
                 <select id="telephoneType" th:field="*{telephoneType}" class="w-full py-1 px-2 border border-gray-300 rounded">
+                    <option value="">Selecione o tipo de telefone</option>
                     <option th:each="g : ${T(org.fatec.esportiva.entity.enums.PhoneType).values()}" th:value="${g}"
-                        th:text="${g}"></option>
+                        th:text="${g.getDisplayName()}"></option>
                 </select>
                 <span class="error" th:if="${#fields.hasErrors('telephoneType')}" th:errors="*{telephoneType}"></span>
             </div>
@@ -118,16 +121,18 @@
                         <select th:id="'residencyType_' + ${i.index}"
                             th:field="*{addresses[__${i.index}__].residencyType}"
                             class="w-full py-1 px-2 border rounded">
+                            <option value="">Selecione o tipo de Residência</option>
                             <option th:each="rt : ${T(org.fatec.esportiva.entity.enums.ResidencyType).values()}"
-                                th:value="${rt}" th:text="${rt}"></option>
+                                th:value="${rt}" th:text="${rt.getDisplayName()}"></option>
                         </select>
                     </div>
                     <div>
                         <label th:for="'streetType_' + ${i.index}" class="block font-medium">Tipo de logradouro:</label>
                         <select th:id="'streetType_' + ${i.index}" th:field="*{addresses[__${i.index}__].streetType}"
                             class="w-full py-1 px-2 border rounded">
+                            <option value="">Selecione o tipo de logradouro</option>
                             <option th:each="st : ${T(org.fatec.esportiva.entity.enums.StreetType).values()}"
-                                th:value="${st}" th:text="${st}"></option>
+                                th:value="${st}" th:text="${st.getDisplayName()}"></option>
                         </select>
                     </div>
                 </div>

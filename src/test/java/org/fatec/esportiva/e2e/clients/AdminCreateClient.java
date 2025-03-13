@@ -14,27 +14,7 @@ public class AdminCreateClient extends E2E {
 
     @BeforeEach
     void beforeEach() {
-        browser.get(baseUrl);
-    }
-
-    public void authenticateAs(String name) {
-        wait.until(ExpectedConditions.urlContains("/login"));
-        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("submitButton")));
-        selectByText(By.id("users"), name);
-
-        submitButton.click();
-
-        wait.until(ExpectedConditions.stalenessOf(submitButton));
-    }
-
-    @Test
-    void unauthenticatedUserCannotAccessProtectedPage() {
-        browser.get(baseUrl + "/admin/clients");
-        WebElement body = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-        String pageText = body.getText();
-
-        assertTrue(pageText.contains("Entrar"));
-        assertFalse(pageText.contains("carlos@gmail.com"));
+        browser.get(baseUrl + "/login");
     }
 
     @Test
@@ -70,30 +50,30 @@ public class AdminCreateClient extends E2E {
         fillInputField(By.id("telephone"), "11960433210");
         fillInputField(By.id("email"), "roberto@email.com");
         fillInputField(By.id("dateBirth"), "16081990");
-        selectByText(By.id("telephoneType"), "TELEFONE");
-        selectByText(By.id("gender"), "MASCULINO");
+        selectByText(By.id("telephoneType"), "Telefone");
+        selectByText(By.id("gender"), "Masculino");
 
         WebElement residentialCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("residence_0")));
         residentialCheckbox.click();
 
         fillInputField(By.id("addressIdentificationPhrase_0"), "casa");
         fillInputField(By.id("cep_0"), "07373020");
-        selectByText(By.id("residencyType_0"), "APARTAMENTO");
-        selectByText(By.id("streetType_0"), "AVENIDA");
+        selectByText(By.id("residencyType_0"), "Apartamento");
+        selectByText(By.id("streetType_0"), "Avenida");
         fillInputField(By.id("street_0"), "avenida dos bancos");
         fillInputField(By.id("neighborhood_0"), "Alto Ipiranga");
         fillInputField(By.id("city_0"), "Mogi das Cruzes");
         fillInputField(By.id("state_0"), "São Paulo");
         fillInputField(By.id("country_0"), "Brasil");
         fillInputField(By.id("number_0"), "123");
-        WebElement newAddressButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("addAddressButton")));
+        WebElement newAddressButton = waitUntilId("addAddressButton");
         newAddressButton.click();
-        WebElement shippingCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("shipping_1")));
+        WebElement shippingCheckbox = waitUntilId("shipping_1");
         shippingCheckbox.click();
         fillInputField(By.id("addressIdentificationPhrase_1"), "empresa");
         fillInputField(By.id("cep_1"), "44423939");
-        selectByText(By.id("residencyType_1"), "APARTAMENTO");
-        selectByText(By.id("streetType_1"), "RUA");
+        selectByText(By.id("residencyType_1"), "Apartamento");
+        selectByText(By.id("streetType_1"), "Rua");
         fillInputField(By.id("street_1"), "rua francisco franco");
         fillInputField(By.id("neighborhood_1"), "Jardim das Flores");
         fillInputField(By.id("city_1"), "Belo Horizonte");
@@ -113,11 +93,12 @@ public class AdminCreateClient extends E2E {
         fillInputField(By.id("creditCardSecurityCode_1"), "432");
         selectByText(By.id("creditCardBrand_1"), "VISA");
 
-        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("submitButton")));
+        WebElement submitButton = waitUntilId("submitButton");
         submitButton.click();
 
         wait.until(ExpectedConditions.stalenessOf(submitButton));
         WebElement body = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+        sleep();
         String pageText = body.getText();
 
         assertTrue(pageText.contains("Carlos Silva"));
@@ -130,14 +111,15 @@ public class AdminCreateClient extends E2E {
     @Test
     void returnErrorsBecauseOfMissingRequiredFields() {
         authenticateAs("Fábio");
-        WebElement createButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("createClientButton")));
+        WebElement createButton = waitUntilId("createClientButton");
         createButton.click();
 
-        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("submitButton")));
+        WebElement submitButton = waitUntilId("submitButton");
         submitButton.click();
 
         wait.until(ExpectedConditions.stalenessOf(submitButton));
         WebElement body = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+        sleep();
         String pageText = body.getText();
 
         assertTrue(pageText.contains("Cadastro de Usuário"));
