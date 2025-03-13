@@ -37,7 +37,7 @@ public class E2E {
 
     @AfterAll
     static void teardown(){
-        browser.close();
+        browser.quit();
     }
 
     public void authenticateAs(String name) {
