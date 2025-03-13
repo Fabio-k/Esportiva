@@ -39,13 +39,19 @@
   <body>
     <header th:replace="~{fragments/header.html :: header}"></header>
     <main>
+
       <div class="flex w-[85%] mx-auto flex-col">
-        <a
-          id="createClientButton"
-          th:href="@{/admin/clients/new}"
-          class="p-2 rounded mb-[10px] text-white self-end w-fit bg-blue-500"
+        <div class="flex self-end gap-4 mb-[10px]">
+          <div th:replace="~{fragments/filter.html :: filter}"></div>
+          <button id="filterButton" onclick="toggleFilter()" class="w-fit">Filtros</button>
+          <a
+                  id="createClientButton"
+                  th:href="@{/admin/clients/new}"
+                  class="p-2 rounded text-white w-fit bg-blue-500"
           >Novo usuário</a
-        >
+          >
+        </div>
+
 
         <table class="w-full">
           <thead>
@@ -111,5 +117,19 @@
         </table>
       </div>
     </main>
+  <script>
+    function toggleFilter(){
+      console.log("clicked")
+      document.getElementById("filterModal").classList.toggle("hidden");
+    }
+
+    document.addEventListener("click", (event) => {
+      const modal = document.getElementById("filterModal");
+
+      if(!modal.classList.contains("hidden") && !modal.contains(event.target) && event.target.id != "filterButton"){
+        modal.classList.add("hidden");
+      }
+    })
+  </script>
   </body>
 </html>

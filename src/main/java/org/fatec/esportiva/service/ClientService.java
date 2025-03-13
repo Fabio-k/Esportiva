@@ -3,6 +3,7 @@ package org.fatec.esportiva.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.*;
+import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.UserStatus;
 import org.fatec.esportiva.mapper.ClientMapper;
 import org.fatec.esportiva.repository.ClientRepository;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -53,8 +56,10 @@ public class ClientService {
         return clientRepository.save(existingUser);
     }
 
-    public List<Client> getClients() {
-        List<Client> clients = clientRepository.findAll();
+    public List<ClientDto> getClients(String name, String email, String cpf, UserStatus status, Gender gender) {
+        String formattedName = normalize(name) == null ? null : "%" + name + "%";
+        String formattedEmail = normalize(email) == null ? null : "%" + email + "%";
+        List<ClientDto> clients = clientRepository.findWithFilter(formattedName, formattedEmail, normalize(cpf), status, gender).stream().map(ClientMapper::toUserDto).toList();
         return clients;
     }
 
@@ -69,6 +74,10 @@ public class ClientService {
 
     public void deleteClient(Client user) {
         clientRepository.delete(user);
+    }
+
+    private String normalize(String value){
+        return (value == null || value.trim().isEmpty()) ? null : value;
     }
 
 }
