@@ -80,10 +80,10 @@ INSERT INTO cupons_troca (ctr_valor, ctr_quantidade, ctr_cli_id) VALUES
 
 -- Cupons de Promoção
 SELECT setval('cupons_promocao_cpr_id_seq', 1, false);
-INSERT INTO cupons_promocao (cpr_desconto_porcentagem, cpr_cli_id, cpr_pro_id) VALUES
-('10', '2', '1'),
-('50', '2', '2'),
-('25', '3', '3');
+INSERT INTO cupons_promocao (cpr_desconto_porcentagem, cpr_cli_id) VALUES
+('10', '2'),
+('50', '2'),
+('25', '3');
 
 
 -- ###########################################################################################

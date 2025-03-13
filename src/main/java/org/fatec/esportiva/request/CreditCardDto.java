@@ -16,7 +16,7 @@ public class CreditCardDto {
     private Long id;
 
     @NotBlank(message = "Número não pode ficar em branco")
-    @Pattern(regexp = "^[0-9]{13,19}$", message = "O campo deve conter um número de cartão de crédito válido")
+    @Pattern(regexp = "^[0-9]{13,19}$", message = "O campo deve conter um número de cartão de crédito válido (13 a 19 dígitos)")
     private String number;
 
     @NotNull(message = "Bandeira não pode ficar em branco")
@@ -31,8 +31,8 @@ public class CreditCardDto {
 
     private boolean preferential;
 
-    public void setNumber(String number){
-        if(number != null){
+    public void setNumber(String number) {
+        if (number != null) {
             this.number = number.replaceAll("\\D", "");
         }
     }

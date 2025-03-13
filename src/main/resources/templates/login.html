@@ -7,55 +7,6 @@
     <title>Esportiva</title>
     <link rel="icon" th:href="@{/images/favicon.png}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
-    <style>
-        html,
-        body {
-            margin: 0;
-        }
-
-        body {
-            display: flex;
-            align-items: center;
-            min-height: 100vh
-        }
-
-        main {
-            display: flex;
-            flex-direction: column;
-            max-width: 500px;
-            border: 2px solid gray;
-            border-radius: 15px;
-            padding: 20px;
-            margin: auto;
-            align-items: center;
-        }
-
-        form {
-            width: -webkit-fill-available;
-        }
-
-        select {
-            padding: 10px 10px;
-            border-radius: 5px;
-            width: 100%;
-        }
-
-        button {
-            width: 100%;
-            text-align: center;
-            border-radius: 15px;
-            padding: 8px 8px;
-            cursor: pointer;
-        }
-
-        img {
-            margin-bottom: 40px;
-        }
-
-        #userSelect{
-            margin-bottom: 40px;
-        }
-    </style>
 </head>
 
 <body>
@@ -65,10 +16,11 @@
             <div id="userSelect">
                 <select id="users" th:field="*{email}">
                     <option value="">Selecione o usuário</option>
-                    <option th:each="user: ${users}" th:value="${user.email}" th:text="${user.name}"></option>
+                    <option th:each="user: ${users}" th:value="${user.email}" th:text="${user.name}"
+                        th:class="${#strings.contains(user.email, '@esportiva.com') ? 'admin-style' : ''}">
+                    </option>
                 </select>
-                <span class="error" th:if="${#fields.hasErrors('email')}"
-                      th:errors="*{email}"></span>
+                <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
             </div>
             <button id="submitButton" type="submit">Entrar</button>
         </form>

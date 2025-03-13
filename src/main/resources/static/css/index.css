@@ -28,7 +28,6 @@ select {
     padding: 10px 10px;
     border-radius: 5px;
     width: 100%;
-    margin-bottom: 20px;
 }
 
 button {
@@ -39,6 +38,16 @@ button {
     cursor: pointer;
 }
 
-svg {
+img {
     margin-bottom: 40px;
+}
+
+#userSelect {
+    margin-bottom: 40px;
+}
+
+/* Aplica uma cor personalizada quando é um administrador (Identificado pelo domínio do e-mail)*/
+.admin-style {
+    color: red;
+    font-weight: bold;
 }

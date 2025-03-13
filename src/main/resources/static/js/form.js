@@ -115,9 +115,23 @@ async function getCepInformation(value) {
 }
 
 async function addCepInformation(input, value) {
-  const result = await getCepInformation(value);
+  let result = await getCepInformation(value);
   if (result == null || result.erro) {
-    return;
+    result = {
+      "cep": "00000-000",
+      "logradouro": "Rua do Mock",
+      "complemento": "Spy",
+      "unidade": "",
+      "bairro": "Stub",
+      "localidade": "Teste",
+      "uf": "MC",
+      "estado": "Dummy",
+      "regiao": "",
+      "ibge": "",
+      "gia": "",
+      "ddd": "",
+      "siafi": ""
+    };
   }
   const indexMatch = input.id.match(/(\d)$/);
 

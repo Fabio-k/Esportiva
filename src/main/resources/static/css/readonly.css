@@ -1,14 +1,4 @@
 /* Aplica um fundo cinza para campos somente leitura */
-h3 {
-    font-size: large;
-    font-weight: 500;
-}
-
-.background-cinza {
-    background-color: #d3d3d3;
-    /* Cor cinza claro */
-}
-
 input[readonly] {
     /* Coloração cinza */
     background-color: #f0f0f0;
