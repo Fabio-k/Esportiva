@@ -1,16 +1,28 @@
-package org.fatec.esportiva.e2e.clients;
+package org.fatec.esportiva.e2e.tests;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.Duration;
+
 import org.fatec.esportiva.e2e.E2E;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class AdminCreateClient extends E2E {
+public class TestAdminCreateClient extends E2E {
+
+    @BeforeAll
+    static void setup() {
+        browser = new ChromeDriver();
+        // browser.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+        wait = new WebDriverWait(browser, Duration.ofSeconds(15));
+    }
 
     @BeforeEach
     void beforeEach() {

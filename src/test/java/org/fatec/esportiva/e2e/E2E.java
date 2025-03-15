@@ -2,14 +2,10 @@ package org.fatec.esportiva.e2e;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-import java.time.Duration;
-
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -22,14 +18,10 @@ public class E2E {
 
     protected final String baseUrl = "http://localhost:8080";
 
+    // Executado antes de qualquer coisa e uma única vez
+    // Configura o navegador do Chrome e baixa o driver correspondente
     static {
         WebDriverManager.chromedriver().setup();
-    }
-
-    @BeforeAll
-    static void setup() {
-        browser = new ChromeDriver();
-        wait = new WebDriverWait(browser, Duration.ofSeconds(15));
     }
 
     @AfterAll
@@ -38,6 +30,7 @@ public class E2E {
     }
 
     public void authenticateAs(String name) {
+        // Entra no site usando o usuário selecionado
         wait.until(ExpectedConditions.urlContains("/login"));
         WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("submitButton")));
         selectByText(By.id("users"), name);

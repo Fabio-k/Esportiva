@@ -68,15 +68,16 @@
             <td th:id="'user-' + ${user.id}" th:text="${user.id}"></td>
             <td th:id="'name-' + ${user.id}" th:text="${user.name}"></td>
             <td th:id="'cpf-' + ${user.id}" th:text="${user.cpf}"></td>
-            <td th:id="'dateBirth' + ${user.id}" th:text="${user.displayDateBirth()}"></td>
+            <td th:id="'dateBirth-' + ${user.id}" th:text="${user.displayDateBirth()}"></td>
             <td th:id="'gender-' + ${user.id}" th:text="${user.gender.getDisplayName()}"></td>
-            <td th:id="'telephone' + ${user.id}" th:text="${user.telephone}"></td>
+            <td th:id="'telephone-' + ${user.id}" th:text="${user.telephone}"></td>
             <td th:id="'email-' + ${user.id}" th:text="${user.email}"></td>
             <td th:id="'status-' + ${user.id}" th:text="${user.status.getDisplayName()}"></td>
 
             <td>
               <!-- Botão de editar é um link -->
-              <a th:href="@{/admin/clients/edit/{id}(id=${user.id})}" style="display: inline-flex; align-items: center">
+              <a th:id="'edit-' + ${user.id}" th:href="@{/admin/clients/edit/{id}(id=${user.id})}"
+                style="display: inline-flex; align-items: center">
                 <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
               </a>
 
@@ -84,7 +85,8 @@
               <form th:action="@{/admin/clients/delete/{id}(id=${user.id})}" method="post"
                 onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
                 <input type="hidden" name="_method" value="delete" />
-                <button type="submit" class="btn btn-danger" style="display: inline-flex; align-items: center">
+                <button th:id="'delete-' + ${user.id}" type="submit" class="btn btn-danger"
+                  style="display: inline-flex; align-items: center">
                   <img th:src="@{/images/trash-can.svg}" width="15" height="15" alt="Ícone de lixeira" />Deletar
                 </button>
               </form>
