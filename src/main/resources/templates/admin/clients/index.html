@@ -1,124 +1,101 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Esportiva</title>
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}" />
-    <style>
-      table {
-        border: 2px solid gray;
-        border-radius: 10px;
-        border-collapse: collapse;
-      }
 
-      th {
-        border-bottom: 2px solid gray;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <title>Esportiva</title>
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}" />
+  <style>
+    table {
+      border: 2px solid gray;
+      border-radius: 10px;
+      border-collapse: collapse;
+    }
 
-      th,
-      td {
-        text-align: left;
-        padding: 14px 8px;
-      }
+    th {
+      border-bottom: 2px solid gray;
+    }
 
-      tr {
-        border: none;
-      }
+    th,
+    td {
+      text-align: left;
+      padding: 14px 8px;
+    }
 
-      tr:nth-child(even) {
-        background-color: #f2f2f2;
-      }
+    tr {
+      border: none;
+    }
 
-      .error {
-        color: red;
-      }
-    </style>
-  </head>
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
 
-  <body>
-    <header th:replace="~{fragments/header.html :: header}"></header>
-    <main>
+    .error {
+      color: red;
+    }
+  </style>
+</head>
 
-      <div class="flex w-[85%] mx-auto flex-col">
-        <div class="flex self-end gap-4 mb-[10px]">
-          <div th:replace="~{fragments/filter.html :: filter}"></div>
-          <button id="filterButton" onclick="toggleFilter()" class="w-fit">Filtros</button>
-          <a
-                  id="createClientButton"
-                  th:href="@{/admin/clients/new}"
-                  class="p-2 rounded text-white w-fit bg-blue-500"
-          >Novo usuário</a
-          >
-        </div>
+<body>
+  <header th:replace="~{fragments/header.html :: header}"></header>
+  <main>
 
-
-        <table class="w-full">
-          <thead>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>CPF</th>
-            <th>Data de nascimento</th>
-            <th>Gênero</th>
-            <th>Telefone</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th></th>
-          </thead>
-
-          <tbody>
-            <tr th:each="user : ${users}">
-              <td th:text="${user.id}"></td>
-              <td th:text="${user.name}"></td>
-              <td th:text="${user.cpf}"></td>
-              <td th:text="${user.displayDateBirth()}"></td>
-              <td th:text="${user.gender.getDisplayName()}"></td>
-              <td th:text="${user.telephone}"></td>
-              <td th:text="${user.email}"></td>
-              <td th:text="${user.status.getDisplayName()}"></td>
-
-              <td>
-                <!-- Botão de editar é um link -->
-                <a
-                  th:href="@{/admin/clients/edit/{id}(id=${user.id})}"
-                  style="display: inline-flex; align-items: center"
-                >
-                  <img
-                    th:src="@{/images/pencil.svg}"
-                    width="15"
-                    height="15"
-                    alt="Ícone de lápis"
-                  />Editar
-                </a>
-
-                <!-- Botão de deletar cria um pop-up para a própria página -->
-                <form
-                  th:action="@{/admin/clients/delete/{id}(id=${user.id})}"
-                  method="post"
-                  onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')"
-                >
-                  <input type="hidden" name="_method" value="delete" />
-                  <button
-                    type="submit"
-                    class="btn btn-danger"
-                    style="display: inline-flex; align-items: center"
-                  >
-                    <img
-                      th:src="@{/images/trash-can.svg}"
-                      width="15"
-                      height="15"
-                      alt="Ícone de lixeira"
-                    />Deletar
-                  </button>
-                </form>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="flex w-[85%] mx-auto flex-col">
+      <div class="flex self-end gap-4 mb-[10px]">
+        <div th:replace="~{fragments/filter.html :: filter}"></div>
+        <button id="filterButton" onclick="toggleFilter()" class="w-fit">Filtros</button>
+        <a id="createClientButton" th:href="@{/admin/clients/new}" class="p-2 rounded text-white w-fit bg-blue-500">Novo
+          usuário</a>
       </div>
-    </main>
+
+
+      <table class="w-full">
+        <thead>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Data de nascimento</th>
+          <th>Gênero</th>
+          <th>Telefone</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th></th>
+        </thead>
+
+        <tbody>
+          <tr th:each="user : ${users}">
+            <td th:id="'user-' + ${user.id}" th:text="${user.id}"></td>
+            <td th:id="'name-' + ${user.id}" th:text="${user.name}"></td>
+            <td th:id="'cpf-' + ${user.id}" th:text="${user.cpf}"></td>
+            <td th:id="'dateBirth' + ${user.id}" th:text="${user.displayDateBirth()}"></td>
+            <td th:id="'gender-' + ${user.id}" th:text="${user.gender.getDisplayName()}"></td>
+            <td th:id="'telephone' + ${user.id}" th:text="${user.telephone}"></td>
+            <td th:id="'email-' + ${user.id}" th:text="${user.email}"></td>
+            <td th:id="'status-' + ${user.id}" th:text="${user.status.getDisplayName()}"></td>
+
+            <td>
+              <!-- Botão de editar é um link -->
+              <a th:href="@{/admin/clients/edit/{id}(id=${user.id})}" style="display: inline-flex; align-items: center">
+                <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
+              </a>
+
+              <!-- Botão de deletar cria um pop-up para a própria página -->
+              <form th:action="@{/admin/clients/delete/{id}(id=${user.id})}" method="post"
+                onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit" class="btn btn-danger" style="display: inline-flex; align-items: center">
+                  <img th:src="@{/images/trash-can.svg}" width="15" height="15" alt="Ícone de lixeira" />Deletar
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
   <script>
-    function toggleFilter(){
+    function toggleFilter() {
       console.log("clicked")
       document.getElementById("filterModal").classList.toggle("hidden");
     }
@@ -126,10 +103,11 @@
     document.addEventListener("click", (event) => {
       const modal = document.getElementById("filterModal");
 
-      if(!modal.classList.contains("hidden") && !modal.contains(event.target) && event.target.id != "filterButton"){
+      if (!modal.classList.contains("hidden") && !modal.contains(event.target) && event.target.id != "filterButton") {
         modal.classList.add("hidden");
       }
     })
   </script>
-  </body>
+</body>
+
 </html>
