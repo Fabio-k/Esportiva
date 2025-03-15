@@ -43,6 +43,9 @@ public class LoginController {
         }
         UserDetails user = userService.findByEmail(userLoginRequest.getEmail()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         authService.authenticateUser(user, request);
+        if (user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_CLIENT"))){
+            return "redirect:/";
+        }
         return "redirect:/admin/clients";
     }
 }
