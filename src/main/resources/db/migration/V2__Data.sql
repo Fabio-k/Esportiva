@@ -41,3 +41,4 @@ INSERT INTO funcao (fun_end_id, fun_cae_id) VALUES
 INSERT INTO administrador (adm_nome, adm_email) VALUES
 ('Fábio', 'fabio@esportiva.com'),
 ('Lucas', 'lucas@esportiva.com');
+

@@ -80,7 +80,7 @@ CREATE TABLE cupons_troca (
 
 CREATE TABLE enderecos (
     end_id                   SERIAL PRIMARY KEY,
-    end_numero               INTEGER NOT NULL,
+    end_numero               VARCHAR(10) NOT NULL,
     end_tipo_residencia      VARCHAR(20) NOT NULL,
     end_tipo_logradouro      VARCHAR(20) NOT NULL,
     end_frase_identificacao  VARCHAR(40) NOT NULL,
