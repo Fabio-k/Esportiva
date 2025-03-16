@@ -19,7 +19,7 @@ public class DashboardPage {
 
     public DashboardPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
     }
 
     // Interações
@@ -57,23 +57,33 @@ public class DashboardPage {
         }
     }
 
+    public void ApplyFilter() {
+        WebElement filterButton = driver.findElement(By.id("filter-submit"));
+        filterButton.click();
+    }
+
+    public void openFilter() {
+        WebElement openFilter = driver.findElement(By.id("filterButton"));
+        openFilter.click();
+    }
+
     public void setFilterName(String userName) {
-        WebElement field = driver.findElement(By.id("name"));
+        WebElement field = driver.findElement(By.id("filter-name"));
         field.sendKeys(userName);
     }
 
     public void setFilterCpf(String cpf) {
-        WebElement field = driver.findElement(By.id("name"));
+        WebElement field = driver.findElement(By.id("filter-name"));
         field.sendKeys(cpf);
     }
 
     // public void setFilterDateBirth(Date dateBirth){
-
+    // openFilterOptions();
     // }
 
     public void setFilterGender(Gender gender) {
         // Encontra as opções e cria um objeto desse tipo
-        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("gender")));
+        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("filter-gender")));
         Select select = new Select(dropdown);
 
         // Seleciona pelo texto que está visível nas opções
@@ -85,13 +95,13 @@ public class DashboardPage {
     // }
 
     public void setFilterEmail(String email) {
-        WebElement field = driver.findElement(By.id("email"));
+        WebElement field = driver.findElement(By.id("filter-email"));
         field.sendKeys(email);
     }
 
     public void setFilterStatus(UserStatus userStatus) {
         // Encontra as opções e cria um objeto desse tipo
-        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("status")));
+        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("filter-status")));
         Select select = new Select(dropdown);
 
         // Seleciona pelo texto que está visível nas opções

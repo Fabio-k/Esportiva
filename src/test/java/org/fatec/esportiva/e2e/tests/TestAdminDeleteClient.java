@@ -2,8 +2,6 @@ package org.fatec.esportiva.e2e.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.Duration;
-
 import org.fatec.esportiva.e2e.E2E;
 import org.fatec.esportiva.e2e.pageObjects.DashboardPage;
 import org.fatec.esportiva.e2e.pageObjects.LoginPage;

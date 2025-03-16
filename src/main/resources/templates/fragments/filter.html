@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
-<div th:fragment="filter" id="filterModal" class="absolute bg-white p-5 border border-gray-200 rounded hidden">
-    <form th:action="@{/admin/clients}" method="get" class="space-y-2">
-        <div>
-            <input type="text" id="name" name="name" placeholder="Nome" th:value="${param.name}">
-        </div>
-        <div>
-            <input type="text" id="email" name="email" placeholder="Email" th:value="${param.email}">
-        </div>
-        <div>
-            <input type="text" id="cpf" name="cpf" placeholder="CPF" th:value="${param.cpf}">
-        </div>
-        <div>
-            <select id="status" name="status" th:value="${param.status}">
-                <option value="">Selecione o Status</option>
-                <option th:each="status : ${T(org.fatec.esportiva.entity.enums.UserStatus).values()}" th:value="${status}" th:text="${status.getDisplayName()}">Status</option>
-            </select>
-        </div>
-        <div>
-            <select id="gender" name="gender" th:value="${param.gender}">
-                <option value="">Selecione o Gênero</option>
-                <option th:each="gender : ${T(org.fatec.esportiva.entity.enums.Gender).values()}" th:value="${gender}" th:text="${gender.getDisplayName()}">Gênero</option>
-            </select>
-        </div>
 
-        <button type="submit">Filtrar</button>
-    </form>
-</div>
+<body>
+    <div th:fragment="filter" id="filterModal" class="absolute bg-white p-5 border border-gray-200 rounded hidden">
+        <form th:action="@{/admin/clients}" method="get" class="space-y-2">
+            <div>
+                <input type="text" id="filter-name" name="name" placeholder="Nome" th:value="${param.name}">
+            </div>
+            <div>
+                <input type="text" id="filter-email" name="email" placeholder="Email" th:value="${param.email}">
+            </div>
+            <div>
+                <input type="text" id="filter-cpf" name="cpf" placeholder="CPF" th:value="${param.cpf}">
+            </div>
+            <div>
+                <select id="filter-status" name="status" th:value="${param.status}">
+                    <option value="">Selecione o Status</option>
+                    <option th:each="status : ${T(org.fatec.esportiva.entity.enums.UserStatus).values()}"
+                        th:value="${status}" th:text="${status.getDisplayName()}">Status</option>
+                </select>
+            </div>
+            <div>
+                <select id="filter-gender" name="gender" th:value="${param.gender}">
+                    <option value="">Selecione o Gênero</option>
+                    <option th:each="gender : ${T(org.fatec.esportiva.entity.enums.Gender).values()}"
+                        th:value="${gender}" th:text="${gender.getDisplayName()}">Gênero</option>
+                </select>
+            </div>
+
+            <button id="filter-submit" type="submit">Filtrar</button>
+        </form>
+    </div>
 </body>
+
 </html>
