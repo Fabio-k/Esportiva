@@ -13,6 +13,7 @@ import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.PhoneType;
 import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -30,6 +31,11 @@ public class TestAdminCreateClient extends E2E {
         login = new LoginPage(browser);
         dashboard = new DashboardPage(browser);
         userForm = new UserFormPage(browser);
+    }
+
+    @AfterEach
+    void afterEach() {
+        browser.quit();
     }
 
     @Test
