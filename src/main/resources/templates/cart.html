@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrinho</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <style>
+        .cartMain{
+            margin: auto;
+            width: 80%;
+            display: flex;
+            gap: 30px;
+        }
+
+        #itemList {
+            flex-grow: 1;
+            gap: 10px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 40%;
+        }
+
+        .itemCard{
+            display: flex;
+            justify-content: space-between;
+        }
+        .itemName {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .itemName p{
+            margin: 0;
+            font-weight: bold;
+        }
+        .imgMock{
+            width: 60px;
+            height: 60px;
+            background-color: gray;
+            border-radius: 5px;
+        }
+        #priceBox {
+            max-width: 300px;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .quantityDiv{
+            display: flex;
+            gap: 10px;
+            border: 1px solid gray;
+            border-radius: 3px;
+            height: fit-content;
+            align-items: center;
+        }
+        .quantityDiv p{
+            margin: 0;
+        }
+        .quantityDiv button {
+            width: 20px;
+            height: 20px;
+            margin: 4px;
+            background-color: #ffffff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .quantityDiv button:hover {
+            background-color: #c8e2fb;
+        }
+
+        #buyButton{
+            margin-top: 10px;
+            display: block;
+            background-color: #0A54FF;
+            padding: 15px 20px;
+            cursor: pointer;
+            text-align: center;
+            color: white;
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+  <header th:replace="fragments/header.html :: html"></header>
+    <main class="cartMain">
+        <div id="itemList">
+
+            <div class="itemCard">
+                <div style="display: flex; gap: 20px;">
+                    <div class="imgMock"></div>
+                    <div class="itemName">
+                        <p>Bola de volei</p>
+                        <span onclick="removeItem(this)">Remover</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction:column; gap: 10px;">
+                    <div class="quantityDiv">
+                        <button id="decreaseButton_0" onclick="modifyQuantity(this, -1)">-</button>
+                        <p id="quantityItem_0">1</p>
+                        <button id="increaseButton_0" onclick="modifyQuantity(this, 1)">+</button>
+                    </div>
+                    <p style="margin:0;">10 disponiveis</p>
+                </div>
+
+
+                <p style="font-weight: semi-bold; margin: 0;">R$ 48,32</p>
+            </div>
+
+
+
+        </div>
+        <div id="priceBox">
+            <h4> Resumo da compra </h4>
+            <form>
+                <label th:for="discountCupom">Cupom de desconto</label>
+                <div style="display: flex;">
+                    <input th:type="text" id="discountCupom">
+                    <button type="submit">Aplicar</button>
+                </div>
+            </form>
+            <div style="display: flex; justify-content: space-between;">
+                <p>Total</p>
+                <p>R$ 48,32</p>
+            </div>
+            <a id="buyButton">Continuar compra</a>
+        </div>
+    </main>
+    <script>
+        function modifyQuantity(button, value){
+          const indexMatch = button.id.match(/(\d)$/);
+          const index = indexMatch[1];
+          const quantityItem = document.getElementById(`quantityItem_${index}`);
+          let currentQuantity = parseInt(quantityItem.innerText);
+          if(value < 0 && currentQuantity < 2){
+            return
+          }
+          quantityItem.innerText = currentQuantity + value;
+        }
+
+        function removeItem(button){
+            const card = button.closest(`.itemCard`);
+            card.remove();
+            const container = document.getElementById("itemList");
+            let index = container.children.length;
+            if (index < 1) {
+                const p = document.createElement("p");
+                p.innerText = "carrinho vazio";
+                container.appendChild(p);
+            }
+        }
+    </script>
+</body>
+</html>
