@@ -146,6 +146,7 @@ async function addCepInformation(input, value) {
   document.getElementById(`neighborhood_${index}`).value = result.bairro || "";
   document.getElementById(`city_${index}`).value = result.localidade || "";
   document.getElementById(`state_${index}`).value = result.estado || "";
+  document.getElementById(`country_${index}`).value = "Brasil"; // O CEP sempre é de algum endereço do Brasil
 }
 
 function creditCardNumberMask(input) {
