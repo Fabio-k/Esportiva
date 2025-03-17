@@ -55,7 +55,7 @@ CREATE TABLE clientes (
     cli_nome             VARCHAR(50) NOT NULL,
     cli_cpf              VARCHAR(11) NOT NULL,
     cli_data_nascimento  DATE NOT NULL,
-    cli_genero           VARCHAR(10) NOT NULL,
+    cli_genero           VARCHAR(20) NOT NULL,
     cli_status           VARCHAR(10) NOT NULL,
     cli_telefone         VARCHAR(13) NOT NULL,
     cli_telefone_tipo    VARCHAR(20) NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE cupons_troca (
 
 CREATE TABLE enderecos (
     end_id                   SERIAL PRIMARY KEY,
-    end_numero               INTEGER NOT NULL,
+    end_numero               VARCHAR(10) NOT NULL,
     end_tipo_residencia      VARCHAR(20) NOT NULL,
     end_tipo_logradouro      VARCHAR(20) NOT NULL,
     end_frase_identificacao  VARCHAR(40) NOT NULL,

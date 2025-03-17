@@ -21,6 +21,7 @@ public class LoginPage {
 
     public void login(String userName) {
         // Encontra as opções e cria um objeto desse tipo
+        driver.get("http://localhost:8080/login");
         WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("users")));
         Select select = new Select(dropdown);
 

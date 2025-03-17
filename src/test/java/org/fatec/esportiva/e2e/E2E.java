@@ -2,18 +2,23 @@ package org.fatec.esportiva.e2e;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ActiveProfiles;
 
-// Carrega o arquivo de '.properties' seguindo o padrão: application-{profile}.properties
-//@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("test")
 public class E2E {
     protected static WebDriver browser;
     protected static WebDriverWait wait;
+
+    @Autowired
+    private Flyway flyway;
 
     protected final String baseUrl = "http://localhost:8080";
 
@@ -21,6 +26,12 @@ public class E2E {
     // Configura o navegador do Chrome e baixa o driver correspondente
     static {
         WebDriverManager.chromedriver().setup();
+    }
+
+    @BeforeEach
+    void setup() {
+        flyway.clean();
+        flyway.migrate();
     }
 
     @AfterAll
