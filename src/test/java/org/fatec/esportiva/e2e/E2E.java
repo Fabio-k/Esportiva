@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class E2E {
     protected static WebDriver browser;
     protected static WebDriverWait wait;
-    private static final int sleepDuration = 0;
+    private static final int sleepDuration = 0; // Variar aqui quando for mostrar para alguém 
 
     @Autowired
     private Flyway flyway;
