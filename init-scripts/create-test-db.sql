@@ -1,0 +1,1 @@
+CREATE DATABASE esportiva_db_test;
