@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class E2E {
     protected static WebDriver browser;
     protected static WebDriverWait wait;
+    private static final int sleepDuration = 0;
 
     @Autowired
     private Flyway flyway;
@@ -37,5 +38,14 @@ public class E2E {
     @AfterAll
     static void teardown() {
         browser.quit();
+    }
+
+    protected void sleepForVisualization() {
+        try {
+            Thread.sleep(sleepDuration);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
     }
 }

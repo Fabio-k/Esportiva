@@ -30,6 +30,7 @@ public class TestLogin extends E2E {
         login.login("Selecione o usuário");
 
         assertTrue(login.getErrorMessage());
+        sleepForVisualization();
     }
 
     // @Test

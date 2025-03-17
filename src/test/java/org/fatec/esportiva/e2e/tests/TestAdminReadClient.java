@@ -95,6 +95,8 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserTelephone(3), null);
         assertEquals(dashboard.getUserEmail(3), null);
         assertEquals(dashboard.getUserStatus(3), null);
+
+        sleepForVisualization();
     }
 
     @Test
@@ -131,5 +133,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserTelephone(3), null);
         assertEquals(dashboard.getUserEmail(3), null);
         assertEquals(dashboard.getUserStatus(3), null);
+
+        sleepForVisualization();
     }
 }

@@ -33,6 +33,7 @@ public class TestAdminDeleteClient extends E2E {
         login.login("Fábio");
         dashboard.deleteUser(2, true);
         assertEquals(dashboard.getUserName(2), null);
+        sleepForVisualization();
     }
 
     @Test
@@ -40,5 +41,6 @@ public class TestAdminDeleteClient extends E2E {
         login.login("Fábio");
         dashboard.deleteUser(1, false);
         assertEquals(dashboard.getUserName(1), "Carlos Silva");
+        sleepForVisualization();
     }
 }

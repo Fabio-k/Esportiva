@@ -101,6 +101,7 @@ public class TestAdminCreateClient extends E2E {
         userForm.setCreditCardCVV(1, "432");
         userForm.setCreditCardBrand(1, CreditCardBrand.VISA);
 
+        sleepForVisualization();
         userForm.clickSaveUser();
 
         // Verifica se o usuário consta na tabela
@@ -111,6 +112,8 @@ public class TestAdminCreateClient extends E2E {
         assertEquals(dashboard.getUserTelephone(4), "11960433210");
         assertEquals(dashboard.getUserEmail(4), "roberto@email.com");
         assertEquals(dashboard.getUserStatus(4), "Ativo");
+
+        sleepForVisualization();
     }
 
     @Test
@@ -140,5 +143,7 @@ public class TestAdminCreateClient extends E2E {
         assertTrue(userForm.isErrorMessagePresent("O campo deve conter um número de cartão de crédito válido"));
         assertTrue(userForm.isErrorMessagePresent("O código de segurança somente contém dígitos"));
         assertTrue(userForm.isErrorMessagePresent("Código de segurança não pode ficar em branco"));
+
+        sleepForVisualization();
     }
 }

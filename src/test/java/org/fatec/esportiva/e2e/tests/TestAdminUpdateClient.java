@@ -40,6 +40,7 @@ public class TestAdminUpdateClient extends E2E {
         // Atualiza perfil do usuário
         userForm.setTelephone("11974441237");
         userForm.setEmail("vanessinha.v.h@uol.com.br");
+        sleepForVisualization();
         userForm.clickSaveUser();
 
         // Verifica se o usuário consta na tabela
@@ -50,6 +51,8 @@ public class TestAdminUpdateClient extends E2E {
         assertEquals(dashboard.getUserTelephone(3), "11974441237");
         assertEquals(dashboard.getUserEmail(3), "vanessinha.v.h@uol.com.br");
         assertEquals(dashboard.getUserStatus(3), "Inativo");
+
+        sleepForVisualization();
     }
 
     @Test
@@ -62,11 +65,13 @@ public class TestAdminUpdateClient extends E2E {
         userForm.setEmail("vanessinha.v.h@uol.com.br");
 
         // Verifica se dá erro com telefone vazio
+        sleepForVisualization();
         userForm.clickSaveUser();
         assertTrue(userForm.isErrorMessagePresent("O número de telefone não pode ficar em branco"));
 
         // Corrige o telefone
         userForm.setTelephone("11974441237");
+        sleepForVisualization();
         userForm.clickSaveUser();
 
         // Verifica se o usuário consta na tabela
@@ -77,5 +82,7 @@ public class TestAdminUpdateClient extends E2E {
         assertEquals(dashboard.getUserTelephone(3), "11974441237");
         assertEquals(dashboard.getUserEmail(3), "vanessinha.v.h@uol.com.br");
         assertEquals(dashboard.getUserStatus(3), "Inativo");
+
+        sleepForVisualization();
     }
 }
