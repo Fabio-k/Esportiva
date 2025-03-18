@@ -38,13 +38,14 @@ public class TestAdminUpdateClient extends E2E {
         dashboard.editUser(3);
 
         // Atualiza perfil do usuário
+        userForm.setName("Carla Santos");
         userForm.setTelephone("11974441237");
         userForm.setEmail("vanessinha.v.h@uol.com.br");
         sleepForVisualization();
         userForm.clickSaveUser();
 
         // Verifica se o usuário consta na tabela
-        assertEquals(dashboard.getUserName(3), "Vanessa Von Hausten");
+        assertEquals(dashboard.getUserName(3), "Carla Santos");
         assertEquals(dashboard.getUserCpf(3), "94551842060");
         assertEquals(dashboard.getUserDateBirth(3), "01/11/2001");
         assertEquals(dashboard.getUserGender(3), "Feminino");
