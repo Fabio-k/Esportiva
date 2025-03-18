@@ -57,7 +57,11 @@ function addItem(type) {
   let newAddress = firstAddress.cloneNode(true);
 
   newAddress.querySelectorAll("input, textarea, select").forEach((input) => {
-    input.value = "";
+    if (input.type == "checkbox") {
+      input.checked = false;
+    } else {
+      input.value = "";
+    }
     let name = input.name.replace(/\[\d+]/, `[${index}]`);
     let id = input.id.replace(/_\d+$/, `_${index}`);
     input.name = name;
@@ -118,19 +122,19 @@ async function addCepInformation(input, value) {
   let result = await getCepInformation(value);
   if (result == null || result.erro) {
     result = {
-      "cep": "00000-000",
-      "logradouro": "Rua do Mock",
-      "complemento": "Spy",
-      "unidade": "",
-      "bairro": "Stub",
-      "localidade": "Teste",
-      "uf": "MC",
-      "estado": "Dummy",
-      "regiao": "",
-      "ibge": "",
-      "gia": "",
-      "ddd": "",
-      "siafi": ""
+      cep: "00000-000",
+      logradouro: "Rua do Mock",
+      complemento: "Spy",
+      unidade: "",
+      bairro: "Stub",
+      localidade: "Teste",
+      uf: "MC",
+      estado: "Dummy",
+      regiao: "",
+      ibge: "",
+      gia: "",
+      ddd: "",
+      siafi: "",
     };
   }
   const indexMatch = input.id.match(/(\d)$/);

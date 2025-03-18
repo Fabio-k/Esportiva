@@ -1,7 +1,5 @@
 package org.fatec.esportiva.e2e.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.fatec.esportiva.e2e.E2E;
 import org.fatec.esportiva.e2e.pageObjects.DashboardPage;
 import org.fatec.esportiva.e2e.pageObjects.LoginPage;
@@ -12,8 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestAdminReadClient extends E2E {
-    // Page Models
     private LoginPage login;
     private DashboardPage dashboard;
 
@@ -34,7 +33,6 @@ public class TestAdminReadClient extends E2E {
     void adminReadTable() {
         login.login("Fábio");
 
-        // Carlos
         assertEquals(dashboard.getUserName(1), "Carlos Silva");
         assertEquals(dashboard.getUserCpf(1), "43757832060");
         assertEquals(dashboard.getUserDateBirth(1), "30/03/1986");
@@ -52,7 +50,6 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserEmail(2), "marina.duarte@outlook.com");
         assertEquals(dashboard.getUserStatus(2), "Ativo");
 
-        // Vanessa
         assertEquals(dashboard.getUserName(3), "Vanessa Von Hausten");
         assertEquals(dashboard.getUserCpf(3), "94551842060");
         assertEquals(dashboard.getUserDateBirth(3), "01/11/2001");
@@ -69,7 +66,6 @@ public class TestAdminReadClient extends E2E {
         dashboard.setFilterName("Carlos");
         dashboard.ApplyFilter();
 
-        // Carlos
         assertEquals(dashboard.getUserName(1), "Carlos Silva");
         assertEquals(dashboard.getUserCpf(1), "43757832060");
         assertEquals(dashboard.getUserDateBirth(1), "30/03/1986");
@@ -78,23 +74,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserEmail(1), "carlos@gmail.com");
         assertEquals(dashboard.getUserStatus(1), "Ativo");
 
-        // Mariana
-        assertEquals(dashboard.getUserName(2), null);
-        assertEquals(dashboard.getUserCpf(2), null);
-        assertEquals(dashboard.getUserDateBirth(2), null);
-        assertEquals(dashboard.getUserGender(2), null);
-        assertEquals(dashboard.getUserTelephone(2), null);
-        assertEquals(dashboard.getUserEmail(2), null);
-        assertEquals(dashboard.getUserStatus(2), null);
-
-        // Vanessa
-        assertEquals(dashboard.getUserName(3), null);
-        assertEquals(dashboard.getUserCpf(3), null);
-        assertEquals(dashboard.getUserDateBirth(3), null);
-        assertEquals(dashboard.getUserGender(3), null);
-        assertEquals(dashboard.getUserTelephone(3), null);
-        assertEquals(dashboard.getUserEmail(3), null);
-        assertEquals(dashboard.getUserStatus(3), null);
+        assertEquals(dashboard.getUsersCount(), 1);
 
         sleepForVisualization();
     }
@@ -107,16 +87,6 @@ public class TestAdminReadClient extends E2E {
         dashboard.setFilterStatus(UserStatus.ATIVO);
         dashboard.ApplyFilter();
 
-        // Carlos
-        assertEquals(dashboard.getUserName(1), null);
-        assertEquals(dashboard.getUserCpf(1), null);
-        assertEquals(dashboard.getUserDateBirth(1), null);
-        assertEquals(dashboard.getUserGender(1), null);
-        assertEquals(dashboard.getUserTelephone(1), null);
-        assertEquals(dashboard.getUserEmail(1), null);
-        assertEquals(dashboard.getUserStatus(1), null);
-
-        // Mariana
         assertEquals(dashboard.getUserName(2), "Mariana Duarte");
         assertEquals(dashboard.getUserCpf(2), "71374904090");
         assertEquals(dashboard.getUserDateBirth(2), "15/02/1971");
@@ -125,14 +95,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserEmail(2), "marina.duarte@outlook.com");
         assertEquals(dashboard.getUserStatus(2), "Ativo");
 
-        // Vanessa
-        assertEquals(dashboard.getUserName(3), null);
-        assertEquals(dashboard.getUserCpf(3), null);
-        assertEquals(dashboard.getUserDateBirth(3), null);
-        assertEquals(dashboard.getUserGender(3), null);
-        assertEquals(dashboard.getUserTelephone(3), null);
-        assertEquals(dashboard.getUserEmail(3), null);
-        assertEquals(dashboard.getUserStatus(3), null);
+        assertEquals(dashboard.getUsersCount(), 1);
 
         sleepForVisualization();
     }
