@@ -21,6 +21,14 @@ public class UserFormPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
+    private final By usernameField = By.id("name");
+    private final By genderField = By.id("gender");
+    private final By emailField = By.id("email");
+    private final By cpfField = By.id("cpf");
+    private final By dateBirthField = By.id("dateBirth");
+    private final By telephoneTypeField = By.id("telephoneType");
+    private final By telephoneField = By.id("telephone");
+
     public UserFormPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
@@ -58,7 +66,7 @@ public class UserFormPage {
     // SETTERS
     // ####################################################################################################
     public void setName(String userName) {
-        WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("name")));
+        WebElement field = driver.findElement(usernameField);
 
         field.clear();
         field.sendKeys(userName);
@@ -66,7 +74,7 @@ public class UserFormPage {
 
     public void setGender(Gender gender) {
         // Encontra as opções e cria um objeto desse tipo
-        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("gender")));
+        WebElement dropdown = driver.findElement(genderField);
         Select select = new Select(dropdown);
 
         // Seleciona pelo texto que está visível nas opções
@@ -74,21 +82,21 @@ public class UserFormPage {
     }
 
     public void setEmail(String email) {
-        WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
+        WebElement field = driver.findElement(emailField);
 
         field.clear();
         field.sendKeys(email);
     }
 
     public void setCpf(String cpf) {
-        WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cpf")));
+        WebElement field = driver.findElement(cpfField);
 
         field.clear();
         field.sendKeys(cpf);
     }
 
     public void setDateBirth(String dateBirth) {
-        WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("dateBirth")));
+        WebElement field = driver.findElement(dateBirthField); 
 
         field.clear();
         field.sendKeys(dateBirth);
@@ -96,7 +104,7 @@ public class UserFormPage {
 
     public void setTelephoneType(PhoneType telephoneType) {
         // Encontra as opções e cria um objeto desse tipo
-        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("telephoneType")));
+        WebElement dropdown = driver.findElement(telephoneTypeField); 
         Select select = new Select(dropdown);
 
         // Seleciona pelo texto que está visível nas opções
@@ -104,7 +112,7 @@ public class UserFormPage {
     }
 
     public void setTelephone(String telephone) {
-        WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("telephone")));
+        WebElement field = driver.findElement(telephoneField);
 
         field.clear();
         field.sendKeys(telephone);

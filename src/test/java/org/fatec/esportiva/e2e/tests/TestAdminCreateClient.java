@@ -26,7 +26,7 @@ public class TestAdminCreateClient extends E2E {
 
     @BeforeEach
     void beforeEach() {
-        browser = new ChromeDriver();
+        browser = new ChromeDriver(options);
         browser.get(baseUrl);
         login = new LoginPage(browser);
         dashboard = new DashboardPage(browser);
