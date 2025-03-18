@@ -1,7 +1,6 @@
 package org.fatec.esportiva.e2e.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.fatec.esportiva.e2e.E2E;
@@ -25,7 +24,7 @@ public class TestAdminCreateClient extends E2E {
 
     @BeforeEach
     void beforeEach() {
-        browser = new ChromeDriver();
+        browser = new ChromeDriver(options);
         browser.get(baseUrl);
         login = new LoginPage(browser);
         dashboard = new DashboardPage(browser);
@@ -83,6 +82,7 @@ public class TestAdminCreateClient extends E2E {
         userForm.setCreditCardCVV(1, "432");
         userForm.setCreditCardBrand(1, CreditCardBrand.VISA);
 
+        sleepForVisualization();
         userForm.clickSaveUser();
 
         assertEquals(dashboard.getUserName(4), "Roberto");
@@ -92,6 +92,8 @@ public class TestAdminCreateClient extends E2E {
         assertEquals(dashboard.getUserTelephone(4), "11960433210");
         assertEquals(dashboard.getUserEmail(4), "roberto@email.com");
         assertEquals(dashboard.getUserStatus(4), "Ativo");
+
+        sleepForVisualization();
     }
 
     @Test
@@ -121,5 +123,7 @@ public class TestAdminCreateClient extends E2E {
         assertTrue(userForm.isErrorMessagePresent("O campo deve conter um número de cartão de crédito válido"));
         assertTrue(userForm.isErrorMessagePresent("O código de segurança somente contém dígitos"));
         assertTrue(userForm.isErrorMessagePresent("Código de segurança não pode ficar em branco"));
+
+        sleepForVisualization();
     }
 }

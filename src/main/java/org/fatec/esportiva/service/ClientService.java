@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
 @RequiredArgsConstructor
 public class ClientService {
@@ -59,7 +57,9 @@ public class ClientService {
     public List<ClientDto> getClients(String name, String email, String cpf, UserStatus status, Gender gender) {
         String formattedName = normalize(name) == null ? null : "%" + name + "%";
         String formattedEmail = normalize(email) == null ? null : "%" + email + "%";
-        List<ClientDto> clients = clientRepository.findWithFilter(formattedName, formattedEmail, normalize(cpf), status, gender).stream().map(ClientMapper::toUserDto).toList();
+        List<ClientDto> clients = clientRepository
+                .findWithFilter(formattedName, formattedEmail, normalize(cpf), status, gender).stream()
+                .map(ClientMapper::toUserDto).toList();
         return clients;
     }
 
@@ -76,7 +76,7 @@ public class ClientService {
         clientRepository.delete(user);
     }
 
-    private String normalize(String value){
+    private String normalize(String value) {
         return (value == null || value.trim().isEmpty()) ? null : value;
     }
 

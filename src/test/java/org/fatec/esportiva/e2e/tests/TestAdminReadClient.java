@@ -18,7 +18,7 @@ public class TestAdminReadClient extends E2E {
 
     @BeforeEach
     void beforeEach() {
-        browser = new ChromeDriver();
+        browser = new ChromeDriver(options);
         browser.get(baseUrl);
         login = new LoginPage(browser);
         dashboard = new DashboardPage(browser);
@@ -75,6 +75,8 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserStatus(1), "Ativo");
 
         assertEquals(dashboard.getUsersCount(), 1);
+
+        sleepForVisualization();
     }
 
     @Test
@@ -94,5 +96,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserStatus(2), "Ativo");
 
         assertEquals(dashboard.getUsersCount(), 1);
+
+        sleepForVisualization();
     }
 }

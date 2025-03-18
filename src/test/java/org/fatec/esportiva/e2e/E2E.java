@@ -6,6 +6,7 @@ import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 public class E2E {
     protected static WebDriver browser;
     protected static WebDriverWait wait;
+    protected static ChromeOptions options;
+    private static final int sleepDuration = 0; // Variar aqui quando for mostrar para alguém
 
     @Autowired
     private Flyway flyway;
@@ -26,6 +29,9 @@ public class E2E {
     // Configura o navegador do Chrome e baixa o driver correspondente
     static {
         WebDriverManager.chromedriver().setup();
+        // https://www.selenium.dev/documentation/webdriver/drivers/options/
+        options = new ChromeOptions();
+        options.addArguments("--start-fullscreen");
     }
 
     @BeforeEach
@@ -37,5 +43,14 @@ public class E2E {
     @AfterAll
     static void teardown() {
         browser.quit();
+    }
+
+    protected void sleepForVisualization() {
+        try {
+            Thread.sleep(sleepDuration);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
     }
 }
