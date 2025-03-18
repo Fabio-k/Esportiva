@@ -14,11 +14,11 @@
             <div>
                 <label th:for="name" class="block font-medium" th:text="'Nome:'"></label>
                 <input th:type="text" th:id="name" th:field="*{name}"
-                    class="w-full py-1 px-2 border border-gray-300 rounded" />
+                    class="" />
             </div>
             <div>
                 <label for="gender" class="block font-medium">Gênero:</label>
-                <select id="gender" th:field="*{gender}" class="w-full py-1 px-2 border border-gray-300 rounded">
+                <select id="gender" th:field="*{gender}" class="">
                     <option value="">Selecione o Gênero</option>
                     <option th:each="g : ${T(org.fatec.esportiva.entity.enums.Gender).values()}" th:value="${g}"
                         th:text="${g.getDisplayName()}"></option>
