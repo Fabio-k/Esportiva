@@ -22,33 +22,25 @@ public class DashboardPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
     }
 
-    // Interações
     public void clickNewUser() {
-        // Acha o botão e clica nele
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable((By.id("createClientButton"))));
         button.click();
 
-        // Espera a nova página ser carregada, quando o botão fica 'inválido'
         wait.until(ExpectedConditions.stalenessOf(button));
     }
 
     public void editUser(int id) {
-        // Acha o botão e clica nele
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable((By.id("edit-" + id))));
         button.click();
 
-        // Espera a nova página ser carregada, quando o botão fica 'inválido'
         wait.until(ExpectedConditions.stalenessOf(button));
     }
 
     public void deleteUser(int id, Boolean confirmDelete) {
-        // Acha o botão e clica nele
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable((By.id("delete-" + id))));
         button.click();
 
-        // Interage com o botão de confirmar exclusão
         wait.until(ExpectedConditions.alertIsPresent());
-        // Troca o foco do Seleniun para o botão de alerta (Pop-Up)
         Alert alertButton = driver.switchTo().alert();
         if (confirmDelete) {
             alertButton.accept();
@@ -77,22 +69,13 @@ public class DashboardPage {
         field.sendKeys(cpf);
     }
 
-    // public void setFilterDateBirth(Date dateBirth){
-    // openFilterOptions();
-    // }
 
     public void setFilterGender(Gender gender) {
-        // Encontra as opções e cria um objeto desse tipo
         WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("filter-gender")));
         Select select = new Select(dropdown);
 
-        // Seleciona pelo texto que está visível nas opções
         select.selectByVisibleText(gender.getDisplayName());
     }
-
-    // public void setFilterTelephone(String telephone){
-
-    // }
 
     public void setFilterEmail(String email) {
         WebElement field = driver.findElement(By.id("filter-email"));
@@ -100,16 +83,12 @@ public class DashboardPage {
     }
 
     public void setFilterStatus(UserStatus userStatus) {
-        // Encontra as opções e cria um objeto desse tipo
         WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("filter-status")));
         Select select = new Select(dropdown);
 
-        // Seleciona pelo texto que está visível nas opções
         select.selectByVisibleText(userStatus.getDisplayName());
     }
 
-    // GETTERS
-    // ####################################################################################################
     public String getUserId(int id) {
         try {
             WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("id-" + id)));
@@ -177,6 +156,15 @@ public class DashboardPage {
         try {
             WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("status-" + id)));
             return content.getText();
+        } catch (TimeoutException e) {
+            return null;
+        }
+    }
+
+    public Integer getUsersCount(){
+        try {
+            WebElement tableBody = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("tbody")));
+            return tableBody.findElements(By.tagName("tr")).size();
         } catch (TimeoutException e) {
             return null;
         }

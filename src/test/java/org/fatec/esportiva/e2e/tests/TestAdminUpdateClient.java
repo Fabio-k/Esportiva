@@ -20,7 +20,7 @@ public class TestAdminUpdateClient extends E2E {
 
     @BeforeEach
     void beforeEach() {
-        browser = new ChromeDriver();
+        browser = new ChromeDriver(options);
         browser.get(baseUrl);
         login = new LoginPage(browser);
         dashboard = new DashboardPage(browser);
@@ -38,18 +38,22 @@ public class TestAdminUpdateClient extends E2E {
         dashboard.editUser(3);
 
         // Atualiza perfil do usuário
+        userForm.setName("Carla Santos");
         userForm.setTelephone("11974441237");
         userForm.setEmail("vanessinha.v.h@uol.com.br");
+        sleepForVisualization();
         userForm.clickSaveUser();
 
         // Verifica se o usuário consta na tabela
-        assertEquals(dashboard.getUserName(3), "Vanessa Von Hausten");
+        assertEquals(dashboard.getUserName(3), "Carla Santos");
         assertEquals(dashboard.getUserCpf(3), "94551842060");
         assertEquals(dashboard.getUserDateBirth(3), "01/11/2001");
         assertEquals(dashboard.getUserGender(3), "Feminino");
         assertEquals(dashboard.getUserTelephone(3), "11974441237");
         assertEquals(dashboard.getUserEmail(3), "vanessinha.v.h@uol.com.br");
         assertEquals(dashboard.getUserStatus(3), "Inativo");
+
+        sleepForVisualization();
     }
 
     @Test
@@ -62,11 +66,13 @@ public class TestAdminUpdateClient extends E2E {
         userForm.setEmail("vanessinha.v.h@uol.com.br");
 
         // Verifica se dá erro com telefone vazio
+        sleepForVisualization();
         userForm.clickSaveUser();
         assertTrue(userForm.isErrorMessagePresent("O número de telefone não pode ficar em branco"));
 
         // Corrige o telefone
         userForm.setTelephone("11974441237");
+        sleepForVisualization();
         userForm.clickSaveUser();
 
         // Verifica se o usuário consta na tabela
@@ -77,5 +83,7 @@ public class TestAdminUpdateClient extends E2E {
         assertEquals(dashboard.getUserTelephone(3), "11974441237");
         assertEquals(dashboard.getUserEmail(3), "vanessinha.v.h@uol.com.br");
         assertEquals(dashboard.getUserStatus(3), "Inativo");
+
+        sleepForVisualization();
     }
 }

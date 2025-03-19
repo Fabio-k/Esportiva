@@ -1,7 +1,6 @@
 package org.fatec.esportiva.e2e.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.fatec.esportiva.e2e.E2E;
@@ -19,14 +18,13 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class TestAdminCreateClient extends E2E {
-    // Page Models
     private LoginPage login;
     private DashboardPage dashboard;
     private UserFormPage userForm;
 
     @BeforeEach
     void beforeEach() {
-        browser = new ChromeDriver();
+        browser = new ChromeDriver(options);
         browser.get(baseUrl);
         login = new LoginPage(browser);
         dashboard = new DashboardPage(browser);
@@ -43,7 +41,6 @@ public class TestAdminCreateClient extends E2E {
         login.login("Fábio");
         dashboard.clickNewUser();
 
-        // Perfil do usuário
         userForm.setName("Roberto");
         userForm.setGender(Gender.MASCULINO);
         userForm.setEmail("roberto@email.com");
@@ -52,8 +49,6 @@ public class TestAdminCreateClient extends E2E {
         userForm.setTelephoneType(PhoneType.TELEFONE);
         userForm.setTelephone("11960433210");
 
-        // Endereço 1
-        // Tenta remover o único endereço que já existe para testar robustez
         userForm.removeAddress();
         userForm.setAddressCategoryResidential(0, true);
         userForm.setAddressCategoryShipping(0, true);
@@ -63,13 +58,7 @@ public class TestAdminCreateClient extends E2E {
         userForm.setAddressStreetType(0, StreetType.AVENIDA);
 
         userForm.setAddressNumber(0, "123");
-        // fillInputField(By.id("street_0"), "avenida dos bancos");
-        // fillInputField(By.id("neighborhood_0"), "Alto Ipiranga");
-        // fillInputField(By.id("city_0"), "Mogi das Cruzes");
-        // fillInputField(By.id("state_0"), "São Paulo");
-        // fillInputField(By.id("country_0"), "Brasil");
 
-        // Endereço 2
         userForm.addAddress();
         userForm.setAddressCategoryResidential(1, false);
         userForm.setAddressCategoryBilling(1, true);
@@ -80,37 +69,31 @@ public class TestAdminCreateClient extends E2E {
         userForm.setAddressStreetType(1, StreetType.RUA);
 
         userForm.setAddressNumber(1, "234");
-        // fillInputField(By.id("street_1"), "rua francisco franco");
-        // fillInputField(By.id("neighborhood_1"), "Jardim das Flores");
-        // fillInputField(By.id("city_1"), "Belo Horizonte");
-        // fillInputField(By.id("state_1"), "Minas Gerais");
-        // fillInputField(By.id("country_1"), "Brasil");
 
-        // Cartão de crédito 1
-        // Tenta remover o único cartão de crédito que já existe para testar robustez
         userForm.removeCreditCard();
         userForm.setCreditCardName(0, "Roberto");
         userForm.setCreditCardNumber(0, "1234567812345678");
         userForm.setCreditCardCVV(0, "234");
         userForm.setCreditCardBrand(0, CreditCardBrand.MASTERCARD);
 
-        // Cartão de crédito 2
         userForm.addCreditCard();
         userForm.setCreditCardName(1, "Roberto");
         userForm.setCreditCardNumber(1, "8765432187654321");
         userForm.setCreditCardCVV(1, "432");
         userForm.setCreditCardBrand(1, CreditCardBrand.VISA);
 
+        sleepForVisualization();
         userForm.clickSaveUser();
 
-        // Verifica se o usuário consta na tabela
         assertEquals(dashboard.getUserName(4), "Roberto");
         assertEquals(dashboard.getUserCpf(4), "77623412334");
-        assertEquals(dashboard.getUserDateBirth(4), "16081990");
+        assertEquals(dashboard.getUserDateBirth(4), "16/08/1990");
         assertEquals(dashboard.getUserGender(4), "Masculino");
         assertEquals(dashboard.getUserTelephone(4), "11960433210");
         assertEquals(dashboard.getUserEmail(4), "roberto@email.com");
         assertEquals(dashboard.getUserStatus(4), "Ativo");
+
+        sleepForVisualization();
     }
 
     @Test
@@ -140,5 +123,7 @@ public class TestAdminCreateClient extends E2E {
         assertTrue(userForm.isErrorMessagePresent("O campo deve conter um número de cartão de crédito válido"));
         assertTrue(userForm.isErrorMessagePresent("O código de segurança somente contém dígitos"));
         assertTrue(userForm.isErrorMessagePresent("Código de segurança não pode ficar em branco"));
+
+        sleepForVisualization();
     }
 }
