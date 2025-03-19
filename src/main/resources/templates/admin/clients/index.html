@@ -6,6 +6,7 @@
   <title>Esportiva</title>
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/admin_navbar.css}">
   <style>
     table {
       border: 2px solid gray;
@@ -38,7 +39,7 @@
 </head>
 
 <body>
-  <header th:replace="~{fragments/header.html :: header}"></header>
+  <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('dashboard')}"></header>
   <main>
 
     <div class="flex w-[85%] mx-auto flex-col">

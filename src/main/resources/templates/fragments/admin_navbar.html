@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin_navbar.css}">
+</head>
+
+<body>
+    <header th:fragment="admin_navbar(activeItem)"
+        class="flex items-center justify-between w-full mb-10 shadow-md p-4 bg-white">
+        <nav>
+            <ul>
+                <li>
+                    <img th:src="@{/images/logo.svg}" />
+                </li>
+                <li th:classappend="${activeItem == 'dashboard' ? 'active' : ''}">
+                    <a href="/admin/clients">Dashboard</a>
+                </li>
+                <li th:classappend="${activeItem == 'stock' ? 'active' : ''}">
+                    <a href="/admin/product_autorization">Estoque</a>
+                </li>
+                <li th:classappend="${activeItem == 'logistic' ? 'active' : ''}">
+                    <a href="/admin/product_autorization">Logística</a>
+                </li>
+                <li th:classappend="${activeItem == 'analysis' ? 'active' : ''}">
+                    <a href="/admin/product_autorization">Análise</a>
+                </li>
+                <li th:classappend="${activeItem == 'logout' ? 'active' : ''}">
+                    <a href="/logout">Logout</a>
+                </li>
+                <li>
+                    <span sec:authentication="principal.name" class="custom-border">
+                    </span>
+                </li>
+            </ul>
+        </nav>
+    </header>
+</body>
+
+</html>

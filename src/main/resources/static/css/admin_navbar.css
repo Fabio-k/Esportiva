@@ -1,0 +1,46 @@
+nav {
+    width: 100%;
+}
+
+nav ul {
+    /* Apaga os bullets da lista*/
+    list-style-type: none;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+
+    /* Centraliza e distribui os itens horizontalmente */
+    display: flex;
+    justify-content: space-evenly;
+    /* Espaçamento igual entre os itens */
+    align-items: center;
+    /* Centraliza verticalmente */
+    text-align: center;
+}
+
+/* Faz a barra de navegação na horizontal */
+nav li {
+    display: inline-block;
+}
+
+/* Aplica uma cor diferente ao passar o mouse sobre itens de link 'a', dentro da barra de navegação 'nav' */
+nav a:hover {
+    color: blue;
+}
+
+/* Classe especial que destaca itens que representa a aba atual */
+.active {
+    background-color: yellow;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Estiliza o span com uma borda */
+.custom-border {
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: cadetblue;
+}
