@@ -23,7 +23,7 @@ public class ProductDto {
     private Long id;
 
     @NotBlank(message = "Nome não pode ficar em branco")
-    private String product_name;
+    private String name;
 
     @NotNull(message = "Data de entrada não pode ficar em branco")
     @PastOrPresent(message = "Data de entrada pode ser até o presente momento")

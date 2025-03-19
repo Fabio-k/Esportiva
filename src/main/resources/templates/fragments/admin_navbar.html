@@ -18,16 +18,16 @@
                     <a href="/admin/clients">Dashboard</a>
                 </li>
                 <li th:classappend="${activeItem == 'stock' ? 'active' : ''}">
-                    <a href="/admin/product_autorization">Estoque</a>
+                    <a href="/admin/products">Estoque</a>
                 </li>
                 <li th:classappend="${activeItem == 'logistic' ? 'active' : ''}">
-                    <a href="/admin/product_autorization">Logística</a>
+                    <a href="/admin/logistic/in_processing">Logística</a>
                 </li>
                 <li th:classappend="${activeItem == 'analysis' ? 'active' : ''}">
-                    <a href="/admin/product_autorization">Análise</a>
+                    <a href="/admin/analysis">Análise</a>
                 </li>
                 <li th:classappend="${activeItem == 'logout' ? 'active' : ''}">
-                    <a href="/logout">Logout</a>
+                    <a href="/login">Logout</a>
                 </li>
                 <li>
                     <span sec:authentication="principal.name" class="custom-border">
