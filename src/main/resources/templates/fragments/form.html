@@ -156,28 +156,28 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div
-                        th:replace="~{fragments/input :: input('street_' + ${i.index}, 'Logradouro', 'text', 'addresses[__${i.index}__].street')}">
+                        th:replace="~{fragments/input_readonly :: input('street_' + ${i.index}, 'Logradouro', 'text', 'addresses[__${i.index}__].street')}">
                     </div>
                     <div
-                        th:replace="~{fragments/input :: input('number_' + ${i.index}, 'Numero', 'text', 'addresses[__${i.index}__].number')}">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div
-                        th:replace="~{fragments/input :: input('neighborhood_' + ${i.index}, 'Bairro', 'text', 'addresses[__${i.index}__].neighborhood')}">
-                    </div>
-                    <div
-                        th:replace="~{fragments/input :: input('city_' + ${i.index}, 'Cidade', 'text', 'addresses[__${i.index}__].city')}">
+                        th:replace="~{fragments/input_readonly :: input('number_' + ${i.index}, 'Numero', 'text', 'addresses[__${i.index}__].number')}">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div
-                        th:replace="~{fragments/input :: input('state_' + ${i.index}, 'Estado', 'text', 'addresses[__${i.index}__].state')}">
+                        th:replace="~{fragments/input_readonly :: input('neighborhood_' + ${i.index}, 'Bairro', 'text', 'addresses[__${i.index}__].neighborhood')}">
                     </div>
                     <div
-                        th:replace="~{fragments/input :: input('country_' + ${i.index}, 'País', 'text', 'addresses[__${i.index}__].country')}">
+                        th:replace="~{fragments/input_readonly :: input('city_' + ${i.index}, 'Cidade', 'text', 'addresses[__${i.index}__].city')}">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div
+                        th:replace="~{fragments/input_readonly :: input('state_' + ${i.index}, 'Estado', 'text', 'addresses[__${i.index}__].state')}">
+                    </div>
+                    <div
+                        th:replace="~{fragments/input_readonly :: input('country_' + ${i.index}, 'País', 'text', 'addresses[__${i.index}__].country')}">
                     </div>
                 </div>
 

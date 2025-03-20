@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <header th:fragment="header" class="flex items-center justify-between w-full mb-10 shadow-md p-4 bg-white">
+        <img th:src="@{/images/logo.svg}" />
+        <span sec:authentication="principal.name"></span>
+    </header>
+</body>
+
+</html>
