@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin_navbar.css}">
+</head>
+
+<body>
+    <header th:fragment="logistic_navbar(activeItem)"
+        class="flex items-center justify-between w-full mb-10 shadow-md p-4 bg-white">
+        <nav>
+            <ul>
+                <li>
+                    Carrinho de compras
+                </li>
+                <li th:classappend="${activeItem == 'in_processing' ? 'active' : ''}">
+                    <a href="/admin/logistic/in_processing">Em processamento</a>
+                </li>
+                <li th:classappend="${activeItem == 'in_transit' ? 'active' : ''}">
+                    <a href="/admin/logistic/in_transit">Em trânsito</a>
+                </li>
+                <li>
+                    Entregue
+                </li>
+                <li th:classappend="${activeItem == 'returned' ? 'active' : ''}">
+                    <a href="/admin/logistic/returned">Em troca</a>
+                </li>
+                <li th:classappend="${activeItem == 'returning' ? 'active' : ''}">
+                    <a href="/admin/logistic/returning">Trocado</a>
+                </li>
+                <li>
+                    Troca finalizada
+                </li>
+            </ul>
+        </nav>
+    </header>
+</body>
+
+</html>
