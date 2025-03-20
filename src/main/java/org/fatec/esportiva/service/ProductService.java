@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.fatec.esportiva.entity.Product;
+import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.fatec.esportiva.mapper.ProductMapper;
 import org.fatec.esportiva.repository.ProductRepository;
 import org.fatec.esportiva.request.ProductDto;
@@ -25,7 +26,7 @@ public class ProductService {
 
     public Product findProduct(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
         return product;
     }
 

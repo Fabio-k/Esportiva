@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query("SELECT c FROM Product c WHERE (:name is NULL or c.name LIKE :name)")
+    @Query("SELECT p FROM Product p WHERE (:name is NULL or p.name LIKE :name)")
     List<Product> findWithFilter(String name);
 }
