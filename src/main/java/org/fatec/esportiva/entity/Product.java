@@ -55,5 +55,5 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "pro_grp_id")
-    private PricingGroup pricingGroup;
+    private PricingGroup pricingGroupId;
 }

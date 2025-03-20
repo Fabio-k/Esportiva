@@ -39,18 +39,18 @@ public class ProductDto {
 
     @NotNull(message = "Margem de lucro não pode ficar em branco")
     @Min(value = 0, message = "Margem de lucro deve ser maior que 0%")
-    private float pricingValue;
+    private float profitMargin;
 
     @NotNull(message = "Custo não pode ficar em branco")
     @Min(value = 0, message = "O custo não pode ser negativo")
-    private float cost;
+    private float costValue;
+
+    @NotNull(message = "Categoria de desativação não pode ficar em branco")
+    private ProductStatus inactivationCategory;
 
     // Pode ter justificativa vazia (Quando não está desativado, por exemplo)
     @NotNull(message = "A justificativa de desativação não pode ser nula, mas pode ser uma string vazia")
-    private String deactivationJustification;
-
-    @NotNull(message = "Categoria de desativação não pode ficar em branco")
-    private ProductStatus deactivationCategory;
+    private String inactivationJustification;
 
     @NotNull(message = "Referencia para uma categoria de inativação não pode ficar em branco")
     private Long pricingGroupId;

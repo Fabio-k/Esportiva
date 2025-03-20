@@ -1,7 +1,9 @@
 package org.fatec.esportiva.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.mapper.ProductMapper;
 import org.fatec.esportiva.repository.ProductRepository;
 import org.fatec.esportiva.request.ProductDto;
@@ -15,10 +17,24 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public List<ProductDto> getProducts(String name) {
-        List<ProductDto> clients = productRepository
+        List<ProductDto> products = productRepository
                 .findWithFilter(name).stream()
                 .map(ProductMapper::toProductDto).toList();
-        return clients;
+        return products;
+    }
+
+    public Product findProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto não encontrado"));
+        return product;
+    }
+
+    public Optional<Product> findById(Long id) {
+        return productRepository.findById(id);
+    }
+
+    public void deleteProduct(Product product) {
+        productRepository.delete(product);
     }
 
 }
