@@ -23,11 +23,11 @@
                 <li>
                     Entregue
                 </li>
-                <li th:classappend="${activeItem == 'returned' ? 'active' : ''}">
-                    <a href="/admin/logistic/returned">Em troca</a>
-                </li>
                 <li th:classappend="${activeItem == 'returning' ? 'active' : ''}">
-                    <a href="/admin/logistic/returning">Trocado</a>
+                    <a href="/admin/logistic/returning">Em troca</a>
+                </li>
+                <li th:classappend="${activeItem == 'returned' ? 'active' : ''}">
+                    <a href="/admin/logistic/returned">Trocado</a>
                 </li>
                 <li>
                     Troca finalizada
