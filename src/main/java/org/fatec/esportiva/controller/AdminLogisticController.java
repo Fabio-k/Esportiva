@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/admin/logistic")
 public class AdminLogisticController {
 
-    @GetMapping({ "/index", "/in_processing" })
+    @GetMapping("/in_processing")
     public String inProcessing(Model model) {
         return "admin/logistic/in_processing";
     }
