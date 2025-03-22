@@ -2,12 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" th:href="@{/images/favicon.png}">
-  <title>Editar Usuário</title>
+  <div th:replace="~{fragments/head_info.html :: head_info}"></div>
   <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}">
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .error {
       color: red;
