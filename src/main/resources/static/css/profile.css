@@ -1,0 +1,8 @@
+/* Estiliza o span com uma borda, para melhorar o profile do usuário */
+.profile-style {
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: cadetblue;
+}

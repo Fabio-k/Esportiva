@@ -36,15 +36,7 @@ nav a:hover {
     border-radius: 5px;
 }
 
-/* Estiliza o span com uma borda */
-.custom-border {
-    border: 2px solid black;
-    padding: 10px;
-    border-radius: 8px;
-    display: inline-block;
-    background-color: cadetblue;
-}
-
+/* Restringe o tamanho dos ícones que ficam na barra de navegação */
 .navbar-image {
     width: 60px;
     height: 60px;
