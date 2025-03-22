@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/analysis")
-public class AdminAnalisys {
+public class AdminAnalysisController {
 
     @GetMapping
     public String inProcessing(Model model) {
