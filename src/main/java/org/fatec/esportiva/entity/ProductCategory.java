@@ -25,6 +25,11 @@ public class ProductCategory {
     @Column(name = "cat_nome")
     private String name;
 
+    // CascadeType.PERSIST: Se você salvar (persistir) uma entidade principal, as
+    // entidades relacionadas também serão salvas automaticamente
+
+    // CascadeType.MERGE: Se você atualizar (merge) uma entidade principal, as
+    // entidades relacionadas também serão atualizadas automaticamente
     @Default
     @ManyToMany(cascade = {
             CascadeType.PERSIST,

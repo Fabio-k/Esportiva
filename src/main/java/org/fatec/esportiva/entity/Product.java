@@ -60,6 +60,11 @@ public class Product {
     @JoinColumn(name = "pro_grp_id")
     private PricingGroup pricingGroupId;
 
+    // CascadeType.PERSIST: Se você salvar (persistir) uma entidade principal, as
+    // entidades relacionadas também serão salvas automaticamente
+
+    // CascadeType.MERGE: Se você atualizar (merge) uma entidade principal, as
+    // entidades relacionadas também serão atualizadas automaticamente
     @Default
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
