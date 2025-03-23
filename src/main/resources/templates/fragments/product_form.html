@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/head_info.html :: head_info}"></div>
+</head>
+
+<body>
+    <main th:fragment="product-form">
+        <form id="product-form" method="post" action="">
+            <br><br><label for="name">Nome do produto</label>
+            <input type="text" id="name" name="name" required>
+
+            <!-- A data de cadastro/ataulização será inserida no back end -->
+
+            <br><br><label for="stockQuantity">Quantidade no estoque</label>
+            <input type="range" min="0" max="100" step="1" id="stockQuantity" name="stockQuantity" value="0"
+                oninput="this.nextElementSibling.value = this.value">
+            <output>0</output>
+
+            <br><br><label for="pricingGroup">Grupo de precificação</label>
+            <select id="pricingGroup" name="pricingGroup" size="5">
+                <option value="noOption">Selecione uma opção</option>
+                <option value="noOption">Premium</option>
+            </select>
+
+            <br><br><label for="profitMargin">Margem de lucro (%)</label>
+            <input type="range" min="0" max="100" step="1" id="profitMargin" name="profitMargin" value="20"
+                oninput="this.nextElementSibling.value = this.value">
+            <output>20</output>
+
+            <br><br><label for="costValue">Valor do custo (R$)</label>
+            <input type="range" min="0" max="500" step="1" id="costValue" name="costValue" value="100"
+                oninput="this.nextElementSibling.value = this.value">
+            <output>100</output>
+
+            <br><br><label for="productCategory">Categoria de produto</label>
+            <select id="productCategory" name="productCategory" size="8" multiple>
+                <option value="noOption">Selecione uma opção</option>
+                <option value="noOption">Bola</option>
+            </select>
+
+            <br><br><label for="inactivationCategory">Categoria de inativação</label>
+            <select id="inactivationCategory" name="inactivationCategory" size="5">
+                <option value="noOption">Selecione uma opção</option>
+                <option value="noOption">Baixa venda</option>
+            </select>
+
+            <br><br><label for="inactivationJustification">Justificativa de inativação </label>
+            <textarea id="inactivationJustification" name="inactivationJustification"></textarea>
+
+            <br><br><input type="submit" value="Salvar">
+        </form>
+    </main>
+</body>

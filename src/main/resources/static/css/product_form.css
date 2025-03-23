@@ -1,0 +1,20 @@
+input {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+textarea {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+select {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+}
