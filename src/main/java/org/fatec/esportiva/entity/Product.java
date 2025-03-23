@@ -3,8 +3,11 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.Builder.Default;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.fatec.esportiva.entity.enums.ProductStatus;
 
@@ -56,4 +59,12 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "pro_grp_id")
     private PricingGroup pricingGroupId;
+
+    @Default
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "pro_id"), inverseJoinColumns = @JoinColumn(name = "cat_id"))
+    private List<ProductCategory> productCategories = new ArrayList<>();
 }

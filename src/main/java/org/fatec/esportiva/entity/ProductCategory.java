@@ -1,8 +1,12 @@
 package org.fatec.esportiva.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.Builder.Default;
 
 @Entity
 @AllArgsConstructor
@@ -20,4 +24,12 @@ public class ProductCategory {
     @NotNull
     @Column(name = "cat_nome")
     private String name;
+
+    @Default
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "cat_id"), inverseJoinColumns = @JoinColumn(name = "pro_id"))
+    private List<Product> products = new ArrayList<>();
 }
