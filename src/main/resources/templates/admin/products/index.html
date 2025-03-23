@@ -13,18 +13,79 @@
     <main>
         <table class="w-full">
             <thead>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Data de cadastro</th>
-                <th>Qtd estoque</th>
-                <th>Qtd bloqueada</th>
-                <th>Margem de lucro (%)</th>
-                <th>Custo (R$)</th>
-                <th>Status</th>
-                <th></th>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Data de cadastro</th>
+                    <th>Qtd estoque</th>
+                    <th>Qtd bloqueada</th>
+                    <th>Margem de lucro (%)</th>
+                    <th>Custo (R$)</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
             </thead>
 
             <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Taco de Beisebol</td>
+                    <td>01/05/2020</td>
+                    <td>50</td>
+                    <td>0</td>
+                    <td>20</td>
+                    <td>30</td>
+                    <td>Ativo</td>
+
+                    <td>
+                        <!-- Botão de editar é um link -->
+                        <a href="admin/products/edit/1" style="display: inline-flex; align-items: center">
+                            <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
+                        </a>
+
+                        <!-- Botão de deletar cria um pop-up para a própria página -->
+                        <form href="admin/products/delete/1" method="post"
+                            onsubmit="return confirm('Tem certeza que deseja excluir este produto?')">
+                            <input type="hidden" name="_method" value="delete" />
+                            <button type="submit" class="btn btn-danger"
+                                style="display: inline-flex; align-items: center">
+                                <img th:src="@{/images/trash-can.svg}" width="15" height="15"
+                                    alt="Ícone de lixeira" />Deletar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Bola de volei</td>
+                    <td>03/10/2021</td>
+                    <td>101</td>
+                    <td>3</td>
+                    <td>10</td>
+                    <td>88</td>
+                    <td>Inativo</td>
+
+                    <td>
+                        <!-- Botão de editar é um link -->
+                        <a href="admin/products/edit/1" style="display: inline-flex; align-items: center">
+                            <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
+                        </a>
+
+                        <!-- Botão de deletar cria um pop-up para a própria página -->
+                        <form href="admin/products/delete/1" method="post"
+                            onsubmit="return confirm('Tem certeza que deseja excluir este produto?')">
+                            <input type="hidden" name="_method" value="delete" />
+                            <button type="submit" class="btn btn-danger"
+                                style="display: inline-flex; align-items: center">
+                                <img th:src="@{/images/trash-can.svg}" width="15" height="15"
+                                    alt="Ícone de lixeira" />Deletar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+
+            <!-- <tbody>
                 <tr th:each="product : ${products}">
                     <td th:id="'product-' + ${product.id}" th:text="${product.id}"></td>
                     <td th:id="'name-' + ${product.id}" th:text="${uproductser.name}"></td>
@@ -34,16 +95,16 @@
                     </td>
                     <td th:id="'profitMargin-' + ${product.profitMargin}" th:text="${product.profitMargin}"></td>
                     <td th:id="'costValue-' + ${product.costValue}" th:text="${product.costValue}"></td>
-                    <td th:id="'entryDate-' + ${product.entryDate}" th:text="${product.entryDate}"></td>
+                    <td th:id="'inactivationCategory-' + ${product.inactivationCategory}" th:text="${product.inactivationCategory}"></td>
 
                     <td>
-                        <!-- Botão de editar é um link -->
+                        <!-- Botão de editar é um link 
                         <a th:id="'edit-' + ${product.id}" th:href="@{/admin/products/edit/{id}(id=${product.id})}"
                             style="display: inline-flex; align-items: center">
                             <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
                         </a>
 
-                        <!-- Botão de deletar cria um pop-up para a própria página -->
+                        <!-- Botão de deletar cria um pop-up para a própria página 
                         <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post"
                             onsubmit="return confirm('Tem certeza que deseja excluir este produto?')">
                             <input type="hidden" name="_method" value="delete" />
@@ -55,8 +116,9 @@
                         </form>
                     </td>
                 </tr>
-            </tbody>
+            </tbody> -->
         </table>
+
     </main>
 </body>
 
