@@ -20,13 +20,76 @@
             </thead>
 
             <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Camisa de esporte</td>
+                    <td>3</td>
+                    <td>1</td>
+
+                    <td th:if="${readonly == false}">
+                        <form action="" method="post"
+                            onsubmit="return confirm('Tem certeza que deseja aprovar este produto?')">
+                            <input type="hidden" name="_method" value="delete" />
+                            <button type="submit" class="btn btn-danger"
+                                style="display: inline-flex; align-items: center">Aprovar
+                            </button>
+                        </form>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Bola de boliche</td>
+                    <td>1</td>
+                    <td>1</td>
+
+                    <td th:if="${readonly == false}">
+                        <form action="" method="post"
+                            onsubmit="return confirm('Tem certeza que deseja aprovar este produto?')">
+                            <input type="hidden" name="_method" value="delete" />
+                            <button type="submit" class="btn btn-danger"
+                                style="display: inline-flex; align-items: center">Aprovar
+                            </button>
+                        </form>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Patins de gelo</td>
+                    <td>2</td>
+                    <td>2</td>
+
+                    <td th:if="${readonly == false}">
+                        <form action="" method="post"
+                            onsubmit="return confirm('Tem certeza que deseja aprovar este produto?')">
+                            <input type="hidden" name="_method" value="delete" />
+                            <button type="submit" class="btn btn-danger"
+                                style="display: inline-flex; align-items: center">Aprovar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+
+            <!-- <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome do produto</th>
+                    <th>Quantidade</th>
+                    <th>Transação</th>
+                    <th th:if="${readonly == false}">Aprovar</th>
+                </tr>
+            </thead>
+
+            <tbody>
                 <tr th:each="order : ${orders}">
                     <td th:id="'order-' + ${order.id}" th:text="${order.id}"></td>
                     <td th:id="'product-name-' + ${order.product}" th:text="${order.product}"></td>
                     <td th:id="'quantity-' + ${order.quantity}" th:text="${order.quantity}"></td>
                     <td th:id="'transaction-' + ${order.transaction}" th:text="${order.transaction}"></td>
 
-                    <!-- Botão de aprovar cria um pop-up para a própria página -->
+                    <!-- Botão de aprovar cria um pop-up para a própria página 
                     <td th:if="${readonly == false}">
                         <form th:action="@{/admin/products" method="post"
                             onsubmit="return confirm('Tem certeza que deseja aprovar este produto?')">
@@ -37,7 +100,7 @@
                         </form>
                     </td>
                 </tr>
-            </tbody>
+            </tbody> -->
         </table>
     </div>
 </body>
