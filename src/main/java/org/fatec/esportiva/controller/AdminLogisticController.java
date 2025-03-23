@@ -22,13 +22,18 @@ public class AdminLogisticController {
         return "admin/logistic/in_transit";
     }
 
+    @GetMapping("/delivered")
+    public String delivered(Model model) {
+        return "admin/logistic/delivered";
+    }
+
     @GetMapping("/returning")
-    public String inReturning(Model model) {
+    public String returning(Model model) {
         return "admin/logistic/returning";
     }
 
     @GetMapping("/returned")
-    public String inReturned(Model model) {
+    public String returned(Model model) {
         return "admin/logistic/returned";
     }
 

@@ -30,8 +30,8 @@
                 <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
 
                 <!-- Entregue -->
-                <li class="navbar-image">
-                    <img th:src="@{/images/house.svg}" />
+                <li th:classappend="${activeItem == 'delivered' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/delivered"><img th:src="@{/images/house.svg}" /></a>
                 </li>
                 <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
 
