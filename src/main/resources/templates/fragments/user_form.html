@@ -159,7 +159,7 @@
                         th:replace="~{fragments/input_readonly :: input('street_' + ${i.index}, 'Logradouro', 'text', 'addresses[__${i.index}__].street')}">
                     </div>
                     <div
-                        th:replace="~{fragments/input_readonly :: input('number_' + ${i.index}, 'Numero', 'text', 'addresses[__${i.index}__].number')}">
+                        th:replace="~{fragments/input :: input('number_' + ${i.index}, 'Numero', 'text', 'addresses[__${i.index}__].number')}">
                     </div>
                 </div>
 
