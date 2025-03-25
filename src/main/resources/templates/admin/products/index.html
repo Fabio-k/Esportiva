@@ -39,12 +39,12 @@
 
                     <td>
                         <!-- Botão de editar é um link -->
-                        <a href="admin/products/edit/1" style="display: inline-flex; align-items: center">
+                        <a href="products/edit/1" style="display: inline-flex; align-items: center">
                             <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
                         </a>
 
                         <!-- Botão de deletar cria um pop-up para a própria página -->
-                        <form href="admin/products/delete/1" method="post"
+                        <form href="products/delete/1" method="post"
                             onsubmit="return confirm('Tem certeza que deseja excluir este produto?')">
                             <input type="hidden" name="_method" value="delete" />
                             <button type="submit" class="btn btn-danger"
@@ -67,12 +67,12 @@
 
                     <td>
                         <!-- Botão de editar é um link -->
-                        <a href="admin/products/edit/1" style="display: inline-flex; align-items: center">
+                        <a href="products/edit/1" style="display: inline-flex; align-items: center">
                             <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
                         </a>
 
                         <!-- Botão de deletar cria um pop-up para a própria página -->
-                        <form href="admin/products/delete/1" method="post"
+                        <form href="products/delete/1" method="post"
                             onsubmit="return confirm('Tem certeza que deseja excluir este produto?')">
                             <input type="hidden" name="_method" value="delete" />
                             <button type="submit" class="btn btn-danger"
@@ -99,13 +99,13 @@
 
                     <td>
                         <!-- Botão de editar é um link 
-                        <a th:id="'edit-' + ${product.id}" th:href="@{/admin/products/edit/{id}(id=${product.id})}"
+                        <a th:id="'edit-' + ${product.id}" th:href="@{/products/edit/{id}(id=${product.id})}"
                             style="display: inline-flex; align-items: center">
                             <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
                         </a>
 
                         <!-- Botão de deletar cria um pop-up para a própria página 
-                        <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post"
+                        <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post"
                             onsubmit="return confirm('Tem certeza que deseja excluir este produto?')">
                             <input type="hidden" name="_method" value="delete" />
                             <button th:id="'delete-' + ${product.id}" type="submit" class="btn btn-danger"
