@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-family: helvetica;
 }
 
 html,
@@ -8,6 +9,8 @@ body {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
 }
@@ -71,4 +74,18 @@ button {
 .admin-style {
   color: red;
   font-weight: bold;
+}
+
+.primaryButton{
+    border: none;
+    background-color: #0A54FF;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    border-radius: 10px;
+}
+
+.primaryButton:hover{
+    background-color: #0747db;
 }

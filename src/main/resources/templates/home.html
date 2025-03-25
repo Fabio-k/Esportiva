@@ -23,8 +23,8 @@
             right: 40px;
             background-color: #ffffff;
             padding: 10px;
-            width:40px;
-            height: 40px;
+            width:50px;
+            height: 50px;
             border-radius: 50%;
             cursor: pointer;
         }
@@ -84,26 +84,34 @@
           <h1>Produtos recomendados</h1>
           <div id="productList">
               <div>
-                  <div style="width: 160px; height: 180px; background-color: gray;"></div>
-                  <p>Bola de volei</p>
-                  <p>R$ 14,43</p>
+                  <div style="width: 160px; height: 180px;">
+                      <img th:src="@{/images/ball.png}" style="width: 100%;">
+                  </div>
+                  <a th:href="@{/product}">
+                      <p>Bola de volei</p>
+                      <p>R$ 48,32</p>
+                  </a>
               </div>
           </div>
       </section>
       <section class="productSection">
           <div class="productCard">
-              <div style="width: 160px; height: 180px; background-color: gray;"></div>
+              <div style="width: 160px; height: 180px;">
+                  <img th:src="@{/images/raquete.png}" style="width: 100%;">
+              </div>
               <p>Bola de volei</p>
               <p>R$ 14,43</p>
           </div>
           <div class="productCard">
-              <div style="width: 160px; height: 180px; background-color: gray;"></div>
+              <div style="width: 160px; height: 180px;">
+                  <img th:src="@{/images/bolafutebol.png}" style="width: 100%;">
+              </div>
               <p>Bola de volei</p>
               <p>R$ 14,43</p>
           </div>
       </section>
 
-      <div id="chatButton" onclick="toggleChat()">chat</div>
+      <div id="chatButton" onclick="toggleChat()"><img th:src="@{/images/chat.svg}" style="width:100%"></div>
       <div id="chatModal" class="hidden">
           <p>Chat</p>
           <div id="messagesDiv">

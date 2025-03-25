@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <style>
         .cartMain{
-            margin: auto;
+            margin: 0 auto;
             width: 80%;
             display: flex;
             gap: 30px;
@@ -91,7 +91,9 @@
 
             <div class="itemCard">
                 <div style="display: flex; gap: 20px;">
-                    <div class="imgMock"></div>
+                    <div class="imgMock">
+                        <img th:src="@{/images/ball.png}" style="width: 100%">
+                    </div>
                     <div class="itemName">
                         <p>Bola de volei</p>
                         <span onclick="removeItem(this)">Remover</span>
