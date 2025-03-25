@@ -1,29 +1,21 @@
-<!DOCTYPE html>
-<html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
-  <head>
-    <meta charset="UTF-8" />
-  </head>
+<header th:fragment="defaultHeader">
+  <img th:src="@{/images/logo.svg}" />
 
-  <body>
-    <header th:fragment="header">
-      <img th:src="@{/images/logo.svg}" />
-
-      <div>
-        <a th:href="@{/cart}" sec:authorize="hasRole('ROLE_CLIENT')"
-          >Carrinho</a
-        >
-        <span sec:authorize="isAuthenticated()">
+  <div>
+    <a th:href="@{/cart}" sec:authorize="hasRole('ROLE_CLIENT')">Carrinho</a>
+    <span sec:authorize="isAuthenticated()">
           <span sec:authentication="principal.name"></span>
           <a th:href="@{/logout}" class="ml-4 text-red-500">Sair</a>
-        </span>
-
-        <span sec:authorize="isAnonymous()">
+      </span>
+    <span sec:authorize="isAnonymous()">
           <a th:href="@{/login}" class="text-blue-500">Login</a>
-        </span>
-      </div>
-    </header>
-  </body>
-</html>
+      </span>
+  </div>
+</header>
+
+<header th:fragment="simpleHeader">
+  <a th:href="@{/}">
+    <img th:src="@{/images/logo.svg}" />
+  </a>
+</header>
+

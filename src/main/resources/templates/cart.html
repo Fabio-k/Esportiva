@@ -85,7 +85,7 @@
     </style>
 </head>
 <body>
-  <header th:replace="fragments/header.html :: html"></header>
+  <header th:replace="fragments/header.html :: simpleHeader"></header>
     <main class="cartMain">
         <div id="itemList">
 
@@ -127,7 +127,7 @@
                 <p>Total</p>
                 <p>R$ 48,32</p>
             </div>
-            <a id="buyButton">Continuar compra</a>
+            <a id="buyButton" th:href="@{/checkout/address}">Continuar compra</a>
         </div>
     </main>
     <script>
