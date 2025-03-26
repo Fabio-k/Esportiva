@@ -76,9 +76,11 @@
             border-radius: 10px;
             padding: 10px;
             width: fit-content;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .productSection {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
             gap: 20px;
         }
     </style>
@@ -103,20 +105,15 @@
           </div>
       </section>
       <section class="productSection">
-          <div class="productCard">
-              <div style="width: 160px; height: 180px;">
-                  <img th:src="@{/images/raquete.png}" style="width: 100%;">
+          <a th:href="@{/product/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}">
+              <div class="productCard">
+                  <div style="width: 160px; height: 180px;">
+                      <img th:src="${product.image}" style="width: 100%;">
+                  </div>
+                  <p th:text="${product.name}" style="min-height: 46px;"></p>
+                  <p th:text="'R$ ' + ${product.price}"></p>
               </div>
-              <p>Bola de volei</p>
-              <p>R$ 14,43</p>
-          </div>
-          <div class="productCard">
-              <div style="width: 160px; height: 180px;">
-                  <img th:src="@{/images/bolafutebol.png}" style="width: 100%;">
-              </div>
-              <p>Bola de volei</p>
-              <p>R$ 14,43</p>
-          </div>
+          </a>
       </section>
 
       <div id="chatButton" onclick="toggleChat()"><img th:src="@{/images/chat.svg}" style="width:100%"></div>

@@ -5,6 +5,7 @@ import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.request.ProductDto;
 
 import lombok.experimental.UtilityClass;
+import org.fatec.esportiva.response.ProductResponseDto;
 
 @UtilityClass
 public class ProductMapper {
@@ -33,5 +34,10 @@ public class ProductMapper {
                 .inactivationCategory(product.getInactivationCategory())
                 .inactivationJustification(product.getInactivationJustification())
                 .build();
+    }
+
+    public ProductResponseDto productResponseDto(Product product){
+        return new ProductResponseDto(product.getId(), product.getStockQuantity(), product.getName(),
+                product.getCostValue(), product.getDescription(), product.getImage());
     }
 }

@@ -8,6 +8,7 @@ import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.fatec.esportiva.mapper.ProductMapper;
 import org.fatec.esportiva.repository.ProductRepository;
 import org.fatec.esportiva.request.ProductDto;
+import org.fatec.esportiva.response.ProductResponseDto;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,11 @@ public class ProductService {
                 .findWithFilter(name).stream()
                 .map(ProductMapper::toProductDto).toList();
         return products;
+    }
+
+    public List<ProductResponseDto> getAllProducts(){
+        return productRepository.findAll().stream()
+                .map(ProductMapper::productResponseDto).toList();
     }
 
     public Product findProduct(Long id) {
