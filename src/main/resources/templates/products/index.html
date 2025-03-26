@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -16,6 +16,13 @@
         #productList{
             display: flex;
             gap: 10px;
+        }
+        .productLink{
+            text-decoration: none;
+            color: inherit;
+        }
+        .productLink:hover{
+            color: blue;
         }
         #chatButton{
             position: fixed;
@@ -80,18 +87,19 @@
   <header th:replace="~{fragments/header :: defaultHeader }"></header>
 
   <main>
+
       <section class="productRecomendation">
           <h1>Produtos recomendados</h1>
           <div id="productList">
-              <div>
-                  <div style="width: 160px; height: 180px;">
-                      <img th:src="@{/images/ball.png}" style="width: 100%;">
+              <a th:href="@{/product}" class="productLink">
+                  <div>
+                      <div style="width: 160px; height: 180px;">
+                          <img th:src="@{/images/ball.png}" style="width: 100%;">
+                      </div>
+                          <p>Bola de volei</p>
+                          <p>R$ 48,32</p>
                   </div>
-                  <a th:href="@{/product}">
-                      <p>Bola de volei</p>
-                      <p>R$ 48,32</p>
-                  </a>
-              </div>
+                </a>
           </div>
       </section>
       <section class="productSection">
@@ -148,8 +156,9 @@
 
       document.addEventListener("click", (event) => {
         const modal = document.getElementById("chatModal");
+        const chatButton = document.getElementById("chatButton");
 
-        if(!modal.classList.contains("hidden") && !modal.contains(event.target) && event.target.id != "chatButton"){
+        if(!modal.classList.contains("hidden") && !modal.contains(event.target) && !chatButton.contains(event.target)){
           modal.classList.add("hidden");
         }
       })

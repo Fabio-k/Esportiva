@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/checkout")
 public class CheckoutController {
+    @GetMapping("/new")
+    public String newCheckout(){
+        return "checkout/new";
+    }
 
     @GetMapping("/address")
     public String checkoutAddress(){
@@ -38,7 +42,7 @@ public class CheckoutController {
 
     @PostMapping("/billing/save")
     public String saveBilling(Model model){
-        return "checkout/new";
+        return "redirect:/checkout/new";
     }
 
     @PostMapping("/address/save")

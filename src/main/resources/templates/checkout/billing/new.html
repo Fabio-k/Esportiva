@@ -19,7 +19,7 @@
   <header th:replace="fragments/header.html :: simpleHeader"></header>
   <main>
     <section class="mainPanel">
-      <form action="@{/checkout/}" method="post">
+      <form action="@{/checkout/new}" method="post">
       <h3 class="text-xl font-semibold mt-6 mb-4">Cartões de crédito</h3>
         <input type="hidden" th:field="*{creditCard.id}">
 
@@ -65,5 +65,14 @@
       <div th:replace="fragments/purchaseSummary :: summary"></div>
     </section>
   </main>
+<script>
+  function creditCardNumberMask(input) {
+    let value = input.value.replace(/\D/g, "");
+    value = value.replace(/^(\d{4})(\d)/, "$1 $2");
+    value = value.replace(/^(\d{4})\s(\d{4})(\d)/, "$1 $2 $3");
+    value = value.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/, "$1 $2 $3 $4");
+    input.value = value;
+  }
+</script>
 </body>
 </html>

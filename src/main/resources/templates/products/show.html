@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <title>esportiva</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+  <style>
+    main {
+      margin: 0 auto;
+      width: 60%;
+    }
+    .quantityDiv{
+          display: flex;
+          gap: 10px;
+          border: 1px solid gray;
+          border-radius: 3px;
+          height: fit-content;
+          align-items: center;
+          width: fit-content;
+      }
+    .quantityDiv p{
+            margin: 0;
+        }
+        .quantityDiv button {
+            width: 20px;
+            height: 20px;
+            margin: 4px;
+            background-color: #ffffff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .quantityDiv button:hover {
+            background-color: #c8e2fb;
+        }
+  </style>
+</head>
+<body>
+<header th:replace="~{fragments/header :: defaultHeader }"></header>
+  <main>
+    <div style="margin-bottom: 30px">
+      <a th:href="@{/}" class="primaryButton">Voltar</a>
+    </div>
+    <section style="display: flex; gap: 30px; justify-content:center; background-color: white; padding: 10px; border-radius: 10px;">
+      <div style="width: 30%">
+        <img th:src="@{/images/ball.png}" style="width: 100%">
+      </div>
+      <section style="width: 70%">
+        <h1>Bola de volei</h1>
+        <p>R$ 48,32</p>
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+          <div class="quantityDiv">
+            <button id="decreaseButton_0" onclick="modifyQuantity(this, -1)">-</button>
+            <p id="quantityItem_0">1</p>
+            <button id="increaseButton_0" onclick="modifyQuantity(this, 1)">+</button>
+          </div>
+          <p style="margin:0;">10 disponiveis</p>
+        </div>
+        <button class="primaryButton" style="width: 100%" type="submit">Adicionar ao carrinho</button>
+      </section>
+    </section>
+  </main>
+<script th:src="@{/js/productQuantityControl.js}"></script>
+</body>
+</html>

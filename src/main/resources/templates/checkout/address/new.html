@@ -120,6 +120,15 @@
   </main>
 
   <script>
+    function cepMaskAndSearch(input) {
+      let value = input.value.replace(/\D/g, "");
+      if (value.length == 8) {
+        addCepInformation(input, value);
+      }
+      value = value.replace(/(\d{5})(\d)/, "$1-$2");
+      input.value = value;
+    }
+
     async function getCepInformation(value) {
       const url = `https://viacep.com.br/ws/${value}/json`;
       try {
@@ -133,6 +142,32 @@
         console.log(error);
         return null;
       }
+    }
+
+    async function addCepInformation(input, value) {
+      let result = await getCepInformation(value);
+      if (result == null || result.erro) {
+          result = {
+            cep: "00000-000",
+            logradouro: "Rua do Mock",
+            complemento: "Spy",
+            unidade: "",
+            bairro: "Stub",
+            localidade: "Teste",
+            uf: "MC",
+            estado: "Dummy",
+            regiao: "",
+            ibge: "",
+            gia: "",
+            ddd: "",
+            siafi: "",
+          };
+        }
+      document.getElementById(`street`).value = result.logradouro || "";
+      document.getElementById(`neighborhood`).value = result.bairro || "";
+      document.getElementById(`city`).value = result.localidade || "";
+      document.getElementById(`state`).value = result.estado || "";
+      document.getElementById(`country`).value = "Brasil";
     }
   </script>
 </body>
