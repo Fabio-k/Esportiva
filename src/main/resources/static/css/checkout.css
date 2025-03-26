@@ -1,0 +1,23 @@
+main{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+.mainPanel {
+    width: 40%;
+}
+.summaryDiv{
+    background-color: white;
+    padding: 20px;
+    height: 80%;
+}
+
+.card{
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

@@ -1,0 +1,92 @@
+* {
+  box-sizing: border-box;
+  font-family: helvetica;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  margin-bottom: 2rem;
+  width: 100%;
+  padding: 1rem;
+  box-shadow: 0px 0px 5px rgb(211, 211, 211);
+}
+
+select {
+  padding: 10px 10px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+input:not([type="checkbox"], [type="radio"]), select, textarea {
+  width: 100%;
+  padding: 4px 4px !important;
+  border: 1px solid rgb(212, 212, 212);
+  border-radius: 5px;
+}
+
+#userSelect {
+  margin-bottom: 40px;
+}
+
+#loginDiv {
+  max-width: 500px;
+  border: 2px solid gray;
+  border-radius: 15px;
+  padding: 20px;
+  margin: auto;
+  align-items: center;
+  background-color: #ffffff;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.error {
+  color: red;
+}
+
+/* Aplica uma cor personalizada quando é um administrador (Identificado pelo domínio do e-mail)
+button {
+    width: 100%;
+    text-align: center;
+    border-radius: 15px;
+    padding: 8px 8px;
+    cursor: pointer;
+}
+
+*/
+.admin-style {
+  color: red;
+  font-weight: bold;
+}
+
+.primaryButton{
+    border: none;
+    background-color: #0A54FF;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.primaryButton:hover{
+    background-color: #0747db;
+}

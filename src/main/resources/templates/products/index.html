@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <style>
+        main {
+            margin: 0 8rem;
+        }
+        .productRecomendation {
+            padding: 1rem;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+        #productList{
+            display: flex;
+            gap: 10px;
+        }
+        .productLink{
+            text-decoration: none;
+            color: inherit;
+        }
+        .productLink:hover{
+            color: blue;
+        }
+        #chatButton{
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #ffffff;
+            padding: 10px;
+            width:50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #chatModal {
+            background-color: #ffffff;
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            height: 500px;
+            width: 300px;
+            box-shadow: 0px 0px 2px gray;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+        #messagesDiv{
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .userMessage{
+            background-color: #eff2ff;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .chatInput {
+            display: flex;
+            padding: 5px;
+            gap: 10px;
+        }
+        .chatInput input{
+            flex-grow: 1;
+            border-radius: 20px;
+            padding: 10px;
+        }
+        .chatInput button {
+            width: fit-content;
+        }
+        .productCard{
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 10px;
+            width: fit-content;
+        }
+        .productSection {
+            display: flex;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+  <header th:replace="~{fragments/header :: defaultHeader }"></header>
+
+  <main>
+
+      <section class="productRecomendation">
+          <h1>Produtos recomendados</h1>
+          <div id="productList">
+              <a th:href="@{/product}" class="productLink">
+                  <div>
+                      <div style="width: 160px; height: 180px;">
+                          <img th:src="@{/images/ball.png}" style="width: 100%;">
+                      </div>
+                          <p>Bola de volei</p>
+                          <p>R$ 48,32</p>
+                  </div>
+                </a>
+          </div>
+      </section>
+      <section class="productSection">
+          <div class="productCard">
+              <div style="width: 160px; height: 180px;">
+                  <img th:src="@{/images/raquete.png}" style="width: 100%;">
+              </div>
+              <p>Bola de volei</p>
+              <p>R$ 14,43</p>
+          </div>
+          <div class="productCard">
+              <div style="width: 160px; height: 180px;">
+                  <img th:src="@{/images/bolafutebol.png}" style="width: 100%;">
+              </div>
+              <p>Bola de volei</p>
+              <p>R$ 14,43</p>
+          </div>
+      </section>
+
+      <div id="chatButton" onclick="toggleChat()"><img th:src="@{/images/chat.svg}" style="width:100%"></div>
+      <div id="chatModal" class="hidden">
+          <p>Chat</p>
+          <div id="messagesDiv">
+
+          </div>
+          <div class="chatInput">
+              <input type="text" id="message"/>
+              <button type="button" onclick="sendMessage()">Enviar</button>
+          </div>
+      </div>
+  </main>
+  <script>
+      let messages = [];
+
+      function sendMessage(){
+        const message = document.getElementById("message").value.trim();
+        const messagesDiv = document.getElementById("messagesDiv");
+
+        if(message != ""){
+            messages.push(message)
+            const span = document.createElement("span");
+            span.textContent = message;
+            span.style.display = "block";
+            span.classList = "userMessage"
+            messagesDiv.appendChild(span);
+            document.getElementById("message").value = "";
+        }
+      }
+
+      function toggleChat(){
+        console.log("clicked")
+        document.getElementById("chatModal").classList.toggle("hidden");
+      }
+
+      document.addEventListener("click", (event) => {
+        const modal = document.getElementById("chatModal");
+        const chatButton = document.getElementById("chatButton");
+
+        if(!modal.classList.contains("hidden") && !modal.contains(event.target) && !chatButton.contains(event.target)){
+          modal.classList.add("hidden");
+        }
+      })
+  </script>
+</body>
+</html>
