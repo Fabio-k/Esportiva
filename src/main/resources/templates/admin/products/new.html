@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/head_info.html :: head_info}"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/product_form.css}">
+</head>
+
+<body class="bg-gray-100">
+    <main>
+        <header th:replace="~{fragments/header.html :: header}"></header>
+
+        <div class="mb-5">
+            <a th:href="@{/admin/products}"
+                class="p-2 rounded mb-[10px] text-white self-end w-fit bg-blue-500">Voltar</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4">Novo produto</h2>
+            <div th:replace="~{fragments/product_form.html :: product-form}"></div>
+        </div>
+    </main>
+</body>

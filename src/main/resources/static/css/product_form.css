@@ -1,0 +1,32 @@
+input,
+textarea,
+select {
+    font-family: inherit;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 200px;
+    box-sizing: border-box;
+    padding: 2px;
+    margin: 5px 5px 5px 5px;
+    background-color: #F7F7F7;
+}
+
+textarea {
+    vertical-align: middle;
+}
+
+select {
+    vertical-align: middle;
+}
+
+/* Ver porque não está aplicando corretamente */
+input[type="submit"] {
+    border-radius: 5px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: cadetblue;
+    background-color: lightblue;
+    cursor: pointer;
+}

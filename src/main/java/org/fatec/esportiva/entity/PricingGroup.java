@@ -1,8 +1,12 @@
 package org.fatec.esportiva.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.Builder.Default;
 
 @Entity
 @AllArgsConstructor
@@ -24,4 +28,10 @@ public class PricingGroup {
     @NotNull
     @Column(name = "grp_margem_lucro")
     private float profitMargin;
+
+    @Default
+    @Column
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pro_id")
+    private List<Product> products = new ArrayList<>();
 }

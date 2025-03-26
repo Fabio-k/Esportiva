@@ -1,92 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Esportiva</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
-    <style>
-      main {
-        display: flex;
-        flex-direction: column;
-        width: 85%;
-        margin: 0 auto;
-      }
-      table {
-        border: 2px solid gray;
-        border-radius: 10px;
-        border-collapse: collapse;
-        background-color: white;
-        width: 100%;
-      }
 
-      th {
-        border-bottom: 2px solid gray;
-      }
+<head>
+  <div th:replace="~{fragments/head_info.html :: head_info}"></div>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/dashboard_table.css}">
+</head>
 
-      th,
-      td {
-        text-align: left;
-        padding: 14px 8px;
-      }
-
-      tr {
-        border: none;
-      }
-
-      tr:nth-child(even) {
-        background-color: #f2f2f2;
-      }
-
-      .buttonsDiv {
-        display: flex;
-        align-self: self-end;
-        margin-bottom: 10px;
-        gap: 10px;
-      }
-
-      .primaryButton {
-        background-color: blue;
-        padding: 10px;
-        border-radius: 10px;
-        color: white;
-        width: fit-content;
-        text-decoration: none;
-      }
-      #filterModal {
-        position: absolute;
-        background-color: white;
-        padding: 15px;
-        border: 1px solid rgb(189, 189, 189);
-        border-radius: 5px;
-      }
-
-      #filterModal form > * {
-        margin-bottom: 10px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <header th:replace="~{fragments/header.html :: defaultHeader}"></header>
-    <main>
+<body>
+<header th:replace="~{fragments/admin_navbar.html :: admin_navbar('dashboard')}"></header>
+  <main>
       <div class="buttonsDiv">
         <div th:replace="~{fragments/filter.html :: filter}"></div>
-        <button
-          id="filterButton"
-          onclick="toggleFilter()"
-          style="width: fit-content"
-        >
-          Filtros
-        </button>
-        <a
-          id="createClientButton"
-          th:href="@{/admin/clients/new}"
-          class="primaryButton"
-          >Novo usuário</a
-        >
+        <button id="filterButton" onclick="toggleFilter()" style="width: fit-content">Filtros</button>
+        <a id="createClientButton" th:href="@{/admin/clients/new}" class="primaryButton">Novo
+          usuário</a>
       </div>
 
-      <table>
+
+      <table class="w-full">
         <thead>
           <th>ID</th>
           <th>Nome</th>
@@ -104,56 +37,24 @@
             <td th:id="'user-' + ${user.id}" th:text="${user.id}"></td>
             <td th:id="'name-' + ${user.id}" th:text="${user.name}"></td>
             <td th:id="'cpf-' + ${user.id}" th:text="${user.cpf}"></td>
-            <td
-              th:id="'dateBirth-' + ${user.id}"
-              th:text="${user.displayDateBirth()}"
-            ></td>
-            <td
-              th:id="'gender-' + ${user.id}"
-              th:text="${user.gender.getDisplayName()}"
-            ></td>
-            <td
-              th:id="'telephone-' + ${user.id}"
-              th:text="${user.telephone}"
-            ></td>
+            <td th:id="'dateBirth-' + ${user.id}" th:text="${user.displayDateBirth()}"></td>
+            <td th:id="'gender-' + ${user.id}" th:text="${user.gender.getDisplayName()}"></td>
+            <td th:id="'telephone-' + ${user.id}" th:text="${user.telephone}"></td>
             <td th:id="'email-' + ${user.id}" th:text="${user.email}"></td>
-            <td
-              th:id="'status-' + ${user.id}"
-              th:text="${user.status.getDisplayName()}"
-            ></td>
+            <td th:id="'status-' + ${user.id}" th:text="${user.status.getDisplayName()}"></td>
 
             <td>
-              <a
-                th:id="'edit-' + ${user.id}"
-                th:href="@{/admin/clients/edit/{id}(id=${user.id})}"
-                style="display: inline-flex; align-items: center"
-              >
-                <img
-                  th:src="@{/images/pencil.svg}"
-                  width="15"
-                  height="15"
-                  alt="Ícone de lápis"
-                />Editar
+              <a th:id="'edit-' + ${user.id}" th:href="@{/admin/clients/edit/{id}(id=${user.id})}"
+                style="display: inline-flex; align-items: center">
+                <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
               </a>
 
-              <form
-                th:action="@{/admin/clients/delete/{id}(id=${user.id})}"
-                method="post"
-                onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')"
-              >
+              <form th:action="@{/admin/clients/delete/{id}(id=${user.id})}" method="post"
+                onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
                 <input type="hidden" name="_method" value="delete" />
-                <button
-                  th:id="'delete-' + ${user.id}"
-                  type="submit"
-                  class="btn btn-danger"
-                  style="display: inline-flex; align-items: center"
-                >
-                  <img
-                    th:src="@{/images/trash-can.svg}"
-                    width="15"
-                    height="15"
-                    alt="Ícone de lixeira"
-                  />Deletar
+                <button th:id="'delete-' + ${user.id}" type="submit" class="btn btn-danger"
+                  style="display: inline-flex; align-items: center">
+                  <img th:src="@{/images/trash-can.svg}" width="15" height="15" alt="Ícone de lixeira" />Deletar
                 </button>
               </form>
             </td>
@@ -167,17 +68,14 @@
         document.getElementById("filterModal").classList.toggle("hidden");
       }
 
-      document.addEventListener("click", (event) => {
-        const modal = document.getElementById("filterModal");
+    document.addEventListener("click", (event) => {
+      const modal = document.getElementById("filterModal");
 
-        if (
-          !modal.classList.contains("hidden") &&
-          !modal.contains(event.target) &&
-          event.target.id != "filterButton"
-        ) {
-          modal.classList.add("hidden");
-        }
-      });
-    </script>
-  </body>
+      if (!modal.classList.contains("hidden") && !modal.contains(event.target) && event.target.id != "filterButton") {
+        modal.classList.add("hidden");
+      }
+    })
+  </script>
+</body>
+
 </html>

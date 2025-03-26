@@ -3,8 +3,11 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.Builder.Default;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.fatec.esportiva.entity.enums.ProductStatus;
 
@@ -55,5 +58,18 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "pro_grp_id")
-    private PricingGroup pricingGroup;
+    private PricingGroup pricingGroupId;
+
+    // CascadeType.PERSIST: Se você salvar (persistir) uma entidade principal, as
+    // entidades relacionadas também serão salvas automaticamente
+
+    // CascadeType.MERGE: Se você atualizar (merge) uma entidade principal, as
+    // entidades relacionadas também serão atualizadas automaticamente
+    @Default
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "pro_id"), inverseJoinColumns = @JoinColumn(name = "cat_id"))
+    private List<ProductCategory> productCategories = new ArrayList<>();
 }

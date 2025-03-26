@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Usuário</title>
-  <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}">
+  <div th:replace="~{fragments/head_info.html :: head_info}"></div>
   <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}">
     main {
       max-width: 750px;
       margin: auto;
@@ -31,7 +28,6 @@
         box-shadow: 1px;
         padding: 20px;
       }
-  </style>
 </head>
 
 <body>
@@ -41,8 +37,8 @@
       <a th:href="@{/admin/clients}" class="primaryButton">Voltar</a>
     </div>
     <div class="formPannel">
-      <h2 class="">Cadastro de Usuário</h2>
-      <div th:replace="~{fragments/form.html :: form}"></div>
+      <h2 class="text-2xl font-semibold mb-4">Cadastro de Usuário</h2>
+      <div th:replace="~{fragments/user_form.html :: form}"></div>
     </div>
   </main>
   <script th:src="@{/js/form.js}"></script>
