@@ -7,7 +7,7 @@
   <style>
     main {
       margin: 0 auto;
-      width: 60%;
+      width: 80%;
     }
     .quantityDiv{
           display: flex;
@@ -39,28 +39,65 @@
 <body>
 <header th:replace="~{fragments/header :: defaultHeader }"></header>
   <main>
+    <input type="hidden" id="productId" th:value="${product.id}">
     <div style="margin-bottom: 30px">
       <a th:href="@{/}" class="primaryButton">Voltar</a>
     </div>
-    <section style="display: flex; gap: 30px; justify-content:center; background-color: white; padding: 10px; border-radius: 10px;">
+    <section class="card" style="display: flex; gap: 30px; justify-content:center;">
       <div style="width: 30%">
-        <img th:src="@{/images/ball.png}" style="width: 100%">
+        <img th:src="${product.image}" style="width: 100%">
       </div>
-      <section style="width: 70%">
-        <h1>Bola de volei</h1>
-        <p>R$ 48,32</p>
+      <section style="width: 40%">
+        <h1 th:text="${product.name}"></h1>
+        <p th:text="${product.getFormattedPrice()}" style="font-size: 36px"></p>
+        <section>
+          <h3>Descrição</h3>
+          <p th:text="${product.description}" style="color: gray"></p>
+        </section>
+      </section>
+      <section style="width: 30%">
+        <p th:text="${product.getFormattedPrice()}"></p>
         <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
-          <div class="quantityDiv">
-            <button id="decreaseButton_0" onclick="modifyQuantity(this, -1)">-</button>
-            <p id="quantityItem_0">1</p>
-            <button id="increaseButton_0" onclick="modifyQuantity(this, 1)">+</button>
-          </div>
-          <p style="margin:0;">10 disponiveis</p>
+          <div th:replace="fragments/productQuantity :: quantityControl"></div>
+          <p style="margin:0;" th:text="${product.quantity} + ' disponíveis'"></p>
         </div>
         <button class="primaryButton" style="width: 100%" type="submit">Adicionar ao carrinho</button>
       </section>
     </section>
   </main>
-<script th:src="@{/js/productQuantityControl.js}"></script>
+<script>
+  function getId(){
+    const id = document.getElementById("productId");
+    return id.value;
+  }
+  async function checkAvailability(id){
+    if(isNaN(id)) return;
+    const response = await fetch(`http://localhost:8080/api/products/${id}`);
+    if(!response.ok) throw Error("error on request status: " + response.status);
+    const result = await response.json();
+    return result.quantity;
+  }
+
+  async function modifyQuantity(button, value){
+    const quantityItem = document.getElementById(`quantityItem`);
+    const increaseButton = document.getElementById("increaseButton");
+    let currentQuantity = parseInt(quantityItem.innerText);
+    if(value < 0 && currentQuantity < 2){
+      return
+    }
+
+    const quantity = await checkAvailability(getId());
+
+    if(currentQuantity + value >= quantity){
+      quantityItem.innerText = quantity;
+      increaseButton.disabled = true;
+      return;
+    } else {
+      increaseButton.disabled = false;
+    }
+
+    quantityItem.innerText = currentQuantity + value;
+  }
+</script>
 </body>
 </html>

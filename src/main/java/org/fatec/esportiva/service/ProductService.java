@@ -30,10 +30,10 @@ public class ProductService {
                 .map(ProductMapper::productResponseDto).toList();
     }
 
-    public Product findProduct(Long id) {
+    public ProductResponseDto findProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
-        return product;
+        return ProductMapper.productResponseDto(product);
     }
 
     public Optional<Product> findById(Long id) {
