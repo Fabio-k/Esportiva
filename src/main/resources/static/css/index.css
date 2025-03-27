@@ -39,6 +39,13 @@ input:not([type="checkbox"], [type="radio"]), select, textarea {
   border-radius: 5px;
 }
 
+#searchInput{
+    width: 500px;
+    padding: 10px 35px !important;
+    background-color: #f0f0f0;
+    border-radius: 50px;
+}
+
 #userSelect {
   margin-bottom: 40px;
 }
