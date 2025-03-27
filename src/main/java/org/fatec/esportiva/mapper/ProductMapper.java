@@ -20,7 +20,7 @@ public class ProductMapper {
                 .blockedQuantity(productDto.getBlockedQuantity())
                 .profitMargin(productDto.getProfitMargin())
                 .costValue(productDto.getCostValue())
-                .inactivationCategory(productDto.getInactivationCategory())
+                .status(productDto.getInactivationCategory())
                 .inactivationJustification(productDto.getInactivationJustification())
                 .build();
     }
@@ -34,7 +34,7 @@ public class ProductMapper {
                 .blockedQuantity(product.getBlockedQuantity())
                 .profitMargin(product.getProfitMargin())
                 .costValue(product.getCostValue())
-                .inactivationCategory(product.getInactivationCategory())
+                .inactivationCategory(product.getStatus())
                 .inactivationJustification(product.getInactivationJustification())
                 .build();
     }
