@@ -52,7 +52,7 @@ public class Product {
     @NotNull
     @Column(name = "pro_categoria_inativacao")
     @Enumerated(EnumType.STRING)
-    private ProductStatus inactivationCategory;
+    private ProductStatus status;
 
     @NotNull
     @Column(name = "pro_justificativa_inativacao")

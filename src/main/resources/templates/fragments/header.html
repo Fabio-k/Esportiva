@@ -1,8 +1,16 @@
 <header th:fragment="defaultHeader">
-  <img th:src="@{/images/logo.svg}" />
+    <a th:href="@{/}">
+        <img th:src="@{/images/logo.svg}" />
+    </a>
+    <form th:action="@{/products/search}" method="get" style="position: relative; display: flex; align-items: center; gap: 10px">
+        <input type="text" id="searchInput" name="name" placeholder="Buscar" th:value="${param.name}">
+        <button type="submit" style="position: absolute; background-color: inherit; width: 30px; border: none; cursor: pointer"><img th:src="@{/images/icons/search.svg}" style="width: 100%"></button>
+    </form>
+  <div style="display: flex; gap: 5px; align-items: center">
+      <div style="width: 30px">
+          <a th:href="@{/cart}" sec:authorize="hasRole('ROLE_CLIENT')" ><img th:src="@{/images/icons/cart.svg}" style="width: 100%"></a>
+      </div>
 
-  <div>
-    <a th:href="@{/cart}" sec:authorize="hasRole('ROLE_CLIENT')">Carrinho</a>
     <span sec:authorize="isAuthenticated()">
           <span sec:authentication="principal.name"></span>
           <a th:href="@{/logout}" class="ml-4 text-red-500">Sair</a>

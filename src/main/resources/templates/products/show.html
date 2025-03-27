@@ -41,7 +41,7 @@
   <main>
     <input type="hidden" id="productId" th:value="${product.id}">
     <div style="margin-bottom: 30px">
-      <a th:href="@{/}" class="primaryButton">Voltar</a>
+      <button onclick="window.history.back()" class="primaryButton">Voltar</button>
     </div>
     <section class="card" style="display: flex; gap: 30px; justify-content:center;">
       <div style="width: 30%">
