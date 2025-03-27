@@ -45,11 +45,11 @@
         <div style="display: flex; justify-content: space-around">
           <div style="display:flex; align-items:center; gap: 10px; width: 20%">R$ 0</div>
           <span>-</span>
-          <div style="display:flex; align-items:center; gap: 10px; width: 50%">R$ <input type="number" name="maxValue" id="maxValue" max="1000" th:value="${param.maxValue}"></div>
+          <div style="display:flex; align-items:center; gap: 10px; width: 50%">R$ <input type="number" name="maxValue" id="maxValue" min="0" max="1000" value="1000" th:value="${param.maxValue == null ? 1000 : param.maxValue}"></div>
         </div>
 
         <div style="display: flex; margin-top:10px" >
-          <input type="range" min="0" max="1000" step="1" id="maxValueRange" value="1000" th:value="${param.maxValue}"
+          <input type="range" min="0" max="1000" step="1" id="maxValueRange" value="1000" th:value="${param.maxValue == null ? 1000 : param.maxValue}"
                  oninput="document.getElementById('maxValue').value = this.value">
           <button type="submit">Filtrar</button>
         </div>
@@ -71,8 +71,8 @@
   </section>
 </main>
 <script>
-  document.getElementById("maxValue").addEventListener('input', () => {
-    document.getElementById("maxValueRange").value = this.value;
+  document.getElementById("maxValue").addEventListener('input', (e) => {
+    document.getElementById("maxValueRange").value = e.target.value;
   })
 </script>
 </body>
