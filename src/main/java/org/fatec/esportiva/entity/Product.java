@@ -64,6 +64,7 @@ public class Product {
     @Column(name = "pro_imagem")
     private String image;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "pro_grp_id")
     private PricingGroup pricingGroup;
