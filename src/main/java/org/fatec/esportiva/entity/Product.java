@@ -66,7 +66,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "pro_grp_id")
-    private PricingGroup pricingGroupId;
+    private PricingGroup pricingGroup;
 
     // CascadeType.PERSIST: Se você salvar (persistir) uma entidade principal, as
     // entidades relacionadas também serão salvas automaticamente

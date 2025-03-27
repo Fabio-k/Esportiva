@@ -7,6 +7,9 @@ import org.fatec.esportiva.request.ProductDto;
 import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.response.ProductResponseDto;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @UtilityClass
 public class ProductMapper {
     public Product toProduct(ProductDto productDto) {
@@ -37,7 +40,9 @@ public class ProductMapper {
     }
 
     public ProductResponseDto productResponseDto(Product product){
-        return new ProductResponseDto(product.getId(), product.getStockQuantity(), product.getName(),
-                product.getCostValue(), product.getDescription(), product.getImage());
+        BigDecimal marginOfProfit = BigDecimal.ONE.add(BigDecimal.valueOf(product.getPricingGroup().getProfitMargin()));
+        BigDecimal finalPrice = product.getCostValue().multiply(marginOfProfit).setScale(2, RoundingMode.HALF_UP);;
+        return new ProductResponseDto(product.getId(), product.getStockQuantity() - product.getBlockedQuantity(), product.getName(),
+                finalPrice, product.getDescription(), product.getImage());
     }
 }

@@ -10,7 +10,6 @@
         }
         .productRecomendation {
             padding: 1rem;
-            background-color: #ffffff;
             margin-bottom: 20px;
         }
         #productList{
@@ -72,11 +71,7 @@
             width: fit-content;
         }
         .productCard{
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 10px;
             width: fit-content;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .productSection {
             display: grid;
@@ -90,7 +85,7 @@
 
   <main>
 
-      <section class="productRecomendation">
+      <section class="card productRecomendation">
           <h1>Produtos recomendados</h1>
           <div id="productList">
               <a th:href="@{/product}" class="productLink">
@@ -105,13 +100,13 @@
           </div>
       </section>
       <section class="productSection">
-          <a th:href="@{/product/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}">
-              <div class="productCard">
+          <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}">
+              <div class="card productCard">
                   <div style="width: 160px; height: 180px;">
                       <img th:src="${product.image}" style="width: 100%;">
                   </div>
                   <p th:text="${product.name}" style="min-height: 46px;"></p>
-                  <p th:text="'R$ ' + ${product.price}"></p>
+                  <h3 th:text="${product.getFormattedPrice()}" style="font-weight: normal"></h3>
               </div>
           </a>
       </section>
