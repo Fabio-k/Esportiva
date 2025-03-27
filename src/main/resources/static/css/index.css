@@ -61,21 +61,6 @@ input:not([type="checkbox"], [type="radio"]), select, textarea {
   color: red;
 }
 
-/* Aplica uma cor personalizada quando é um administrador (Identificado pelo domínio do e-mail)
-button {
-    width: 100%;
-    text-align: center;
-    border-radius: 15px;
-    padding: 8px 8px;
-    cursor: pointer;
-}
-
-*/
-.admin-style {
-  color: red;
-  font-weight: bold;
-}
-
 .primaryButton{
     border: none;
     background-color: #0A54FF;
@@ -89,4 +74,11 @@ button {
 
 .primaryButton:hover{
     background-color: #0747db;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }

@@ -10,7 +10,6 @@
         }
         .productRecomendation {
             padding: 1rem;
-            background-color: #ffffff;
             margin-bottom: 20px;
         }
         #productList{
@@ -72,13 +71,11 @@
             width: fit-content;
         }
         .productCard{
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 10px;
             width: fit-content;
         }
         .productSection {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
             gap: 20px;
         }
     </style>
@@ -88,7 +85,7 @@
 
   <main>
 
-      <section class="productRecomendation">
+      <section class="card productRecomendation">
           <h1>Produtos recomendados</h1>
           <div id="productList">
               <a th:href="@{/product}" class="productLink">
@@ -103,20 +100,15 @@
           </div>
       </section>
       <section class="productSection">
-          <div class="productCard">
-              <div style="width: 160px; height: 180px;">
-                  <img th:src="@{/images/raquete.png}" style="width: 100%;">
+          <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}">
+              <div class="card productCard">
+                  <div style="width: 160px; height: 180px;">
+                      <img th:src="${product.image}" style="width: 100%;">
+                  </div>
+                  <p th:text="${product.name}" style="min-height: 46px;"></p>
+                  <h3 th:text="${product.getFormattedPrice()}" style="font-weight: normal"></h3>
               </div>
-              <p>Bola de volei</p>
-              <p>R$ 14,43</p>
-          </div>
-          <div class="productCard">
-              <div style="width: 160px; height: 180px;">
-                  <img th:src="@{/images/bolafutebol.png}" style="width: 100%;">
-              </div>
-              <p>Bola de volei</p>
-              <p>R$ 14,43</p>
-          </div>
+          </a>
       </section>
 
       <div id="chatButton" onclick="toggleChat()"><img th:src="@{/images/chat.svg}" style="width:100%"></div>
