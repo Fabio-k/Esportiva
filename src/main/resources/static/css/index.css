@@ -13,17 +13,21 @@ body {
   flex-direction: column;
   min-height: 100vh;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+  overflow-x: hidden;
 }
 
-header {
+header{
+    background-color: #ffffff;
+    margin-bottom: 2rem;
+    box-shadow: 0px 0px 5px rgb(211, 211, 211);
+    width: 100%;
+    padding: 1rem;
+}
+
+#headerRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffffff;
-  margin-bottom: 2rem;
-  width: 100%;
-  padding: 1rem;
-  box-shadow: 0px 0px 5px rgb(211, 211, 211);
 }
 
 select {
@@ -44,20 +48,6 @@ input:not([type="checkbox"], [type="radio"]), select, textarea {
     padding: 10px 35px !important;
     background-color: #f0f0f0;
     border-radius: 50px;
-}
-
-#userSelect {
-  margin-bottom: 40px;
-}
-
-#loginDiv {
-  max-width: 500px;
-  border: 2px solid gray;
-  border-radius: 15px;
-  padding: 20px;
-  margin: auto;
-  align-items: center;
-  background-color: #ffffff;
 }
 
 .hidden {
@@ -89,3 +79,48 @@ input:not([type="checkbox"], [type="radio"]), select, textarea {
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+.subCategoryMenu{
+    box-sizing: border-box;
+    display: none;
+    height: 200px;
+    position: absolute;
+    top: 18px;
+    left: -15px;
+    width: 100vw;
+}
+
+.subCategoryInvisibleDiv{
+    background-color: transparent;
+    height: 19px;
+}
+
+.subCategoryDisplayDiv{
+    background-color: white;
+    padding: 10px;
+    border-bottom: 2px solid #e6e6e6;
+}
+
+li:hover .subCategoryMenu,  .subCategoryMenu:hover{
+    display: block;
+}
+
+
+.categoryList {
+    list-style-type: none;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+#extra-hover{
+    position: fixed;
+    background-color: red;
+    height: 50px;
+    width: 100%;
+}
+

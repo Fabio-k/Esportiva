@@ -20,7 +20,7 @@ public class ProductService {
 
     public List<ProductDto> getProducts(String name) {
         List<ProductDto> products = productRepository
-                .findWithFilter(name, null, null).stream()
+                .findWithFilter(name, null, null, null).stream()
                 .map(ProductMapper::toProductDto).toList();
         return products;
     }
@@ -30,9 +30,9 @@ public class ProductService {
                 .stream().map(ProductMapper::productResponseDto).toList();
     }
 
-    public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue){
+    public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category){
         return productRepository
-                .findWithFilter(name, ProductStatus.ATIVO, maxValue).stream()
+                .findWithFilter(name, ProductStatus.ATIVO, maxValue, category).stream()
                 .map(ProductMapper::productResponseDto).toList();
     }
 
