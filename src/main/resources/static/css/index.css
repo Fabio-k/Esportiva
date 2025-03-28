@@ -117,10 +117,3 @@ li:hover .subCategoryMenu,  .subCategoryMenu:hover{
     align-items: center;
 }
 
-#extra-hover{
-    position: fixed;
-    background-color: red;
-    height: 50px;
-    width: 100%;
-}
-
