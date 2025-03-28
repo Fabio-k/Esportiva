@@ -20,15 +20,22 @@ public class ProductService {
 
     public List<ProductDto> getProducts(String name) {
         List<ProductDto> products = productRepository
-                .findWithFilter(name).stream()
+                .findWithFilter(name, null, null, null).stream()
                 .map(ProductMapper::toProductDto).toList();
         return products;
     }
 
-    public List<ProductResponseDto> getAllProducts(){
-        return productRepository.findAll().stream()
+    public List<ProductResponseDto> getProductsSummary(){
+        return  productRepository.findAllByStatus(ProductStatus.ATIVO)
+                .stream().map(ProductMapper::productResponseDto).toList();
+    }
+
+    public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category){
+        return productRepository
+                .findWithFilter(name, ProductStatus.ATIVO, maxValue, category).stream()
                 .map(ProductMapper::productResponseDto).toList();
     }
+
 
     public ProductResponseDto findProduct(Long id) {
         Product product = productRepository.findById(id)

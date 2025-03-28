@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -21,5 +22,15 @@ public class ProductController {
         ProductResponseDto product = productService.findProduct(id);
         model.addAttribute("product", product);
         return "products/show";
+    }
+
+    @GetMapping("/search")
+    public String findProductByName(Model model, @RequestParam(required = false, name = "name") String name,
+                                    @RequestParam(required = false, name = "maxValue") Integer maxValue,
+                                    @RequestParam(required = false, name = "category") String category
+    ){
+        List<ProductResponseDto> products = productService.findProductsSummary(name, maxValue, category);
+        model.addAttribute("products", products);
+        return "products/search";
     }
 }

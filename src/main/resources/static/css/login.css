@@ -32,3 +32,17 @@ main {
     border-radius: 10px;
     border: none
 }
+
+#loginDiv {
+  max-width: 500px;
+  border: 2px solid gray;
+  border-radius: 15px;
+  padding: 20px;
+  margin: auto;
+  align-items: center;
+  background-color: #ffffff;
+}
+
+#userSelect {
+  margin-bottom: 40px;
+}

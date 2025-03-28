@@ -52,7 +52,7 @@ public class Product {
     @NotNull
     @Column(name = "pro_categoria_inativacao")
     @Enumerated(EnumType.STRING)
-    private ProductStatus inactivationCategory;
+    private ProductStatus status;
 
     @NotNull
     @Column(name = "pro_justificativa_inativacao")
@@ -79,6 +79,6 @@ public class Product {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
-    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "pro_id"), inverseJoinColumns = @JoinColumn(name = "cat_id"))
-    private List<ProductCategory> productCategories = new ArrayList<>();
+    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "per_pro_id"), inverseJoinColumns = @JoinColumn(name = "per_cat_id"))
+    private List<ProductCategory> categories = new ArrayList<>();
 }

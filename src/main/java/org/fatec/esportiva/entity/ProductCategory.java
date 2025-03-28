@@ -31,10 +31,9 @@ public class ProductCategory {
     // CascadeType.MERGE: Se você atualizar (merge) uma entidade principal, as
     // entidades relacionadas também serão atualizadas automaticamente
     @Default
-    @ManyToMany(cascade = {
+    @ManyToMany(mappedBy = "categories", cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
-    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "cat_id"), inverseJoinColumns = @JoinColumn(name = "pro_id"))
     private List<Product> products = new ArrayList<>();
 }
