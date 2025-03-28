@@ -58,7 +58,7 @@
       <section style="width: 30%">
         <p th:text="${product.getFormattedPrice()}"></p>
         <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
-          <div th:replace="fragments/productQuantity :: quantityControl"></div>
+          <div th:replace="~{fragments/productQuantity :: quantityControl}"></div>
           <p style="margin:0;" th:text="${product.quantity} + ' disponíveis'"></p>
         </div>
         <button class="primaryButton" style="width: 100%" type="submit">Adicionar ao carrinho</button>
