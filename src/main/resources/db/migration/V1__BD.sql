@@ -131,7 +131,7 @@ ALTER TABLE pertence ADD CONSTRAINT pertence_pk PRIMARY KEY ( per_pro_id,
 
 CREATE TABLE produtos (
     pro_id                        SERIAL PRIMARY KEY,
-    pro_nome_produto              VARCHAR(30) NOT NULL,
+    pro_nome_produto              VARCHAR(70) NOT NULL,
     pro_data_entrada              DATE NOT NULL,
     pro_quantidade_estoque        INTEGER NOT NULL,
     pro_quantidade_bloqueada      INTEGER NOT NULL,
