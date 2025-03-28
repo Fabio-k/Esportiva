@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fragment: Logistic Navbar</title>
+</head>
+
+<body>
+    <header th:fragment="logistic_navbar(activeItem)"
+        class="flex items-center justify-between w-full mb-10 shadow-md p-4 bg-white">
+        <nav>
+            <ul>
+                <!-- Carrinho de compras -->
+                <li class="navbar-image">
+                    <img th:src="@{/images/shopping-cart.svg}" />
+                </li>
+                <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
+
+                <!-- Em processamento -->
+                <li th:classappend="${activeItem == 'in_processing' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/in_processing"><img th:src="@{/images/store.svg}" /></a>
+                </li>
+                <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
+
+                <!-- Em trânsito -->
+                <li th:classappend="${activeItem == 'in_transit' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/in_transit"><img th:src="@{/images/delivery-truck.svg}" /></a>
+                </li>
+                <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
+
+                <!-- Entregue -->
+                <li th:classappend="${activeItem == 'delivered' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/delivered"><img th:src="@{/images/house.svg}" /></a>
+                </li>
+                <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
+
+                <!-- Em troca -->
+                <li th:classappend="${activeItem == 'returning' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/returning"><img th:src="@{/images/product-returning.svg}" /></a>
+                </li>
+                <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
+
+                <!-- Trocado -->
+                <li th:classappend="${activeItem == 'returned' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/returned"><img th:src="@{/images/product-returned.svg}" /></a>
+                </li>
+                <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
+
+                <!-- Troca finalizada -->
+                <li class="navbar-image">
+                    <img th:src="@{/images/money.svg}" />
+                </li>
+            </ul>
+        </nav>
+    </header>
+</body>
+
+</html>

@@ -12,7 +12,7 @@ services:
     depends_on:
       - database
   database:
-    image: postgres:latest
+    image: postgres:16
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d

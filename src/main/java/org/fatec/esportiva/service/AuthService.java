@@ -31,7 +31,6 @@ public class AuthService implements UserDetailsService {
         if (!(principal instanceof UserDetails)) {
             throw new Exception("Erro na autenticação");
         }
-        UserDetails user = (UserDetails) principal;
-        return user;
+        return (UserDetails) principal;
     }
 }

@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
-<head>
-  <meta charset="UTF-8">
-  <title>Fragment: Input</title>
-</head>
-
-<body>
-  <div th:fragment="input(id, label, type, field)" class="mb-4">
-    <label th:for="${id}" class="block font-medium" th:text="${label} + ':'"></label>
-    <input th:type="${type}" th:id="${id}" th:field="*{__${field}__}" class="w-full py-1 px-2 border border-gray-300 rounded" />
-    <span class="error" th:if="${#fields.hasErrors(field)}" th:errors="*{__${field}__}"></span>
-  </div>
-</body>
-
-</html>
+<div th:fragment="input(id, label, type, field)" class="mb-4">
+  <label th:for="${id}" class="block font-medium" th:text="${label} + ':'"></label>
+  <input th:type="${type}" th:id="${id}" th:field="*{__${field}__}" class="w-full py-1 px-2 border border-gray-300 rounded" />
+  <span class="error" th:if="${#fields.hasErrors(field)}" th:errors="*{__${field}__}"></span>
+</div>

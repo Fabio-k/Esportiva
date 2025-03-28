@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <title>Esportiva</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
+  <style>
+    .summaryDiv{
+      height: fit-content;
+    }
+  </style>
+</head>
+<body>
+<header th:replace="fragments/header.html :: simpleHeader"></header>
+  <main>
+    <section class="mainPanel">
+      <div class="card">
+        <h1>Apartamento</h1>
+        <p>Rua x, cep: 088837</p>
+        <a th:href="@{/checkout/address}">Mudar endereço</a>
+      </div>
+      <div class="card">
+        <p>**** 3214</p>
+        <a th:href="@{/checkout/billing}">Mudar cartão de crédito</a>
+      </div>
+    </section>
+    <section>
+      <div class="summaryDiv">
+        <form>
+          <h1>Resumo da compra</h1><form>
+          <label th:for="discountCupom">Cupom de desconto</label>
+          <div style="display: flex;">
+            <input th:type="text" id="discountCupom">
+            <button type="submit">Aplicar</button>
+          </div>
+        </form>
+          <div style="display: flex; justify-content: space-between;">
+            <p>Total</p>
+            <p>R$ 48,32</p>
+          </div>
+
+          <button class="primaryButton" style="width: 100%" type="submit">Confirmar Compra</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,28 +1,46 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Usuário</title>
+  <div th:replace="~{fragments/head_info.html :: head_info}"></div>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-        .error {
-            color: red;
-        }
-  </style>
+    <style>
+        main {
+      max-width: 750px;
+      margin: auto;
+      margin-bottom: 10px;
+    }
+
+    .primaryButton {
+        background-color: blue;
+        padding: 10px;
+        border-radius: 10px;
+        color: white;
+        width: fit-content;
+        text-decoration: none;
+        margin-bottom: 10px;
+      }
+
+      .formPannel{
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 1px;
+        padding: 20px;
+      }
+    </style>
 </head>
 
-<body class="bg-gray-100">
-  <header th:replace="~{fragments/header.html :: header}"></header>
-  <main th:fragment="content" class="max-w-3xl mx-auto mb-10">
+<body>
+  <header th:replace="~{fragments/header.html :: defaultHeader}"></header>
+  <main th:fragment="content">
     <div class="mb-5">
-      <a th:href="@{/admin/clients}" class="p-2 rounded mb-[10px] text-white self-end w-fit bg-blue-500">Voltar</a>
+      <a th:href="@{/admin/clients}" class="primaryButton">Voltar</a>
     </div>
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="formPannel">
       <h2 class="text-2xl font-semibold mb-4">Cadastro de Usuário</h2>
-      <div th:replace="~{fragments/form.html :: form}"></div>
+      <div th:replace="~{fragments/user_form.html :: form}"></div>
     </div>
   </main>
   <script th:src="@{/js/form.js}"></script>

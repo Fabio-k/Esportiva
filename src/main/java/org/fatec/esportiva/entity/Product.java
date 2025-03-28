@@ -3,8 +3,12 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.Builder.Default;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.fatec.esportiva.entity.enums.ProductStatus;
 
@@ -42,18 +46,39 @@ public class Product {
     private float profitMargin;
 
     @NotNull
-    @Column(name = "pro_valor_custo")
-    private float costValue;
+    @Column(name = "pro_valor_custo", precision = 10, scale = 2)
+    private BigDecimal costValue;
 
     @NotNull
     @Column(name = "pro_categoria_inativacao")
+    @Enumerated(EnumType.STRING)
     private ProductStatus inactivationCategory;
 
     @NotNull
     @Column(name = "pro_justificativa_inativacao")
     private String inactivationJustification;
 
+    @Column(name = "pro_descricao")
+    private String description;
+
+    @Column(name = "pro_imagem")
+    private String image;
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "pro_grp_id")
     private PricingGroup pricingGroup;
+
+    // CascadeType.PERSIST: Se você salvar (persistir) uma entidade principal, as
+    // entidades relacionadas também serão salvas automaticamente
+
+    // CascadeType.MERGE: Se você atualizar (merge) uma entidade principal, as
+    // entidades relacionadas também serão atualizadas automaticamente
+    @Default
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "pro_id"), inverseJoinColumns = @JoinColumn(name = "cat_id"))
+    private List<ProductCategory> productCategories = new ArrayList<>();
 }

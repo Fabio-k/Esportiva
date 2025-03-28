@@ -7,24 +7,27 @@
     <title>Esportiva</title>
     <link rel="icon" th:href="@{/images/favicon.png}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
 </head>
 
 <body>
     <main>
-        <img th:src="@{/images/logo.svg}">
-        <form th:if="${users.size > 0}" th:action="@{/login/auth}" th:object="${user}" method="post">
-            <div id="userSelect">
-                <select id="users" th:field="*{email}">
-                    <option value="">Selecione o usuário</option>
-                    <option th:each="user: ${users}" th:value="${user.email}" th:text="${user.name}"
-                        th:class="${#strings.contains(user.email, '@esportiva.com') ? 'admin-style' : ''}">
-                    </option>
-                </select>
-                <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-            </div>
-            <button id="submitButton" type="submit">Entrar</button>
-        </form>
-        <span th:if="${users.size == 0}">Não há usuários na aplicação</span>
+        <div id="loginDiv">
+            <img th:src="@{/images/logo.svg}">
+            <form th:if="${users.size > 0}" th:action="@{/login/auth}" th:object="${user}" method="post">
+                <div id="userSelect">
+                    <select id="users" th:field="*{email}">
+                        <option value="">Selecione o usuário</option>
+                        <option th:each="user: ${users}" th:value="${user.email}" th:text="${user.name}"
+                                th:class="${#strings.contains(user.email, '@esportiva.com') ? 'admin-style' : ''}">
+                        </option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+                <button id="submitButton" type="submit">Entrar</button>
+            </form>
+            <span th:if="${users.size == 0}">Não há usuários na aplicação</span>
+        </div>
     </main>
 </body>
 
