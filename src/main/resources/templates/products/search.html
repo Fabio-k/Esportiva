@@ -36,11 +36,19 @@
 </head>
 <body>
 <header th:replace="~{fragments/header :: defaultHeader }"></header>
-<main>
-  <section style="padding-right: 50px" th:if="${products.size() > 0}">
+<div th:if="${#lists.isEmpty(products)}" style="display: flex; flex-direction: column; align-items: center">
+  <h1  style="width:100%; text-align:center">Nenhum produto foi encontrado</h1>
+  <a  th:href="@{/products/search}">Limpar filtros</a>
+</div>
+
+<main th:if="${products.size() > 0}">
+  <section style="padding-right: 50px">
     <div>
+      <a th:href="@{/products/search}">Limpar filtros</a>
+      <p th:if="${param.category != null}" th:text="'Categoria: ' + ${param.category}"></p>
       <p>Preço</p>
       <form action="" method="get">
+        <input th:if="${param.category != null}" type="hidden" name="category" th:value="${param.category}">
         <input type="hidden" name="name" th:value="${param.name}">
         <div style="display: flex; justify-content: space-around">
           <div style="display:flex; align-items:center; gap: 10px; width: 20%">R$ 0</div>
@@ -57,8 +65,7 @@
 
     </div>
   </section>
-  <h1 th:if="${#lists.isEmpty(products)}" style="width:100%; grid-column: 2">Nenhum produto foi encontrado</h1>
-  <section class="productSection" th:if="${products.size() > 0}">
+  <section class="productSection" >
     <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}">
       <div class="card productCard">
         <div style="width: 100%;">

@@ -79,6 +79,6 @@ public class Product {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
-    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "pro_id"), inverseJoinColumns = @JoinColumn(name = "cat_id"))
-    private List<ProductCategory> productCategories = new ArrayList<>();
+    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "per_pro_id"), inverseJoinColumns = @JoinColumn(name = "per_cat_id"))
+    private List<ProductCategory> categories = new ArrayList<>();
 }

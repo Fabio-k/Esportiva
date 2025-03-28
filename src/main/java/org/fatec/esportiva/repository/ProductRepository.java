@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query("SELECT p FROM Product p WHERE (:maxValue IS NULL OR p.costValue <= :maxValue) AND (:status IS NULL OR p.status = :status) AND (:name is NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')))")
-    List<Product> findWithFilter(String name, ProductStatus status, Integer maxValue);
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN p.categories c WHERE (:maxValue IS NULL OR p.costValue <= :maxValue) AND (:status IS NULL OR p.status = :status) AND (:category IS NULL OR c.name = :category) AND (:name is NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%')))")
+    List<Product> findWithFilter(String name, ProductStatus status, Integer maxValue, String category);
 
     List<Product> findAllByStatus(ProductStatus status);
 }

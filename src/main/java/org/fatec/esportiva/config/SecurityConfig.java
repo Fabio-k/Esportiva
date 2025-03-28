@@ -23,6 +23,7 @@ public class SecurityConfig {
                                                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                                 .authorizeHttpRequests(authorize -> authorize
                                                 .requestMatchers("/").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                                                 .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                                                 .requestMatchers("/login").permitAll()
                                                 .requestMatchers("/images/**").permitAll()

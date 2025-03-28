@@ -25,10 +25,11 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public String findProductByName(Model model, @RequestParam(required = true, name = "name") String name,
-        @RequestParam(required = false, name = "maxValue") Integer maxValue
+    public String findProductByName(Model model, @RequestParam(required = false, name = "name") String name,
+                                    @RequestParam(required = false, name = "maxValue") Integer maxValue,
+                                    @RequestParam(required = false, name = "category") String category
     ){
-        List<ProductResponseDto> products = productService.findProductsSummary(name, maxValue);
+        List<ProductResponseDto> products = productService.findProductsSummary(name, maxValue, category);
         model.addAttribute("products", products);
         return "products/search";
     }
