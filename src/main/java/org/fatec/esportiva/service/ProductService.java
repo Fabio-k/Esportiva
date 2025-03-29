@@ -11,12 +11,20 @@ import org.fatec.esportiva.request.ProductDto;
 import org.fatec.esportiva.response.ProductResponseDto;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+
+    @Transactional
+    public Product save(ProductDto productDto) {
+        Product product = ProductMapper.toProduct(productDto);
+        product.setStatus(ProductStatus.ATIVO);
+        return productRepository.save(product);
+    }
 
     // costValue é tratado como int porque ele é usado como filtro. Para o usuário,
     // basta usar valores inteiros
@@ -37,6 +45,10 @@ public class ProductService {
         return productRepository
                 .findWithFilter(name, ProductStatus.ATIVO, maxValue, category).stream()
                 .map(ProductMapper::productResponseDto).toList();
+    }
+
+    public Optional<Product> findProduct2(Long id) {
+        return productRepository.findById(id);
     }
 
     public ProductResponseDto findProduct(Long id) {

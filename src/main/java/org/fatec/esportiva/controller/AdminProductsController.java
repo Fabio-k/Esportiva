@@ -1,17 +1,30 @@
 package org.fatec.esportiva.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.fatec.esportiva.entity.Client;
+import org.fatec.esportiva.entity.ProductCategory;
 import org.fatec.esportiva.entity.enums.ProductStatus;
+import org.fatec.esportiva.request.AddressDto;
+import org.fatec.esportiva.request.ClientDto;
+import org.fatec.esportiva.request.CreditCardDto;
+import org.fatec.esportiva.request.ProductCategoryDto;
 import org.fatec.esportiva.request.ProductDto;
+import org.fatec.esportiva.response.ProductResponseDto;
 import org.fatec.esportiva.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -38,7 +51,33 @@ public class AdminProductsController {
 
     @GetMapping("/new")
     public String newProduct(Model model) {
+        model.addAttribute("formAction", "/admin/products/save");
+        if (!model.containsAttribute("product")) {
+            ProductDto productDto = new ProductDto();
+            productDto.getProductCategory().add(new ProductCategoryDto());
+            model.addAttribute("product", productDto);
+        }
         return "admin/products/new";
+    }
+
+    @PostMapping("/save")
+    public String save(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "admin/products/new";
+        }
+
+        // Define a data atual de cadastro/atualização
+        productDto.setEntryDate(LocalDate.now());
+
+        productService.save(productDto);
+        return "redirect:/admin/products";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        Product product = productService.findProduct2(id);
+        productService.deleteClient(product);
+        return "redirect:/admin/products";
     }
 
     @GetMapping("/edit/{id}")

@@ -3,11 +3,9 @@ package org.fatec.esportiva.request;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 import lombok.Builder.Default;
 
-import org.fatec.esportiva.entity.ProductCategory;
 import org.fatec.esportiva.entity.enums.ProductStatus;
 
 import java.math.BigDecimal;
@@ -27,8 +25,9 @@ public class ProductDto {
     @NotBlank(message = "Nome não pode ficar em branco")
     private String name;
 
-    @NotNull(message = "Data de entrada não pode ficar em branco")
-    @PastOrPresent(message = "Data de entrada pode ser até o presente momento")
+    // Esse campo não tem validação porque ele é inserido pelo back-end
+    // @NotNull(message = "Data de entrada não pode ficar em branco")
+    // @PastOrPresent(message = "Data de entrada pode ser até o presente momento")
     private LocalDate entryDate;
 
     @NotNull(message = "Quantidade no estoque não pode ficar em branco")
@@ -57,9 +56,15 @@ public class ProductDto {
     @NotNull(message = "Referencia para uma categoria de inativação não pode ficar em branco")
     private Long pricingGroupId;
 
+    @NotNull(message = "A descrição do produto não pode estar vazia")
+    private String description;
+
+    @NotNull(message = "O caminho para a imagem não pode estar vazia")
+    private String image;
+
     @NotNull(message = "Referencia a uma categoria de produto não pode ficar em branco")
     @Default
-    private List<ProductCategory> productCategory = new ArrayList<>();
+    private List<ProductCategoryDto> productCategory = new ArrayList<>();
 
     public String displayEntryDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

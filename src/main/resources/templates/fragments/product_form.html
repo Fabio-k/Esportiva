@@ -7,9 +7,15 @@
 
 <body>
     <main th:fragment="product-form">
-        <form id="product-form" method="post" action="">
+        <form id="product-form" th:action="${formAction}" th:object="${product}" method="post">
+            <input type="hidden" name="_method" th:value="${id} ? 'PATCH' : 'POST'" />
+
+            <!-- Usado para depurar erros -->
+            <p class="error" th:each="error : ${#fields.errors('*')}" th:text="${error}"></p>
+
             <br><br><label for="name">Nome do produto</label>
             <input type="text" id="name" name="name" required>
+            <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 
             <!-- A data de cadastro/ataulização será inserida no back end -->
 
@@ -18,36 +24,60 @@
                 oninput="this.nextElementSibling.value = this.value">
             <output>10</output>
 
-            <br><br><label for="pricingGroup">Grupo de precificação</label>
-            <select id="pricingGroup" name="pricingGroup" size="5">
+            <!-- <br><br><label for="pricingGroup" class="block font-medium">Grupo de precificação</label>
+            <select id="pricingGroup" name="pricingGroup" size="5" th:field="*{gender}">
                 <option value="noOption">Selecione uma opção</option>
-                <option value="noOption">Premium</option>
+                <option th:each="g : ${T(org.fatec.esportiva.entity.enums.Gender).values()}" th:value="${g}"
+                    th:text="${g.getDisplayName()}"></option>
             </select>
+            <span class="error" th:if="${#fields.hasErrors('pricingGroup')}" th:errors="*{pricingGroup}"></span>
+            -->
+            <!-- REMOVER -->
+            <input type="hidden" id="pricingGroup" name="pricingGroup" field="pricingGroup" value="1" />
+
 
             <br><br><label for="profitMargin">Margem de lucro (%)</label>
             <input type="range" min="1" max="100" step="1" id="profitMargin" name="profitMargin" value="20"
                 oninput="this.nextElementSibling.value = this.value">
             <output>20</output>
+            <span class="error" th:if="${#fields.hasErrors('profitMargin')}" th:errors="*{profitMargin}"></span>
 
             <br><br><label for="costValue">Valor do custo (R$)</label>
             <input type="range" min="1" max="600" step="1" id="costValue" name="costValue" value="100"
                 oninput="this.nextElementSibling.value = this.value">
             <output>100</output>
+            <span class="error" th:if="${#fields.hasErrors('costValue')}" th:errors="*{costValue}"></span>
 
             <br><br><label for="productCategory">Categoria de produto</label>
             <select id="productCategory" name="productCategory" size="8" multiple>
                 <option value="noOption">Selecione uma opção</option>
-                <option value="noOption">Bola</option>
+                <option th:each="category, i : *{productCategory}" th:value="${category}" th:text="${category.name}">
+                </option>
             </select>
+            <span class="error" th:if="${#fields.hasErrors('productCategory')}" th:errors="*{productCategory}"></span>
 
             <br><br><label for="inactivationCategory">Categoria de inativação</label>
-            <select id="inactivationCategory" name="inactivationCategory" size="5">
+            <select id="inactivationCategory" name="inactivationCategory" size="5" th:field="*{inactivationCategory}"
+                class="w-full py-1 px-2 border border-gray-300 rounded">
                 <option value="noOption">Selecione uma opção</option>
-                <option value="noOption">Baixa venda</option>
+                <option th:each="s : ${T(org.fatec.esportiva.entity.enums.ProductStatus).values()}" th:value="${s}"
+                    th:text="${s.getDisplayName()}"></option>
             </select>
+            <span class="error" th:if="${#fields.hasErrors('inactivationCategory')}"
+                th:errors="*{inactivationCategory}"></span>
 
-            <br><br><label for="inactivationJustification">Justificativa de inativação </label>
-            <textarea id="inactivationJustification" name="inactivationJustification"></textarea>
+            <br><br><label for="inactivationJustification">Justificativa de inativação</label>
+            <textarea id="inactivationJustification" name="inactivationJustification" maxlength="50"></textarea>
+            <span class="error" th:if="${#fields.hasErrors('inactivationJustification')}"
+                th:errors="*{inactivationJustification}"></span>
+
+            <br><br><label for="description">Descrição do produto</label>
+            <textarea id="description" name="description" maxlength="50" required></textarea>
+            <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+
+            <br><br><label for="image">Imagem </label>
+            <input type="text" id="image" name="image" required>
+            <span class="error" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
 
             <br><br><input type="submit" value="Salvar">
         </form>
