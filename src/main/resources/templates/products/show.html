@@ -34,6 +34,20 @@
         .quantityDiv button:hover {
             background-color: #c8e2fb;
         }
+
+        aside{
+          position: fixed;
+          top: 0;
+          right: 0;
+          background-color: white;
+          box-shadow: 0px 0px 5px rgb(211, 211, 211);
+          width: 20%;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
   </style>
 </head>
 <body>
@@ -59,45 +73,94 @@
         <p th:text="${product.getFormattedPrice()}"></p>
         <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
           <div th:replace="~{fragments/productQuantity :: quantityControl}"></div>
-          <p style="margin:0;" th:text="${product.quantity} + ' disponíveis'"></p>
+          <p id="availableQuantity" style="margin:0;" th:text="${product.quantity} + ' disponíveis'"></p>
         </div>
-        <button class="primaryButton" style="width: 100%" type="submit">Adicionar ao carrinho</button>
+        <button class="primaryButton" onclick="addItem()" style="width: 100%" type="button">Adicionar ao carrinho</button>
       </section>
     </section>
   </main>
+  <aside id="asideMenu" class="hidden">
+    <div style="width: 80px">
+      <img src="" id="productImage" style="width: 100%">
+    </div>
+    <h4>Item adicionado ao carrinho</h4>
+    <p id="productName"></p>
+    <p id="productQuantity"></p>
+    <a th:href="@{/cart}">Ir para o carrinho</a>
+  </aside>
 <script>
-  function getId(){
-    const id = document.getElementById("productId");
-    return id.value;
-  }
-  async function checkAvailability(id){
-    if(isNaN(id)) return;
-    const response = await fetch(`http://localhost:8080/api/products/${id}`);
-    if(!response.ok) throw Error("error on request status: " + response.status);
-    const result = await response.json();
-    return result.quantity;
-  }
+  async function requestAddItem(body){
+   const response = await fetch("http://localhost:8080/api/cart/product", {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json"
+       },
+       body: JSON.stringify(body)
+     }
+   )
 
-  async function modifyQuantity(button, value){
-    const quantityItem = document.getElementById(`quantityItem`);
-    const increaseButton = document.getElementById("increaseButton");
-    let currentQuantity = parseInt(quantityItem.innerText);
-    if(value < 0 && currentQuantity < 2){
-      return
+   if(!response.ok) return null;
+   return await response.json();
+ };
+
+ async function addItem(){
+   const quantity = document.getElementById("quantityItem").innerText;
+   const productId = document.getElementById("productId").value;
+   const body = {
+     id: productId,
+     quantity: quantity
+   };
+
+   const response = await requestAddItem(body);
+   if(response == null) return;
+   console.log(response);
+   document.getElementById("availableQuantity").innerText = response.product.quantity + ' disponível';
+   document.getElementById("productName").innerText = response.product.name;
+   document.getElementById("productQuantity").innerText = response.quantity + ' unidade(s)';
+   document.getElementById("productImage").src = response.product.image;
+   document.querySelector("aside").classList.toggle("hidden");
+ }
+
+ function getId(){
+   const id = document.getElementById("productId");
+   return id.value;
+ }
+ async function checkAvailability(id){
+   if(isNaN(id)) return;
+   const response = await fetch(`http://localhost:8080/api/products/${id}`);
+   if(!response.ok) throw Error("error on request status: " + response.status);
+   const result = await response.json();
+   return result.quantity;
+ }
+
+ async function modifyQuantity(button, value){
+   const quantityItem = document.getElementById(`quantityItem`);
+   const increaseButton = document.getElementById("increaseButton");
+   let currentQuantity = parseInt(quantityItem.innerText);
+   if(value < 0 && currentQuantity < 2){
+     return
+   }
+
+   const quantity = await checkAvailability(getId());
+   document.getElementById("availableQuantity").innerText = quantity + ' disponível';
+
+   if(currentQuantity + value >= quantity){
+     quantityItem.innerText = quantity;
+     increaseButton.disabled = true;
+     return;
+   } else {
+     increaseButton.disabled = false;
+   }
+
+   quantityItem.innerText = currentQuantity + value;
+ }
+
+  window.addEventListener("click", (event) => {
+    const asideMenu = document.getElementById("asideMenu");
+    if(!asideMenu.classList.contains("hidden") && !asideMenu.contains(event.target)){
+      asideMenu.classList.add("hidden");
     }
-
-    const quantity = await checkAvailability(getId());
-
-    if(currentQuantity + value >= quantity){
-      quantityItem.innerText = quantity;
-      increaseButton.disabled = true;
-      return;
-    } else {
-      increaseButton.disabled = false;
-    }
-
-    quantityItem.innerText = currentQuantity + value;
-  }
+  })
 </script>
 </body>
 </html>

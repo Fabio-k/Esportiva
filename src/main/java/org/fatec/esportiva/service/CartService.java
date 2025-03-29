@@ -4,10 +4,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Cart;
 import org.fatec.esportiva.entity.CartItem;
+import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.CartMapper;
 import org.fatec.esportiva.repository.CartItemRepository;
 import org.fatec.esportiva.repository.CartRepository;
 import org.fatec.esportiva.request.CartItemRequestDto;
+import org.fatec.esportiva.response.CartItemResponseDto;
 import org.fatec.esportiva.response.CartResponseDto;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
 
     @Transactional
-    public CartResponseDto addItem(CartItemRequestDto dto) throws Exception{
+    public CartItemResponseDto addItem(CartItemRequestDto dto) throws Exception{
         Cart cart = clientService.getAuthenticatedClient().getCart();
         CartItem cartItem = productService.updateQuantity(dto.id(), dto.quantity());
 
@@ -31,6 +33,6 @@ public class CartService {
 
         cart.getCartItems().add(cartItem);
 
-        return CartMapper.toCartResponseDto(cart);
+        return CartItemMapper.toCartItemResponseDto(cartItem);
     }
 }
