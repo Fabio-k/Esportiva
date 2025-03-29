@@ -10,6 +10,7 @@ import lombok.Builder.Default;
 import org.fatec.esportiva.entity.ProductCategory;
 import org.fatec.esportiva.entity.enums.ProductStatus;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ProductDto {
 
     @NotNull(message = "Custo não pode ficar em branco")
     @Min(value = 0, message = "O custo não pode ser negativo")
-    private float costValue;
+    private BigDecimal costValue;
 
     @NotNull(message = "Categoria de desativação não pode ficar em branco")
     private ProductStatus inactivationCategory;

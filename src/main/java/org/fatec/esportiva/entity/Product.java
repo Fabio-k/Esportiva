@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.Builder.Default;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,20 +46,28 @@ public class Product {
     private float profitMargin;
 
     @NotNull
-    @Column(name = "pro_valor_custo")
-    private float costValue;
+    @Column(name = "pro_valor_custo", precision = 10, scale = 2)
+    private BigDecimal costValue;
 
     @NotNull
     @Column(name = "pro_categoria_inativacao")
-    private ProductStatus inactivationCategory;
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
 
     @NotNull
     @Column(name = "pro_justificativa_inativacao")
     private String inactivationJustification;
 
+    @Column(name = "pro_descricao")
+    private String description;
+
+    @Column(name = "pro_imagem")
+    private String image;
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "pro_grp_id")
-    private PricingGroup pricingGroupId;
+    private PricingGroup pricingGroup;
 
     // CascadeType.PERSIST: Se você salvar (persistir) uma entidade principal, as
     // entidades relacionadas também serão salvas automaticamente
@@ -70,6 +79,6 @@ public class Product {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
-    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "pro_id"), inverseJoinColumns = @JoinColumn(name = "cat_id"))
-    private List<ProductCategory> productCategories = new ArrayList<>();
+    @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "per_pro_id"), inverseJoinColumns = @JoinColumn(name = "per_cat_id"))
+    private List<ProductCategory> categories = new ArrayList<>();
 }

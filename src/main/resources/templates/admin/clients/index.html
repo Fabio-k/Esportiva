@@ -9,14 +9,12 @@
 </head>
 
 <body>
-  <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('dashboard')}"></header>
+<header th:replace="~{fragments/admin_navbar.html :: admin_navbar('dashboard')}"></header>
   <main>
-
-    <div class="flex w-[85%] mx-auto flex-col">
-      <div class="flex self-end gap-4 mb-[10px]">
+      <div class="buttonsDiv">
         <div th:replace="~{fragments/user_filter.html :: filter}"></div>
-        <button id="filterButton" onclick="toggleFilter()" class="w-fit">Filtros</button>
-        <a id="createClientButton" th:href="@{/admin/clients/new}" class="p-2 rounded text-white w-fit bg-blue-500">Novo
+        <button id="filterButton" onclick="toggleFilter()" style="width: fit-content">Filtros</button>
+        <a id="createClientButton" th:href="@{/admin/clients/new}" class="primaryButton">Novo
           usuário</a>
       </div>
 
@@ -46,13 +44,11 @@
             <td th:id="'status-' + ${user.id}" th:text="${user.status.getDisplayName()}"></td>
 
             <td>
-              <!-- Botão de editar é um link -->
               <a th:id="'edit-' + ${user.id}" th:href="@{/admin/clients/edit/{id}(id=${user.id})}"
                 style="display: inline-flex; align-items: center">
                 <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
               </a>
 
-              <!-- Botão de deletar cria um pop-up para a própria página -->
               <form th:action="@{/admin/clients/delete/{id}(id=${user.id})}" method="post"
                 onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
                 <input type="hidden" name="_method" value="delete" />
@@ -65,13 +61,12 @@
           </tr>
         </tbody>
       </table>
-    </div>
-  </main>
-  <script>
-    function toggleFilter() {
-      console.log("clicked")
-      document.getElementById("filterModal").classList.toggle("hidden");
-    }
+    </main>
+    <script>
+      function toggleFilter() {
+        console.log("clicked");
+        document.getElementById("filterModal").classList.toggle("hidden");
+      }
 
     document.addEventListener("click", (event) => {
       const modal = document.getElementById("filterModal");

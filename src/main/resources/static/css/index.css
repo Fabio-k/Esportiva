@@ -1,0 +1,119 @@
+* {
+  box-sizing: border-box;
+  font-family: helvetica;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+  overflow-x: hidden;
+}
+
+header{
+    background-color: #ffffff;
+    margin-bottom: 2rem;
+    box-shadow: 0px 0px 5px rgb(211, 211, 211);
+    width: 100%;
+    padding: 1rem;
+}
+
+#headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+select {
+  padding: 10px 10px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+input:not([type="checkbox"], [type="radio"]), select, textarea {
+  width: 100%;
+  padding: 4px 4px !important;
+  border: 1px solid rgb(212, 212, 212);
+  border-radius: 5px;
+}
+
+#searchInput{
+    width: 500px;
+    padding: 10px 35px !important;
+    background-color: #f0f0f0;
+    border-radius: 50px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.error {
+  color: red;
+}
+
+.primaryButton{
+    border: none;
+    background-color: #0A54FF;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.primaryButton:hover{
+    background-color: #0747db;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.subCategoryMenu{
+    box-sizing: border-box;
+    display: none;
+    height: 200px;
+    position: absolute;
+    top: 18px;
+    left: -15px;
+    width: 100vw;
+}
+
+.subCategoryInvisibleDiv{
+    background-color: transparent;
+    height: 19px;
+}
+
+.subCategoryDisplayDiv{
+    background-color: white;
+    padding: 10px;
+    border-bottom: 2px solid #e6e6e6;
+}
+
+li:hover .subCategoryMenu,  .subCategoryMenu:hover{
+    display: block;
+}
+
+
+.categoryList {
+    list-style-type: none;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+

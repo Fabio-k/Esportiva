@@ -1,53 +1,48 @@
-html,
-body {
-    margin: 0;
+.admin-style {
+  color: red;
+  font-weight: bold;
 }
 
-body {
-    display: flex;
-    align-items: center;
-    min-height: 100vh
+.primaryButton{
+    border: none;
+    background-color: #0A54FF;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    border-radius: 10px;
+}
+
+.primaryButton:hover{
+    background-color: #0747db;
 }
 
 main {
     display: flex;
-    flex-direction: column;
-    max-width: 500px;
-    border: 2px solid gray;
-    border-radius: 15px;
-    padding: 20px;
-    margin: auto;
+    min-height: 100vh;
     align-items: center;
 }
-
-form {
-    width: -webkit-fill-available;
-}
-
-select {
-    padding: 10px 10px;
-    border-radius: 5px;
-    width: 100%;
-}
-
-button {
-    width: 100%;
-    text-align: center;
-    border-radius: 15px;
-    padding: 8px 8px;
+#submitButton {
+    background-color: #0A54FF;
+    padding: 7px 9px;
     cursor: pointer;
+    text-align: center;
+    color: white;
+    width: 100%;
+    border-radius: 10px;
+    border: none
 }
 
-img {
-    margin-bottom: 40px;
+#loginDiv {
+  max-width: 500px;
+  border: 2px solid gray;
+  border-radius: 15px;
+  padding: 20px;
+  margin: auto;
+  align-items: center;
+  background-color: #ffffff;
 }
 
 #userSelect {
-    margin-bottom: 40px;
-}
-
-/* Aplica uma cor personalizada quando é um administrador (Identificado pelo domínio do e-mail)*/
-.admin-style {
-    color: red;
-    font-weight: bold;
+  margin-bottom: 40px;
 }

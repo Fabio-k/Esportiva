@@ -1,0 +1,14 @@
+<div th:fragment="summary" class="card summaryDiv">
+  <form>
+    <h1>Resumo da compra</h1>
+    <label th:for="discountCupom">Cupom de desconto</label>
+    <div style="display: flex;">
+      <input th:type="text" id="discountCupom">
+      <button type="submit">Aplicar</button>
+    </div>
+  </form>
+  <div style="display: flex; justify-content: space-between;">
+    <p>Total</p>
+    <p>R$ 48,32</p>
+  </div>
+</div>

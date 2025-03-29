@@ -3,17 +3,13 @@
 
 <head>
   <div th:replace="~{fragments/head_info.html :: head_info}"></div>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
   <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}">
-  <style>
-    .error {
-      color: red;
-    }
-  </style>
 </head>
 
 <body class="bg-gray-100">
-  <header th:replace="~{fragments/header.html :: header}"></header>
+<header th:replace="~{fragments/header.html :: defaultHeader}"></header>
   <main class="max-w-3xl mx-auto mb-10">
     <div class="mb-5">
       <a th:href="@{/admin/clients}" class="p-2 rounded mb-[10px] text-white self-end w-fit bg-blue-500">Voltar</a>

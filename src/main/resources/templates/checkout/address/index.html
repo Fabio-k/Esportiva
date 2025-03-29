@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Esportiva</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
+</head>
+<body>
+  <header th:replace="fragments/header.html :: simpleHeader"></header>
+  <main>
+    <section class="mainPanel">
+        <form th:action="@{/checkout/address/save}" method="post">
+            <h1>Escolher Endereço</h1>
+            <div class="card">
+                <input type="radio" id="address_1" name="address" value="address_1">
+                <h1>Apartamento</h1>
+                <label for="address_1">Rua x, cep: 088837</label>
+            </div>
+
+            <div class="card">
+                <input type="radio" id="address_2" name="address" value="address_2">
+                <h1>Casa</h1>
+                <label for="address_2">Rua y, cep: 9998888</label>
+            </div>
+
+          <a th:href="@{/checkout/address/new}" >Usar Novo Endereço</a>
+            <button class="primaryButton" type="submit">Continuar</button>
+        </form>
+    </section>
+    <section>
+        <div th:replace="fragments/purchaseSummary :: summary"></div>
+    </section>
+  </main>
+</body>
+</html>

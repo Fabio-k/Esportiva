@@ -105,16 +105,18 @@ ALTER TABLE pertence ADD CONSTRAINT pertence_pk PRIMARY KEY (per_pro_id,
                                                              per_cat_id);
 
 
-CREATE TABLE produtos ( pro_id SERIAL PRIMARY KEY,
-                                              pro_nome_produto VARCHAR(30) NOT NULL,
-                                                                           pro_data_entrada DATE NOT NULL,
-                                                                                                 pro_quantidade_estoque INTEGER NOT NULL,
-                                                                                                                                pro_quantidade_bloqueada INTEGER NOT NULL,
-                                                                                                                                                                 pro_margem_lucro FLOAT NOT NULL,
-                                                                                                                                                                                        pro_valor_custo FLOAT NOT NULL,
-                                                                                                                                                                                                              pro_categoria_inativacao VARCHAR(23) NOT NULL,
-                                                                                                                                                                                                                                                   pro_justificativa_inativacao VARCHAR(50) NOT NULL,
-                                                                                                                                                                                                                                                                                            pro_grp_id INTEGER);
+CREATE TABLE produtos (
+    pro_id                        SERIAL PRIMARY KEY,
+    pro_nome_produto              VARCHAR(70) NOT NULL,
+    pro_data_entrada              DATE NOT NULL,
+    pro_quantidade_estoque        INTEGER NOT NULL,
+    pro_quantidade_bloqueada      INTEGER NOT NULL,
+    pro_margem_lucro              FLOAT NOT NULL,
+    pro_valor_custo               FLOAT NOT NULL,
+    pro_categoria_inativacao      VARCHAR(23) NOT NULL,
+    pro_justificativa_inativacao  VARCHAR(50) NOT NULL,
+    pro_grp_id                    INTEGER
+);
 
 
 CREATE TABLE transacoes ( tra_id SERIAL PRIMARY KEY,
