@@ -68,6 +68,9 @@ public class Client implements UserDetails {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CreditCard> creditCards;
 
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart = new Cart();
+
     // O dado não será salvo no banco de dados, ele é derivado de suas vendas
     @Transient
     private float indexRanking;
