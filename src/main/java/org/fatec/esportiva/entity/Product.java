@@ -6,8 +6,8 @@ import lombok.*;
 import lombok.Builder.Default;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.fatec.esportiva.entity.enums.ProductStatus;
@@ -31,7 +31,7 @@ public class Product {
 
     @NotNull
     @Column(name = "pro_data_entrada")
-    private Date entryDate;
+    private LocalDate entryDate;
 
     @NotNull
     @Column(name = "pro_quantidade_estoque")

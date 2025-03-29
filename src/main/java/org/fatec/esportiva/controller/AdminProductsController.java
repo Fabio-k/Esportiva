@@ -22,17 +22,13 @@ public class AdminProductsController {
 
     @GetMapping
     public String getProducts(Model model,
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "entryDate", required = false) String entryDate
-    // @RequestParam(value = "stockQuantity", required = false) int stockQuantity,
-    // @RequestParam(value = "blockedQuantity", required = false) int
-    // blockedQuantity,
-    // @RequestParam(value = "profitMargin", required = false) float profitMargin,
-    // @RequestParam(value = "costValue", required = false) float costValue,
-    // @RequestParam(value = "entryDate", required = false) ProductStatus
-    // inactivationCategory
-    ) {
-
+            @RequestParam(value = "name", required = false, defaultValue = "") String name,
+            @RequestParam(value = "entryDate", required = false, defaultValue = "") String entryDate,
+            @RequestParam(value = "stockQuantity", required = false, defaultValue = "100") int stockQuantity,
+            @RequestParam(value = "blockedQuantity", required = false, defaultValue = "100") int blockedQuantity,
+            @RequestParam(value = "profitMargin", required = false, defaultValue = "100") float profitMargin,
+            @RequestParam(value = "costValue", required = false, defaultValue = "100") float costValue,
+            @RequestParam(value = "entryDate", required = false) ProductStatus inactivationCategory) {
         List<ProductDto> products = productService.getProducts(name);
         model.addAttribute("products", products);
         return "admin/products/index";
@@ -44,7 +40,7 @@ public class AdminProductsController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editProduct(@PathVariable Long id,  Model model) {
+    public String editProduct(@PathVariable Long id, Model model) {
         return "admin/products/edit";
     }
 }
