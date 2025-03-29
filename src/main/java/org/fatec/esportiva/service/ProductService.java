@@ -65,4 +65,9 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    public void deleteClient(Optional<Product> product) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
+    }
+
 }

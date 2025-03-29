@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import org.fatec.esportiva.entity.enums.OrderStatus;
 
 @Entity
 @AllArgsConstructor
@@ -13,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "transacoes")
-public class Transactions {
+public class Transaction {
 
     @Id
     @Column(name = "tra_id")
@@ -21,7 +23,11 @@ public class Transactions {
 
     @NotNull
     @Column(name = "tra_data_compra")
-    private Date purchaseDate;
+    private LocalDate purchaseDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tra_status")
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "tra_cli_id")

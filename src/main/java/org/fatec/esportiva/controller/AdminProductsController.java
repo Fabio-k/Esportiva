@@ -2,16 +2,13 @@ package org.fatec.esportiva.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
-import org.fatec.esportiva.entity.Client;
-import org.fatec.esportiva.entity.ProductCategory;
+import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.ProductStatus;
-import org.fatec.esportiva.request.AddressDto;
-import org.fatec.esportiva.request.ClientDto;
-import org.fatec.esportiva.request.CreditCardDto;
 import org.fatec.esportiva.request.ProductCategoryDto;
 import org.fatec.esportiva.request.ProductDto;
-import org.fatec.esportiva.response.ProductResponseDto;
+
 import org.fatec.esportiva.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,7 +72,7 @@ public class AdminProductsController {
 
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
-        Product product = productService.findProduct2(id);
+        Optional<Product> product = productService.findProduct2(id);
         productService.deleteClient(product);
         return "redirect:/admin/products";
     }

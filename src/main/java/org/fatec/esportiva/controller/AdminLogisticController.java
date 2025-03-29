@@ -1,5 +1,10 @@
 package org.fatec.esportiva.controller;
 
+import java.util.List;
+
+import org.fatec.esportiva.entity.enums.OrderStatus;
+import org.fatec.esportiva.request.TransactionDto;
+import org.fatec.esportiva.service.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +16,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/admin/logistic")
 public class AdminLogisticController {
+    private final TransactionService transactionService;
 
     @GetMapping("/in_processing")
     public String inProcessing(Model model) {
+        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.EM_PROCESSAMENTO);
+        model.addAttribute("transactions", transactions);
         return "admin/logistic/in_processing";
     }
 
