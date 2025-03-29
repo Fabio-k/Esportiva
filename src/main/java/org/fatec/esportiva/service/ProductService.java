@@ -18,9 +18,9 @@ import lombok.RequiredArgsConstructor;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public List<ProductDto> getProducts(String name) {
+    public List<ProductDto> getProducts(String name, Float costValue) {
         List<ProductDto> products = productRepository
-                .findWithFilter(name, null, null, null).stream()
+                .findWithFilter(name, null, costValue, null).stream()
                 .map(ProductMapper::toProductDto).toList();
         return products;
     }

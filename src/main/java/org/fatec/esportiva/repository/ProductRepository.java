@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT DISTINCT p FROM Product p LEFT JOIN p.categories c WHERE (:maxValue IS NULL OR p.costValue <= :maxValue) AND (:status IS NULL OR p.status = :status) AND (:category IS NULL OR c.name = :category) AND (:name is NULL OR LOWER(CAST(p.name AS text)) LIKE LOWER(CONCAT('%', :name, '%')))")
-    List<Product> findWithFilter(String name, ProductStatus status, Integer maxValue, String category);
+    List<Product> findWithFilter(String name, ProductStatus status, Float maxValue, String category);
 
     List<Product> findAllByStatus(ProductStatus status);
 }

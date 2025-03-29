@@ -1,0 +1,28 @@
+<div th:fragment="filter" id="filterModal" class="absolute bg-white p-5 border border-gray-200 rounded hidden">
+    <form th:action="@{/admin/products}" method="get" class="space-y-2">
+        <div>
+            <input type="text" id="filter-name" name="name" placeholder="Nome" th:value="${param.name}">
+        </div>
+        <div>
+            <input type="text" id="filter-costValue" name="costValue" placeholder="Custo máximo"
+                th:value="${param.costValue}">
+        </div>
+        <div>
+            <select id="filter-status" name="status" th:value="${param.status}">
+                <option value="">Selecione o Status</option>
+                <option th:each="status : ${T(org.fatec.esportiva.entity.enums.ProductStatus).values()}"
+                    th:value="${status}" th:text="${status.getDisplayName()}">Status</option>
+            </select>
+        </div>
+        <!-- <div>
+            <select id="filter-categories" name="categories" th:value="${param.categories}">
+                <option value="">Selecione a Categoria</option>
+                <option th:each="status : ${T(org.fatec.esportiva.entity.enums.ProductStatus).values()}"
+                    th:value="${status}" th:text="${status.getDisplayName()}">Categoria</option>
+            </select>
+        </div> -->
+
+        <button id="filter-submit" type="submit">Filtrar</button>
+        <button id="filter-reset" type="reset">Limpar</button>
+    </form>
+</div>

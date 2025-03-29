@@ -11,6 +11,12 @@
 <body>
     <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('stock')}"></header>
     <main>
+        <div class="buttonsDiv">
+            <div th:replace="~{fragments/product_filter.html :: filter}"></div>
+            <button id="filterButton" onclick="toggleFilter()" style="width: fit-content">Filtros</button>
+            <a id="createClientButton" th:href="@{/admin/products/new}" class="primaryButton">Novo Produto</a>
+        </div>
+
         <table class="w-full">
             <thead>
                 <tr>
@@ -62,6 +68,29 @@
         </table>
 
     </main>
+
+
+    <script>
+        function toggleFilter() {
+            console.log("clicked");
+            document.getElementById("filterModal").classList.toggle("hidden");
+        }
+
+        document.addEventListener("click", (event) => {
+            const modal = document.getElementById("filterModal");
+
+            if (!modal.classList.contains("hidden") && !modal.contains(event.target) && event.target.id != "filterButton") {
+                modal.classList.add("hidden");
+            }
+        })
+
+        // Reseta o filtro, apagando todos os parâmetros
+        document.getElementById('filter-reset').addEventListener('click', function (event) {
+            event.preventDefault(); // Impede o comportamento padrão do botão reset
+            window.location.href = '/admin/products?name=&costValue=&status='; // Redireciona para a URL desejada
+        });
+    </script>
+
 </body>
 
 </html>
