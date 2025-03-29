@@ -88,14 +88,14 @@
   <header th:replace="~{fragments/header.html :: defaultHeader}"></header>
     <main class="cartMain">
         <div id="itemList">
-
-            <div class="itemCard">
+            <div class="itemCard" th:each="item : ${cartItems}">
                 <div style="display: flex; gap: 20px;">
                     <div class="imgMock">
-                        <img th:src="@{/images/ball.png}" style="width: 100%">
+                        <img  th:src="${item.product.image}" style="width: 100%">
                     </div>
                     <div class="itemName">
-                        <p>Bola de volei</p>
+                        <input type="hidden" class="itemId" th:value="${item.id}">
+                        <p th:text="${item.product.name}"></p>
                         <span onclick="removeItem(this)">Remover</span>
                     </div>
                 </div>
@@ -103,14 +103,14 @@
                 <div style="display: flex; flex-direction:column; gap: 10px;">
                     <div class="quantityDiv">
                         <button id="decreaseButton_0" onclick="modifyQuantity(this, -1)">-</button>
-                        <p id="quantityItem_0">1</p>
+                        <p id="quantityItem_0" th:text="${item.quantity}"></p>
                         <button id="increaseButton_0" onclick="modifyQuantity(this, 1)">+</button>
                     </div>
-                    <p style="margin:0;">10 disponiveis</p>
+                    <p style="margin:0;" th:text="${item.product.quantity} + ' disponiveis'"></p>
                 </div>
 
 
-                <p style="font-weight: semi-bold; margin: 0;">R$ 48,32</p>
+                <p style="font-weight: semi-bold; margin: 0;" th:text="${item.product.getFormattedPrice()}"></p>
             </div>
 
         </div>
@@ -132,8 +132,17 @@
     </main>
     <script th:src="@{/js/productQuantityControl.js}"></script>
     <script>
-        function removeItem(button){
+        async function freeBlockedItemQuantity(id, quantity){
+            const response = await fetch(`http://localhost:8080/api/cart/product/${id}`, {method: "DELETE"});
+            if(response.ok) return true;
+            return false
+        }
+
+        async function removeItem(button){
             const card = button.closest(`.itemCard`);
+            const id = card.querySelector(".itemId").value;
+            const isDeleted = await freeBlockedItemQuantity(id, null);
+            if(!isDeleted) return;
             card.remove();
             const container = document.getElementById("itemList");
             let index = container.children.length;

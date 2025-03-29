@@ -7,10 +7,7 @@ import org.fatec.esportiva.response.CartItemResponseDto;
 import org.fatec.esportiva.response.CartResponseDto;
 import org.fatec.esportiva.service.CartService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -21,5 +18,11 @@ public class CartApiController {
     public ResponseEntity<CartItemResponseDto> addProduct(@RequestBody CartItemRequestDto dto) throws Exception {
         CartItemResponseDto cartItem = cartService.addItem(dto);
         return ResponseEntity.ok(cartItem);
+    }
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<Void> removeProduct(@PathVariable Long id, @RequestParam(name = "quantity", required = false) Short quantity){
+        cartService.removeItem(id, quantity);
+        return ResponseEntity.ok().build();
     }
 }

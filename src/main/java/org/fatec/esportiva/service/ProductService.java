@@ -40,13 +40,11 @@ public class ProductService {
 
 
     public ProductResponseDto findProduct(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
-        return ProductMapper.toProductResponseDto(product);
+        return ProductMapper.toProductResponseDto(findById(id));
     }
 
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    public Product findById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
     }
 
     public void deleteProduct(Product product) {
@@ -54,7 +52,7 @@ public class ProductService {
     }
 
     public CartItem updateQuantity(Long id, Short quantity) {
-        Product product = findById(id).orElseThrow(() ->  new EntityNotFoundException("Produto não encontrado"));
+        Product product = findById(id);
         Integer availableStock = product.getStockQuantity() - product.getBlockedQuantity();
         if(availableStock < quantity){
             throw new IllegalArgumentException("Estoque insuficiente");
@@ -66,5 +64,12 @@ public class ProductService {
         cartItem.setQuantity(quantity);
         cartItem.setProduct(savedProduct);
         return cartItem;
+    }
+
+    public void returnBlockedProductQuantity(Long id, Short quantity){
+        Product product = findById(id);
+        if(product.getBlockedQuantity() < quantity) throw new IllegalArgumentException("Erro no estoque");
+        product.setBlockedQuantity(product.getBlockedQuantity() - quantity);
+        productRepository.save(product);
     }
 }
