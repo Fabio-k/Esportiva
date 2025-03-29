@@ -9,33 +9,8 @@
       margin: 0 auto;
       width: 80%;
     }
-    .quantityDiv{
-          display: flex;
-          gap: 10px;
-          border: 1px solid gray;
-          border-radius: 3px;
-          height: fit-content;
-          align-items: center;
-          width: fit-content;
-      }
-    .quantityDiv p{
-            margin: 0;
-        }
-        .quantityDiv button {
-            width: 20px;
-            height: 20px;
-            margin: 4px;
-            background-color: #ffffff;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
 
-        .quantityDiv button:hover {
-            background-color: #c8e2fb;
-        }
-
-        aside{
+      aside{
           position: fixed;
           top: 0;
           right: 0;
@@ -49,6 +24,7 @@
           align-items: center;
         }
   </style>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/quantityControl.css}">
 </head>
 <body>
 <header th:replace="~{fragments/header :: defaultHeader }"></header>
@@ -72,7 +48,7 @@
       <section style="width: 30%">
         <p th:text="${product.getFormattedPrice()}"></p>
         <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
-          <div th:replace="~{fragments/productQuantity :: quantityControl}"></div>
+          <div th:replace="~{fragments/productQuantity :: quantityControl('1')}"></div>
           <p id="availableQuantity" style="margin:0;" th:text="${product.quantity} + ' disponíveis'"></p>
         </div>
         <button class="primaryButton" onclick="addItem()" style="width: 100%" type="button">Adicionar ao carrinho</button>

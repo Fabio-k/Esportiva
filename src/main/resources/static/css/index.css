@@ -117,3 +117,10 @@ li:hover .subCategoryMenu,  .subCategoryMenu:hover{
     align-items: center;
 }
 
+.productLink{
+    text-decoration: none;
+    color: inherit;
+}
+.productLink:hover{
+    color: blue;
+}
