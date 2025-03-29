@@ -14,9 +14,9 @@
             <!-- A data de cadastro/ataulização será inserida no back end -->
 
             <br><br><label for="stockQuantity">Quantidade no estoque</label>
-            <input type="range" min="0" max="100" step="1" id="stockQuantity" name="stockQuantity" value="0"
+            <input type="range" min="1" max="100" step="1" id="stockQuantity" name="stockQuantity" value="10"
                 oninput="this.nextElementSibling.value = this.value">
-            <output>0</output>
+            <output>10</output>
 
             <br><br><label for="pricingGroup">Grupo de precificação</label>
             <select id="pricingGroup" name="pricingGroup" size="5">
@@ -25,12 +25,12 @@
             </select>
 
             <br><br><label for="profitMargin">Margem de lucro (%)</label>
-            <input type="range" min="0" max="100" step="1" id="profitMargin" name="profitMargin" value="20"
+            <input type="range" min="1" max="100" step="1" id="profitMargin" name="profitMargin" value="20"
                 oninput="this.nextElementSibling.value = this.value">
             <output>20</output>
 
             <br><br><label for="costValue">Valor do custo (R$)</label>
-            <input type="range" min="0" max="500" step="1" id="costValue" name="costValue" value="100"
+            <input type="range" min="1" max="600" step="1" id="costValue" name="costValue" value="100"
                 oninput="this.nextElementSibling.value = this.value">
             <output>100</output>
 
