@@ -3,6 +3,8 @@ package org.fatec.esportiva.service;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityNotFoundException;
+import org.fatec.esportiva.entity.CartItem;
 import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.fatec.esportiva.mapper.ProductMapper;
@@ -27,20 +29,20 @@ public class ProductService {
 
     public List<ProductResponseDto> getProductsSummary(){
         return  productRepository.findAllByStatus(ProductStatus.ATIVO)
-                .stream().map(ProductMapper::productResponseDto).toList();
+                .stream().map(ProductMapper::toProductResponseDto).toList();
     }
 
     public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category){
         return productRepository
                 .findWithFilter(name, ProductStatus.ATIVO, maxValue, category).stream()
-                .map(ProductMapper::productResponseDto).toList();
+                .map(ProductMapper::toProductResponseDto).toList();
     }
 
 
     public ProductResponseDto findProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
-        return ProductMapper.productResponseDto(product);
+        return ProductMapper.toProductResponseDto(product);
     }
 
     public Optional<Product> findById(Long id) {
@@ -51,4 +53,18 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    public CartItem updateQuantity(Long id, Short quantity) {
+        Product product = findById(id).orElseThrow(() ->  new EntityNotFoundException("Produto não encontrado"));
+        Integer availableStock = product.getStockQuantity() - product.getBlockedQuantity();
+        if(availableStock < quantity){
+            throw new IllegalArgumentException("Estoque insuficiente");
+        }
+        product.setBlockedQuantity(product.getBlockedQuantity() + quantity);
+        Product savedProduct = productRepository.save(product);
+
+        CartItem cartItem = new CartItem();
+        cartItem.setQuantity(quantity);
+        cartItem.setProduct(savedProduct);
+        return cartItem;
+    }
 }

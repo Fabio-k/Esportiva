@@ -15,6 +15,10 @@ import java.util.Optional;
 public interface ClientRepository extends JpaRepository<Client, Long> {
     Optional<UserDetails> findUserByEmail(String email);
 
+    Optional<Client> findClientByEmail(String email);
+
     @Query("SELECT c FROM Client c WHERE (:name is NULL or c.name LIKE :name) AND (:email is NULL or c.email LIKE :email) AND (:cpf is NULL or c.cpf = :cpf) AND (:status IS NULL OR c.status = :status) AND (:gender IS NULL OR c.gender = :gender)")
     List<Client> findWithFilter(String name, String email, String cpf, UserStatus status, Gender gender);
+
+
 }

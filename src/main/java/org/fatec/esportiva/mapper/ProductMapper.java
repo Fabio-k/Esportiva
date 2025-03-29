@@ -1,5 +1,7 @@
 package org.fatec.esportiva.mapper;
 
+import org.checkerframework.checker.units.qual.C;
+import org.fatec.esportiva.entity.CartItem;
 import org.fatec.esportiva.entity.Product;
 
 import org.fatec.esportiva.request.ProductDto;
@@ -39,7 +41,7 @@ public class ProductMapper {
                 .build();
     }
 
-    public ProductResponseDto productResponseDto(Product product){
+    public ProductResponseDto toProductResponseDto(Product product){
         BigDecimal marginOfProfit = BigDecimal.ONE.add(BigDecimal.valueOf(product.getPricingGroup().getProfitMargin()));
         BigDecimal finalPrice = product.getCostValue().multiply(marginOfProfit).setScale(2, RoundingMode.HALF_UP);
         int availableQuantity = product.getStockQuantity() - product.getBlockedQuantity();

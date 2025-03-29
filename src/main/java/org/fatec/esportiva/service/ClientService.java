@@ -8,6 +8,7 @@ import org.fatec.esportiva.entity.enums.UserStatus;
 import org.fatec.esportiva.mapper.ClientMapper;
 import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.request.ClientDto;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ClientService {
     private final AddressService addressService;
     private final ClientRepository clientRepository;
     private final CreditCardService creditCardService;
+    private final AuthService authService;
 
     @Transactional
     public Client save(ClientDto clientDto) {
@@ -66,6 +68,11 @@ public class ClientService {
     public Client findClient(Long id) {
         Client client = clientRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         return client;
+    }
+
+    public Client getAuthenticatedClient() throws Exception {
+        UserDetails userDetails = authService.getAuthenticatedUser();
+        return clientRepository.findClientByEmail(userDetails.getUsername()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
     public Optional<Client> findById(Long id) {
