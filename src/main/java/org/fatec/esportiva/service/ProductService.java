@@ -18,24 +18,26 @@ import lombok.RequiredArgsConstructor;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public List<ProductDto> getProducts(String name, Float costValue) {
+    // costValue é tratado como int porque ele é usado como filtro. Para o usuário,
+    // basta usar valores inteiros
+    public List<ProductDto> getProducts(String name, ProductStatus inactivationCategory, int costValue,
+            String category) {
         List<ProductDto> products = productRepository
-                .findWithFilter(name, null, costValue, null).stream()
+                .findWithFilter(name, inactivationCategory, costValue, category).stream()
                 .map(ProductMapper::toProductDto).toList();
         return products;
     }
 
-    public List<ProductResponseDto> getProductsSummary(){
-        return  productRepository.findAllByStatus(ProductStatus.ATIVO)
+    public List<ProductResponseDto> getProductsSummary() {
+        return productRepository.findAllByStatus(ProductStatus.ATIVO)
                 .stream().map(ProductMapper::productResponseDto).toList();
     }
 
-    public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category){
+    public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category) {
         return productRepository
                 .findWithFilter(name, ProductStatus.ATIVO, maxValue, category).stream()
                 .map(ProductMapper::productResponseDto).toList();
     }
-
 
     public ProductResponseDto findProduct(Long id) {
         Product product = productRepository.findById(id)

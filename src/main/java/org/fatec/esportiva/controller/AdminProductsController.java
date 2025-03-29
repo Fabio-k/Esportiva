@@ -27,9 +27,11 @@ public class AdminProductsController {
             @RequestParam(value = "stockQuantity", required = false, defaultValue = "1000") int stockQuantity,
             @RequestParam(value = "blockedQuantity", required = false, defaultValue = "1000") int blockedQuantity,
             @RequestParam(value = "profitMargin", required = false, defaultValue = "1000") float profitMargin,
-            @RequestParam(value = "costValue", required = false, defaultValue = "1000") float costValue,
-            @RequestParam(value = "entryDate", required = false) ProductStatus inactivationCategory) {
-        List<ProductDto> products = productService.getProducts(name, costValue);
+            @RequestParam(value = "costValue", required = false, defaultValue = "1000") int costValue,
+            @RequestParam(value = "inactivationCategory", required = false) ProductStatus inactivationCategory,
+            @RequestParam(value = "category", required = false) String category) {
+        List<ProductDto> products = productService.getProducts(name, inactivationCategory, costValue,
+                category);
         model.addAttribute("products", products);
         return "admin/products/index";
     }
