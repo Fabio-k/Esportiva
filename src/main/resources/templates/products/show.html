@@ -46,15 +46,15 @@
         </section>
       </section>
       <section style="width: 30%">
-        <h1 th:attr="hidden=${product.quantity > 0}">Produto sem estoque</h1>
-        <div th:attr="hidden=${product.quantity < 1}">
+        <h1 id="noStockTitle" th:attr="hidden=${product.quantity > 0}">Produto sem estoque</h1>
+        <div id="productControlDiv" th:attr="hidden=${product.quantity < 1}">
           <p th:text="${product.getFormattedPrice()}"></p>
           <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
             <div th:replace="~{fragments/productQuantity :: quantityControl('1')}"></div>
             <p id="availableQuantity" style="margin:0;" th:text="${product.quantity} + ' disponível'"></p>
           </div>
         </div>
-        <button th:attr="disabled=${product.quantity < 1}" class="primaryButton" onclick="addItem()" style="width: 100%" type="button">Adicionar ao carrinho</button>
+        <button id="addProductButton" th:attr="disabled=${product.quantity < 1}" class="primaryButton" onclick="addItem()" style="width: 100%" type="button">Adicionar ao carrinho</button>
       </section>
     </section>
   </main>
@@ -91,8 +91,8 @@
    };
 
    const response = await requestAddItem(body);
+   updateContent(quantity);
    if(response == null) return;
-   console.log(response);
    document.getElementById("availableQuantity").innerText = response.product.quantity + ' disponível';
    document.getElementById("productName").innerText = response.product.name;
    document.getElementById("productQuantity").innerText = response.quantity + ' unidade(s)';
@@ -120,10 +120,19 @@
      return
    }
 
-   const quantity = await checkAvailability(getId());
-   document.getElementById("availableQuantity").innerText = quantity + ' disponível';
+   updateContent(currentQuantity + value);
+ }
 
-   if(currentQuantity + value >= quantity){
+ async function updateContent(currentQuantity){
+  const quantity = await checkAvailability(getId());
+   document.getElementById("availableQuantity").innerText = quantity + ' disponível';
+   if(quantity == 0){
+    document.getElementById("noStockTitle").hidden = false;
+    document.getElementById("productControlDiv").hidden = true;
+    document.getElementById("addProductButton").disabled = true;
+   }
+
+   if(currentQuantity >= quantity){
      quantityItem.innerText = quantity;
      increaseButton.disabled = true;
      return;
@@ -131,7 +140,7 @@
      increaseButton.disabled = false;
    }
 
-   quantityItem.innerText = currentQuantity + value;
+   quantityItem.innerText = currentQuantity;
  }
 
   window.addEventListener("click", (event) => {
