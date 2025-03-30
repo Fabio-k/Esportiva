@@ -7,12 +7,13 @@
 </head>
 
 <body>
-    <div th:fragment="logistic_dashboard(transaction_status, readonly)">
+    <div th:fragment="dashboard_transaction(transaction_status, readonly)">
         <table class="w-full">
             <thead>
                 <tr>
                     <th>ID da transação</th>
                     <th>Data da transação</th>
+                    <th>Cliente</th>
                     <th th:if="${readonly == false}">Aprovar</th>
                 </tr>
             </thead>
@@ -20,7 +21,8 @@
             <tbody>
                 <tr th:each="transaction : ${transactions}">
                     <td th:id="'transaction-' + ${transaction.id}" th:text="${transaction.id}"></td>
-                    <td th:id="'transaction-' + ${transaction.id}" th:text="${transaction.purchaseDate}">
+                    <td th:id="'purchaseDate-' + ${transaction.id}" th:text="${transaction.purchaseDate}">
+                    <td th:id="'client-' + ${transaction.id}" th:text="${transaction.purchaseDate}"></td>
                     </td>
 
                     <!-- Botão de aprovar cria um pop-up para a própria página -->
@@ -36,6 +38,54 @@
                         </form>
                         <form th:action="@{/admin/logistic}" method="post"
                             onsubmit="return confirm('Tem certeza que deseja reprovar esta transação?')">
+                            <input type="hidden" name="_method" value="delete" />
+                            <button th:id="'reprove-' + ${transaction.id}" type="submit" class="btn btn-danger"
+                                style="display: inline-flex; align-items: center">
+                                <img th:src="@{/images/cancel.svg}" width="15" height="15"
+                                    alt="Ícone de Reprovação" />Reprovar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- ######################################################################################################### -->
+
+
+    <div th:fragment="dashboard_order(order_status)">
+        <table class="w-full">
+            <thead>
+                <tr>
+                    <th>ID do pedido</th>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Cliente</th>
+                    <th>Aprovar</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:id="'order-' + ${order.id}" th:text="${order.id}"></td>
+                    <td th:id="'order-' + ${order.id}" th:text="${order.purchaseDate}">
+                    </td>
+
+                    <!-- Botão de aprovar cria um pop-up para a própria página -->
+                    <td th:if="${readonly == false}">
+                        <form th:action="@{/admin/logistic}" method="post"
+                            onsubmit="return confirm('Tem certeza que deseja aprovar este pedido?')">
+                            <input type="hidden" name="_method" value="delete" />
+                            <button th:id="'approve-' + ${transaction.id}" type="submit" class="btn btn-danger"
+                                style="display: inline-flex; align-items: center">
+                                <img th:src="@{/images/approval.svg}" width="18" height="18"
+                                    alt="Ícone de Aprovação" />Aprovar
+                            </button>
+                        </form>
+                        <form th:action="@{/admin/logistic}" method="post"
+                            onsubmit="return confirm('Tem certeza que deseja reprovar este pedido?')">
                             <input type="hidden" name="_method" value="delete" />
                             <button th:id="'reprove-' + ${transaction.id}" type="submit" class="btn btn-danger"
                                 style="display: inline-flex; align-items: center">

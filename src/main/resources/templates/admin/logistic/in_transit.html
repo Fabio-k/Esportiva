@@ -12,7 +12,7 @@
     <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('logistic')}"></header>
     <header th:replace="~{fragments/logistic_navbar.html :: logistic_navbar('in_transit')}"></header>
     <main>
-        <div th:replace="~{fragments/logistic_dashboard.html :: logistic_dashboard('EM_TRANSITO', false)}"></div>
+        <div th:replace="~{fragments/logistic_dashboard.html :: dashboard_transaction('EM_TRANSITO', false)}"></div>
     </main>
 </body>
 
