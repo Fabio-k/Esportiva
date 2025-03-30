@@ -61,6 +61,10 @@ public class ClientDto {
     @Default
     private List<CreditCardDto> creditCards = new ArrayList<>();
 
+    @Valid
+    @Default
+    private List<ExchangeVoucherDto> exchangeVoucherDtos = new ArrayList<>();
+
     public String displayDateBirth() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return dateBirth.format(formatter);

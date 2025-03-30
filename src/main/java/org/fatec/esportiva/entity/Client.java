@@ -6,7 +6,6 @@ import lombok.*;
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.PhoneType;
 import org.fatec.esportiva.entity.enums.UserStatus;
-import org.fatec.esportiva.listeners.LogListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -68,6 +67,9 @@ public class Client implements UserDetails {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CreditCard> creditCards;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ExchangeVoucher> exchangeVouchers;
 
     @NotNull
     @Column(name = "cli_endereco_preferencial")
