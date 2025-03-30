@@ -12,6 +12,7 @@ import org.fatec.esportiva.repository.CartRepository;
 import org.fatec.esportiva.request.CartItemRequestDto;
 import org.fatec.esportiva.response.CartItemResponseDto;
 import org.fatec.esportiva.response.CartResponseDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,9 @@ public class CartService {
     private final ClientService clientService;
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
+
+    @Value("${cart.product.timeoutInMinutes}")
+    private int productTimeoutInMinutes;
 
     @Transactional
     public CartItemResponseDto addItem(CartItemRequestDto dto){
@@ -69,13 +73,13 @@ public class CartService {
         if(cart == null){
             cart = clientService.getAuthenticatedClient().getCart();
         }
-        cart.setCreatedAt(LocalDateTime.now().plusMinutes(5));
+        cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
         cartRepository.save(cart);
     }
 
     private void updateCartCreatedAt(){
         Cart cart = clientService.getAuthenticatedClient().getCart();
-        cart.setCreatedAt(LocalDateTime.now().plusMinutes(5));
+        cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
         System.out.println(cart.getCreatedAt());
         cartRepository.save(cart);
     }
