@@ -1,13 +1,8 @@
 package org.fatec.esportiva.controller;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.fatec.esportiva.entity.Order;
-import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.enums.OrderStatus;
-import org.fatec.esportiva.mapper.OrderMapper;
-import org.fatec.esportiva.mapper.TransactionMapper;
 import org.fatec.esportiva.request.OrderDto;
 import org.fatec.esportiva.request.TransactionDto;
 import org.fatec.esportiva.service.OrderService;

@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.Order;
+import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.mapper.OrderMapper;
 import org.fatec.esportiva.repository.ClientRepository;
@@ -36,10 +38,41 @@ public class OrderService {
     // Máquina de estados que controla a transições conforme cada aprovação
     public void changeState(long id, boolean approve) throws Exception {
         Order order = getNonOptional(orderRepository.findById(id));
+        Product product = order.getProduct();
+        Client client = order.getTransaction().getClient();
         OrderStatus status = order.getStatus();
 
         // Máquina de estados
-        if (status == OrderStatus.ENTREGUE) {
+        if (status == OrderStatus.CARRINHO_COMPRAS) {
+            if (approve == true) {
+                order.setStatus(OrderStatus.EM_PROCESSAMENTO);
+            } else {
+                // Deletar a transação e reembolsar com cupom de dinheiro
+            }
+
+            // O cartão de crédito não aprova, ele só reprova se for inválido o cartão
+        } else if (status == OrderStatus.EM_PROCESSAMENTO) {
+            if (approve == true) {
+                order.setStatus(OrderStatus.EM_TRANSITO);
+
+                // Dá a baixa no estoque aqui e desbloqueia os produtos do
+                int quantity = product.getStockQuantity();
+                product.setStockQuantity(quantity - order.getQuantity());
+                product.setBlockedQuantity(quantity - order.getQuantity());
+
+            } else {
+                // Deletar a transação e reembolsar com cupom de dinheiro
+            }
+
+        } else if (status == OrderStatus.EM_TRANSITO) {
+            if (approve == true) {
+                order.setStatus(OrderStatus.ENTREGUE);
+            } else {
+                // Deletar a transação e reembolsar com cupom de dinheiro
+            }
+        }
+
+        else if (status == OrderStatus.ENTREGUE) {
             if (approve == true) {
                 order.setStatus(OrderStatus.EM_TROCA);
                 // Aparece um aviso para o cliente, pode ser uma lista de produtos que estão
@@ -47,22 +80,29 @@ public class OrderService {
             } else {
                 // Volta para entregue e recusa o pedido???
             }
+
         } else if (status == OrderStatus.EM_TROCA) {
             if (approve == true) {
                 order.setStatus(OrderStatus.TROCADO);
             } else {
                 // Volta para entregue e recusa o pedido???
             }
+
         } else if (status == OrderStatus.TROCADO) {
             order.setStatus(OrderStatus.TROCA_FINALIZADA);
 
-            // O produto volta para o estoque
+            // Repõe o estoque quando a troca é finalizada
+            int quantity = product.getStockQuantity();
+            product.setStockQuantity(quantity + order.getQuantity());
+
             // Gera cupom para o cliente naquele valor
+
         } else {
-            // Não faz nada nos outros estados que são da transação
+            // Não faz nada nos outros estados
         }
 
         orderRepository.save(order);
+        productRepository.save(product);
     }
 
     // Remove o "Optional" do tipo que o linter reclama
