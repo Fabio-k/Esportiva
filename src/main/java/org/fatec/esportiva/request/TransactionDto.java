@@ -5,6 +5,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 import lombok.Builder.Default;
 
+import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
@@ -31,6 +32,9 @@ public class TransactionDto {
     @NotNull(message = "Todo carrinho tem pelo menos um pedido associado")
     @Default
     private List<Order> orders = new ArrayList<>();
+
+    @NotNull(message = "Toda transação deve estar associada a um cliente")
+    private Client client;
 
     public String displayEntryDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

@@ -11,6 +11,7 @@ public class TransactionMapper {
         return Transaction.builder()
                 .purchaseDate(transactionsDto.getPurchaseDate())
                 .status(transactionsDto.getStatus())
+                .client(transactionsDto.getClient())
                 .build();
     }
 
@@ -19,6 +20,7 @@ public class TransactionMapper {
                 .id(transactions.getId())
                 .purchaseDate(transactions.getPurchaseDate())
                 .status(transactions.getStatus())
+                .client(transactions.getClient())
                 .build();
     }
 }

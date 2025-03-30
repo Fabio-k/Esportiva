@@ -21,8 +21,8 @@
             <tbody>
                 <tr th:each="transaction : ${transactions}">
                     <td th:id="'transaction-' + ${transaction.id}" th:text="${transaction.id}"></td>
-                    <td th:id="'purchaseDate-' + ${transaction.id}" th:text="${transaction.purchaseDate}">
-                    <td th:id="'client-' + ${transaction.id}" th:text="${transaction.purchaseDate}"></td>
+                    <td th:id="'purchaseDate-' + ${transaction.id}" th:text="${transaction.displayEntryDate}">
+                    <td th:id="'client-' + ${transaction.id}" th:text="${transaction.client.name}"></td>
                     </td>
 
                     <!-- Botão de aprovar cria um pop-up para a própria página -->
