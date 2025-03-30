@@ -1,5 +1,7 @@
 package org.fatec.esportiva.request;
 
+import java.math.BigDecimal;
+
 import org.fatec.esportiva.entity.Client;
 
 import jakarta.validation.constraints.Min;
@@ -20,7 +22,7 @@ public class ExchangeVoucherDto {
 
     @NotNull(message = "Valor do cupom de desconto não pode ficar em branco")
     @Min(value = 0, message = "Valor do cupom de desconto não pode ser negativo")
-    private float value;
+    private BigDecimal value;
 
     @NotNull(message = "Quantidade de cupons ficar em branco")
     @Min(value = 0, message = "Quantidade no estoque não pode ser negativa")

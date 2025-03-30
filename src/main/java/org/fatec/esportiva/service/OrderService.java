@@ -1,10 +1,12 @@
 package org.fatec.esportiva.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.fatec.esportiva.entity.Client;
+import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.OrderStatus;
@@ -23,6 +25,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final ClientRepository clientRepository;
+    private final ExchangeVoucherService exchangeVoucherService;
 
     public List<OrderDto> getTransactions(OrderStatus status) {
         return orderRepository.findAllByStatus(status)
@@ -99,8 +102,20 @@ public class OrderService {
             int quantity = product.getStockQuantity();
             product.setStockQuantity(quantity + order.getQuantity());
 
-            // Gera cupom para o cliente naquele valor
-
+            // Gera cupom para o cliente, reembolsando o produto
+            List<ExchangeVoucher> exchangeVouchers = client.getExchangeVouchers();
+            ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
+            exchangeVoucher.setId(null);
+            // Cálculo do valor do cupom (Valor gasto com esse produto)
+            BigDecimal result = order.getProduct().getProfitMargin().divide(BigDecimal.valueOf(100))
+                    .add(BigDecimal.valueOf(1)); // Margem de lucro em valor decimal
+            result = result.multiply(order.getProduct().getCostValue()); // O custo vezes a margem de lucro para achar o
+                                                                         // preço
+            result = result.multiply(BigDecimal.valueOf(order.getQuantity())); // Preço vezes quantidade para achar o
+                                                                               // valor a ser reembolsado
+            exchangeVoucher.setValue(result);
+            exchangeVoucher.setClient(client);
+            client.setExchangeVouchers(exchangeVouchers);
         }
 
         else {
@@ -109,6 +124,7 @@ public class OrderService {
 
         orderRepository.save(order);
         productRepository.save(product);
+        clientRepository.save(client);
     }
 
     // Remove o "Optional" do tipo que o linter reclama

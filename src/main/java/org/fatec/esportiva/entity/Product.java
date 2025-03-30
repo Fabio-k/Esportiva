@@ -42,8 +42,8 @@ public class Product {
     private int blockedQuantity;
 
     @NotNull
-    @Column(name = "pro_margem_lucro")
-    private float profitMargin;
+    @Column(name = "pro_margem_lucro", precision = 10, scale = 2)
+    private BigDecimal profitMargin;
 
     @NotNull
     @Column(name = "pro_valor_custo", precision = 10, scale = 2)

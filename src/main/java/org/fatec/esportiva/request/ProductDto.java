@@ -40,7 +40,7 @@ public class ProductDto {
 
     @NotNull(message = "Margem de lucro não pode ficar em branco")
     @Min(value = 0, message = "Margem de lucro deve ser maior que 0%")
-    private float profitMargin;
+    private BigDecimal profitMargin;
 
     @NotNull(message = "Custo não pode ficar em branco")
     @Min(value = 0, message = "O custo não pode ser negativo")

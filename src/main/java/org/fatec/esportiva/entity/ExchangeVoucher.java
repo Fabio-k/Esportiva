@@ -1,5 +1,7 @@
 package org.fatec.esportiva.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -18,8 +20,8 @@ public class ExchangeVoucher {
     private Long id;
 
     @NotNull
-    @Column(name = "ctr_valor")
-    private float value;
+    @Column(name = "ctr_valor", precision = 10, scale = 2)
+    private BigDecimal value;
 
     @NotNull
     @Column(name = "ctr_quantidade")

@@ -3,6 +3,7 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import java.math.BigDecimal;
 
 @Entity
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class PromotionVoucher {
 
     @NotNull
     @Column(name = "cpr_desconto_porcentagem")
-    private float discountPercentagem;
+    private BigDecimal discountPercentagem;
 
     @NotNull
     @ManyToOne
