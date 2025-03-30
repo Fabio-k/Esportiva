@@ -16,15 +16,15 @@ public class LogDto {
     private Long id;
 
     @NotBlank(message = "Usuário não pode ficar em branco")
-    private String usuario;
+    private String user;
 
     @NotNull(message = "Data e hora não pode ficar em branco")
     @PastOrPresent(message = "As operações no banco não podem ser efetuadas no futuro")
-    private LocalDateTime data_hora;
+    private LocalDateTime timestamp;
 
     @NotBlank(message = "Tipo de operação não pode ficar em branco")
-    private String operacao;
+    private String operation;
 
     @NotBlank(message = "Conteúdo da operação não pode ficar em branco")
-    private String conteudo_alteracao;
+    private String operationContent;
 }
