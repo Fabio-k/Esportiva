@@ -1,6 +1,7 @@
 package org.fatec.esportiva.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.fatec.esportiva.entity.Transaction;
@@ -28,17 +29,8 @@ public class TransactionService {
 
     // Máquina de estados que controla a transições conforme cada aprovação
     public void changeState(long id, boolean approve) throws Exception {
-        Optional<Transaction> transactionOptional = transactionRepository.findById(id);
-        OrderStatus status;
-        Transaction transaction;
-
-        // Pega o item da tabela
-        if (transactionOptional.isPresent()) {
-            transaction = transactionOptional.get();
-            status = transaction.getStatus();
-        } else {
-            throw new Exception("Não foi possível achar a transação: " + id);
-        }
+        Transaction transaction = getNonOptional(transactionRepository.findById(id));
+        OrderStatus status = transaction.getStatus();
 
         // Máquina de estados
         if (status == OrderStatus.CARRINHO_COMPRAS) {
@@ -75,5 +67,14 @@ public class TransactionService {
         }
 
         transactionRepository.save(transaction);
+    }
+
+    // Remove o "Optional" do tipo que o linter reclama
+    private static <T> T getNonOptional(Optional<T> optional) {
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            throw new NoSuchElementException("Optional está vazio.");
+        }
     }
 }
