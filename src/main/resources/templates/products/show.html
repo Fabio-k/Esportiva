@@ -46,12 +46,15 @@
         </section>
       </section>
       <section style="width: 30%">
-        <p th:text="${product.getFormattedPrice()}"></p>
-        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
-          <div th:replace="~{fragments/productQuantity :: quantityControl('1')}"></div>
-          <p id="availableQuantity" style="margin:0;" th:text="${product.quantity} + ' disponíveis'"></p>
+        <h1 th:attr="hidden=${product.quantity > 0}">Produto sem estoque</h1>
+        <div th:attr="hidden=${product.quantity < 1}">
+          <p th:text="${product.getFormattedPrice()}"></p>
+          <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+            <div th:replace="~{fragments/productQuantity :: quantityControl('1')}"></div>
+            <p id="availableQuantity" style="margin:0;" th:text="${product.quantity} + ' disponível'"></p>
+          </div>
         </div>
-        <button class="primaryButton" onclick="addItem()" style="width: 100%" type="button">Adicionar ao carrinho</button>
+        <button th:attr="disabled=${product.quantity < 1}" class="primaryButton" onclick="addItem()" style="width: 100%" type="button">Adicionar ao carrinho</button>
       </section>
     </section>
   </main>

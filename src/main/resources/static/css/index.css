@@ -73,6 +73,10 @@ input:not([type="checkbox"], [type="radio"]), select, textarea {
     background-color: #0747db;
 }
 
+.primaryButton:disabled{
+    background-color: #adadad;
+}
+
 .card {
     background-color: white;
     border-radius: 10px;
