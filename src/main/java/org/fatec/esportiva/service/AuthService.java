@@ -26,10 +26,10 @@ public class AuthService implements UserDetailsService {
         request.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
     }
 
-    public UserDetails getAuthenticatedUser() throws Exception {
+    public UserDetails getAuthenticatedUser(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!(principal instanceof UserDetails)) {
-            throw new Exception("Erro na autenticação");
+            throw new RuntimeException("Erro na autenticação");
         }
         return (UserDetails) principal;
     }

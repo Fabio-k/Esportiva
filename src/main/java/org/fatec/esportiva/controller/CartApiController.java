@@ -21,8 +21,8 @@ public class CartApiController {
     }
 
     @DeleteMapping("/product/{id}")
-    public ResponseEntity<Void> removeProduct(@PathVariable Long id, @RequestParam(name = "quantity", required = false) Short quantity){
-        cartService.removeItem(id, quantity);
+    public ResponseEntity<Void> removeProduct(@PathVariable Long id, @RequestParam(name = "quantity", required = false) Short quantity) throws Exception{
+        cartService.removeItem(id, quantity, null);
         return ResponseEntity.ok().build();
     }
 }
