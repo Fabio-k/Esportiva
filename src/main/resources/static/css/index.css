@@ -73,6 +73,10 @@ input:not([type="checkbox"], [type="radio"]), select, textarea {
     background-color: #0747db;
 }
 
+.primaryButton:disabled{
+    background-color: #adadad;
+}
+
 .card {
     background-color: white;
     border-radius: 10px;
@@ -117,3 +121,10 @@ li:hover .subCategoryMenu,  .subCategoryMenu:hover{
     align-items: center;
 }
 
+.productLink{
+    text-decoration: none;
+    color: inherit;
+}
+.productLink:hover{
+    color: blue;
+}

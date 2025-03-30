@@ -14,7 +14,6 @@
 
         #itemList {
             flex-grow: 1;
-            gap: 10px;
             background-color: #ffffff;
             padding: 20px;
             border-radius: 10px;
@@ -24,6 +23,7 @@
         .itemCard{
             display: flex;
             justify-content: space-between;
+            margin-bottom: 20px;
         }
         .itemName {
             display: flex;
@@ -46,30 +46,6 @@
             padding: 15px;
             border-radius: 10px;
         }
-        .quantityDiv{
-            display: flex;
-            gap: 10px;
-            border: 1px solid gray;
-            border-radius: 3px;
-            height: fit-content;
-            align-items: center;
-        }
-        .quantityDiv p{
-            margin: 0;
-        }
-        .quantityDiv button {
-            width: 20px;
-            height: 20px;
-            margin: 4px;
-            background-color: #ffffff;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .quantityDiv button:hover {
-            background-color: #c8e2fb;
-        }
 
         #buyButton{
             margin-top: 10px;
@@ -83,34 +59,34 @@
             border-radius: 10px;
         }
     </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/quantityControl.css}">
 </head>
 <body>
   <header th:replace="~{fragments/header.html :: defaultHeader}"></header>
     <main class="cartMain">
         <div id="itemList">
-
-            <div class="itemCard">
+            <div class="itemCard" th:each="item : ${cartItems}">
+                <input type="hidden" class="itemId" th:value="${item.id}">
+                <input type="hidden" id="productId" th:value="${item.product.id}">
                 <div style="display: flex; gap: 20px;">
                     <div class="imgMock">
-                        <img th:src="@{/images/ball.png}" style="width: 100%">
+                        <img  th:src="${item.product.image}" style="width: 100%">
                     </div>
-                    <div class="itemName">
-                        <p>Bola de volei</p>
+                    <div class="itemName" style="max-width: 280px; min-width: 280px">
+                        <a class="productLink" th:href="@{/products/{id}(id=${item.product.id})}">
+                            <p th:text="${item.product.name}"></p>
+                        </a>
                         <span onclick="removeItem(this)">Remover</span>
                     </div>
                 </div>
 
                 <div style="display: flex; flex-direction:column; gap: 10px;">
-                    <div class="quantityDiv">
-                        <button id="decreaseButton_0" onclick="modifyQuantity(this, -1)">-</button>
-                        <p id="quantityItem_0">1</p>
-                        <button id="increaseButton_0" onclick="modifyQuantity(this, 1)">+</button>
-                    </div>
-                    <p style="margin:0;">10 disponiveis</p>
+                    <div th:replace="~{fragments/productQuantity :: quantityControl(${item.quantity})}"></div>
+                    <p style="margin:0;" id="availableQuantity" th:text="${item.product.quantity} + ' disponiveis'"></p>
                 </div>
 
 
-                <p style="font-weight: semi-bold; margin: 0;">R$ 48,32</p>
+                <p style="font-weight: semi-bold; margin: 0; min-width: 90px" class="itemTotalPrice" th:data-price="${item.product.price}" th:text="${item.product.getFormattedPrice()}"></p>
             </div>
 
         </div>
@@ -125,15 +101,41 @@
             </form>
             <div style="display: flex; justify-content: space-between;">
                 <p>Total</p>
-                <p>R$ 48,32</p>
+                <p id="totalPrice">R$ 48,32</p>
             </div>
             <a id="buyButton" th:href="@{/checkout/address}">Continuar compra</a>
         </div>
     </main>
     <script th:src="@{/js/productQuantityControl.js}"></script>
     <script>
-        function removeItem(button){
+        updatePrices();
+
+        function updatePrices(){
+            let totalPrice = 0;
+            document.querySelectorAll(".itemCard").forEach(itemCard => {
+                let quantity = itemCard.querySelector("#quantityItem").innerText;
+                const totalPriceElement = itemCard.querySelector(".itemTotalPrice");
+                if(quantity && totalPriceElement){
+                    const unitPrice = parseFloat(totalPriceElement.dataset.price);
+                    quantity = parseInt(quantity);
+                    totalPriceElement.innerText = formattedPrice(unitPrice * quantity);
+                    totalPrice += unitPrice * quantity;
+                }
+            })
+            document.getElementById("totalPrice").innerText = formattedPrice(totalPrice);
+        }
+
+        async function freeBlockedItemQuantity(id, quantity){
+            const response = await fetch(`/api/cart/product/${id}`, {method: "DELETE"});
+            if(response.ok) return true;
+            return false
+        }
+
+        async function removeItem(button){
             const card = button.closest(`.itemCard`);
+            const id = card.querySelector(".itemId").value;
+            const isDeleted = await freeBlockedItemQuantity(id, null);
+            if(!isDeleted) return;
             card.remove();
             const container = document.getElementById("itemList");
             let index = container.children.length;
@@ -141,8 +143,88 @@
                 const p = document.createElement("p");
                 p.innerText = "carrinho vazio";
                 container.appendChild(p);
+                return
             }
+            updatePrices();
         }
+
+        async function lowerCartItemQuantity(id){
+            const response = await fetch(`/api/cart/product/${id}?quantity=1`, {method: "DELETE"});
+            if (!response.ok) return false;
+            return true;
+        }
+
+        async function requestAddItem(body){
+           const response = await fetch("/api/cart/product", {
+               method: "POST",
+               headers: {
+                 "Content-Type": "application/json"
+               },
+               body: JSON.stringify(body)
+             }
+           )
+
+           if(!response.ok) return null;
+           return await response.json();
+         };
+
+         async function addItem(productId){
+           const body = {
+             id: productId,
+             quantity: 1
+           };
+
+           const response = await requestAddItem(body);
+           if(response == null) return false;
+           return true
+         }
+
+         async function checkAvailability(id){
+           if(isNaN(id)) return;
+           const response = await fetch(`/api/products/${id}`);
+           if(!response.ok) throw Error("error on request status: " + response.status);
+           const result = await response.json();
+           return result;
+         }
+
+         function formattedPrice(price){
+            return new Intl.NumberFormat("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            }).format(price);
+         }
+
+        async function modifyQuantity(button, value){
+           const card = button.closest(`.itemCard`);
+           const id = card.querySelector(".itemId").value;
+           const productId = card.querySelector("#productId").value;
+           const quantityItem = card.querySelector(`#quantityItem`);
+           const increaseButton = card.querySelector("#increaseButton");
+           let currentQuantity = parseInt(quantityItem.innerText);
+           if(value < 0 && currentQuantity < 2){
+             return
+           }
+
+           let isSuccess = false
+            if (value < 0){
+                isSuccess = await lowerCartItemQuantity(id);
+
+            } else {
+                isSuccess = await addItem(productId);
+            }
+            if(!isSuccess) return;
+           const result =  await checkAvailability(productId);
+
+           if(result.quantity < 1){
+             increaseButton.disabled = true;
+           } else {
+            increaseButton.disabled = false;
+           }
+
+           card.querySelector("#availableQuantity").innerText = result.quantity + ' disponível';
+           quantityItem.innerText = currentQuantity + value;
+           updatePrices();
+         }
     </script>
 </body>
 </html>
