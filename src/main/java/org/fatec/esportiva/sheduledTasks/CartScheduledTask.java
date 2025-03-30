@@ -6,6 +6,7 @@ import org.fatec.esportiva.entity.Cart;
 import org.fatec.esportiva.entity.CartItem;
 import org.fatec.esportiva.repository.CartRepository;
 import org.fatec.esportiva.service.CartService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +20,16 @@ public class CartScheduledTask {
     private final CartRepository cartRepository;
     private final CartService cartService;
 
-    @Scheduled(fixedRate = 60000)
+    @Value("${cart.product.timeoutInMinutes}")
+    private int productTimeoutInMinutes;
+
+    @Scheduled(fixedRateString = "${cart.cleanup.intervalInMillis:60000}")
     @Transactional
     public void freeCarts(){
         List<Cart> carts =  cartRepository.findByCreatedAtBefore(LocalDateTime.now());
         carts.forEach(cart -> {
             removeItems(cart);
-            cart.setCreatedAt(LocalDateTime.now().plusMinutes(5));
+            cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
             cartRepository.save(cart);
         });
     }
@@ -33,7 +37,6 @@ public class CartScheduledTask {
     private void removeItems(Cart cart){
         List<CartItem> copyCartItems = new ArrayList<>(cart.getCartItems());
         copyCartItems.forEach(cartItem -> {
-            System.out.println("Removing: " + cartItem.getProduct().getName() + LocalDateTime.now());
             cartService.removeItem(cartItem.getId(), null, cart);
         });
     }
