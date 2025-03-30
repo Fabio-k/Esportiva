@@ -23,7 +23,6 @@ public class ExchangeVoucherService {
                 ExchangeVoucher exchangeVoucher = exchangeVoucherRepository.findById(c.getId())
                         .orElseThrow(() -> new RuntimeException("Cupom de desconto não encontrado"));
                 exchangeVoucher.setValue(c.getValue());
-                exchangeVoucher.setQuantity(c.getQuantity());
 
                 return exchangeVoucher;
             }

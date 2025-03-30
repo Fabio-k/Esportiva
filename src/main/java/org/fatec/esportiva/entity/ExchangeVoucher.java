@@ -24,10 +24,6 @@ public class ExchangeVoucher {
     private BigDecimal value;
 
     @NotNull
-    @Column(name = "ctr_quantidade")
-    private int quantity;
-
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "ctr_cli_id")
     private Client client;

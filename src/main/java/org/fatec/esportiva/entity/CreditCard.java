@@ -37,9 +37,6 @@ public class CreditCard {
     @Column(name = "car_codigo_seguranca")
     private String securityCode;
 
-    @Column(name = "car_preferencial")
-    private boolean preferential;
-
     @ManyToOne
     @JoinColumn(name = "car_cli_id")
     private Client client;

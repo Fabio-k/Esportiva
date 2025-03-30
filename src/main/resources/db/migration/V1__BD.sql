@@ -22,7 +22,6 @@ CREATE TABLE cartoes_de_credito (
     car_bandeira          VARCHAR(20) NOT NULL,
     car_nome_impresso     VARCHAR(30) NOT NULL,
     car_codigo_seguranca  VARCHAR(4) NOT NULL,
-    car_preferencial      BOOLEAN NOT NULL,
     car_cli_id            INTEGER NOT NULL
 );
 
@@ -67,15 +66,14 @@ CREATE TABLE clientes (
 
 CREATE TABLE cupons_promocao (
     cpr_id                    SERIAL PRIMARY KEY,
-    cpr_desconto_porcentagem  FLOAT NOT NULL,
+    cpr_desconto_porcentagem  NUMERIC(10,2) NOT NULL,
     cpr_cli_id                INTEGER NOT NULL
 );
 
 
 CREATE TABLE cupons_troca (
     ctr_id          SERIAL PRIMARY KEY,
-    ctr_valor       FLOAT NOT NULL,
-    ctr_quantidade  INTEGER NOT NULL,
+    ctr_valor       NUMERIC(10,2) NOT NULL,
     ctr_cli_id      INTEGER NOT NULL
 );
 
@@ -103,8 +101,7 @@ ALTER TABLE funcao ADD CONSTRAINT funcao_pk PRIMARY KEY ( fun_end_id,
 CREATE TABLE grupo_precificacao (
     grp_id            SERIAL PRIMARY KEY,
     grp_nome          VARCHAR(20) NOT NULL,
-    grp_margem_lucro  FLOAT NOT NULL
-    
+    grp_margem_lucro  NUMERIC(10,2) NOT NULL  
 );
 
 CREATE TABLE logs (
@@ -137,10 +134,12 @@ CREATE TABLE produtos (
     pro_data_entrada              DATE NOT NULL,
     pro_quantidade_estoque        INTEGER NOT NULL,
     pro_quantidade_bloqueada      INTEGER NOT NULL,
-    pro_margem_lucro              FLOAT NOT NULL,
-    pro_valor_custo               FLOAT NOT NULL,
+    pro_margem_lucro              NUMERIC(10,2) NOT NULL,
+    pro_valor_custo               NUMERIC(10,2) NOT NULL,
     pro_categoria_inativacao      VARCHAR(23) NOT NULL,
     pro_justificativa_inativacao  VARCHAR(50) NOT NULL,
+    pro_descricao                 VARCHAR(500) NOT NULL,
+    pro_imagem                    VARCHAR(400) NOT NULL,
     pro_grp_id                    INTEGER
 );
 

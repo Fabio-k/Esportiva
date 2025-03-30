@@ -11,7 +11,6 @@ public class ExchangeVoucherMapper {
     public ExchangeVoucher toExchangeVoucher(Client client, ExchangeVoucherDto exchangeVoucherDto) {
         return ExchangeVoucher.builder()
                 .value(exchangeVoucherDto.getValue())
-                .quantity(exchangeVoucherDto.getQuantity())
                 .client(client)
                 .build();
     }
@@ -20,7 +19,6 @@ public class ExchangeVoucherMapper {
         return ExchangeVoucherDto.builder()
                 .id(exchangeVoucher.getId())
                 .value(exchangeVoucher.getValue())
-                .quantity(exchangeVoucher.getQuantity())
                 .client(exchangeVoucher.getClient())
                 .build();
     }

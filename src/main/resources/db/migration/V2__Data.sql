@@ -3,11 +3,11 @@ INSERT INTO clientes (cli_nome, cli_cpf, cli_data_nascimento, cli_genero, cli_st
 ('Mariana Duarte', '71374904090', '1971-02-15', 'FEMININO', 'ATIVO', '11974526335', 'TELEFONE', 'marina.duarte@outlook.com', '3', '3'),
 ('Vanessa Von Hausten', '94551842060', '2001-11-01', 'FEMININO', 'INATIVO', '11932301004', 'TELEFONE_VoIP', 'vanessa123@terra.com.br', '4', '4');
 
-INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car_codigo_seguranca, car_preferencial, car_cli_id) VALUES
-('4372412662447605', 'VISA', 'Carlos Silva', '757', (TRUE), '1'),
-('5115199853098847', 'MASTERCARD', 'Carlos Silva', '543', (FALSE), '1'),
-('344773538685170', 'AMERICAN_EXPRESS', 'Mariana Duarte', '7161', (TRUE), '2'),
-('6011737478309686', 'DISCOVER', 'Vanessa V. Hausten', '647', (TRUE), '3');
+INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car_codigo_seguranca, car_cli_id) VALUES
+('4372412662447605', 'VISA', 'Carlos Silva', '757', '1'),
+('5115199853098847', 'MASTERCARD', 'Carlos Silva', '543', '1'),
+('344773538685170', 'AMERICAN_EXPRESS', 'Mariana Duarte', '7161', '2'),
+('6011737478309686', 'DISCOVER', 'Vanessa V. Hausten', '647', '3');
 
 INSERT INTO cep(cep_cep, cep_logradouro, cep_bairro, cep_cidade, cep_estado, cep_pais) VALUES
 ('13424794', 'Rua das Laranjeiras', 'Vila das Rosas', 'Pindamonhangaba', 'São Paulo', 'Brasil'),
@@ -36,6 +36,12 @@ INSERT INTO funcao (fun_end_id, fun_cae_id) VALUES
 ('4', '1'),
 ('4', '2'),
 ('4', '3');
+
+
+INSERT INTO cupons_troca(ctr_valor, ctr_cli_id) VALUES
+('50', '2'),
+('20', '3'),
+('30', '3');
 
 
 INSERT INTO administrador (adm_nome, adm_email) VALUES
