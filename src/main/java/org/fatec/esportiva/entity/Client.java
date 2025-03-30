@@ -71,6 +71,14 @@ public class Client implements UserDetails {
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart = new Cart();
 
+    @NotNull
+    @Column(name = "cli_endereco_preferencial")
+    private Long preferentialAddress;
+
+    @NotNull
+    @Column(name = "cli_cartao_preferencial")
+    private Long preferentialCard;
+
     // O dado não será salvo no banco de dados, ele é derivado de suas vendas
     @Transient
     private float indexRanking;

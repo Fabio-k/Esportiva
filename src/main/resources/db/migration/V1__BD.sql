@@ -51,15 +51,17 @@ CREATE TABLE cep (
 
 
 CREATE TABLE clientes (
-    cli_id               SERIAL PRIMARY KEY,
-    cli_nome             VARCHAR(50) NOT NULL,
-    cli_cpf              VARCHAR(11) NOT NULL,
-    cli_data_nascimento  DATE NOT NULL,
-    cli_genero           VARCHAR(20) NOT NULL,
-    cli_status           VARCHAR(10) NOT NULL,
-    cli_telefone         VARCHAR(13) NOT NULL,
-    cli_telefone_tipo    VARCHAR(20) NOT NULL,
-    cli_email            VARCHAR(50) NOT NULL
+    cli_id                      SERIAL PRIMARY KEY,
+    cli_nome                    VARCHAR(50) NOT NULL,
+    cli_cpf                     VARCHAR(11) NOT NULL,
+    cli_data_nascimento         DATE NOT NULL,
+    cli_genero                  VARCHAR(20) NOT NULL,
+    cli_status                  VARCHAR(10) NOT NULL,
+    cli_telefone                VARCHAR(13) NOT NULL,
+    cli_telefone_tipo           VARCHAR(20) NOT NULL,
+    cli_email                   VARCHAR(50) NOT NULL,
+    cli_endereco_preferencial   INTEGER NOT NULL,
+    cli_cartao_preferencial     INTEGER NOT NULL
 );
 
 
