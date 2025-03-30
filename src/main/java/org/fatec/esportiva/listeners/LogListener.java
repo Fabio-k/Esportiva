@@ -14,6 +14,8 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.transaction.Transactional;
 
+// Colocar isso nas entidades que quer interceptar: @EntityListeners(LogListener.class)
+
 @Component
 public class LogListener {
 

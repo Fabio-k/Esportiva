@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@EntityListeners(LogListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
