@@ -1,8 +1,13 @@
 package org.fatec.esportiva.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.fatec.esportiva.entity.Order;
+import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.enums.OrderStatus;
+import org.fatec.esportiva.mapper.OrderMapper;
+import org.fatec.esportiva.mapper.TransactionMapper;
 import org.fatec.esportiva.request.OrderDto;
 import org.fatec.esportiva.request.TransactionDto;
 import org.fatec.esportiva.service.OrderService;
@@ -11,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -54,6 +61,31 @@ public class AdminLogisticController {
         List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCADO);
         model.addAttribute("orders", orders);
         return "admin/logistic/returned";
+    }
+
+    @GetMapping("/approve")
+    public String deliveryPipeline(Model model,
+            HttpServletRequest request,
+            @RequestParam(value = "approval", required = true) boolean approval,
+            @RequestParam(value = "transaction", required = false, defaultValue = "") String transactionId,
+            @RequestParam(value = "order", required = false, defaultValue = "") String orderId) throws Exception {
+
+        if (transactionId != "") {
+            long id = Long.parseLong(transactionId);
+            transactionService.changeState(id, approval);
+
+        } else if (orderId != "") {
+            long id = Long.parseLong(orderId);
+            orderService.changeState(id, approval);
+
+        } else {
+            throw new Exception("Ao aprovar uma transação/ordem, ambos os ID ficaram nulos");
+        }
+
+        // Redireciona para a mesma página que a chamou. E o Controller renderiza
+        // corretamente interceptando a mesma URL
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
 }
