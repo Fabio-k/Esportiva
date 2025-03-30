@@ -12,7 +12,6 @@ import org.fatec.esportiva.mapper.OrderMapper;
 import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.repository.OrderRepository;
 import org.fatec.esportiva.repository.ProductRepository;
-import org.fatec.esportiva.repository.TransactionRepository;
 import org.fatec.esportiva.request.OrderDto;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    private final TransactionRepository transactionRepository;
     private final ClientRepository clientRepository;
 
     public List<OrderDto> getTransactions(OrderStatus status) {
@@ -49,13 +47,14 @@ public class OrderService {
             } else {
                 // Deletar a transação e reembolsar com cupom de dinheiro
             }
+        }
 
-            // O cartão de crédito não aprova, ele só reprova se for inválido o cartão
-        } else if (status == OrderStatus.EM_PROCESSAMENTO) {
+        // O cartão de crédito não aprova, ele só reprova se for inválido o cartão
+        else if (status == OrderStatus.EM_PROCESSAMENTO) {
             if (approve == true) {
                 order.setStatus(OrderStatus.EM_TRANSITO);
 
-                // Dá a baixa no estoque aqui e desbloqueia os produtos do
+                // Dá a baixa no estoque aqui e desbloqueia os produtos
                 int quantity = product.getStockQuantity();
                 product.setStockQuantity(quantity - order.getQuantity());
                 product.setBlockedQuantity(quantity - order.getQuantity());
@@ -63,8 +62,9 @@ public class OrderService {
             } else {
                 // Deletar a transação e reembolsar com cupom de dinheiro
             }
+        }
 
-        } else if (status == OrderStatus.EM_TRANSITO) {
+        else if (status == OrderStatus.EM_TRANSITO) {
             if (approve == true) {
                 order.setStatus(OrderStatus.ENTREGUE);
             } else {
@@ -81,14 +81,18 @@ public class OrderService {
                 // Volta para entregue e recusa o pedido???
             }
 
-        } else if (status == OrderStatus.EM_TROCA) {
+        }
+
+        else if (status == OrderStatus.EM_TROCA) {
             if (approve == true) {
                 order.setStatus(OrderStatus.TROCADO);
             } else {
                 // Volta para entregue e recusa o pedido???
             }
 
-        } else if (status == OrderStatus.TROCADO) {
+        }
+
+        else if (status == OrderStatus.TROCADO) {
             order.setStatus(OrderStatus.TROCA_FINALIZADA);
 
             // Repõe o estoque quando a troca é finalizada
@@ -97,7 +101,9 @@ public class OrderService {
 
             // Gera cupom para o cliente naquele valor
 
-        } else {
+        }
+
+        else {
             // Não faz nada nos outros estados
         }
 

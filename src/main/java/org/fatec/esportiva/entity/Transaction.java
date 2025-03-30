@@ -3,8 +3,11 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.Builder.Default;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
@@ -32,4 +35,8 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "tra_cli_id")
     private Client client;
+
+    @Default
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
 }
