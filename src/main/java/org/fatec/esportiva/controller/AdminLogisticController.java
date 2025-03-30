@@ -27,21 +27,29 @@ public class AdminLogisticController {
 
     @GetMapping("/in_transit")
     public String inTransit(Model model) {
+        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.EM_TRANSITO);
+        model.addAttribute("transactions", transactions);
         return "admin/logistic/in_transit";
     }
 
     @GetMapping("/delivered")
     public String delivered(Model model) {
+        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.ENTREGUE);
+        model.addAttribute("transactions", transactions);
         return "admin/logistic/delivered";
     }
 
     @GetMapping("/returning")
     public String returning(Model model) {
+        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.EM_TROCA);
+        model.addAttribute("transactions", transactions);
         return "admin/logistic/returning";
     }
 
     @GetMapping("/returned")
     public String returned(Model model) {
+        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.TROCADO);
+        model.addAttribute("transactions", transactions);
         return "admin/logistic/returned";
     }
 

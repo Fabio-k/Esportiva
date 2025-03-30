@@ -148,6 +148,7 @@ CREATE TABLE produtos (
 CREATE TABLE transacoes (
     tra_id           SERIAL PRIMARY KEY,
     tra_data_compra  DATE NOT NULL,
+    tra_status       VARCHAR(20) NOT NULL,
     tra_cli_id       INTEGER NOT NULL
 );
 
