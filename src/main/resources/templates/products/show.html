@@ -69,7 +69,7 @@
   </aside>
 <script>
   async function requestAddItem(body){
-   const response = await fetch("http://localhost:8080/api/cart/product", {
+   const response = await fetch("/api/cart/product", {
        method: "POST",
        headers: {
          "Content-Type": "application/json"
@@ -106,7 +106,7 @@
  }
  async function checkAvailability(id){
    if(isNaN(id)) return;
-   const response = await fetch(`http://localhost:8080/api/products/${id}`);
+   const response = await fetch(`/api/products/${id}`);
    if(!response.ok) throw Error("error on request status: " + response.status);
    const result = await response.json();
    return result.quantity;
