@@ -70,7 +70,7 @@ public class ClientService {
         return client;
     }
 
-    public Client getAuthenticatedClient() throws Exception {
+    public Client getAuthenticatedClient(){
         UserDetails userDetails = authService.getAuthenticatedUser();
         return clientRepository.findClientByEmail(userDetails.getUsername()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }

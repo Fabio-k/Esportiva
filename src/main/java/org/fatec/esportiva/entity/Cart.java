@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,4 +27,7 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "car_cli_id")
     Client client;
+
+    @Column(name = "car_criado_em")
+    LocalDateTime createdAt;
 }

@@ -8,11 +8,14 @@ import org.fatec.esportiva.entity.CartItem;
 import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.CartMapper;
 import org.fatec.esportiva.repository.CartItemRepository;
+import org.fatec.esportiva.repository.CartRepository;
 import org.fatec.esportiva.request.CartItemRequestDto;
 import org.fatec.esportiva.response.CartItemResponseDto;
 import org.fatec.esportiva.response.CartResponseDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +25,13 @@ public class CartService {
     private final ProductService productService;
     private final ClientService clientService;
     private final CartItemRepository cartItemRepository;
+    private final CartRepository cartRepository;
+
+    @Value("${cart.product.timeoutInMinutes}")
+    private int productTimeoutInMinutes;
 
     @Transactional
-    public CartItemResponseDto addItem(CartItemRequestDto dto) throws Exception{
+    public CartItemResponseDto addItem(CartItemRequestDto dto){
         Cart cart = clientService.getAuthenticatedClient().getCart();
         CartItem cartItem = productService.updateQuantity(dto.id(), dto.quantity());
         cartItem.setCart(cart);
@@ -36,7 +43,7 @@ public class CartService {
             cartItem = existingItem;
         }
         cartItem = cartItemRepository.save(cartItem);
-
+        updateCartCreatedAt();
         return CartItemMapper.toCartItemResponseDto(cartItem);
     }
 
@@ -47,18 +54,34 @@ public class CartService {
     }
 
     @Transactional
-    public void removeItem(Long id, Short quantity) {
+    public void removeItem(Long id, Short quantity, Cart cart){
         CartItem cartItem = findCartItemById(id);
         if(quantity == null || cartItem.getQuantity() < quantity){
             quantity = cartItem.getQuantity();
         }
         cartItem.setQuantity((short) (cartItem.getQuantity() - quantity));
         productService.returnBlockedProductQuantity(cartItem.getProduct().getId(), quantity);
+        updateCartCreatedAt(cart);
         if (cartItem.getQuantity() == 0){
             cartItemRepository.delete(cartItem);
             return;
         }
         cartItemRepository.save(cartItem);
+    }
+
+    private void updateCartCreatedAt(Cart cart){
+        if(cart == null){
+            cart = clientService.getAuthenticatedClient().getCart();
+        }
+        cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
+        cartRepository.save(cart);
+    }
+
+    private void updateCartCreatedAt(){
+        Cart cart = clientService.getAuthenticatedClient().getCart();
+        cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
+        System.out.println(cart.getCreatedAt());
+        cartRepository.save(cart);
     }
 
     private CartItem findCartItemById(Long id){

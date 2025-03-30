@@ -1,6 +1,7 @@
 CREATE TABLE carrinhos(
     car_id SERIAL PRIMARY KEY,
     car_cli_id INTEGER NOT NULL,
+    car_criado_em TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_car_cli FOREIGN KEY ( car_cli_id ) REFERENCES clientes(cli_id)
 );
 
