@@ -6,30 +6,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/dashboard_table.css}">
-    <style>
-        .collapsible {
-            background-color: #777;
-            color: white;
-            cursor: pointer;
-            width: 100%;
-            border: none;
-            text-align: center;
-            outline: none;
-            font-size: 15px;
-            border-radius: 10px;
-        }
-
-        .active,
-        .collapsible:hover {
-            background-color: #555;
-        }
-
-        .content {
-            display: none;
-            overflow: hidden;
-            background-color: inherit;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/collapsible_table.css}">
 </head>
 
 <body>
@@ -70,7 +47,7 @@
 
             for (i = 0; i < coll.length; i++) {
                 coll[i].addEventListener("click", function () {
-                    this.classList.toggle("active");
+                    this.classList.toggle("activeRow");
 
                     // Procura o elemento de classe 'content' na mesma linha da tabela
                     var content = this.closest("tr").querySelector(".content");
