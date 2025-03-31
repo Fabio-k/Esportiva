@@ -8,6 +8,7 @@ import lombok.Builder.Default;
 import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "enderecos")
-public class Address {
+public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

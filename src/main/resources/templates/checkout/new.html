@@ -16,12 +16,24 @@
   <main>
     <section class="mainPanel">
       <div class="card">
-        <h1>Apartamento</h1>
-        <p>Rua x, cep: 088837</p>
+        <h1 th:text="${address.getAddressIdentificationPhrase()}"></h1>
+        <p th:text="${address.cep.street} + ',' + 'cep: ' + ${address.cep.cep}"></p>
         <a th:href="@{/checkout/address}">Mudar endereço</a>
       </div>
       <div class="card">
-        <p>**** 3214</p>
+        <div th:each="item : ${items}" style="display: flex; gap: 20px; align-items:center">
+          <div style="width: 60px">
+            <img th:src="${item.product.getImage()}" style="width: 100%">
+          </div>
+          <div>
+            <h4 th:text="${item.product.name}"></h4>
+            <p th:text="${item.getTotalPrice()}"></p>
+          </div>
+
+        </div>
+      </div>
+      <div class="card">
+        <p th:each="creditCard : ${creditCards}" th:text="${creditCard.number}"></p>
         <a th:href="@{/checkout/billing}">Mudar cartão de crédito</a>
       </div>
     </section>

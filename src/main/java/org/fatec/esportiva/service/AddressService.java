@@ -27,8 +27,8 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public Optional<Address> findById(Long id) {
-        return addressRepository.findById(id);
+    public Address findById(Long id) {
+        return addressRepository.findById(id).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
     }
 
     public List<Address> createAddresses(Client client, List<AddressDto> addressDtoList) {
@@ -52,8 +52,7 @@ public class AddressService {
             Set<AddressCategory> addressCategories = addressCategoryRepository
                     .findByAddressTypeIn(addressDto.getTypes());
             if (addressDto.getId() != null) {
-                Address address = findById(addressDto.getId())
-                        .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+                Address address = findById(addressDto.getId());
 
                 address.setAddressIdentificationPhrase(addressDto.getAddressIdentificationPhrase());
                 address.setCep(cep);

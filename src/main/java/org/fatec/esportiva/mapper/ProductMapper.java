@@ -42,10 +42,8 @@ public class ProductMapper {
     }
 
     public ProductResponseDto toProductResponseDto(Product product){
-        BigDecimal marginOfProfit = BigDecimal.ONE.add(BigDecimal.valueOf(product.getPricingGroup().getProfitMargin()));
-        BigDecimal finalPrice = product.getCostValue().multiply(marginOfProfit).setScale(2, RoundingMode.HALF_UP);
         int availableQuantity = product.getStockQuantity() - product.getBlockedQuantity();
         return new ProductResponseDto(product.getId(), availableQuantity, product.getName(),
-                finalPrice, product.getDescription(), product.getImage());
+                product.getPriceWithMargin(), product.getDescription(), product.getImage());
     }
 }

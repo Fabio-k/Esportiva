@@ -1,5 +1,6 @@
 package org.fatec.esportiva.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.CreditCard;
@@ -26,7 +27,7 @@ public class CreditCardService {
     public List<CreditCard> updateOrCreateCreditCards(Client client, List<CreditCardDto> creditCardDtos){
         return creditCardDtos.stream().map(c -> {
             if(c.getId() != null){
-                CreditCard creditCard = creditCardRepository.findById(c.getId()).orElseThrow(() -> new RuntimeException("Cartão de crédito não encontrado"));
+                CreditCard creditCard = findCreditCard(c.getId());
                 creditCard.setName(c.getName());
                 creditCard.setNumber(c.getNumber());
                 creditCard.setBrand(c.getBrand());
@@ -37,5 +38,9 @@ public class CreditCardService {
 
             return CreditCardMapper.toCreditCard(client, c);
         }).toList();
+    }
+
+    public CreditCard findCreditCard(Long id){
+        return creditCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cartão de crédito não encontrado"));
     }
 }
