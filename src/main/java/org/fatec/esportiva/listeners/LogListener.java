@@ -26,28 +26,26 @@ public class LogListener {
         this.authService = authService;
     }
 
-    // Detecta qualquer commit antes de acontecer do tipo INSERT
+    // Detecta qualquer commit depois de acontecer do tipo INSERT
     @PostPersist
     public void beforeInsert(Object entity) throws Exception {
         Log log = new Log();
         log.setUser(authService.getAuthenticatedUser().getUsername());
         log.setTimestamp(LocalDateTime.now());
         log.setOperation("INSERT");
-        // log.setOperationContent(entity.toString());
-        log.setOperationContent("CONTEUDO");
+        log.setOperationContent(entity.toString());
 
         saveLog(log);
     }
 
-    // Detecta qualquer commit antes de acontecer do tipo UPDATE
+    // Detecta qualquer commit depois de acontecer do tipo UPDATE
     @PostUpdate
     public void beforeUpdate(Object entity) throws Exception {
         Log log = new Log();
         log.setUser(authService.getAuthenticatedUser().getUsername());
         log.setTimestamp(LocalDateTime.now());
         log.setOperation("UPDATE");
-        // log.setOperationContent(entity.toString());
-        log.setOperationContent("XXXX");
+        log.setOperationContent(entity.toString());
 
         saveLog(log);
     }

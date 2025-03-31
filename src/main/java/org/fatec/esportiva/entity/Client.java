@@ -104,4 +104,9 @@ public class Client implements UserDetails {
     public boolean isEnabled() {
         return this.status == UserStatus.ATIVO;
     }
+
+    @Override
+    public String toString() {
+        return "Nome: " + name;
+    }
 }
