@@ -22,7 +22,7 @@ public class Cart {
     @Column(name = "car_id")
     private Long id;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", orphanRemoval = true)
     List<CartItem> cartItems = new ArrayList<>();
 
     @ManyToOne

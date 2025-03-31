@@ -69,6 +69,12 @@ public class CartService {
         cartItemRepository.save(cartItem);
     }
 
+    public void cleanCart(){
+        Cart cart = clientService.getAuthenticatedClient().getCart();
+        cart.getCartItems().clear();
+        cartRepository.save(cart);
+    }
+
     private void updateCartCreatedAt(Cart cart){
         if(cart == null){
             cart = clientService.getAuthenticatedClient().getCart();

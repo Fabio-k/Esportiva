@@ -12,6 +12,7 @@ import org.fatec.esportiva.request.CreditCardDto;
 import org.fatec.esportiva.service.AddressService;
 import org.fatec.esportiva.service.ClientService;
 import org.fatec.esportiva.service.CreditCardService;
+import org.fatec.esportiva.service.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ public class CheckoutController {
     private final ClientService clientService;
     private final AddressService addressService;
     private final CreditCardService creditCardService;
+    private final TransactionService transactionService;
 
     @ModelAttribute("checkoutSession")
     public CheckoutSession createSession(){
@@ -101,9 +103,19 @@ public class CheckoutController {
 
         model.addAttribute("items", cartItems);
 
-
-
         return "checkout/new";
+    }
+
+    @PostMapping("/save")
+    public String buyCart(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
+        if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";
+
+        if (checkoutSession.getCreditCardIds().isEmpty()) return "redirect:/checkout/billing";
+
+        transactionService.generateTransaction(checkoutSession);
+
+
+        return "redirect:/";
     }
 
 }

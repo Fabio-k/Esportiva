@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.fatec.esportiva.entity.CartItem;
+import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.fatec.esportiva.mapper.ProductMapper;
@@ -73,5 +74,18 @@ public class ProductService {
         if(product.getBlockedQuantity() < quantity) throw new IllegalArgumentException("Erro no estoque");
         product.setBlockedQuantity(product.getBlockedQuantity() - quantity);
         productRepository.save(product);
+    }
+
+    public void updateQuantityAfterPurchase(List<Order> orders) {
+        orders.forEach(order -> {
+            Product product = order.getProduct();
+            Product product1 = findById(product.getId());
+            if(product1.getStockQuantity() < order.getQuantity() || order.getQuantity() > product.getBlockedQuantity()){
+                throw new RuntimeException("Conflito na quantidade de itens comprados");
+            }
+            product1.setStockQuantity(product.getStockQuantity() - order.getQuantity());
+            product1.setBlockedQuantity(product1.getBlockedQuantity() - order.getQuantity());
+            productRepository.save(product1);
+        });
     }
 }

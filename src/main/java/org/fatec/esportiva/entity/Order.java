@@ -15,6 +15,7 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ped_id")
     private Long id;
 
