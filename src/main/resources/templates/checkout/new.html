@@ -12,7 +12,7 @@
   </style>
 </head>
 <body>
-<header th:replace="fragments/header.html :: simpleHeader"></header>
+<header th:replace="~{fragments/header.html :: simpleHeader}"></header>
   <main>
     <section class="mainPanel">
       <div class="card">
@@ -39,14 +39,13 @@
     </section>
     <section>
       <div class="summaryDiv">
-        <form>
-          <h1>Resumo da compra</h1><form>
+        <form th:action="@{/checkout/save}" method="post">
+          <h1>Resumo da compra</h1>
           <label th:for="discountCupom">Cupom de desconto</label>
           <div style="display: flex;">
             <input th:type="text" id="discountCupom">
             <button type="submit">Aplicar</button>
           </div>
-        </form>
           <div style="display: flex; justify-content: space-between;">
             <p>Total</p>
             <p>R$ 48,32</p>

@@ -16,7 +16,7 @@
   </style>
 </head>
 <body>
-  <header th:replace="fragments/header.html :: simpleHeader"></header>
+  <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
   <main>
     <section class="mainPanel">
       <form action="@{/checkout/new}" method="post">
@@ -62,7 +62,7 @@
       </form>
     </section>
     <section>
-      <div th:replace="fragments/purchaseSummary :: summary"></div>
+      <div th:replace="~{fragments/purchaseSummary :: summary}"></div>
     </section>
   </main>
 <script>

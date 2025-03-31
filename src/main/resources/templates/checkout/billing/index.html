@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
 </head>
 <body>
-    <header th:replace="fragments/header.html :: simpleHeader"></header>
+    <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
     <main>
         <section>
             <form th:action="@{/checkout/billing/save}" method="post">
@@ -22,7 +22,7 @@
             </form>
         </section>
         <section>
-            <div th:replace="fragments/purchaseSummary :: summary"></div>
+            <div th:replace="~{fragments/purchaseSummary :: summary}"></div>
         </section>
     </main>
 </body>
