@@ -8,11 +8,12 @@ import org.fatec.esportiva.service.AuthService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostUpdate;
 
 // https://stackoverflow.com/questions/66304627/spring-boot-entitylistener-the-dependencies-of-some-of-the-beans-in-the-applica
 // Obs: Colocar isso nas entidades que quer interceptar: @EntityListeners(LogListener.class)
+// Obs: Se usar o PrePersist e PreUpdate, ele gera uns 5 logs para cada commit, devido a cascata
 @Component
 public class LogListener {
     private final LogRepository logRepository;
@@ -26,7 +27,7 @@ public class LogListener {
     }
 
     // Detecta qualquer commit antes de acontecer do tipo INSERT
-    @PrePersist
+    @PostPersist
     public void beforeInsert(Object entity) throws Exception {
         Log log = new Log();
         log.setUser(authService.getAuthenticatedUser().getUsername());
@@ -39,14 +40,14 @@ public class LogListener {
     }
 
     // Detecta qualquer commit antes de acontecer do tipo UPDATE
-    @PreUpdate
+    @PostUpdate
     public void beforeUpdate(Object entity) throws Exception {
         Log log = new Log();
         log.setUser(authService.getAuthenticatedUser().getUsername());
         log.setTimestamp(LocalDateTime.now());
         log.setOperation("UPDATE");
         // log.setOperationContent(entity.toString());
-        log.setOperationContent("CONTEUDO");
+        log.setOperationContent("XXXX");
 
         saveLog(log);
     }
