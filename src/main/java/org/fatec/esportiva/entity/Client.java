@@ -109,7 +109,21 @@ public class Client implements UserDetails {
     public String toString() {
         return """
                 Nome: %s\n
-                E-mail: %s
-                """.formatted(name, email);
+                E-mail: %s\n
+                CPF: %s\n
+                Status: %s\n
+                Gênero: %s\n
+                Data de nascimento: %s\n
+                Telefone: %s\n
+                Tipo de telefone: %s
+                """.formatted(
+                name,
+                email,
+                cpf,
+                status.getDisplayName(),
+                gender.getDisplayName(),
+                dateBirth.toString(),
+                telephone,
+                telephoneType.getDisplayName());
     }
 }
