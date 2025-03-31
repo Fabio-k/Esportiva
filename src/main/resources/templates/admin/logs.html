@@ -44,21 +44,16 @@
         <!-- Funcionalidade que colapsa ou não o conteúdo da coluna de conteúdo -->
         <script>
             var coll = document.getElementsByClassName("collapsible");
-            var i;
 
-            for (i = 0; i < coll.length; i++) {
+            for (var i = 0; i < coll.length; i++) {
                 coll[i].addEventListener("click", function () {
                     this.classList.toggle("activeRow");
 
-                    // Procura o elemento de classe 'content' na mesma linha da tabela
+                    // Encontra o elemento com a classe "content" na mesma linha
                     var content = this.closest("tr").querySelector(".content");
 
-                    // Alterna a visibilidade do conteúdo
-                    if (content.style.display === "block") {
-                        content.style.display = "none";
-                    } else {
-                        content.style.display = "block";
-                    }
+                    // Alterna a classe 'expanded' para expandir/colapsar o conteúdo
+                    content.classList.toggle("expanded");
                 });
             }
         </script>
