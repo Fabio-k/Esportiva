@@ -3,9 +3,12 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
 import org.fatec.esportiva.entity.enums.OrderStatus;
+import org.fatec.esportiva.listeners.LogListener;
 
 @Entity
+@EntityListeners(LogListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -34,4 +37,19 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "ped_pro_id")
     private Product product;
+
+    @Override
+    public String toString() {
+        return """
+                Pedido\n
+                Produto: %s\n
+                Status: %s\n
+                Quantidade: %s\n
+                Transação: %s
+                """.formatted(
+                product.getName(),
+                status.getDisplayName(),
+                quantity,
+                transaction.getId());
+    }
 }

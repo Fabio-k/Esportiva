@@ -108,6 +108,7 @@ public class Client implements UserDetails {
     @Override
     public String toString() {
         return """
+                Cliente\n
                 Nome: %s\n
                 E-mail: %s\n
                 CPF: %s\n

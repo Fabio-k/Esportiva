@@ -7,11 +7,13 @@ import lombok.Builder.Default;
 
 import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
+import org.fatec.esportiva.listeners.LogListener;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@EntityListeners(LogListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -60,4 +62,21 @@ public class Address {
             @JoinColumn(name = "fun_cae_id") })
 
     Set<AddressCategory> addressCategories = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return """
+                Endereço\n
+                Frase de identificação: %s\n
+                Número: %s\n
+                Observação: %s\n
+                Tipo de residência: %s\n
+                Tipo de rua: %s
+                """.formatted(
+                addressIdentificationPhrase,
+                number,
+                observation,
+                residencyType.getDisplayName(),
+                streetType.getDisplayName());
+    }
 }

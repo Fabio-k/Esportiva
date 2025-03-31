@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.fatec.esportiva.entity.enums.OrderStatus;
+import org.fatec.esportiva.listeners.LogListener;
 
 @Entity
+@EntityListeners(LogListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -39,4 +41,17 @@ public class Transaction {
     @Default
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return """
+                Transação\n
+                ID: %s\n
+                Status: %s\n
+                Data da compra: %s
+                """.formatted(
+                id,
+                status.getDisplayName(),
+                purchaseDate.toString());
+    }
 }

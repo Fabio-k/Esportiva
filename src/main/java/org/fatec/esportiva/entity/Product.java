@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.fatec.esportiva.entity.enums.ProductStatus;
+import org.fatec.esportiva.listeners.LogListener;
 
 @Entity
+@EntityListeners(LogListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -81,4 +83,31 @@ public class Product {
     })
     @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "per_pro_id"), inverseJoinColumns = @JoinColumn(name = "per_cat_id"))
     private List<ProductCategory> categories = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return """
+                Produto\n
+                Nome: %s\n
+                Data de cadastro: %s\n
+                Qtd estoque: %s\n
+                Qtd bloqueada: %s\n
+                Margem de lucro: %s\n
+                Custo: %s\n
+                Status: %s\n
+                Justificativa de inativação: %s\n
+                Descrição: %s\n
+                Imagem: %s
+                """.formatted(
+                name,
+                entryDate.toString(),
+                stockQuantity,
+                blockedQuantity,
+                profitMargin,
+                costValue,
+                status.getDisplayName(),
+                inactivationJustification,
+                description,
+                image);
+    }
 }
