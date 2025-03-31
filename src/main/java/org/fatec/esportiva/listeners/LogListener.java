@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.fatec.esportiva.entity.Log;
 import org.fatec.esportiva.repository.LogRepository;
-//import org.fatec.esportiva.service.AuthService;
+import org.fatec.esportiva.service.AuthService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
@@ -16,25 +16,24 @@ import jakarta.persistence.PreUpdate;
 @Component
 public class LogListener {
     private final LogRepository logRepository;
-    // private AuthService authService;
+    private AuthService authService;
 
     // Para evitar o problema de importação circular, o @Lazy é adicionado na
     // instanciação do objeto de Listener
-    public LogListener(@Lazy LogRepository logRepository) {
+    public LogListener(@Lazy LogRepository logRepository, @Lazy AuthService authService) {
         this.logRepository = logRepository;
+        this.authService = authService;
     }
 
     // Detecta qualquer commit antes de acontecer do tipo INSERT
     @PrePersist
     public void beforeInsert(Object entity) throws Exception {
         Log log = new Log();
-        // log.setUser(authService.getAuthenticatedUser().getUsername());
-        log.setUser("TESTE");
+        log.setUser(authService.getAuthenticatedUser().getUsername());
+        log.setTimestamp(LocalDateTime.now());
         log.setOperation("INSERT");
         // log.setOperationContent(entity.toString());
-        // log.setTimestamp(LocalDateTime.now());
         log.setOperationContent("CONTEUDO");
-        log.setTimestamp(LocalDateTime.now());
 
         saveLog(log);
     }
@@ -43,13 +42,11 @@ public class LogListener {
     @PreUpdate
     public void beforeUpdate(Object entity) throws Exception {
         Log log = new Log();
-        // log.setUser(authService.getAuthenticatedUser().getUsername());
-        log.setUser("TESTE");
+        log.setUser(authService.getAuthenticatedUser().getUsername());
+        log.setTimestamp(LocalDateTime.now());
         log.setOperation("UPDATE");
         // log.setOperationContent(entity.toString());
-        // log.setTimestamp(LocalDateTime.now());
         log.setOperationContent("CONTEUDO");
-        log.setTimestamp(LocalDateTime.now());
 
         saveLog(log);
     }

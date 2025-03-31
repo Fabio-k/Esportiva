@@ -28,7 +28,7 @@
                 <tr th:each="log : ${logs}">
                     <td th:id="'log-' + ${log.id}" th:text="${log.id}"></td>
                     <td th:id="'user-' + ${log.id}" th:text="${log.user}"></td>
-                    <td th:id="'timestamp-' + ${log.id}" th:text="${log.timestamp}"></td>
+                    <td th:id="'timestamp-' + ${log.id}" th:text="${log.displayLogTimestamp}"></td>
                     <td th:id="'operation-' + ${log.id}" th:text="${log.operation}"></td>
                     <td th:id="'operationContent-' + ${log.id}" th:text="${log.operationContent}"></td>
                 </tr>
