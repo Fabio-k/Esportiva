@@ -107,6 +107,9 @@ public class Client implements UserDetails {
 
     @Override
     public String toString() {
-        return "Nome: " + name;
+        return """
+                Nome: %s\n
+                E-mail: %s
+                """.formatted(name, email);
     }
 }
