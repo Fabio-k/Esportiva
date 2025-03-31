@@ -10,12 +10,13 @@ th {
 
 th,
 td {
-    text-align: left;
-    padding: 14px 8px;
+    text-align: center;
+    padding: 5px;
 }
 
 tr {
     border: none;
+    height: auto;
 }
 
 tr:nth-child(even) {
@@ -24,28 +25,29 @@ tr:nth-child(even) {
 
 
 .buttonsDiv {
-display: flex;
-align-self: self-end;
-margin-bottom: 10px;
-gap: 10px;
+    display: flex;
+    align-self: self-end;
+    margin-bottom: 10px;
+    gap: 10px;
 }
 
 .primaryButton {
-background-color: blue;
-padding: 10px;
-border-radius: 10px;
-color: white;
-width: fit-content;
-text-decoration: none;
-}
-#filterModal {
-position: absolute;
-background-color: white;
-padding: 15px;
-border: 1px solid rgb(189, 189, 189);
-border-radius: 5px;
+    background-color: blue;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    width: fit-content;
+    text-decoration: none;
 }
 
-#filterModal form > * {
-margin-bottom: 10px;
+#filterModal {
+    position: absolute;
+    background-color: white;
+    padding: 15px;
+    border: 1px solid rgb(189, 189, 189);
+    border-radius: 5px;
+}
+
+#filterModal form>* {
+    margin-bottom: 10px;
 }

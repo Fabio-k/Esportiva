@@ -6,6 +6,30 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/dashboard_table.css}">
+    <style>
+        .collapsible {
+            background-color: #777;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            border: none;
+            text-align: center;
+            outline: none;
+            font-size: 15px;
+            border-radius: 10px;
+        }
+
+        .active,
+        .collapsible:hover {
+            background-color: #555;
+        }
+
+        .content {
+            display: none;
+            overflow: hidden;
+            background-color: inherit;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,7 +44,7 @@
                     <th>Data da operação</th>
                     <th>Tipo de operação</th>
                     <th>Conteúdo da operação</th>
-                    <th></th>
+                    <th>Exibir</th>
                 </tr>
             </thead>
 
@@ -31,10 +55,35 @@
                     <td th:id="'user-' + ${log.id}" th:text="${log.user}"></td>
                     <td th:id="'timestamp-' + ${log.id}" th:text="${log.displayLogTimestamp}"></td>
                     <td th:id="'operation-' + ${log.id}" th:text="${log.operation}"></td>
-                    <td th:id="'operationContent-' + ${log.id}" th:text="${log.operationContent}"></td>
+                    <td>
+                        <p th:id="'operationContent-' + ${log.id}" th:text="${log.operationContent}" class="content">
+                        </p>
+                    </td>
+                    <td><button type="button" class="collapsible">+</button></td>
                 </tr>
             </tbody>
         </table>
+
+        <script>
+            var coll = document.getElementsByClassName("collapsible");
+            var i;
+
+            for (i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+
+                    // Procura o elemento de classe 'content' na mesma linha da tabela
+                    var content = this.closest("tr").querySelector(".content");
+
+                    // Alterna a visibilidade do conteúdo
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            }
+        </script>
 
     </main>
 </body>
