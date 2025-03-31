@@ -109,7 +109,7 @@ CREATE TABLE logs (
     log_usuario             VARCHAR(50) NOT NULL,
     log_data_hora           TIMESTAMP NOT NULL,
     log_operacao            VARCHAR(10) NOT NULL,
-    log_conteudo_alteracao  VARCHAR(500) NOT NULL
+    log_conteudo_alteracao  VARCHAR(1000) NOT NULL
 );
 
 CREATE TABLE pedidos (
