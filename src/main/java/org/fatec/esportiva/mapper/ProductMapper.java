@@ -1,16 +1,11 @@
 package org.fatec.esportiva.mapper;
 
-import org.checkerframework.checker.units.qual.C;
-import org.fatec.esportiva.entity.CartItem;
 import org.fatec.esportiva.entity.Product;
 
 import org.fatec.esportiva.request.ProductDto;
 
 import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.response.ProductResponseDto;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @UtilityClass
 public class ProductMapper {

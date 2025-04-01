@@ -26,6 +26,7 @@ public class CartService {
     private final ClientService clientService;
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
+    private final CartMapper cartMapper;
 
     @Value("${cart.product.timeoutInMinutes}")
     private int productTimeoutInMinutes;
@@ -50,7 +51,7 @@ public class CartService {
     public CartResponseDto getCart(){
         Cart cart = clientService.getAuthenticatedClient().getCart();
 
-        return CartMapper.toCartResponseDto(cart);
+        return cartMapper.toCartResponseDto(cart);
     }
 
     @Transactional

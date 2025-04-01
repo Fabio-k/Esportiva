@@ -24,7 +24,7 @@
                     </select>
                     <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                 </div>
-                <button id="submitButton" type="submit">Entrar</button>
+                <button id="submitButton" type="submit" data-turbo="false">Entrar</button>
             </form>
             <span th:if="${users.size == 0}">Não há usuários na aplicação</span>
         </div>

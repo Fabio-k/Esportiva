@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.CreditCardDto;
+import org.fatec.esportiva.response.CartItemResponseDto;
 import org.fatec.esportiva.response.CartResponseDto;
 import org.fatec.esportiva.service.*;
 import org.springframework.stereotype.Controller;
@@ -30,6 +32,12 @@ public class CheckoutController {
     @ModelAttribute("checkoutSession")
     public CheckoutSession createSession(){
         return new CheckoutSession();
+    }
+
+    @ModelAttribute("cartTotalPrice")
+    public String totalPrice(){
+        CartResponseDto cart = cartService.getCart();
+        return cart.getTotalPrice();
     }
 
     @GetMapping("/address")
@@ -87,7 +95,8 @@ public class CheckoutController {
 
     @GetMapping("/new")
     public String newCheckout(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
-        List<CartItem> cartItems = clientService.getAuthenticatedClient().getCart().getCartItems();
+        List<CartItemResponseDto> cartItems = clientService.getAuthenticatedClient().getCart().getCartItems()
+                .stream().map(CartItemMapper::toCartItemResponseDto).toList();
         if(cartItems.isEmpty()) return "redirect:/cart";
 
         if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";

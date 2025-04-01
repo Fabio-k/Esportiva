@@ -23,11 +23,11 @@
       <div class="card">
         <div th:each="item : ${items}" style="display: flex; gap: 20px; align-items:center">
           <div style="width: 60px">
-            <img th:src="${item.product.getImage()}" style="width: 100%">
+            <img th:src="${item.product.image}" style="width: 100%">
           </div>
           <div>
-            <h4 th:text="${item.product.name}"></h4>
-            <p th:text="${item.getTotalPrice()}"></p>
+            <h4 th:text="${item.product.name} + ' - Qtd:' +  ${item.quantity}"></h4>
+            <p th:text="${item.getFormattedTotalPrice()}"></p>
           </div>
 
         </div>
@@ -48,7 +48,7 @@
           </div>
           <div style="display: flex; justify-content: space-between;">
             <p>Total</p>
-            <p>R$ 48,32</p>
+            <p th:text="${cartTotalPrice}"></p>
           </div>
 
           <button class="primaryButton" style="width: 100%" type="submit">Confirmar Compra</button>

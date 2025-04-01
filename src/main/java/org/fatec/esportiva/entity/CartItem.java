@@ -6,12 +6,8 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.fatec.esportiva.mapper.ProductMapper;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 @Entity
 @Table(name = "itens_carrinho")
@@ -36,10 +32,4 @@ public class CartItem implements Serializable {
     @ManyToOne
     @JoinColumn(name = "itc_pro_id")
     private Product product;
-
-    public String getTotalPrice(){
-        BigDecimal totalPrice = product.getPriceWithMargin().multiply(BigDecimal.valueOf(quantity));
-        NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-        return format.format(totalPrice);
-    }
 }
