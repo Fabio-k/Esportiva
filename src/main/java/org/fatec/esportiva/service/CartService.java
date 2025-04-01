@@ -47,7 +47,7 @@ public class CartService {
         return CartItemMapper.toCartItemResponseDto(cartItem);
     }
 
-    public CartResponseDto getCart() throws Exception{
+    public CartResponseDto getCart(){
         Cart cart = clientService.getAuthenticatedClient().getCart();
 
         return CartMapper.toCartResponseDto(cart);

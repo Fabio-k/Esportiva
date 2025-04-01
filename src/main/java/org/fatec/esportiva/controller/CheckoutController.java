@@ -2,17 +2,13 @@ package org.fatec.esportiva.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.entity.Address;
-import org.fatec.esportiva.entity.CartItem;
-import org.fatec.esportiva.entity.Client;
-import org.fatec.esportiva.entity.CreditCard;
+import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.CreditCardDto;
-import org.fatec.esportiva.service.AddressService;
-import org.fatec.esportiva.service.ClientService;
-import org.fatec.esportiva.service.CreditCardService;
-import org.fatec.esportiva.service.TransactionService;
+import org.fatec.esportiva.response.CartResponseDto;
+import org.fatec.esportiva.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +25,7 @@ public class CheckoutController {
     private final AddressService addressService;
     private final CreditCardService creditCardService;
     private final TransactionService transactionService;
+    private final CartService cartService;
 
     @ModelAttribute("checkoutSession")
     public CheckoutSession createSession(){
@@ -62,8 +59,10 @@ public class CheckoutController {
 
     @GetMapping("/billing")
     public String getBilling(Model model, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
-        List <CreditCard> creditCards = clientService.getAuthenticatedClient().getCreditCards();
         if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";
+        Client client =  clientService.getAuthenticatedClient();
+        List <CreditCardDto> creditCards = client.getCreditCards().stream()
+                .map(CreditCardMapper::toCreditCardDto).toList();
         model.addAttribute("creditCard", new CreditCardDto());
         model.addAttribute("creditCards", creditCards);
         return "checkout/billing/index";
@@ -98,7 +97,12 @@ public class CheckoutController {
         Address address = addressService.findById(checkoutSession.getAddressId());
         model.addAttribute("address", address);
 
-        List<CreditCard> creditCards = checkoutSession.getCreditCardIds().stream().map(creditCardService::findCreditCard).toList();
+        List<CreditCardDto> creditCards = checkoutSession.getCreditCardIds().stream()
+                .map(creditCardId -> {
+                    CreditCard creditCard = creditCardService.findCreditCard(creditCardId);
+                    return CreditCardMapper.toCreditCardDto(creditCard);
+                })
+                .toList();
         model.addAttribute("creditCards", creditCards);
 
         model.addAttribute("items", cartItems);

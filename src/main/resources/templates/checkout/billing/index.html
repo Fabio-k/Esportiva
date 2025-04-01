@@ -14,7 +14,7 @@
                 <h1>Escolher Cartão de crédito</h1>
                 <div class="card" th:each="creditCard : ${creditCards}">
                     <input type="checkbox" th:id="'billing_' + ${creditCard.id}" name="selectedCards" th:value="${creditCard.id}">
-                    <label th:for="'billing_' + ${creditCard.id}" th:text="${creditCard.number}">**** 4321</label>
+                    <label th:for="'billing_' + ${creditCard.id}" th:text="${creditCard.numberMask()}"></label>
                 </div>
 
                 <a th:href="@{/checkout/billing/new}" >Usar Novo cartão de crédito</a>

@@ -18,7 +18,8 @@ public class CreditCardService {
 
     public List<CreditCard> createCreditCards(Client client, List<CreditCardDto> creditCardDtos){
         return creditCardDtos.stream().map(c -> {
-            CreditCard creditCard = CreditCardMapper.toCreditCard(client, c);
+            CreditCard creditCard = CreditCardMapper.toCreditCard(c);
+            creditCard.setClient(client);
             creditCard.setId(null);
             return creditCard;
         }).toList();
@@ -35,8 +36,9 @@ public class CreditCardService {
 
                 return creditCard;
             }
-
-            return CreditCardMapper.toCreditCard(client, c);
+            CreditCard creditCard = CreditCardMapper.toCreditCard(c);
+            creditCard.setClient(client);
+            return creditCard;
         }).toList();
     }
 
