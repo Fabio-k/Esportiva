@@ -19,6 +19,7 @@ import lombok.*;
 public class ExchangeVoucher {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ctr_id")
     private Long id;
 
