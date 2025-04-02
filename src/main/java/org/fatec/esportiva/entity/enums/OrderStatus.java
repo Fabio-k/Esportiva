@@ -1,5 +1,6 @@
 package org.fatec.esportiva.entity.enums;
 
+// Ao contrário da entrega 9, alguns dos 'estados' na verdade são transições
 public enum OrderStatus {
     CARRINHO_COMPRAS("Carrinho de compras"),
     EM_PROCESSAMENTO("Em processamento"),
@@ -7,7 +8,9 @@ public enum OrderStatus {
     ENTREGUE("Entregue"),
     EM_TROCA("Em troca"),
     TROCADO("Trocado"),
-    TROCA_FINALIZADA("Troca finalizada");
+    TROCA_FINALIZADA("Troca finalizada"),
+    COMPRA_CANCELADA("Compra cancelada"),
+    TROCA_RECUSADA("Troca recusada");
 
     private final String displayName;
 

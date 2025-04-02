@@ -26,6 +26,10 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ClientRepository clientRepository;
 
+    // Constantes para aumentar a legibilidade
+    private static final BigDecimal ONE = BigDecimal.valueOf(1);
+    private static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
+
     public List<OrderDto> getTransactions(OrderStatus status) {
         return orderRepository.findAllByStatus(status)
                 .stream().map(OrderMapper::toOrderDto).toList();
@@ -36,7 +40,8 @@ public class OrderService {
     }
 
     // Máquina de estados que controla a transições conforme cada aprovação
-    public void changeState(long id, boolean approve) throws Exception {
+    public BigDecimal changeState(long id, boolean approve) throws Exception {
+        BigDecimal voucherValue = BigDecimal.valueOf(0); // Por padrão, o valor que nada aconteceu é zero
         Order order = getNonOptional(orderRepository.findById(id));
         Product product = order.getProduct();
         Client client = order.getTransaction().getClient();
@@ -45,76 +50,76 @@ public class OrderService {
         // Máquina de estados
         if (status == OrderStatus.CARRINHO_COMPRAS) {
             if (approve == true) {
+                // Cartão foi validado antes se chegou aqui
                 order.setStatus(OrderStatus.EM_PROCESSAMENTO);
             } else {
-                // Deletar a transação e reembolsar com cupom de dinheiro
+                // Não faz nada, porque nada foi aprovado ainda
             }
         }
 
-        // O cartão de crédito não aprova, ele só reprova se for inválido o cartão
         else if (status == OrderStatus.EM_PROCESSAMENTO) {
             if (approve == true) {
-                order.setStatus(OrderStatus.EM_TRANSITO);
-
                 // Dá a baixa no estoque aqui e desbloqueia os produtos
+                order.setStatus(OrderStatus.EM_TRANSITO);
                 int quantity = product.getStockQuantity();
                 product.setStockQuantity(quantity - order.getQuantity());
                 product.setBlockedQuantity(quantity - order.getQuantity());
 
             } else {
-                // Deletar a transação e reembolsar com cupom de dinheiro
+                // Reembolsa o cliente
+                order.setStatus(OrderStatus.COMPRA_CANCELADA);
+                voucherValue = calculateVoucherValue(order);
             }
         }
 
         else if (status == OrderStatus.EM_TRANSITO) {
             if (approve == true) {
+                // Vai para a casa do cliente
                 order.setStatus(OrderStatus.ENTREGUE);
             } else {
-                // Deletar a transação e reembolsar com cupom de dinheiro
+                // Produto que estava indo para o cliente, volta para o estoque antes de chegar
+                // na sua casa
+                // Reembolsa o cliente
+                order.setStatus(OrderStatus.COMPRA_CANCELADA);
+                product.setStockQuantity(product.getStockQuantity() + order.getQuantity());
+                voucherValue = calculateVoucherValue(order);
             }
         }
 
         else if (status == OrderStatus.ENTREGUE) {
             if (approve == true) {
+                // Aparece um aviso para o cliente que a troca foi aceita
+                // Pode ser uma lista de produtos que estão nesse estado
                 order.setStatus(OrderStatus.EM_TROCA);
-                // Aparece um aviso para o cliente, pode ser uma lista de produtos que estão
-                // nesse estado
             } else {
-                // Volta para entregue e recusa o pedido???
+                // Não faz nada, porque o cliente só pode solicitar devolução ou fazer nada
             }
 
         }
 
         else if (status == OrderStatus.EM_TROCA) {
             if (approve == true) {
+                // Troca aceita
                 order.setStatus(OrderStatus.TROCADO);
             } else {
-                // Volta para entregue e recusa o pedido???
+                // Troca recusada, não faz nada
+                order.setStatus(OrderStatus.TROCA_RECUSADA);
             }
 
         }
 
         else if (status == OrderStatus.TROCADO) {
-            order.setStatus(OrderStatus.TROCA_FINALIZADA);
-
-            // Repõe o estoque quando a troca é finalizada
-            int quantity = product.getStockQuantity();
-            product.setStockQuantity(quantity + order.getQuantity());
-
-            // Gera cupom para o cliente, reembolsando o produto
-            List<ExchangeVoucher> exchangeVouchers = client.getExchangeVouchers();
-            ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
-            exchangeVoucher.setId(null);
-            // Cálculo do valor do cupom (Valor gasto com esse produto)
-            BigDecimal result = order.getProduct().getProfitMargin().divide(BigDecimal.valueOf(100))
-                    .add(BigDecimal.valueOf(1)); // Margem de lucro em valor decimal
-            result = result.multiply(order.getProduct().getCostValue()); // O custo vezes a margem de lucro para achar o
-                                                                         // preço
-            result = result.multiply(BigDecimal.valueOf(order.getQuantity())); // Preço vezes quantidade para achar o
-                                                                               // valor a ser reembolsado
-            exchangeVoucher.setValue(result);
-            exchangeVoucher.setClient(client);
-            client.setExchangeVouchers(exchangeVouchers);
+            if (approve == true) {
+                // Repõe o estoque quando a troca é finalizada
+                // Reembolsa o cliente
+                order.setStatus(OrderStatus.TROCA_FINALIZADA);
+                product.setStockQuantity(product.getStockQuantity() + order.getQuantity());
+                voucherValue = calculateVoucherValue(order);
+                client = refundVoucher(client, voucherValue);
+            } else {
+                // Produto não chegou na loja, troca recusada novamente
+                order.setStatus(OrderStatus.TROCA_RECUSADA);
+            }
         }
 
         else {
@@ -124,6 +129,37 @@ public class OrderService {
         orderRepository.save(order);
         productRepository.save(product);
         clientRepository.save(client);
+        return voucherValue; // Caso tenha vários produtos, soma tudo e gera um cupom somente
+    }
+
+    // Cálculo do valor do cupom (Valor gasto com esse produto)
+    private BigDecimal calculateVoucherValue(Order order) {
+        // Margem de lucro em porcentagem
+        BigDecimal voucherValue = order.getProduct().getProfitMargin();
+        // Margem de lucro em decimal = (Margem de lucro em porcentagem / 100) + 1
+        voucherValue = voucherValue.divide(HUNDRED).add(ONE);
+        // Preço do produto = Margem de lucro * Custo do produto
+        voucherValue = voucherValue.multiply(order.getProduct().getCostValue());
+        // Valor do cupom = Preço do produto * Quantidade do produto
+        voucherValue = voucherValue.multiply(BigDecimal.valueOf(order.getQuantity()));
+
+        return voucherValue;
+    }
+
+    // Gera cupom para o cliente, reembolsando o produto
+    private Client refundVoucher(Client client, BigDecimal voucherValue) {
+        // Cria um novo cupom
+        ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
+        exchangeVoucher.setId(null);
+        exchangeVoucher.setValue(voucherValue);
+        exchangeVoucher.setClient(client);
+
+        // Adiciona o novo cupom a lista de cupons que o cliente já tinha
+        List<ExchangeVoucher> exchangeVouchers = client.getExchangeVouchers();
+        exchangeVouchers.add(exchangeVoucher);
+        client.setExchangeVouchers(exchangeVouchers);
+
+        return client;
     }
 
     // Remove o "Optional" do tipo que o linter reclama
