@@ -51,3 +51,19 @@ tr:nth-child(even) {
 #filterModal form>* {
     margin-bottom: 10px;
 }
+
+
+/* Estilo inicial do botão */
+.btn-danger {
+    background-color: inherit;
+    color: black;
+    /* Suaviza a transição */
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo quando o mouse está sobre o botão */
+.btn-danger:hover {
+    background-color: darkred;
+    color: yellow;
+    border-radius: 5px;
+}
