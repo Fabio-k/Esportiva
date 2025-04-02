@@ -1,6 +1,5 @@
 package org.fatec.esportiva.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.session.CheckoutSession;
@@ -13,10 +12,12 @@ import org.fatec.esportiva.response.CartResponseDto;
 import org.fatec.esportiva.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/checkout")
@@ -71,8 +72,20 @@ public class CheckoutController {
         Client client =  clientService.getAuthenticatedClient();
         List <CreditCardDto> creditCards = client.getCreditCards().stream()
                 .map(CreditCardMapper::toCreditCardDto).toList();
+        List<CreditCardDto> allCreditCards = new ArrayList<>(creditCards);
+
+        if (checkoutSession.getCreditCardIds() != null) {
+            Set<Long> uniqueCreditCards = creditCards.stream().map(CreditCardDto::getId).collect(Collectors.toSet());
+
+            checkoutSession.getCreditCardIds().stream()
+                    .filter(uniqueCreditCards::add)
+                    .map(creditCardService::findCreditCard)
+                    .map(CreditCardMapper::toCreditCardDto)
+                    .forEach(allCreditCards::add);
+        }
+
         model.addAttribute("creditCard", new CreditCardDto());
-        model.addAttribute("creditCards", creditCards);
+        model.addAttribute("creditCards", allCreditCards);
         return "checkout/billing/index";
     }
 
@@ -81,16 +94,29 @@ public class CheckoutController {
         if(checkoutSession.getAddressId() == null){
             return "redirect:/checkout/address";
         }
-        if (checkoutSession.getCreditCardIds().isEmpty()){
-            return "redirect:/checkout/billing";
-        }
+        model.addAttribute("creditCard", new CreditCardDto());
         return "checkout/billing/new";
     }
 
     @PostMapping("/billing/save")
     public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds){
+        if(creditCardsIds == null) return "redirect:/checkout/billing";
         checkoutSession.setCreditCardIds(creditCardsIds);
         return "redirect:/checkout/new";
+    }
+
+    @PostMapping("/billing/credit_card/save")
+    public String saveCreditCard(@ModelAttribute("creditCard") CreditCardDto dto, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "saveCreditCard", required = false) boolean saveCreditCard){
+        CreditCardDto savedCreditCard;
+
+        if (saveCreditCard){
+            savedCreditCard = creditCardService.createCreditCard(clientService.getAuthenticatedClient(), dto);
+        } else {
+            savedCreditCard = creditCardService.saveCreditCard(dto);
+        }
+
+        checkoutSession.getCreditCardIds().add(savedCreditCard.getId());
+        return "redirect:/checkout/billing";
     }
 
     @GetMapping("/new")
@@ -101,7 +127,7 @@ public class CheckoutController {
 
         if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";
 
-        if (checkoutSession.getCreditCardIds().isEmpty()) return "redirect:/checkout/billing";
+        if (checkoutSession.getCreditCardIds() == null || checkoutSession.getCreditCardIds().isEmpty()) return "redirect:/checkout/billing";
 
         Address address = addressService.findById(checkoutSession.getAddressId());
         model.addAttribute("address", address);

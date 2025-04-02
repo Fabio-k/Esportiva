@@ -68,7 +68,7 @@
   </section>
   <turbo-frame id="products-container">
     <section class="productSection" >
-      <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}">
+      <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}" data-turbo="false">
         <div class="card productCard">
           <div style="width: 100%;">
             <img th:src="${product.image}" style="width: 100%;">

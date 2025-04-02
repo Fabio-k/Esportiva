@@ -42,7 +42,18 @@ public class CreditCardService {
         }).toList();
     }
 
+    public CreditCardDto createCreditCard(Client client, CreditCardDto creditCardDto){
+        CreditCard creditCard = CreditCardMapper.toCreditCard(creditCardDto);
+        creditCard.setClient(client);
+        creditCard.setId(null);
+        return CreditCardMapper.toCreditCardDto(creditCardRepository.save(creditCard));
+    }
+
     public CreditCard findCreditCard(Long id){
         return creditCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cartão de crédito não encontrado"));
+    }
+
+    public CreditCardDto saveCreditCard(CreditCardDto dto){
+        return CreditCardMapper.toCreditCardDto(creditCardRepository.save(CreditCardMapper.toCreditCard(dto)));
     }
 }

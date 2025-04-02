@@ -19,7 +19,7 @@
   <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
   <main>
     <section class="mainPanel">
-      <form action="@{/checkout/new}" method="post">
+      <form th:action="@{/checkout/billing/credit_card/save}" method="post">
       <h3 class="text-xl font-semibold mt-6 mb-4">Cartões de crédito</h3>
         <input type="hidden" th:field="*{creditCard.id}">
 
@@ -58,6 +58,12 @@
           <span class="error" th:if="${#fields.hasErrors('creditCard.brand')}"
                 th:errors="*{creditCard.brand}"></span>
         </div>
+
+        <div style="margin-top: 20px">
+          <input type="checkbox" name="saveCreditCard" id="saveCreditCard">
+          <label th:for="saveCreditCard">Salvar endereço</label>
+        </div>
+
         <button class="primaryButton" style="margin-top: 40px" type="submit">Continuar</button>
       </form>
     </section>
