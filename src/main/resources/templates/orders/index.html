@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <style>
+        main {
+            margin: 0 8rem;
+        }
+        .transaction{
+            width: 100%;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        .inactiveText{
+            color: gray;
+        }
+        .activeText{
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: defaultHeader }"></header>
+    <main>
+        <h3>Compras</h3>
+        <section class="card transaction" th:each="transaction : ${transactions}">
+            <div style="display: flex; align-items: center; gap: 30px;">
+                <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM YYYY')}"></h3>
+                <div style="display: flex; gap: 20px">
+                    <p class="inactiveText">Em processamento</p>
+                    <p class="inactiveText">Em trânsito</p>
+                    <p class="inactiveText">Entregue</p>
+                </div>
+            </div>
+            <div th:each="order : ${transaction.orders}">
+                <div style="display: flex; gap: 20px">
+                    <div style="width: 80px">
+                        <img th:src="${order.product.image}" style="width: 100%">
+                    </div>
+                    <div>
+                        <p th:text="${order.product.name}"></p>
+                        <p th:text="'Quantidade: ' + ${order.quantity}"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

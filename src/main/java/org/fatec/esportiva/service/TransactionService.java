@@ -23,6 +23,12 @@ public class TransactionService {
     private final ProductService productService;
     private final CartService cartService;
 
+    public List<TransactionResponseDto> getTransactions(){
+        Client client = clientService.getAuthenticatedClient();
+        List<Transaction> transactions = transactionRepository.findAllByClientOrderByPurchaseDateDesc(client);
+        return transactions.stream().map(TransactionMapper::toDto).toList();
+    }
+
     @Transactional
     public void generateTransaction(CheckoutSession checkoutSession){
         Address address = addressService.findById(checkoutSession.getAddressId());
