@@ -1,5 +1,6 @@
 package org.fatec.esportiva.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.session.CheckoutSession;
@@ -12,6 +13,7 @@ import org.fatec.esportiva.response.CartResponseDto;
 import org.fatec.esportiva.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -35,6 +37,14 @@ public class CheckoutController {
         return new CheckoutSession();
     }
 
+    private Client client(){
+        return clientService.getAuthenticatedClient();
+    }
+
+    private Boolean isCartEmpty(){
+        return client().getCart().getCartItems().isEmpty();
+    }
+
     @ModelAttribute("cartTotalPrice")
     public String totalPrice(){
         CartResponseDto cart = cartService.getCart();
@@ -42,14 +52,16 @@ public class CheckoutController {
     }
 
     @GetMapping("/address")
-    public String checkoutAddress(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
-        model.addAttribute("addresses", clientService.getAuthenticatedClient().getAddresses());
+    public String checkoutAddress(Model model){
+        if(isCartEmpty()) return "redirect:/cart";
+        model.addAttribute("addresses", client().getAddresses());
         model.addAttribute("address", new AddressDto());
         return "checkout/address/index";
     }
 
     @GetMapping("/address/new")
     public String newChceckoutAddress(Model model){
+        if(isCartEmpty()) return "redirect:/cart";
         if(!model.containsAttribute("address")){
             model.addAttribute("address", new AddressDto());
         }
@@ -57,20 +69,30 @@ public class CheckoutController {
     }
 
     @PostMapping("/address/save")
-    public String saveAddress(@ModelAttribute("addresss")AddressDto address, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
-        Client client = clientService.getAuthenticatedClient();
-        if(address.getId() == null){
-            address = (AddressDto) addressService.updateOrCreateAddress(client, List.of(address));
+    public String saveAddress(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "selectedAddress") Long id){
+        if(isCartEmpty()) return "redirect:/cart";
+        checkoutSession.setAddressId(id);
+        return "redirect:/checkout/billing";
+    }
+
+    @PostMapping("/address/new_address/save")
+    public String saveNewAddress(@Valid @ModelAttribute("address")AddressDto dto, BindingResult result, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model, @RequestParam(name = "saveAddress", required = false) boolean saveAddress){
+        if(isCartEmpty()) return "redirect:/cart";
+        if (result.hasErrors()) {
+            model.addAttribute("address", dto);
+            return "checkout/address/new";
         }
+        AddressDto address = addressService.createAddress(dto, saveAddress, client());
+
         checkoutSession.setAddressId(address.getId());
         return "redirect:/checkout/billing";
     }
 
     @GetMapping("/billing")
     public String getBilling(Model model, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
+        if(isCartEmpty()) return "redirect:/cart";
         if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";
-        Client client =  clientService.getAuthenticatedClient();
-        List <CreditCardDto> creditCards = client.getCreditCards().stream()
+        List <CreditCardDto> creditCards = client().getCreditCards().stream()
                 .map(CreditCardMapper::toCreditCardDto).toList();
         List<CreditCardDto> allCreditCards = new ArrayList<>(creditCards);
 
@@ -91,6 +113,7 @@ public class CheckoutController {
 
     @GetMapping("/billing/new")
     public String newBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,Model model){
+        if(isCartEmpty()) return "redirect:/cart";
         if(checkoutSession.getAddressId() == null){
             return "redirect:/checkout/address";
         }
@@ -100,13 +123,19 @@ public class CheckoutController {
 
     @PostMapping("/billing/save")
     public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds){
+        if(isCartEmpty()) return "redirect:/cart";
         if(creditCardsIds == null) return "redirect:/checkout/billing";
         checkoutSession.setCreditCardIds(creditCardsIds);
         return "redirect:/checkout/new";
     }
 
     @PostMapping("/billing/credit_card/save")
-    public String saveCreditCard(@ModelAttribute("creditCard") CreditCardDto dto, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "saveCreditCard", required = false) boolean saveCreditCard){
+    public String saveCreditCard(@Valid @ModelAttribute("creditCard") CreditCardDto dto, BindingResult result, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "saveCreditCard", required = false) boolean saveCreditCard, Model model){
+        if(isCartEmpty()) return "redirect:/cart";
+        if(result.hasErrors()){
+            model.addAttribute("creditCard", dto);
+            return "checkout/billing/new";
+        }
         CreditCardDto savedCreditCard;
 
         if (saveCreditCard){
@@ -121,7 +150,7 @@ public class CheckoutController {
 
     @GetMapping("/new")
     public String newCheckout(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
-        List<CartItemResponseDto> cartItems = clientService.getAuthenticatedClient().getCart().getCartItems()
+        List<CartItemResponseDto> cartItems = client().getCart().getCartItems()
                 .stream().map(CartItemMapper::toCartItemResponseDto).toList();
         if(cartItems.isEmpty()) return "redirect:/cart";
 

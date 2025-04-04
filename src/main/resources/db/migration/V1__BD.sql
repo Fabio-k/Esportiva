@@ -88,7 +88,9 @@ CREATE TABLE enderecos (
     end_frase_identificacao  VARCHAR(40) NOT NULL,
     end_observacao           VARCHAR(50),
     end_cli_id               INTEGER NOT NULL,
-    end_cep_id               INTEGER NOT NULL
+    end_cep_id               INTEGER NOT NULL,
+    end_temporario BOOLEAN DEFAULT false,
+    end_expira_em TIMESTAMP
 );
 
 

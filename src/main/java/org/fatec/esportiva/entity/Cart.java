@@ -23,12 +23,12 @@ public class Cart {
     private Long id;
 
     @OneToMany(mappedBy = "cart", orphanRemoval = true)
-    List<CartItem> cartItems = new ArrayList<>();
+    private List<CartItem> cartItems = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "car_cli_id")
-    Client client;
+    private Client client;
 
     @Column(name = "car_criado_em")
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 }

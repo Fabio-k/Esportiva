@@ -9,6 +9,7 @@ import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,6 +47,12 @@ public class Address implements Serializable {
     @NotNull
     @Column(name = "end_tipo_logradouro")
     private StreetType streetType;
+
+    @Column(name = "end_temporario")
+    private Boolean temporary;
+
+    @Column(name = "end_expira_em")
+    private LocalDateTime expiredAt;
 
     @ManyToOne
     @JoinColumn(name = "end_cep_id")

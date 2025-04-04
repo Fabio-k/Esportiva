@@ -10,10 +10,10 @@
   <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
   <main>
     <section class="mainPanel">
-        <form th:action="@{/checkout/address/save}" method="post" th:object="${address}">
+        <form th:action="@{/checkout/address/save}" method="post">
             <h1>Escolher Endereço</h1>
             <div class="card" th:each="address : ${addresses}">
-                <input type="radio" th:field="*{id}" th:id="'address_' +  ${address.id}" name="address" th:value="${address.id}">
+                <input type="radio" th:id="'address_' +  ${address.id}" name="selectedAddress" th:value="${address.id}">
                 <h1 th:text="${address.getAddressIdentificationPhrase()}"></h1>
                 <label th:for="'address_' +  ${address.id}" th:text="${address.cep.street} + ',' + ${address.cep.cep}"></label>
             </div>
