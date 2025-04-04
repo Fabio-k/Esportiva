@@ -55,7 +55,7 @@ public class ProductService {
     public CartItem updateQuantity(Long id, Short quantity) {
         if(quantity < 0) throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
         Product product = findById(id);
-        Integer availableStock = product.getStockQuantity() - product.getBlockedQuantity();
+        int availableStock = product.getStockQuantity() - product.getBlockedQuantity();
         if(availableStock < quantity){
             throw new IllegalArgumentException("Estoque insuficiente");
         }
