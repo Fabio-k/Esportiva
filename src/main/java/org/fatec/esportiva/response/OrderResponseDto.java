@@ -15,8 +15,4 @@ public class OrderResponseDto {
     private ProductResponseDto product;
     private Integer quantity;
     private OrderStatus status;
-
-    public Boolean isInProcessing(){
-        return status == OrderStatus.EM_PROCESSAMENTO;
-    }
 }

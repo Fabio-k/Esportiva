@@ -32,6 +32,10 @@ public class Transaction {
     @JoinColumn(name = "tra_cli_id")
     private Client client;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tra_status")
+    private OrderStatus status;
+
     @Builder.Default
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();

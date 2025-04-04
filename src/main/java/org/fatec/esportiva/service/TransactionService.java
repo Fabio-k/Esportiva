@@ -3,6 +3,7 @@ package org.fatec.esportiva.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.*;
+import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.TransactionMapper;
@@ -37,6 +38,7 @@ public class TransactionService {
         Client client = clientService.getAuthenticatedClient();
         Transaction transaction = Transaction.builder()
                 .client(client)
+                .status(OrderStatus.EM_PROCESSAMENTO)
                 .purchaseDate(LocalDate.now())
                 .build();
 
@@ -45,6 +47,7 @@ public class TransactionService {
                 .map(cartItem -> {
                     Order order = CartItemMapper.toOrder(cartItem);
                     order.setTransaction(transaction);
+                    order.setStatus(OrderStatus.EM_PROCESSAMENTO);
                     return order;
                 }).toList();
 

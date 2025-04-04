@@ -9,6 +9,7 @@ public class TransactionMapper {
     public TransactionResponseDto toDto(Transaction transaction){
         return TransactionResponseDto.builder()
                 .id(transaction.getId())
+                .status(transaction.getStatus())
                 .purchaseDate(transaction.getPurchaseDate())
                 .orders(transaction.getOrders().stream().map(OrderMapper::toDto).toList())
                 .build();

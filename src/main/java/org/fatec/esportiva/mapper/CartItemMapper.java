@@ -15,7 +15,6 @@ public class CartItemMapper {
     public Order toOrder(CartItem cartItem){
         return Order.builder()
                 .product(cartItem.getProduct())
-                .status(OrderStatus.EM_PROCESSAMENTO)
                 .quantity(cartItem.getQuantity())
                 .build();
     }
