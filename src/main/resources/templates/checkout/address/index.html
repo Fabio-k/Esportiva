@@ -7,21 +7,15 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
 </head>
 <body>
-  <header th:replace="fragments/header.html :: simpleHeader"></header>
+  <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
   <main>
     <section class="mainPanel">
         <form th:action="@{/checkout/address/save}" method="post">
             <h1>Escolher Endereço</h1>
-            <div class="card">
-                <input type="radio" id="address_1" name="address" value="address_1">
-                <h1>Apartamento</h1>
-                <label for="address_1">Rua x, cep: 088837</label>
-            </div>
-
-            <div class="card">
-                <input type="radio" id="address_2" name="address" value="address_2">
-                <h1>Casa</h1>
-                <label for="address_2">Rua y, cep: 9998888</label>
+            <div class="card" th:each="address : ${addresses}">
+                <input type="radio" th:id="'address_' +  ${address.id}" name="selectedAddress" th:value="${address.id}">
+                <h1 th:text="${address.getAddressIdentificationPhrase()}"></h1>
+                <label th:for="'address_' +  ${address.id}" th:text="${address.cep.street} + ',' + ${address.cep.cep}"></label>
             </div>
 
           <a th:href="@{/checkout/address/new}" >Usar Novo Endereço</a>
@@ -29,7 +23,7 @@
         </form>
     </section>
     <section>
-        <div th:replace="fragments/purchaseSummary :: summary"></div>
+        <div th:replace="~{fragments/purchaseSummary :: summary}"></div>
     </section>
   </main>
 </body>

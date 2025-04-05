@@ -12,6 +12,15 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class AddressMapper {
+    public Address toAddress(AddressDto addressDto){
+        return Address.builder()
+                .addressIdentificationPhrase(addressDto.getAddressIdentificationPhrase())
+                .number(addressDto.getNumber())
+                .streetType(addressDto.getStreetType())
+                .residencyType(addressDto.getResidencyType())
+                .observation(addressDto.getObservation())
+                .build();
+    }
 
     public Address toAddress(Client client, AddressDto addressDto, Cep cep) {
         return Address.builder()

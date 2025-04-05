@@ -36,4 +36,9 @@ public class CreditCardDto {
             this.number = number.replaceAll("\\D", "");
         }
     }
+
+    public String numberMask(){
+        if(number.length() < 12) return "";
+        return "**** " + number.substring(number.length() - 4);
+    }
 }

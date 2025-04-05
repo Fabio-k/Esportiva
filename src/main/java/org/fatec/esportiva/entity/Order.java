@@ -15,6 +15,7 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ped_id")
     private Long id;
 
@@ -29,7 +30,7 @@ public class Order {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "ped_tra_id")
-    private Transactions transaction;
+    private Transaction transaction;
 
     @ManyToOne
     @JoinColumn(name = "ped_pro_id")

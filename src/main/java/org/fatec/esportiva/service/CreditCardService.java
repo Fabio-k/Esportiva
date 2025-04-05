@@ -1,5 +1,6 @@
 package org.fatec.esportiva.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.CreditCard;
@@ -17,7 +18,8 @@ public class CreditCardService {
 
     public List<CreditCard> createCreditCards(Client client, List<CreditCardDto> creditCardDtos){
         return creditCardDtos.stream().map(c -> {
-            CreditCard creditCard = CreditCardMapper.toCreditCard(client, c);
+            CreditCard creditCard = CreditCardMapper.toCreditCard(c);
+            creditCard.setClient(client);
             creditCard.setId(null);
             return creditCard;
         }).toList();
@@ -26,7 +28,7 @@ public class CreditCardService {
     public List<CreditCard> updateOrCreateCreditCards(Client client, List<CreditCardDto> creditCardDtos){
         return creditCardDtos.stream().map(c -> {
             if(c.getId() != null){
-                CreditCard creditCard = creditCardRepository.findById(c.getId()).orElseThrow(() -> new RuntimeException("Cartão de crédito não encontrado"));
+                CreditCard creditCard = findCreditCard(c.getId());
                 creditCard.setName(c.getName());
                 creditCard.setNumber(c.getNumber());
                 creditCard.setBrand(c.getBrand());
@@ -34,8 +36,24 @@ public class CreditCardService {
 
                 return creditCard;
             }
-
-            return CreditCardMapper.toCreditCard(client, c);
+            CreditCard creditCard = CreditCardMapper.toCreditCard(c);
+            creditCard.setClient(client);
+            return creditCard;
         }).toList();
+    }
+
+    public CreditCardDto createCreditCard(Client client, CreditCardDto creditCardDto){
+        CreditCard creditCard = CreditCardMapper.toCreditCard(creditCardDto);
+        creditCard.setClient(client);
+        creditCard.setId(null);
+        return CreditCardMapper.toCreditCardDto(creditCardRepository.save(creditCard));
+    }
+
+    public CreditCard findCreditCard(Long id){
+        return creditCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cartão de crédito não encontrado"));
+    }
+
+    public CreditCardDto saveCreditCard(CreditCardDto dto){
+        return CreditCardMapper.toCreditCardDto(creditCardRepository.save(CreditCardMapper.toCreditCard(dto)));
     }
 }

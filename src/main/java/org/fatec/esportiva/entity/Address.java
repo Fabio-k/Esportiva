@@ -8,6 +8,8 @@ import lombok.Builder.Default;
 import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "enderecos")
-public class Address {
+public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +47,12 @@ public class Address {
     @NotNull
     @Column(name = "end_tipo_logradouro")
     private StreetType streetType;
+
+    @Column(name = "end_temporario")
+    private Boolean temporary;
+
+    @Column(name = "end_expira_em")
+    private LocalDateTime expiredAt;
 
     @ManyToOne
     @JoinColumn(name = "end_cep_id")

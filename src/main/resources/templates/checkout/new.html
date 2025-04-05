@@ -12,32 +12,43 @@
   </style>
 </head>
 <body>
-<header th:replace="fragments/header.html :: simpleHeader"></header>
+<header th:replace="~{fragments/header.html :: simpleHeader}"></header>
   <main>
     <section class="mainPanel">
       <div class="card">
-        <h1>Apartamento</h1>
-        <p>Rua x, cep: 088837</p>
+        <h1 th:text="${address.getAddressIdentificationPhrase()}"></h1>
+        <p th:text="${address.cep.street} + ',' + 'cep: ' + ${address.cep.cep}"></p>
         <a th:href="@{/checkout/address}">Mudar endereço</a>
       </div>
       <div class="card">
-        <p>**** 3214</p>
+        <div th:each="item : ${items}" style="display: flex; gap: 20px; align-items:center">
+          <div style="width: 60px">
+            <img th:src="${item.product.image}" style="width: 100%">
+          </div>
+          <div>
+            <h4 th:text="${item.product.name} + ' - Qtd:' +  ${item.quantity}"></h4>
+            <p th:text="${item.getFormattedTotalPrice()}"></p>
+          </div>
+
+        </div>
+      </div>
+      <div class="card">
+        <p th:each="creditCard : ${creditCards}" th:text="${creditCard.numberMask}"></p>
         <a th:href="@{/checkout/billing}">Mudar cartão de crédito</a>
       </div>
     </section>
     <section>
       <div class="summaryDiv">
-        <form>
-          <h1>Resumo da compra</h1><form>
+        <form th:action="@{/checkout/save}" method="post">
+          <h1>Resumo da compra</h1>
           <label th:for="discountCupom">Cupom de desconto</label>
           <div style="display: flex;">
             <input th:type="text" id="discountCupom">
             <button type="submit">Aplicar</button>
           </div>
-        </form>
           <div style="display: flex; justify-content: space-between;">
             <p>Total</p>
-            <p>R$ 48,32</p>
+            <p th:text="${cartTotalPrice}"></p>
           </div>
 
           <button class="primaryButton" style="width: 100%" type="submit">Confirmar Compra</button>

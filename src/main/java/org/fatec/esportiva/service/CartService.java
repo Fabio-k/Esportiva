@@ -26,6 +26,7 @@ public class CartService {
     private final ClientService clientService;
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
+    private final CartMapper cartMapper;
 
     @Value("${cart.product.timeoutInMinutes}")
     private int productTimeoutInMinutes;
@@ -47,10 +48,10 @@ public class CartService {
         return CartItemMapper.toCartItemResponseDto(cartItem);
     }
 
-    public CartResponseDto getCart() throws Exception{
+    public CartResponseDto getCart(){
         Cart cart = clientService.getAuthenticatedClient().getCart();
 
-        return CartMapper.toCartResponseDto(cart);
+        return cartMapper.toCartResponseDto(cart);
     }
 
     @Transactional
@@ -67,6 +68,12 @@ public class CartService {
             return;
         }
         cartItemRepository.save(cartItem);
+    }
+
+    public void cleanCart(){
+        Cart cart = clientService.getAuthenticatedClient().getCart();
+        cart.getCartItems().clear();
+        cartRepository.save(cart);
     }
 
     private void updateCartCreatedAt(Cart cart){

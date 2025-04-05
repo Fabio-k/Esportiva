@@ -23,7 +23,7 @@ CREATE TABLE cartoes_de_credito (
     car_nome_impresso     VARCHAR(30) NOT NULL,
     car_codigo_seguranca  VARCHAR(4) NOT NULL,
     car_preferencial      BOOLEAN NOT NULL,
-    car_cli_id            INTEGER NOT NULL
+    car_cli_id            INTEGER
 );
 
 
@@ -88,7 +88,9 @@ CREATE TABLE enderecos (
     end_frase_identificacao  VARCHAR(40) NOT NULL,
     end_observacao           VARCHAR(50),
     end_cli_id               INTEGER NOT NULL,
-    end_cep_id               INTEGER NOT NULL
+    end_cep_id               INTEGER NOT NULL,
+    end_temporario BOOLEAN DEFAULT false,
+    end_expira_em TIMESTAMP
 );
 
 
@@ -148,6 +150,7 @@ CREATE TABLE produtos (
 CREATE TABLE transacoes (
     tra_id           SERIAL PRIMARY KEY,
     tra_data_compra  DATE NOT NULL,
+    tra_status       VARCHAR(20) NOT NULL,
     tra_cli_id       INTEGER NOT NULL
 );
 
