@@ -27,7 +27,8 @@ public class OrderService {
     private final ClientRepository clientRepository;
 
     // Constantes para aumentar a legibilidade
-    private static final BigDecimal ONE = BigDecimal.valueOf(1);
+    private static final BigDecimal ZERO = BigDecimal.ZERO;
+    private static final BigDecimal ONE = BigDecimal.ONE;
     private static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
 
     public List<OrderDto> getTransactions(OrderStatus status) {
@@ -41,7 +42,7 @@ public class OrderService {
 
     // Máquina de estados que controla a transições conforme cada aprovação
     public BigDecimal changeState(long id, boolean approve) throws Exception {
-        BigDecimal voucherValue = BigDecimal.valueOf(0); // Por padrão, o valor que nada aconteceu é zero
+        BigDecimal voucherValue = ZERO; // Por padrão, o valor que nada aconteceu é zero
         Order order = getNonOptional(orderRepository.findById(id));
         Product product = order.getProduct();
         Client client = order.getTransaction().getClient();
