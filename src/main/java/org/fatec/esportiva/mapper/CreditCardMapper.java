@@ -7,11 +7,10 @@ import org.fatec.esportiva.request.CreditCardDto;
 
 @UtilityClass
 public class CreditCardMapper {
-    public CreditCard toCreditCard(Client client, CreditCardDto creditCardDto){
+    public CreditCard toCreditCard(CreditCardDto creditCardDto){
         return CreditCard.builder()
                 .name(creditCardDto.getName())
                 .securityCode(creditCardDto.getSecurityCode())
-                .client(client)
                 .number(creditCardDto.getNumber())
                 .brand(creditCardDto.getBrand())
                 .build();

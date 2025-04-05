@@ -9,11 +9,12 @@ import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.repository.AddressCategoryRepository;
 import org.fatec.esportiva.repository.AddressRepository;
 import org.fatec.esportiva.request.AddressDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -23,12 +24,28 @@ public class AddressService {
     private final CepService cepService;
     private final AddressCategoryRepository addressCategoryRepository;
 
+    @Value("${creditCard.timeoutInMinutes}")
+    private Long timeoutInMinutes;
+
     public Address save(Address address) {
         return addressRepository.save(address);
     }
 
-    public Optional<Address> findById(Long id) {
-        return addressRepository.findById(id);
+    public Address findById(Long id) {
+        return addressRepository.findById(id).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+    }
+
+    public AddressDto createAddress(AddressDto addressDto, Boolean saveAddress, Client client){
+        Address address = AddressMapper.toAddress(addressDto);
+        Cep cep = cepService.findOrCreateByCep(addressDto);
+        Set<AddressCategory> addressCategories = addressCategoryRepository
+                .findByAddressTypeIn(addressDto.getTypes());
+        address.setClient(client);
+        address.setCep(cep);
+        address.setAddressCategories(addressCategories);
+        address.setTemporary(!saveAddress);
+        if(!saveAddress) address.setExpiredAt(LocalDateTime.now().plusMinutes(timeoutInMinutes));
+        return AddressMapper.toAddressDto(addressRepository.save(address));
     }
 
     public List<Address> createAddresses(Client client, List<AddressDto> addressDtoList) {
@@ -52,8 +69,7 @@ public class AddressService {
             Set<AddressCategory> addressCategories = addressCategoryRepository
                     .findByAddressTypeIn(addressDto.getTypes());
             if (addressDto.getId() != null) {
-                Address address = findById(addressDto.getId())
-                        .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+                Address address = findById(addressDto.getId());
 
                 address.setAddressIdentificationPhrase(addressDto.getAddressIdentificationPhrase());
                 address.setCep(cep);

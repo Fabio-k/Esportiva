@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <script th:src="@{/js/turbo.umd.js}"></script>
   <style>
     main{
       display: grid;
@@ -47,7 +48,7 @@
       <a th:href="@{/products/search}">Limpar filtros</a>
       <p th:if="${param.category != null}" th:text="'Categoria: ' + ${param.category}"></p>
       <p>Preço</p>
-      <form action="" method="get">
+      <form th:action="@{/products/search/results}" method="get" data-turbo-frame="products-container">
         <input th:if="${param.category != null}" type="hidden" name="category" th:value="${param.category}">
         <input type="hidden" name="name" th:value="${param.name}">
         <div style="display: flex; justify-content: space-around">
@@ -65,17 +66,19 @@
 
     </div>
   </section>
-  <section class="productSection" >
-    <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}">
-      <div class="card productCard">
-        <div style="width: 100%;">
-          <img th:src="${product.image}" style="width: 100%;">
+  <turbo-frame id="products-container">
+    <section class="productSection" >
+      <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}" data-turbo="false">
+        <div class="card productCard">
+          <div style="width: 100%;">
+            <img th:src="${product.image}" style="width: 100%;">
+          </div>
+          <p th:text="${product.name}" style="min-height: 46px;"></p>
+          <h3 th:text="${product.getFormattedPrice()}" style="font-weight: normal"></h3>
         </div>
-        <p th:text="${product.name}" style="min-height: 46px;"></p>
-        <h3 th:text="${product.getFormattedPrice()}" style="font-weight: normal"></h3>
-      </div>
-    </a>
-  </section>
+      </a>
+    </section>
+  </turbo-frame>
 </main>
 <script>
   document.getElementById("maxValue").addEventListener('input', (e) => {

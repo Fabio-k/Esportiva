@@ -19,10 +19,11 @@
     </style>
 </head>
 <body>
-  <header th:replace="fragments/header.html :: simpleHeader"></header>
+  <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
   <main>
     <section class="mainPanel">
-      <form th:action="@{/checkout/address/save}" th:object="${address}" method="post">
+      <form th:action="@{/checkout/address/new_address/save}" th:object="${address}" method="post">
+        <input type="hidden" name="types" value="ENTREGA">
         <h1>Novo Endereço</h1>
         <div class="mb-4">
           <label th:for="addressIdentificationPhrase" class="block font-medium">Frase de
@@ -115,7 +116,7 @@
       </form>
     </section>
     <section>
-      <div th:replace="fragments/purchaseSummary :: summary"></div>
+      <div th:replace="~{fragments/purchaseSummary :: summary}"></div>
     </section>
   </main>
 

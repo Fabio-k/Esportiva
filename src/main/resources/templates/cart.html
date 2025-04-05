@@ -64,9 +64,9 @@
   <header th:replace="~{fragments/header.html :: defaultHeader}"></header>
     <main class="cartMain">
         <div id="itemList" class="card">
-            <div style="display: flex; flex-direction:column; align-items: center">
-                <h1 th:attr="hidden=${cartItems.size() > 0}">Carrinho vazio</h1>
-                <a th:href="@{/}">Conferir Produtos</a>
+            <div  style="display: flex; flex-direction:column; align-items: center" th:if="${cartItems.size() <= 0}">
+                <h1 >Carrinho vazio</h1>
+                <a th:href="@{/}" data-turbo="false">Conferir Produtos</a>
             </div>
 
             <div class="itemCard" th:each="item : ${cartItems}">

@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.Builder.Default;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,11 +70,6 @@ public class Product {
     @JoinColumn(name = "pro_grp_id")
     private PricingGroup pricingGroup;
 
-    // CascadeType.PERSIST: Se você salvar (persistir) uma entidade principal, as
-    // entidades relacionadas também serão salvas automaticamente
-
-    // CascadeType.MERGE: Se você atualizar (merge) uma entidade principal, as
-    // entidades relacionadas também serão atualizadas automaticamente
     @Default
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -81,4 +77,9 @@ public class Product {
     })
     @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "per_pro_id"), inverseJoinColumns = @JoinColumn(name = "per_cat_id"))
     private List<ProductCategory> categories = new ArrayList<>();
+
+    public BigDecimal getPriceWithMargin(){
+        BigDecimal marginOfProfit = BigDecimal.ONE.add(BigDecimal.valueOf(pricingGroup.getProfitMargin()));
+        return costValue.multiply(marginOfProfit).setScale(2, RoundingMode.HALF_UP);
+    }
 }
