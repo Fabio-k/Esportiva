@@ -28,7 +28,7 @@ public class LogListener {
 
     // Detecta qualquer commit depois de acontecer do tipo INSERT
     @PostPersist
-    public void beforeInsert(Object entity) throws Exception {
+    public void afterInsert(Object entity) throws Exception {
         Log log = new Log();
         log.setUser(authService.getAuthenticatedUser().getUsername());
         log.setTimestamp(LocalDateTime.now());
@@ -40,7 +40,7 @@ public class LogListener {
 
     // Detecta qualquer commit depois de acontecer do tipo UPDATE
     @PostUpdate
-    public void beforeUpdate(Object entity) throws Exception {
+    public void afterUpdate(Object entity) throws Exception {
         Log log = new Log();
         log.setUser(authService.getAuthenticatedUser().getUsername());
         log.setTimestamp(LocalDateTime.now());
