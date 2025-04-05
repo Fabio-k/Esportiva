@@ -3,14 +3,17 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.Builder.Default;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.fatec.esportiva.listeners.LogListener;
+
 @Entity
+@EntityListeners(LogListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -28,15 +31,28 @@ public class Transaction {
     @Column(name = "tra_data_compra")
     private LocalDate purchaseDate;
 
-    @ManyToOne
-    @JoinColumn(name = "tra_cli_id")
-    private Client client;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "tra_status")
     private OrderStatus status;
 
-    @Builder.Default
+    @ManyToOne
+    @JoinColumn(name = "tra_cli_id")
+    private Client client;
+
+    @Default
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return """
+                Transação\n
+                ID: %s\n
+                Status: %s\n
+                Data da compra: %s
+                """.formatted(
+                id,
+                status.getDisplayName(),
+                purchaseDate.toString());
+    }
 }

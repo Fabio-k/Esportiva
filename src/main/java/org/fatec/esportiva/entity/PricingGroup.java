@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.Builder.Default;
+import java.math.BigDecimal;
 
 @Entity
 @AllArgsConstructor
@@ -26,8 +27,8 @@ public class PricingGroup {
     private String name;
 
     @NotNull
-    @Column(name = "grp_margem_lucro")
-    private float profitMargin;
+    @Column(name = "grp_margem_lucro", precision = 10, scale = 2)
+    private BigDecimal profitMargin;
 
     @Default
     @Column

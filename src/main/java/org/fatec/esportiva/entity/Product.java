@@ -7,13 +7,15 @@ import lombok.Builder.Default;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.fatec.esportiva.entity.enums.ProductStatus;
+import org.fatec.esportiva.listeners.LogListener;
 
 @Entity
+@EntityListeners(LogListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -32,7 +34,7 @@ public class Product {
 
     @NotNull
     @Column(name = "pro_data_entrada")
-    private Date entryDate;
+    private LocalDate entryDate;
 
     @NotNull
     @Column(name = "pro_quantidade_estoque")
@@ -43,8 +45,8 @@ public class Product {
     private int blockedQuantity;
 
     @NotNull
-    @Column(name = "pro_margem_lucro")
-    private float profitMargin;
+    @Column(name = "pro_margem_lucro", precision = 10, scale = 2)
+    private BigDecimal profitMargin;
 
     @NotNull
     @Column(name = "pro_valor_custo", precision = 10, scale = 2)
@@ -70,6 +72,11 @@ public class Product {
     @JoinColumn(name = "pro_grp_id")
     private PricingGroup pricingGroup;
 
+    // CascadeType.PERSIST: Se você salvar (persistir) uma entidade principal, as
+    // entidades relacionadas também serão salvas automaticamente
+
+    // CascadeType.MERGE: Se você atualizar (merge) uma entidade principal, as
+    // entidades relacionadas também serão atualizadas automaticamente
     @Default
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -81,5 +88,32 @@ public class Product {
     public BigDecimal getPriceWithMargin(){
         BigDecimal marginOfProfit = BigDecimal.ONE.add(BigDecimal.valueOf(pricingGroup.getProfitMargin()));
         return costValue.multiply(marginOfProfit).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public String toString() {
+        return """
+                Produto\n
+                Nome: %s\n
+                Data de cadastro: %s\n
+                Qtd estoque: %s\n
+                Qtd bloqueada: %s\n
+                Margem de lucro: %s\n
+                Custo: %s\n
+                Status: %s\n
+                Justificativa de inativação: %s\n
+                Descrição: %s\n
+                Imagem: %s
+                """.formatted(
+                name,
+                entryDate.toString(),
+                stockQuantity,
+                blockedQuantity,
+                profitMargin,
+                costValue,
+                status.getDisplayName(),
+                inactivationJustification,
+                description,
+                image);
     }
 }

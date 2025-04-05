@@ -6,34 +6,34 @@
   <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
   <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
   <link rel="stylesheet" type="text/css" th:href="@{/css/readonly.css}">
-    <style>
-        main {
+  <style>
+    main {
       max-width: 750px;
       margin: auto;
       margin-bottom: 10px;
     }
 
     .primaryButton {
-        background-color: blue;
-        padding: 10px;
-        border-radius: 10px;
-        color: white;
-        width: fit-content;
-        text-decoration: none;
-        margin-bottom: 10px;
-      }
+      background-color: blue;
+      padding: 10px;
+      border-radius: 10px;
+      color: white;
+      width: fit-content;
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
 
-      .formPannel{
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 1px;
-        padding: 20px;
-      }
-    </style>
+    .formPannel {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 1px;
+      padding: 20px;
+    }
+  </style>
 </head>
 
 <body>
-  <header th:replace="~{fragments/header.html :: defaultHeader}"></header>
+  <header th:replace="~{fragments/header_basic.html :: header}"></header>
   <main th:fragment="content">
     <div class="mb-5">
       <a th:href="@{/admin/clients}" class="primaryButton">Voltar</a>

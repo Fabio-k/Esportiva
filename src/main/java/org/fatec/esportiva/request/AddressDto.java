@@ -25,7 +25,7 @@ public class AddressDto {
     private String addressIdentificationPhrase;
 
     @NotBlank(message = "CEP não pode ficar em branco")
-    @Pattern(regexp = "^[0-9]{8}$", message = "O CEP deve estar em um formato válido: XXXXXXXX")
+    @Pattern(regexp = "^[0-9]{8}$", message = "O CEP somente aceita 8 dígitos")
     private String cep;
 
     @NotNull(message = "Tipo de residência não pode ficar em branco")
@@ -59,7 +59,7 @@ public class AddressDto {
     @NotEmpty(message = "Endereço deve pertencer ao menos a um tipo de residência")
     private HashSet<AddressType> types = new HashSet<>();
 
-    public void setCep(String cep){
+    public void setCep(String cep) {
         if (cep != null) {
             this.cep = cep.replaceAll("\\D", ""); // Remove tudo que não é número
         }

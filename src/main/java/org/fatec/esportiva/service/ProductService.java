@@ -14,6 +14,7 @@ import org.fatec.esportiva.request.ProductDto;
 import org.fatec.esportiva.response.ProductResponseDto;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,9 +22,19 @@ import lombok.RequiredArgsConstructor;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public List<ProductDto> getProducts(String name) {
+    @Transactional
+    public Product save(ProductDto productDto) {
+        Product product = ProductMapper.toProduct(productDto);
+        product.setStatus(ProductStatus.ATIVO);
+        return productRepository.save(product);
+    }
+
+    // costValue é tratado como int porque ele é usado como filtro. Para o usuário,
+    // basta usar valores inteiros
+    public List<ProductDto> getProducts(String name, ProductStatus inactivationCategory, int costValue,
+            String category) {
         List<ProductDto> products = productRepository
-                .findWithFilter(name, null, null, null).stream()
+                .findWithFilter(name, inactivationCategory, costValue, category).stream()
                 .map(ProductMapper::toProductDto).toList();
         return products;
     }
@@ -33,12 +44,15 @@ public class ProductService {
                 .stream().map(ProductMapper::toProductResponseDto).toList();
     }
 
-    public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category){
+    public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category) {
         return productRepository
                 .findWithFilter(name, ProductStatus.ATIVO, maxValue, category).stream()
                 .map(ProductMapper::toProductResponseDto).toList();
     }
 
+    public Optional<Product> findProduct2(Long id) {
+        return productRepository.findById(id);
+    }
 
     public ProductResponseDto findProduct(Long id) {
         return ProductMapper.toProductResponseDto(findById(id));
@@ -88,4 +102,9 @@ public class ProductService {
             productRepository.save(product1);
         });
     }
+    public void deleteClient(Optional<Product> product) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
+    }
+
 }

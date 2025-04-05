@@ -6,6 +6,7 @@ import lombok.*;
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.PhoneType;
 import org.fatec.esportiva.entity.enums.UserStatus;
+import org.fatec.esportiva.listeners.LogListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@EntityListeners(LogListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -68,8 +70,8 @@ public class Client implements UserDetails {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CreditCard> creditCards;
 
-    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Cart cart = new Cart();
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ExchangeVoucher> exchangeVouchers;
 
     @NotNull
     @Column(name = "cli_endereco_preferencial")
@@ -101,5 +103,28 @@ public class Client implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.status == UserStatus.ATIVO;
+    }
+
+    @Override
+    public String toString() {
+        return """
+                Cliente\n
+                Nome: %s\n
+                E-mail: %s\n
+                CPF: %s\n
+                Status: %s\n
+                Gênero: %s\n
+                Data de nascimento: %s\n
+                Telefone: %s\n
+                Tipo de telefone: %s
+                """.formatted(
+                name,
+                email,
+                cpf,
+                status.getDisplayName(),
+                gender.getDisplayName(),
+                dateBirth.toString(),
+                telephone,
+                telephoneType.getDisplayName());
     }
 }

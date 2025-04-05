@@ -20,6 +20,7 @@ public class ClientService {
     private final AddressService addressService;
     private final ClientRepository clientRepository;
     private final CreditCardService creditCardService;
+    private final ExchangeVoucherService exchangeVoucherService;
     private final AuthService authService;
 
     @Transactional
@@ -46,12 +47,17 @@ public class ClientService {
         List<Address> updatedAddresses = addressService.updateOrCreateAddress(existingUser, userDto.getAddresses());
         List<CreditCard> updatedCreditCards = creditCardService.updateOrCreateCreditCards(existingUser,
                 userDto.getCreditCards());
+        List<ExchangeVoucher> updatedExchangeVoucher = exchangeVoucherService
+                .updateOrCreateExchangeVoucher(existingUser, userDto.getExchangeVoucherDtos());
 
         existingUser.getAddresses().clear();
         existingUser.getAddresses().addAll(updatedAddresses);
 
         existingUser.getCreditCards().clear();
         existingUser.getCreditCards().addAll(updatedCreditCards);
+
+        existingUser.getExchangeVouchers().clear();
+        existingUser.getExchangeVouchers().addAll(updatedExchangeVoucher);
 
         return clientRepository.save(existingUser);
     }
