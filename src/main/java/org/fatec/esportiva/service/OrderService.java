@@ -49,16 +49,7 @@ public class OrderService {
         OrderStatus status = order.getStatus();
 
         // Máquina de estados
-        if (status == OrderStatus.CARRINHO_COMPRAS) {
-            if (approve == true) {
-                // Cartão foi validado antes se chegou aqui
-                order.setStatus(OrderStatus.EM_PROCESSAMENTO);
-            } else {
-                // Não faz nada, porque nada foi aprovado ainda
-            }
-        }
-
-        else if (status == OrderStatus.EM_PROCESSAMENTO) {
+        if  (status == OrderStatus.EM_PROCESSAMENTO) {
             if (approve == true) {
                 // Dá a baixa no estoque aqui e desbloqueia os produtos
                 order.setStatus(OrderStatus.EM_TRANSITO);

@@ -31,9 +31,15 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final ClientRepository clientRepository;
     private final OrderService orderService;
+    private final CartService cartService;
 
     // Constante para melhorar legibilidade
     private static final BigDecimal ZERO = BigDecimal.valueOf(0);
+
+    public List<TransactionResponseDto> getTransactions() {
+        return transactionRepository.findAllByClientOrderByPurchaseDateDesc(clientService.getAuthenticatedClient())
+                .stream().map(TransactionMapper::toTransactionResponseDto).toList();
+    }
 
     public List<TransactionDto> getTransactions(OrderStatus status) {
         return transactionRepository.findAllByStatus(status)
@@ -42,6 +48,10 @@ public class TransactionService {
 
     public Optional<Transaction> findById(Long id) {
         return transactionRepository.findById(id);
+    }
+
+    public Boolean isCardValid(String number){
+        return !number.equals("5115199853098847");
     }
 
     @Transactional
@@ -76,18 +86,8 @@ public class TransactionService {
         Transaction transaction = getNonOptional(transactionRepository.findById(id));
         OrderStatus status = transaction.getStatus();
 
-        // Máquina de estados
-        if (status == OrderStatus.CARRINHO_COMPRAS) {
-            if (approve == true) {
-                // Cartão foi validado antes se chegou aqui
-                transaction.setStatus(OrderStatus.EM_PROCESSAMENTO);
-                propagateStatusToOrder(transaction, approve);
-            } else {
-                // Não faz nada, porque nada foi aprovado ainda
-            }
-        }
 
-        else if (status == OrderStatus.EM_PROCESSAMENTO) {
+        if (status == OrderStatus.EM_PROCESSAMENTO) {
             if (approve == true) {
                 // Dá a baixa no estoque aqui e desbloqueia os produtos
                 transaction.setStatus(OrderStatus.EM_TRANSITO);
@@ -97,11 +97,7 @@ public class TransactionService {
                 transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
                 propagateStatusToOrder(transaction, approve);
             }
-        }
-    private final ProductService productService;
-    private final CartService cartService;
-
-        else if (status == OrderStatus.EM_TRANSITO) {
+        } else if (status == OrderStatus.EM_TRANSITO) {
             if (approve == true) {
                 // Vai para a casa do cliente
                 transaction.setStatus(OrderStatus.ENTREGUE);
@@ -114,11 +110,6 @@ public class TransactionService {
                 propagateStatusToOrder(transaction, approve);
             }
         }
-    public List<TransactionResponseDto> getTransactions(){
-        Client client = clientService.getAuthenticatedClient();
-        List<Transaction> transactions = transactionRepository.findAllByClientOrderByPurchaseDateDesc(client);
-        return transactions.stream().map(TransactionMapper::toDto).toList();
-    }
 
         else if (status == OrderStatus.ENTREGUE) {
             if (approve == true) {

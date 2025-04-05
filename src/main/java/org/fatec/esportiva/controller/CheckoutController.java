@@ -186,4 +186,6 @@ public class CheckoutController {
         return "redirect:/";
     }
 
+    //validar cartão
+
 }

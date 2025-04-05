@@ -2,11 +2,11 @@ INSERT INTO transacoes (tra_data_compra, tra_status, tra_cli_id) VALUES
 ('2024-03-07', 'EM_PROCESSAMENTO', '1'),
 ('2024-04-07', 'EM_TRANSITO', '1'),
 ('2024-05-07', 'ENTREGUE', '1'),
-('2024-06-07', 'EM_TROCA', '1'),
-('2024-07-07', 'TROCADO', '1'),
+('2024-06-07', 'ENTREGUE', '1'),
+('2024-07-07', 'ENTREGUE', '1'),
 ('2024-12-25', 'EM_PROCESSAMENTO', '2'),
 ('2024-12-30', 'EM_PROCESSAMENTO', '2'),
-('2025-01-12', 'EM_TROCA', '3');
+('2025-01-12', 'ENTREGUE', '3');
 
 
 INSERT INTO pedidos (ped_status, ped_quantidade, ped_tra_id, ped_pro_id) VALUES

@@ -22,7 +22,7 @@ CREATE TABLE cartoes_de_credito (
     car_bandeira          VARCHAR(20) NOT NULL,
     car_nome_impresso     VARCHAR(30) NOT NULL,
     car_codigo_seguranca  VARCHAR(4) NOT NULL,
-    car_cli_id            INTEGER NOT NULL
+    car_cli_id            INTEGER
 );
 
 

@@ -86,7 +86,7 @@ public class Product {
     private List<ProductCategory> categories = new ArrayList<>();
 
     public BigDecimal getPriceWithMargin(){
-        BigDecimal marginOfProfit = BigDecimal.ONE.add(BigDecimal.valueOf(pricingGroup.getProfitMargin()));
+        BigDecimal marginOfProfit = BigDecimal.ONE.add(pricingGroup.getProfitMargin());
         return costValue.multiply(marginOfProfit).setScale(2, RoundingMode.HALF_UP);
     }
 
