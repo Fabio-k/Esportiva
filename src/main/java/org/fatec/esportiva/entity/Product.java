@@ -25,6 +25,7 @@ import org.fatec.esportiva.listeners.LogListener;
 public class Product {
 
     @Id
+    
     @Column(name = "pro_id")
     private Long id;
 

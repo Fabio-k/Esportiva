@@ -1,6 +1,8 @@
 package org.fatec.esportiva.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.fatec.esportiva.entity.CartItem;
@@ -8,6 +10,8 @@ import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.fatec.esportiva.mapper.ProductMapper;
+import org.fatec.esportiva.repository.PricingGroupRepository;
+import org.fatec.esportiva.repository.ProductCategoryRepository;
 import org.fatec.esportiva.repository.ProductRepository;
 import org.fatec.esportiva.request.ProductDto;
 import org.fatec.esportiva.response.ProductResponseDto;
@@ -20,10 +24,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final PricingGroupRepository pricingGroupRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
     @Transactional
     public Product save(ProductDto productDto) {
         Product product = ProductMapper.toProduct(productDto);
+        // Define a data atual de cadastro/atualização
+        product.setPricingGroup(getNonOptional(pricingGroupRepository.findById(productDto.getPricingGroup().getId())));
+        product.setCategories(productCategoryRepository.findAll());
+        product.setEntryDate(LocalDate.now());
         product.setStatus(ProductStatus.ATIVO);
         return productRepository.save(product);
     }
@@ -38,8 +48,8 @@ public class ProductService {
         return products;
     }
 
-    public List<ProductResponseDto> getProductsSummary(){
-        return  productRepository.findAllByStatus(ProductStatus.ATIVO)
+    public List<ProductResponseDto> getProductsSummary() {
+        return productRepository.findAllByStatus(ProductStatus.ATIVO)
                 .stream().map(ProductMapper::toProductResponseDto).toList();
     }
 
@@ -66,10 +76,11 @@ public class ProductService {
     }
 
     public CartItem updateQuantity(Long id, Short quantity) {
-        if(quantity < 0) throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
+        if (quantity < 0)
+            throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
         Product product = findById(id);
         int availableStock = product.getStockQuantity() - product.getBlockedQuantity();
-        if(availableStock < quantity){
+        if (availableStock < quantity) {
             throw new IllegalArgumentException("Estoque insuficiente");
         }
         product.setBlockedQuantity(product.getBlockedQuantity() + quantity);
@@ -81,10 +92,12 @@ public class ProductService {
         return cartItem;
     }
 
-    public void returnBlockedProductQuantity(Long id, Short quantity){
-        if(quantity < 0) throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
+    public void returnBlockedProductQuantity(Long id, Short quantity) {
+        if (quantity < 0)
+            throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
         Product product = findById(id);
-        if(product.getBlockedQuantity() < quantity) throw new IllegalArgumentException("Erro no estoque");
+        if (product.getBlockedQuantity() < quantity)
+            throw new IllegalArgumentException("Erro no estoque");
         product.setBlockedQuantity(product.getBlockedQuantity() - quantity);
         productRepository.save(product);
     }
@@ -93,7 +106,8 @@ public class ProductService {
         orders.forEach(order -> {
             Product product = order.getProduct();
             Product product1 = findById(product.getId());
-            if(product1.getStockQuantity() < order.getQuantity() || order.getQuantity() > product.getBlockedQuantity()){
+            if (product1.getStockQuantity() < order.getQuantity()
+                    || order.getQuantity() > product.getBlockedQuantity()) {
                 throw new RuntimeException("Conflito na quantidade de itens comprados");
             }
             product1.setStockQuantity(product.getStockQuantity() - order.getQuantity());
@@ -101,9 +115,19 @@ public class ProductService {
             productRepository.save(product1);
         });
     }
+
     public void deleteClient(Optional<Product> product) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
+    }
+
+    // Remove o "Optional" do tipo que o linter reclama
+    private static <T> T getNonOptional(Optional<T> optional) {
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            throw new NoSuchElementException("Optional está vazio.");
+        }
     }
 
 }

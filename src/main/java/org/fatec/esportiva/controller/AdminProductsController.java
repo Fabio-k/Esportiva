@@ -68,9 +68,6 @@ public class AdminProductsController {
             return "admin/products/new";
         }
 
-        // Define a data atual de cadastro/atualização
-        productDto.setEntryDate(LocalDate.now());
-
         productService.save(productDto);
         return "redirect:/admin/products";
     }
