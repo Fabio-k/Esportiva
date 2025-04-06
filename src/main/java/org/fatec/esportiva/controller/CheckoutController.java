@@ -9,7 +9,6 @@ import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.CreditCardDto;
 import org.fatec.esportiva.response.CartItemResponseDto;
-import org.fatec.esportiva.response.CartResponseDto;
 import org.fatec.esportiva.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +29,9 @@ public class CheckoutController {
     private final AddressService addressService;
     private final CreditCardService creditCardService;
     private final TransactionService transactionService;
-    private final CartService cartService;
+    private final ExchangeVoucherService exchangeVoucherService;
+    private final CurrencyService currencyService;
+    private final CheckoutService checkoutService;
 
     @ModelAttribute("checkoutSession")
     public CheckoutSession createSession(){
@@ -46,9 +47,18 @@ public class CheckoutController {
     }
 
     @ModelAttribute("cartTotalPrice")
-    public String totalPrice(){
-        CartResponseDto cart = cartService.getCart();
-        return cart.getTotalPrice();
+    public String totalPrice(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
+        return currencyService.format(checkoutService.calculateTotalPrice(checkoutSession));
+    }
+
+    @ModelAttribute("exchangeVoucherTotalPrice")
+    public String totalExchangeVoucherPrice(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
+        return currencyService.format(checkoutService.getTotalExchangeVoucherDiscount(checkoutSession));
+    }
+
+    @ModelAttribute("productsTotalPrice")
+    public String productsTotalPrice(){
+        return currencyService.format(checkoutService.getCartTotalPrice());
     }
 
     @GetMapping("/address")
@@ -106,6 +116,7 @@ public class CheckoutController {
                     .forEach(allCreditCards::add);
         }
 
+        model.addAttribute("vouchers", clientService.getClientVouchers());
         model.addAttribute("creditCard", new CreditCardDto());
         model.addAttribute("creditCards", allCreditCards);
         return "checkout/billing/index";
@@ -122,9 +133,16 @@ public class CheckoutController {
     }
 
     @PostMapping("/billing/save")
-    public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds){
+    public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,
+                              @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds,
+                              @RequestParam(name = "exchangeVouchers", required = false) List<Long> exchangeVoucherIds
+    ){
         if(isCartEmpty()) return "redirect:/cart";
         if(creditCardsIds == null) return "redirect:/checkout/billing";
+        if(exchangeVoucherIds != null){
+            exchangeVoucherService.validateExchangeVoucherOwnership(exchangeVoucherIds, client().getId());
+            checkoutSession.setExchangeVoucherIds(exchangeVoucherIds);
+        } else checkoutSession.getExchangeVoucherIds().clear();
         checkoutSession.setCreditCardIds(creditCardsIds);
         return "redirect:/checkout/new";
     }

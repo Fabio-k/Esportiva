@@ -15,6 +15,7 @@ import org.fatec.esportiva.response.CartResponseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -74,6 +75,20 @@ public class CartService {
         Cart cart = clientService.getAuthenticatedClient().getCart();
         cart.getCartItems().clear();
         cartRepository.save(cart);
+    }
+
+    public BigDecimal getTotalCartPrice(){
+        Cart cart = clientService.getAuthenticatedClient().getCart();
+        BigDecimal total = cart.getCartItems().stream()
+                .map(this::getItemTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return total;
+    }
+
+    private BigDecimal getItemTotalPrice(CartItem cartItem){
+        BigDecimal quantity = BigDecimal.valueOf(cartItem.getQuantity());
+        return cartItem.getProduct().getPriceWithMargin().multiply(quantity);
     }
 
     private void updateCartCreatedAt(Cart cart){

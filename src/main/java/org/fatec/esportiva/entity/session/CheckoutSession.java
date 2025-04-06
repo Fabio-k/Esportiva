@@ -15,8 +15,10 @@ import java.util.List;
 public class CheckoutSession implements Serializable {
     private Long addressId;
     private List<Long> creditCardIds;
+    private List<Long> exchangeVoucherIds;
 
     public CheckoutSession() {
+        this.exchangeVoucherIds = new ArrayList<>();
         this.creditCardIds = new ArrayList<>();
     }
 }

@@ -6,8 +6,10 @@ import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.UserStatus;
 import org.fatec.esportiva.mapper.ClientMapper;
+import org.fatec.esportiva.mapper.ExchangeVoucherMapper;
 import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.request.ClientDto;
+import org.fatec.esportiva.response.ExchangeVoucherResponseDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class ClientService {
     private final CreditCardService creditCardService;
     private final ExchangeVoucherService exchangeVoucherService;
     private final AuthService authService;
+    private final CurrencyService currencyService;
 
     @Transactional
     public Client save(ClientDto clientDto) {
@@ -83,6 +86,12 @@ public class ClientService {
 
     public Optional<Client> findById(Long id) {
         return clientRepository.findById(id);
+    }
+
+    public List<ExchangeVoucherResponseDto> getClientVouchers(){
+        return  getAuthenticatedClient().getExchangeVouchers().stream()
+                .map(voucher -> ExchangeVoucherMapper.toExchangeVoucherResponseDto(voucher, currencyService.format(voucher.getValue())))
+                .toList();
     }
 
     public void deleteClient(Client user) {

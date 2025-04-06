@@ -11,13 +11,23 @@
     <main>
         <section>
             <form th:action="@{/checkout/billing/save}" method="post">
-                <h1>Escolher Cartão de crédito</h1>
-                <div class="card" th:each="creditCard : ${creditCards}">
-                    <input type="checkbox" th:checked="${checkoutSession.getCreditCardIds().contains(creditCard.id)}" th:id="'billing_' + ${creditCard.id}" name="selectedCards" th:value="${creditCard.id}">
-                    <label th:for="'billing_' + ${creditCard.id}" th:text="${creditCard.numberMask()}"></label>
-                </div>
+                <h1>Escolher como pagar</h1>
+                <section class="card">
+                    <div style="margin-bottom:10px"  th:each="creditCard : ${creditCards}">
+                        <input type="checkbox" th:checked="${checkoutSession.getCreditCardIds().contains(creditCard.id)}" th:id="'billing_' + ${creditCard.id}" name="selectedCards" th:value="${creditCard.id}">
+                        <label th:for="'billing_' + ${creditCard.id}" th:text="${creditCard.numberMask()}"></label>
+                    </div>
+                    <a th:href="@{/checkout/billing/new}" >Usar Novo cartão de crédito</a>
+                </section>
 
-                <a th:href="@{/checkout/billing/new}" >Usar Novo cartão de crédito</a>
+                <section class="card">
+                    <p>Cupons de troca</p>
+                    <div th:each="voucher : ${vouchers}" style="margin-bottom: 10px">
+                        <input type="checkbox" name="exchangeVouchers" th:checked="${checkoutSession.getExchangeVoucherIds().contains(voucher.id)}" th:id="'voucher_' + ${voucher.id}" th:value="${voucher.id}">
+                        <label th:for="'voucher_' + ${voucher.id}" th:text="'de ' + ${voucher.formattedValue}"></label>
+                    </div>
+                </section>
+
                 <button class="primaryButton" type="submit">Continuar</button>
             </form>
         </section>
