@@ -47,6 +47,14 @@
             <button type="submit">Aplicar</button>
           </div>
           <div style="display: flex; justify-content: space-between;">
+            <p>Produto(s)</p>
+            <p th:text="${productsTotalPrice}"></p>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <p>Cupon(s)</p>
+            <p th:text="'- ' + ${exchangeVoucherTotalPrice}"></p>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
             <p>Total</p>
             <p th:text="${cartTotalPrice}"></p>
           </div>

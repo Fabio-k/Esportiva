@@ -88,7 +88,7 @@ public class TransactionService {
 
 
         if (status == OrderStatus.EM_PROCESSAMENTO) {
-            if (approve == true) {
+            if (approve) {
                 // Dá a baixa no estoque aqui e desbloqueia os produtos
                 transaction.setStatus(OrderStatus.EM_TRANSITO);
                 propagateStatusToOrder(transaction, approve);
@@ -98,7 +98,7 @@ public class TransactionService {
                 propagateStatusToOrder(transaction, approve);
             }
         } else if (status == OrderStatus.EM_TRANSITO) {
-            if (approve == true) {
+            if (approve) {
                 // Vai para a casa do cliente
                 transaction.setStatus(OrderStatus.ENTREGUE);
                 propagateStatusToOrder(transaction, approve);
@@ -112,7 +112,7 @@ public class TransactionService {
         }
 
         else if (status == OrderStatus.ENTREGUE) {
-            if (approve == true) {
+            if (approve) {
                 // Aparece um aviso para o cliente que a troca foi aceita
                 // Pode ser uma lista de produtos que estão nesse estado
                 transaction.setStatus(OrderStatus.EM_TROCA);
@@ -123,7 +123,7 @@ public class TransactionService {
         }
 
         else if (status == OrderStatus.EM_TROCA) {
-            if (approve == true) {
+            if (approve) {
                 // Troca aceita
                 transaction.setStatus(OrderStatus.TROCADO);
                 propagateStatusToOrder(transaction, approve);
@@ -136,7 +136,7 @@ public class TransactionService {
         }
 
         else if (status == OrderStatus.TROCADO) {
-            if (approve == true) {
+            if (approve) {
                 // Repõe o estoque quando a troca é finalizada
                 // Reembolsa o cliente
                 transaction.setStatus(OrderStatus.TROCA_FINALIZADA);
@@ -177,7 +177,7 @@ public class TransactionService {
 
         // Se o valor do cupom for maior que zero, quer dizer que há algo para
         // reembolsar
-        if (totalValue.compareTo(ZERO) == 1) {
+        if (totalValue.compareTo(ZERO) > 0) {
             refundSingleVoucher(transaction, totalValue);
         }
     }
