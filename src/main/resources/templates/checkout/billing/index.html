@@ -11,6 +11,7 @@
     <main>
         <section>
             <form th:action="@{/checkout/billing/save}" method="post">
+                <input type="hidden" id="promotionalCouponCode" name="promotionalCouponCode" th:value="${checkoutSession.promotionalCouponCode}">
                 <h1>Escolher como pagar</h1>
                 <section class="card">
                     <div style="margin-bottom:10px"  th:each="creditCard : ${creditCards}">
@@ -24,16 +25,50 @@
                     <p>Cupons de troca</p>
                     <div th:each="voucher : ${vouchers}" style="margin-bottom: 10px">
                         <input type="checkbox" name="exchangeVouchers" th:checked="${checkoutSession.getExchangeVoucherIds().contains(voucher.id)}" th:id="'voucher_' + ${voucher.id}" th:value="${voucher.id}">
-                        <label th:for="'voucher_' + ${voucher.id}" th:text="'de ' + ${voucher.formattedValue}"></label>
+                        <label th:for="'voucher_' + ${voucher.id}" th:text="${voucher.formattedValue}"></label>
                     </div>
                 </section>
 
                 <button class="primaryButton" type="submit">Continuar</button>
             </form>
         </section>
-        <section>
-            <div th:replace="~{fragments/purchaseSummary :: summary}"></div>
+        <section class="card">
+            <form>
+                <h1>Resumo da compra</h1>
+                <div id="discountDiv" th:classappend="${promotionalCoupon == null} ? '' : hidden">
+                    <label th:for="code">Cupom de desconto</label>
+                    <div style="display: flex;">
+                        <input th:type="text" id="code">
+                        <button id="applyDiscountButton" type="button">Aplicar</button>
+                    </div>
+                </div>
+            </form>
+            <div id="discountCouponDiv" class="hidden" style="display: flex; justify-content: space-between;">
+                <p id="discountCouponCode"></p>
+                <p id="discountCouponValue"></p>
+            </div>
+            <div th:if="${promotionalCoupon != null}" style="display: flex; justify-content: space-between;">
+                <p th:text="${promotionalCoupon.code}"></p>
+                <p th:text="${promotionalCoupon.discountValue}"></p>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <p>Total</p>
+                <p th:text="${cartTotalPrice}"></p>
+            </div>
         </section>
     </main>
+    <script>
+        document.getElementById('applyDiscountButton').addEventListener('click', async () => {
+            const code = document.getElementById('code').value;
+            const response = await fetch(`/api/promotionalCoupon/${code}`);
+            if(!response.ok) return;
+            const result = await response.json();
+            document.getElementById('discountDiv').hidden = true;
+            document.getElementById('discountCouponDiv').classList.toggle("hidden");
+            document.getElementById('discountCouponCode').innerText = result.code;
+            document.getElementById('discountCouponValue').innerText = result.discountValue;
+            document.getElementById('promotionalCouponCode').value = result.code;
+        })
+    </script>
 </body>
 </html>

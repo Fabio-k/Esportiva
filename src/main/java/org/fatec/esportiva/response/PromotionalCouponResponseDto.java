@@ -1,4 +1,6 @@
 package org.fatec.esportiva.response;
 
-public record PromotionalCouponResponseDto(String code, Integer discount) {
+import java.math.BigDecimal;
+
+public record PromotionalCouponResponseDto(String code, Integer discount, String discountValue, BigDecimal discountPrice) {
 }

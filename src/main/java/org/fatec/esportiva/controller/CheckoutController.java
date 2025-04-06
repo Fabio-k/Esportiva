@@ -9,6 +9,7 @@ import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.CreditCardDto;
 import org.fatec.esportiva.response.CartItemResponseDto;
+import org.fatec.esportiva.response.PromotionalCouponResponseDto;
 import org.fatec.esportiva.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,7 @@ public class CheckoutController {
     private final ExchangeVoucherService exchangeVoucherService;
     private final CurrencyService currencyService;
     private final CheckoutService checkoutService;
+    private final PromotionalCouponService promotionalCouponService;
 
     @ModelAttribute("checkoutSession")
     public CheckoutSession createSession(){
@@ -115,7 +117,8 @@ public class CheckoutController {
                     .map(CreditCardMapper::toCreditCardDto)
                     .forEach(allCreditCards::add);
         }
-
+        PromotionalCouponResponseDto promotionalCouponResponseDto = promotionalCouponService.getPromotionalCouponOrReturnNull(checkoutSession.getPromotionalCouponCode());
+        model.addAttribute("promotionalCoupon", promotionalCouponResponseDto);
         model.addAttribute("vouchers", clientService.getClientVouchers());
         model.addAttribute("creditCard", new CreditCardDto());
         model.addAttribute("creditCards", allCreditCards);
@@ -135,7 +138,8 @@ public class CheckoutController {
     @PostMapping("/billing/save")
     public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,
                               @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds,
-                              @RequestParam(name = "exchangeVouchers", required = false) List<Long> exchangeVoucherIds
+                              @RequestParam(name = "exchangeVouchers", required = false) List<Long> exchangeVoucherIds,
+                              @RequestParam(name = "promotionalCouponCode", required = false) String promotionalCouponCode
     ){
         if(isCartEmpty()) return "redirect:/cart";
         if(creditCardsIds == null) return "redirect:/checkout/billing";
@@ -143,6 +147,11 @@ public class CheckoutController {
             exchangeVoucherService.validateExchangeVoucherOwnership(exchangeVoucherIds, client().getId());
             checkoutSession.setExchangeVoucherIds(exchangeVoucherIds);
         } else checkoutSession.getExchangeVoucherIds().clear();
+
+        PromotionalCouponResponseDto promotionalCoupon = promotionalCouponService.getPromotionalCouponOrReturnNull(promotionalCouponCode);
+        if(promotionalCoupon != null) {
+            checkoutSession.setPromotionalCouponCode(promotionalCoupon.code());
+        }
         checkoutSession.setCreditCardIds(creditCardsIds);
         return "redirect:/checkout/new";
     }

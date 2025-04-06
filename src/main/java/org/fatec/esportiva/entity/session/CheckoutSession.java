@@ -16,6 +16,7 @@ public class CheckoutSession implements Serializable {
     private Long addressId;
     private List<Long> creditCardIds;
     private List<Long> exchangeVoucherIds;
+    private String promotionalCouponCode;
 
     public CheckoutSession() {
         this.exchangeVoucherIds = new ArrayList<>();
