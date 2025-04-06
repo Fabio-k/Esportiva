@@ -1,10 +1,8 @@
 package org.fatec.esportiva.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.entity.CartItem;
 import org.fatec.esportiva.request.CartItemRequestDto;
 import org.fatec.esportiva.response.CartItemResponseDto;
-import org.fatec.esportiva.response.CartResponseDto;
 import org.fatec.esportiva.service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

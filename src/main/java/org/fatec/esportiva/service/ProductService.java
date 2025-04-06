@@ -3,7 +3,6 @@ package org.fatec.esportiva.service;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.fatec.esportiva.entity.CartItem;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Product;

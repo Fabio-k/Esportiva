@@ -10,6 +10,7 @@ public record CartItemResponseDto(Long id, Short quantity, ProductResponseDto pr
     }
 
     public String getFormattedTotalPrice(){
+        @SuppressWarnings("deprecation")
         NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         return format.format(getTotalPrice());
     }

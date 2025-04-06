@@ -7,9 +7,6 @@ import org.fatec.esportiva.request.ProductDto;
 import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.response.ProductResponseDto;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 @UtilityClass
 public class ProductMapper {
     public Product toProduct(ProductDto productDto) {
