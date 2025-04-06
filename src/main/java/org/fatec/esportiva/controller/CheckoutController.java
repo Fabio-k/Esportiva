@@ -60,7 +60,7 @@ public class CheckoutController {
     }
 
     @GetMapping("/address/new")
-    public String newChceckoutAddress(Model model){
+    public String newCheckoutAddress(Model model){
         if(isCartEmpty()) return "redirect:/cart";
         if(!model.containsAttribute("address")){
             model.addAttribute("address", new AddressDto());
