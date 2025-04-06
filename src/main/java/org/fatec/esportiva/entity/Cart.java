@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,13 @@ public class Cart {
     @Column(name = "car_id")
     private Long id;
 
-    @OneToMany(mappedBy = "cart")
-    List<CartItem> cartItems = new ArrayList<>();
+    @OneToMany(mappedBy = "cart", orphanRemoval = true)
+    private List<CartItem> cartItems = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "car_cli_id")
-    Client client;
+    private Client client;
 
     @Column(name = "car_criado_em")
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 }

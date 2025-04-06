@@ -8,7 +8,7 @@ INSERT INTO categorias_produto (cat_nome) VALUES
 INSERT INTO grupo_precificacao (grp_nome, grp_margem_lucro) VALUES
 ('Baixa', 0.1),
 ('Média', 0.2),
-('Alta', 0.3);
+('Alta',  0.3);
 
 INSERT INTO produtos (
     pro_nome_produto, pro_data_entrada, pro_quantidade_estoque,
@@ -36,6 +36,6 @@ INSERT INTO pertence (per_pro_id, per_cat_id) VALUES
 (5, 1),
 (6, 1),
 (7, 5),
-(8,1),
-(9,1),
+(8, 1),
+(9, 1),
 (10,1);

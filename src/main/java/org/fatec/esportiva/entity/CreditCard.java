@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import org.fatec.esportiva.entity.enums.CreditCardBrand;
+import org.fatec.esportiva.listeners.LogListener;
 
 @Entity
+@EntityListeners(LogListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -37,10 +39,22 @@ public class CreditCard {
     @Column(name = "car_codigo_seguranca")
     private String securityCode;
 
-    @Column(name = "car_preferencial")
-    private boolean preferential;
-
     @ManyToOne
     @JoinColumn(name = "car_cli_id")
     private Client client;
+
+    @Override
+    public String toString() {
+        return """
+                Cartão de crédito\n
+                Nº cartão: %s\n
+                Bandeira: %s\n
+                Nome no cartão: %s\n
+                CVV: %s
+                """.formatted(
+                number,
+                brand.getDisplayName(),
+                name,
+                securityCode);
+    }
 }

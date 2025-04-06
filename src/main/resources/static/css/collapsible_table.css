@@ -1,0 +1,36 @@
+.collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    text-align: center;
+    outline: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+.activeRow,
+.collapsible:hover {
+    background-color: #555;
+}
+
+.content {
+    /* Exibe o elemento como caixa flexível (necessário para line-clamp) */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* Limita a uma linha (colapso: só mostra a primeira linha) */
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    /* Mantém as quebras de linha conforme necessário */
+    white-space: pre-wrap;
+    transition: all 0.3s ease;
+    background-color: inherit;
+}
+
+/* Quando expandido, remove a restrição para mostrar todo o conteúdo */
+.content.expanded {
+    line-clamp: unset;
+    -webkit-line-clamp: unset;
+}

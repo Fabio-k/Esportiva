@@ -5,10 +5,7 @@ import org.fatec.esportiva.response.ProductResponseDto;
 import org.fatec.esportiva.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,15 @@ public class ProductController {
         List<ProductResponseDto> products = productService.findProductsSummary(name, maxValue, category);
         model.addAttribute("products", products);
         return "products/search";
+    }
+
+    @GetMapping("/search/results")
+    public String findProductByFilters(Model model, @RequestParam(required = false, name = "name") String name,
+                                       @RequestParam(required = false, name = "maxValue") Integer maxValue,
+                                       @RequestParam(required = false, name = "category") String category){
+
+        List<ProductResponseDto> products = productService.findProductsSummary(name, maxValue, category);
+        model.addAttribute("products", products);
+        return "fragments/searchResults";
     }
 }

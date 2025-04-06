@@ -1,0 +1,13 @@
+<turbo-frame id="products-container">
+    <section class="productSection" id="products-container">
+      <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}" data-turbo="false">
+        <div class="card productCard">
+          <div style="width: 100%;">
+            <img th:src="${product.image}" style="width: 100%;">
+          </div>
+          <p th:text="${product.name}" style="min-height: 46px;"></p>
+          <h3 th:text="${product.getFormattedPrice()}" style="font-weight: normal"></h3>
+        </div>
+      </a>
+    </section>
+</turbo-frame>

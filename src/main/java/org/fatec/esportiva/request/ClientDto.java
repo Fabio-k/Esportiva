@@ -37,6 +37,7 @@ public class ClientDto {
     @Pattern(regexp = "^[0-9]{11}$", message = "O CPF deve conter 11 dígitos numéricos")
     private String cpf;
 
+    @NotNull(message = "Status não pode ficar em branco")
     private UserStatus status;
 
     @NotNull(message = "Gênero não pode ficar em branco")
@@ -60,6 +61,10 @@ public class ClientDto {
     @Valid
     @Default
     private List<CreditCardDto> creditCards = new ArrayList<>();
+
+    @Valid
+    @Default
+    private List<ExchangeVoucherDto> exchangeVoucherDtos = new ArrayList<>();
 
     public String displayDateBirth() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

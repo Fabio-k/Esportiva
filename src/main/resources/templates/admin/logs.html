@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/head_info.html :: head_info}"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/dashboard_table.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/collapsible_table.css}">
+</head>
+
+<body>
+    <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('log')}"></header>
+    <main>
+
+        <table class="w-full">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuário</th>
+                    <th>Data da operação</th>
+                    <th>Tipo de operação</th>
+                    <th>Conteúdo da operação</th>
+                    <th>Exibir</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <!-- Esse estilo CSS converte \n em <br>-->
+                <tr th:each="log : ${logs}" style="white-space: pre-wrap;">
+                    <td th:id="'log-' + ${log.id}" th:text="${log.id}"></td>
+                    <td th:id="'user-' + ${log.id}" th:text="${log.user}"></td>
+                    <td th:id="'timestamp-' + ${log.id}" th:text="${log.displayLogTimestamp}"></td>
+                    <td th:id="'operation-' + ${log.id}" th:text="${log.operation}"></td>
+                    <td>
+                        <p th:id="'operationContent-' + ${log.id}" th:text="${log.operationContent}" class="content">
+                        </p>
+                    </td>
+                    <td><button type="button" class="collapsible">+</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Funcionalidade que colapsa ou não o conteúdo da coluna de conteúdo -->
+        <script>
+            var coll = document.getElementsByClassName("collapsible");
+
+            for (var i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function () {
+                    this.classList.toggle("activeRow");
+
+                    // Encontra o elemento com a classe "content" na mesma linha
+                    var content = this.closest("tr").querySelector(".content");
+
+                    // Alterna a classe 'expanded' para expandir/colapsar o conteúdo
+                    content.classList.toggle("expanded");
+                });
+            }
+        </script>
+
+    </main>
+</body>
+
+</html>

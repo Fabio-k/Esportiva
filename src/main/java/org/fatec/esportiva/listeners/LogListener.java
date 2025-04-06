@@ -3,58 +3,57 @@ package org.fatec.esportiva.listeners;
 import java.time.LocalDateTime;
 
 import org.fatec.esportiva.entity.Log;
+import org.fatec.esportiva.repository.LogRepository;
+import org.fatec.esportiva.service.AuthService;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreRemove;
-import jakarta.persistence.PreUpdate;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostUpdate;
 
+// https://stackoverflow.com/questions/66304627/spring-boot-entitylistener-the-dependencies-of-some-of-the-beans-in-the-applica
+// Obs: Colocar isso nas entidades que quer interceptar: @EntityListeners(LogListener.class)
+// Obs: Se usar o PrePersist e PreUpdate, ele gera uns 5 logs para cada commit, devido a cascata
+@Component
 public class LogListener {
+    private final LogRepository logRepository;
+    private AuthService authService;
 
-    // Injetará o EntityManager configurado automaticamente no contexto do Spring
-    @PersistenceContext
-    private EntityManager entityManager;
+    // Para evitar o problema de importação circular, o @Lazy é adicionado na
+    // instanciação do objeto de Listener
+    public LogListener(@Lazy LogRepository logRepository, @Lazy AuthService authService) {
+        this.logRepository = logRepository;
+        this.authService = authService;
+    }
 
-    @PrePersist
-    public void beforeInsert(Object entity) {
+    // Detecta qualquer commit depois de acontecer do tipo INSERT
+    @PostPersist
+    public void afterInsert(Object entity) throws Exception {
         Log log = new Log();
-        // log.setUser();
+        log.setUser(authService.getAuthenticatedUser().getUsername());
+        log.setTimestamp(LocalDateTime.now());
         log.setOperation("INSERT");
         log.setOperationContent(entity.toString());
-        log.setTimestamp(LocalDateTime.now());
 
         saveLog(log);
     }
 
-    @PreUpdate
-    public void beforeUpdate(Object entity) {
+    // Detecta qualquer commit depois de acontecer do tipo UPDATE
+    @PostUpdate
+    public void afterUpdate(Object entity) throws Exception {
         Log log = new Log();
-        // log.setUser();
+        log.setUser(authService.getAuthenticatedUser().getUsername());
+        log.setTimestamp(LocalDateTime.now());
         log.setOperation("UPDATE");
         log.setOperationContent(entity.toString());
-        log.setTimestamp(LocalDateTime.now());
 
         saveLog(log);
     }
 
-    // @PreRemove
-    // public void beforeDelete(Object entity) {
-    // Log log = new Log();
-    // log.setUser();
-    // log.setOperation("DELETE");
-    // log.setOperationContent(entity.toString());
-    // log.setTimestamp(LocalDateTime.now());
+    // @PreRemove // Detecta qualquer commit antes de acontecer do tipo DELETE
 
-    // saveLog(log);
-    // }
-
-    // Use EntityManager para salvar o log no banco de dados
-    // @ Transactional -> O Jakarta gerencia a transação automaticamente, sem
-    // necessidade de chamar manualmente begin() ou commit()
-    @Transactional
+    // Salva na tabela Log. A solução final é usar o logRepository diretamente
     private void saveLog(Log log) {
-        entityManager.persist(log);
+        logRepository.save(log);
     }
 }

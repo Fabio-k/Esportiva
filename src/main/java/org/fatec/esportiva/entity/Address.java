@@ -7,18 +7,22 @@ import lombok.Builder.Default;
 
 import org.fatec.esportiva.entity.enums.ResidencyType;
 import org.fatec.esportiva.entity.enums.StreetType;
+import org.fatec.esportiva.listeners.LogListener;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@EntityListeners(LogListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Setter
 @Table(name = "enderecos")
-public class Address {
+public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +50,12 @@ public class Address {
     @Column(name = "end_tipo_logradouro")
     private StreetType streetType;
 
+    @Column(name = "end_temporario")
+    private Boolean temporary;
+
+    @Column(name = "end_expira_em")
+    private LocalDateTime expiredAt;
+
     @ManyToOne
     @JoinColumn(name = "end_cep_id")
     private Cep cep;
@@ -60,4 +70,21 @@ public class Address {
             @JoinColumn(name = "fun_cae_id") })
 
     Set<AddressCategory> addressCategories = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return """
+                Endereço\n
+                Frase de identificação: %s\n
+                Número: %s\n
+                Observação: %s\n
+                Tipo de residência: %s\n
+                Tipo de rua: %s
+                """.formatted(
+                addressIdentificationPhrase,
+                number,
+                observation,
+                residencyType.getDisplayName(),
+                streetType.getDisplayName());
+    }
 }
