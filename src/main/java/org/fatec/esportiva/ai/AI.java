@@ -14,7 +14,7 @@ import org.springframework.web.client.RestClient;
 
 @RestController
 public class AI {
-    private final String apiKey = "AIzaSyA2VocbKNolBfOmYUHpfNPYEHfaaIj0Zb0";
+    private final String apiKey = "";
     private final String geminiApiBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/";
     private final String modelName = "gemini-2.0-flash";
     private final RestClient restClient;
@@ -33,6 +33,14 @@ public class AI {
         HttpHeaders headers = new HttpHeaders();
         // Define o content type: -H 'Content-Type: application/json' \
         headers.setContentType(MediaType.APPLICATION_JSON);
+
+        userText = """
+                Recomende produtos da seguinte lista com base na consulta do usuário:
+                Nome: Camiseta Algodão, Preço: 29.99, Descrição: Camiseta básica de algodão macio.
+                Nome: Calça Jeans Slim, Preço: 79.99, Descrição: Calça jeans corte slim fit.
+                Nome: Tênis Esportivo, Preço: 129.99, Descrição: Tênis confortável para corrida e treino.
+                Consulta do usuário: Preciso de algo confortável para usar no dia a dia.
+                """;
 
         String requestBody = String.format("""
                 {
@@ -70,7 +78,8 @@ public class AI {
                 });
 
         // Depurar resposta
-        //System.out.println(String.format("Enviando para a API do Gemini: {%s}", responseEntity.getBody()));
+        // System.out.println(String.format("Enviando para a API do Gemini: {%s}",
+        // responseEntity.getBody()));
 
         if (responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.getBody() != null) {
             Map<String, Object> responseBody = responseEntity.getBody();
