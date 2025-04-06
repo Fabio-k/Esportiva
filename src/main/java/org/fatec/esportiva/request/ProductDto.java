@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.Builder.Default;
 
+import org.fatec.esportiva.entity.PricingGroup;
 import org.fatec.esportiva.entity.enums.ProductStatus;
 
 import java.math.BigDecimal;
@@ -53,8 +54,8 @@ public class ProductDto {
     @NotNull(message = "A justificativa de desativação não pode ser nula, mas pode ser uma string vazia")
     private String inactivationJustification;
 
-    @NotNull(message = "Referencia para uma categoria de inativação não pode ficar em branco")
-    private Long pricingGroupId;
+    @NotNull(message = "Referencia para uma categoria de preços não pode ficar em branco")
+    private PricingGroup pricingGroup;
 
     @NotNull(message = "A descrição do produto não pode estar vazia")
     private String description;

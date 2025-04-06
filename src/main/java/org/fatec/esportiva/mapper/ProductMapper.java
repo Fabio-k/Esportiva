@@ -15,6 +15,7 @@ public class ProductMapper {
                 .entryDate(productDto.getEntryDate())
                 .stockQuantity(productDto.getStockQuantity())
                 .blockedQuantity(productDto.getBlockedQuantity())
+                .pricingGroup(productDto.getPricingGroup())
                 .profitMargin(productDto.getProfitMargin())
                 .costValue(productDto.getCostValue())
                 .status(productDto.getInactivationCategory())
@@ -29,6 +30,7 @@ public class ProductMapper {
                 .entryDate(product.getEntryDate())
                 .stockQuantity(product.getStockQuantity())
                 .blockedQuantity(product.getBlockedQuantity())
+                .pricingGroup(product.getPricingGroup())
                 .profitMargin(product.getProfitMargin())
                 .costValue(product.getCostValue())
                 .inactivationCategory(product.getStatus())
@@ -36,7 +38,7 @@ public class ProductMapper {
                 .build();
     }
 
-    public ProductResponseDto toProductResponseDto(Product product){
+    public ProductResponseDto toProductResponseDto(Product product) {
         int availableQuantity = product.getStockQuantity() - product.getBlockedQuantity();
         return new ProductResponseDto(product.getId(), availableQuantity, product.getName(),
                 product.getPriceWithMargin(), product.getDescription(), product.getImage());

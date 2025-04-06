@@ -8,7 +8,8 @@ import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.fatec.esportiva.request.ProductCategoryDto;
 import org.fatec.esportiva.request.ProductDto;
-
+import org.fatec.esportiva.service.PricingGroupService;
+import org.fatec.esportiva.service.ProductCategoryService;
 import org.fatec.esportiva.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/admin/products")
 public class AdminProductsController {
     private final ProductService productService;
+    private final PricingGroupService pricingGroupService;
+    private final ProductCategoryService productCategoryService;
 
     @GetMapping
     public String getProducts(Model model,
@@ -49,6 +52,8 @@ public class AdminProductsController {
     @GetMapping("/new")
     public String newProduct(Model model) {
         model.addAttribute("formAction", "/admin/products/save");
+        model.addAttribute("pricingGroups", pricingGroupService.getPrincingGroups());
+        model.addAttribute("productCategories", productCategoryService.getProductCategories());
         if (!model.containsAttribute("product")) {
             ProductDto productDto = new ProductDto();
             productDto.getProductCategory().add(new ProductCategoryDto());
