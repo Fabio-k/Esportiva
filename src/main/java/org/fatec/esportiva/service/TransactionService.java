@@ -9,7 +9,6 @@ import java.util.Optional;
 import jakarta.transaction.Transactional;
 import org.fatec.esportiva.entity.*;
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.mapper.CartItemMapper;
@@ -19,8 +18,6 @@ import org.fatec.esportiva.repository.TransactionRepository;
 import org.fatec.esportiva.request.TransactionDto;
 import org.fatec.esportiva.response.TransactionResponseDto;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

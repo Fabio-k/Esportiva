@@ -1,7 +1,6 @@
 package org.fatec.esportiva.mapper;
 
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.entity.Cart;
 import org.fatec.esportiva.response.CartResponseDto;
 import org.fatec.esportiva.service.CurrencyService;

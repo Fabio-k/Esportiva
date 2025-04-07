@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.request.OrderDto;
 
-import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.response.OrderResponseDto;
 
 @UtilityClass

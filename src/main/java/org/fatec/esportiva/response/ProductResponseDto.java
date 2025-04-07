@@ -1,7 +1,5 @@
 package org.fatec.esportiva.response;
 
-import org.fatec.esportiva.service.CurrencyService;
-
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;

@@ -2,13 +2,9 @@ package org.fatec.esportiva.entity.session;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.fatec.esportiva.entity.Address;
-import org.fatec.esportiva.entity.CartItem;
-import org.fatec.esportiva.entity.CreditCard;
 import org.fatec.esportiva.response.AddressResponseDto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
