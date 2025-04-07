@@ -49,12 +49,6 @@ public class CartService {
         return CartItemMapper.toCartItemResponseDto(cartItem);
     }
 
-    public CartResponseDto getCart(){
-        Cart cart = clientService.getAuthenticatedClient().getCart();
-
-        return cartMapper.toCartResponseDto(cart);
-    }
-
     @Transactional
     public void removeItem(Long id, Short quantity, Cart cart){
         CartItem cartItem = findCartItemById(id);
