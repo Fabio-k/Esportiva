@@ -55,6 +55,10 @@
                 <p th:text="${productsTotalPrice}"></p>
             </div>
             <div style="display: flex; justify-content: space-between;">
+                <p>Frete</p>
+                <p th:text="${checkoutSession.getAddress().getFormattedFreight()}"></p>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
                 <p>Cupon(s)</p>
                 <p th:text="'- ' + ${exchangeVoucherTotalPrice}"></p>
             </div>

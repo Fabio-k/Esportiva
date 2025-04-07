@@ -17,7 +17,7 @@
     <section class="mainPanel">
       <div class="card">
         <h1 th:text="${address.getAddressIdentificationPhrase()}"></h1>
-        <p th:text="${address.cep.street} + ',' + 'cep: ' + ${address.cep.cep}"></p>
+        <p th:text="${address.street} + ',' + 'cep: ' + ${address.cep}"></p>
         <a th:href="@{/checkout/address}">Mudar endereço</a>
       </div>
       <div class="card">
@@ -44,6 +44,10 @@
           <div style="display: flex; justify-content: space-between;">
             <p>Produto(s)</p>
             <p th:text="${productsTotalPrice}"></p>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <p>Frete</p>
+            <p th:text="${address.getFormattedFreight()}"></p>
           </div>
           <div th:if="${promotionalCoupon != null}" style="display: flex; justify-content: space-between;">
             <p th:text="${promotionalCoupon.code}"></p>
