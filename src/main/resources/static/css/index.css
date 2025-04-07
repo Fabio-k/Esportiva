@@ -138,5 +138,7 @@ li:hover .subCategoryMenu,  .subCategoryMenu:hover{
     color: red;
     padding: 10px;
     border-radius: 10px;
-    animation: fade 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }

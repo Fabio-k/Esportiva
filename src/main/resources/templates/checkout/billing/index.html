@@ -9,7 +9,7 @@
 <body>
     <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
     <div th:if="${errorMessage}" class="errorMessageDiv">
-        <span th:text="${errorMessage}"></span><button id="errorMessageCloseButton">fechar</button>
+        <span th:text="${errorMessage}"></span><div style="width:20px" id="errorMessageCloseButton"><img th:src="@{/images/icons/close.svg}" style="width:100%; cursor: pointer;" alt="fechar"></div>
     </div>
     <main>
         <section>

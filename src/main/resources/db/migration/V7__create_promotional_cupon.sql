@@ -1,6 +1,6 @@
 CREATE TABLE cupons_promocionais (
     cpp_id SERIAL PRIMARY KEY,
-    cpp_codigo VARCHAR(30) NOT NULL,
+    cpp_codigo VARCHAR(30) NOT NULL UNIQUE,
     cpp_desconto INTEGER NOT NULL
 );
 

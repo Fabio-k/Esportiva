@@ -64,13 +64,6 @@ CREATE TABLE clientes (
 );
 
 
-CREATE TABLE cupons_promocao (
-    cpr_id                    SERIAL PRIMARY KEY,
-    cpr_desconto_porcentagem  NUMERIC(10,2) NOT NULL,
-    cpr_cli_id                INTEGER NOT NULL
-);
-
-
 CREATE TABLE cupons_troca (
     ctr_id          SERIAL PRIMARY KEY,
     ctr_valor       NUMERIC(10,2) NOT NULL,
@@ -156,10 +149,6 @@ CREATE TABLE transacoes (
 
 ALTER TABLE cartoes_de_credito
     ADD CONSTRAINT cartoes_de_credito_clientes_fk FOREIGN KEY ( car_cli_id )
-        REFERENCES clientes ( cli_id );
-
-ALTER TABLE cupons_promocao
-    ADD CONSTRAINT cupons_promocao_clientes_fk FOREIGN KEY ( cpr_cli_id )
         REFERENCES clientes ( cli_id );
 
 ALTER TABLE cupons_troca
