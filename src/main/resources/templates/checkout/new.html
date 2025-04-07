@@ -34,7 +34,7 @@
       </div>
       <div class="card">
         <p th:each="creditCard : ${creditCards}" th:text="${creditCard.numberMask}"></p>
-        <a th:href="@{/checkout/billing}">Mudar cartão de crédito</a>
+        <a th:href="@{/checkout/billing}">Mudar pagamento</a>
       </div>
     </section>
     <section>
@@ -44,6 +44,10 @@
           <div style="display: flex; justify-content: space-between;">
             <p>Produto(s)</p>
             <p th:text="${productsTotalPrice}"></p>
+          </div>
+          <div th:if="${promotionalCoupon != null}" style="display: flex; justify-content: space-between;">
+            <p th:text="${promotionalCoupon.code}"></p>
+            <p th:text="'- ' + ${promotionalCoupon.discountValue}"></p>
           </div>
           <div style="display: flex; justify-content: space-between;">
             <p>Cupon(s)</p>

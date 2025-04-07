@@ -128,3 +128,15 @@ li:hover .subCategoryMenu,  .subCategoryMenu:hover{
 .productLink:hover{
     color: blue;
 }
+
+.errorMessageDiv{
+    position: fixed;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffc1c1;
+    color: red;
+    padding: 10px;
+    border-radius: 10px;
+    animation: fade 0.3s ease;
+}

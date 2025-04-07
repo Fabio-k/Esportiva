@@ -40,6 +40,7 @@ INSERT INTO funcao (fun_end_id, fun_cae_id) VALUES
 
 INSERT INTO cupons_troca(ctr_valor, ctr_cli_id) VALUES
 ('50', '1'),
+('20', '1'),
 ('50', '2'),
 ('20', '3'),
 ('30', '3');

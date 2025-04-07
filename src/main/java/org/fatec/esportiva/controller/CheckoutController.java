@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class CheckoutController {
 
     @ModelAttribute("exchangeVoucherTotalPrice")
     public String totalExchangeVoucherPrice(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
-        return currencyService.format(checkoutService.getTotalExchangeVoucherDiscount(checkoutSession));
+        return currencyService.format(checkoutService.getExchangeVouchersTotalPrice(checkoutSession));
     }
 
     @ModelAttribute("productsTotalPrice")
@@ -139,10 +140,10 @@ public class CheckoutController {
     public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,
                               @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds,
                               @RequestParam(name = "exchangeVouchers", required = false) List<Long> exchangeVoucherIds,
-                              @RequestParam(name = "promotionalCouponCode", required = false) String promotionalCouponCode
+                              @RequestParam(name = "promotionalCouponCode", required = false) String promotionalCouponCode,
+                              RedirectAttributes redirectAttributes
     ){
         if(isCartEmpty()) return "redirect:/cart";
-        if(creditCardsIds == null) return "redirect:/checkout/billing";
         if(exchangeVoucherIds != null){
             exchangeVoucherService.validateExchangeVoucherOwnership(exchangeVoucherIds, client().getId());
             checkoutSession.setExchangeVoucherIds(exchangeVoucherIds);
@@ -152,7 +153,22 @@ public class CheckoutController {
         if(promotionalCoupon != null) {
             checkoutSession.setPromotionalCouponCode(promotionalCoupon.code());
         }
-        checkoutSession.setCreditCardIds(creditCardsIds);
+
+        if(creditCardsIds != null)
+            checkoutSession.setCreditCardIds(creditCardsIds);
+        else
+            checkoutSession.getCreditCardIds().clear();
+
+        try {
+            checkoutService.validateEachCartHasMinimumPaymentOfTenOnOnlyCreditCardPayment(checkoutSession);
+            checkoutService.validateCreditCardsCannotBeUsedWhenTotalPriceIsZero(checkoutSession);
+            checkoutService.validateUnusedExchangeVouchers(checkoutSession);
+            checkoutService.validateInsufficientPayment(checkoutSession);
+        }catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/checkout/billing";
+        }
+
         return "redirect:/checkout/new";
     }
 
@@ -183,17 +199,13 @@ public class CheckoutController {
 
         if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";
 
-        if (checkoutSession.getCreditCardIds() == null || checkoutSession.getCreditCardIds().isEmpty()) return "redirect:/checkout/billing";
-
         Address address = addressService.findById(checkoutSession.getAddressId());
         model.addAttribute("address", address);
 
-        List<CreditCardDto> creditCards = checkoutSession.getCreditCardIds().stream()
-                .map(creditCardId -> {
-                    CreditCard creditCard = creditCardService.findCreditCard(creditCardId);
-                    return CreditCardMapper.toCreditCardDto(creditCard);
-                })
-                .toList();
+        PromotionalCouponResponseDto promotionalCouponResponseDto = promotionalCouponService.getPromotionalCouponOrReturnNull(checkoutSession.getPromotionalCouponCode());
+        model.addAttribute("promotionalCoupon", promotionalCouponResponseDto);
+
+        List<CreditCardDto> creditCards = checkoutService.getCreditCardsDto(checkoutSession);
         model.addAttribute("creditCards", creditCards);
 
         model.addAttribute("items", cartItems);
@@ -204,8 +216,6 @@ public class CheckoutController {
     @PostMapping("/save")
     public String buyCart(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
         if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";
-
-        if (checkoutSession.getCreditCardIds().isEmpty()) return "redirect:/checkout/billing";
 
         transactionService.generateTransaction(checkoutSession);
 

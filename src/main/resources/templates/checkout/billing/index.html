@@ -8,6 +8,9 @@
 </head>
 <body>
     <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
+    <div th:if="${errorMessage}" class="errorMessageDiv">
+        <span th:text="${errorMessage}"></span><button id="errorMessageCloseButton">fechar</button>
+    </div>
     <main>
         <section>
             <form th:action="@{/checkout/billing/save}" method="post">
@@ -47,6 +50,14 @@
                 <p id="discountCouponCode"></p>
                 <p id="discountCouponValue"></p>
             </div>
+            <div style="display: flex; justify-content: space-between;">
+                <p>Produto(s)</p>
+                <p th:text="${productsTotalPrice}"></p>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <p>Cupon(s)</p>
+                <p th:text="'- ' + ${exchangeVoucherTotalPrice}"></p>
+            </div>
             <div th:if="${promotionalCoupon != null}" style="display: flex; justify-content: space-between;">
                 <p th:text="${promotionalCoupon.code}"></p>
                 <p th:text="${promotionalCoupon.discountValue}"></p>
@@ -69,6 +80,10 @@
             document.getElementById('discountCouponValue').innerText = result.discountValue;
             document.getElementById('promotionalCouponCode').value = result.code;
         })
+
+        document.getElementById('errorMessageCloseButton').addEventListener('click', function(){
+            this.closest('.errorMessageDiv').classList.toggle("hidden");
+        });
     </script>
 </body>
 </html>
