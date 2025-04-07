@@ -87,7 +87,10 @@ public class CheckoutService {
         List <ExchangeVoucher> vouchers = exchangeVoucherService.findAllById(checkoutSession.getExchangeVoucherIds());
         if (vouchers.isEmpty()) return;
 
-        BigDecimal priceWithoutExchangeVouchers = getCartTotalPrice().subtract(getPromotionalCouponDiscount(checkoutSession));
+        BigDecimal freight = BigDecimal.ZERO;
+        if(checkoutSession.getAddress() != null) freight = checkoutSession.getAddress().getFreight();
+
+        BigDecimal priceWithoutExchangeVouchers = getCartTotalPrice().add(freight).subtract(getPromotionalCouponDiscount(checkoutSession));
         if (getExchangeVouchersTotalPrice(checkoutSession).compareTo(priceWithoutExchangeVouchers) < 1) return;
 
         vouchers.sort((a, b) -> b.getValue().compareTo(a.getValue()));
