@@ -53,7 +53,7 @@
             <p th:text="${promotionalCoupon.code}"></p>
             <p th:text="'- ' + ${promotionalCoupon.discountValue}"></p>
           </div>
-          <div style="display: flex; justify-content: space-between;">
+          <div style="display: flex; justify-content: space-between;" th:classappend="${exchangeVoucherTotalPrice.equals('R$&nbsp;0,00')} ? 'hidden' : ''">
             <p>Cupon(s)</p>
             <p th:text="'- ' + ${exchangeVoucherTotalPrice}"></p>
           </div>
