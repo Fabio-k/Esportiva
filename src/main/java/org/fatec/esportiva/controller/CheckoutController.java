@@ -4,18 +4,21 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.CreditCardDto;
 import org.fatec.esportiva.response.CartItemResponseDto;
-import org.fatec.esportiva.response.CartResponseDto;
+import org.fatec.esportiva.response.PromotionalCouponResponseDto;
 import org.fatec.esportiva.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +33,11 @@ public class CheckoutController {
     private final AddressService addressService;
     private final CreditCardService creditCardService;
     private final TransactionService transactionService;
-    private final CartService cartService;
+    private final ExchangeVoucherService exchangeVoucherService;
+    private final CurrencyService currencyService;
+    private final CheckoutService checkoutService;
+    private final PromotionalCouponService promotionalCouponService;
+    private final FreightService freightService;
 
     @ModelAttribute("checkoutSession")
     public CheckoutSession createSession(){
@@ -46,21 +53,30 @@ public class CheckoutController {
     }
 
     @ModelAttribute("cartTotalPrice")
-    public String totalPrice(){
-        CartResponseDto cart = cartService.getCart();
-        return cart.getTotalPrice();
+    public String totalPrice(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
+        return currencyService.format(checkoutService.calculateTotalPrice(checkoutSession));
+    }
+
+    @ModelAttribute("exchangeVoucherTotalPrice")
+    public String totalExchangeVoucherPrice(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
+        return currencyService.format(checkoutService.getExchangeVouchersTotalPrice(checkoutSession));
+    }
+
+    @ModelAttribute("productsTotalPrice")
+    public String productsTotalPrice(){
+        return currencyService.format(checkoutService.getCartTotalPrice());
     }
 
     @GetMapping("/address")
     public String checkoutAddress(Model model){
         if(isCartEmpty()) return "redirect:/cart";
-        model.addAttribute("addresses", client().getAddresses());
+        model.addAttribute("addresses", clientService.getClientAddresses());
         model.addAttribute("address", new AddressDto());
         return "checkout/address/index";
     }
 
     @GetMapping("/address/new")
-    public String newChceckoutAddress(Model model){
+    public String newCheckoutAddress(Model model){
         if(isCartEmpty()) return "redirect:/cart";
         if(!model.containsAttribute("address")){
             model.addAttribute("address", new AddressDto());
@@ -71,7 +87,9 @@ public class CheckoutController {
     @PostMapping("/address/save")
     public String saveAddress(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "selectedAddress") Long id){
         if(isCartEmpty()) return "redirect:/cart";
-        checkoutSession.setAddressId(id);
+        Address address = addressService.findById(id);
+        BigDecimal freight = freightService.calculate(address.getCep().getState(), clientService.getCart().items());
+        checkoutSession.setAddress(AddressMapper.toAddressDtoResponse(addressService.findById(address.getId()), freight, currencyService.format(freight)));
         return "redirect:/checkout/billing";
     }
 
@@ -83,15 +101,16 @@ public class CheckoutController {
             return "checkout/address/new";
         }
         AddressDto address = addressService.createAddress(dto, saveAddress, client());
+        BigDecimal freight = freightService.calculate(address.getState(), clientService.getCart().items());
 
-        checkoutSession.setAddressId(address.getId());
-        return "redirect:/checkout/billing";
+        checkoutSession.setAddress(AddressMapper.toAddressDtoResponse(addressService.findById(address.getId()), freight, currencyService.format(freight)));
+        return "redirect:/checkout/address";
     }
 
     @GetMapping("/billing")
     public String getBilling(Model model, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
         if(isCartEmpty()) return "redirect:/cart";
-        if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";
+        if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
         List <CreditCardDto> creditCards = client().getCreditCards().stream()
                 .map(CreditCardMapper::toCreditCardDto).toList();
         List<CreditCardDto> allCreditCards = new ArrayList<>(creditCards);
@@ -105,7 +124,9 @@ public class CheckoutController {
                     .map(CreditCardMapper::toCreditCardDto)
                     .forEach(allCreditCards::add);
         }
-
+        PromotionalCouponResponseDto promotionalCouponResponseDto = promotionalCouponService.getPromotionalCouponOrReturnNull(checkoutSession.getPromotionalCouponCode());
+        model.addAttribute("promotionalCoupon", promotionalCouponResponseDto);
+        model.addAttribute("vouchers", clientService.getClientVouchers());
         model.addAttribute("creditCard", new CreditCardDto());
         model.addAttribute("creditCards", allCreditCards);
         return "checkout/billing/index";
@@ -114,7 +135,7 @@ public class CheckoutController {
     @GetMapping("/billing/new")
     public String newBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,Model model){
         if(isCartEmpty()) return "redirect:/cart";
-        if(checkoutSession.getAddressId() == null){
+        if(checkoutSession.getAddress() == null){
             return "redirect:/checkout/address";
         }
         model.addAttribute("creditCard", new CreditCardDto());
@@ -122,10 +143,38 @@ public class CheckoutController {
     }
 
     @PostMapping("/billing/save")
-    public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds){
+    public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,
+                              @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds,
+                              @RequestParam(name = "exchangeVouchers", required = false) List<Long> exchangeVoucherIds,
+                              @RequestParam(name = "promotionalCouponCode", required = false) String promotionalCouponCode,
+                              RedirectAttributes redirectAttributes
+    ){
         if(isCartEmpty()) return "redirect:/cart";
-        if(creditCardsIds == null) return "redirect:/checkout/billing";
-        checkoutSession.setCreditCardIds(creditCardsIds);
+        if(exchangeVoucherIds != null){
+            exchangeVoucherService.validateExchangeVoucherOwnership(exchangeVoucherIds, client().getId());
+            checkoutSession.setExchangeVoucherIds(exchangeVoucherIds);
+        } else checkoutSession.getExchangeVoucherIds().clear();
+
+        PromotionalCouponResponseDto promotionalCoupon = promotionalCouponService.getPromotionalCouponOrReturnNull(promotionalCouponCode);
+        if(promotionalCoupon != null) {
+            checkoutSession.setPromotionalCouponCode(promotionalCoupon.code());
+        }
+
+        if(creditCardsIds != null)
+            checkoutSession.setCreditCardIds(creditCardsIds);
+        else
+            checkoutSession.getCreditCardIds().clear();
+
+        try {
+            checkoutService.validateEachCartHasMinimumPaymentOfTenOnOnlyCreditCardPayment(checkoutSession);
+            checkoutService.validateCreditCardsCannotBeUsedWhenTotalPriceIsZero(checkoutSession);
+            checkoutService.validateUnusedExchangeVouchers(checkoutSession);
+            checkoutService.validateInsufficientPayment(checkoutSession);
+        }catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/checkout/billing";
+        }
+
         return "redirect:/checkout/new";
     }
 
@@ -154,19 +203,14 @@ public class CheckoutController {
                 .stream().map(CartItemMapper::toCartItemResponseDto).toList();
         if(cartItems.isEmpty()) return "redirect:/cart";
 
-        if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";
+        if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
 
-        if (checkoutSession.getCreditCardIds() == null || checkoutSession.getCreditCardIds().isEmpty()) return "redirect:/checkout/billing";
+        model.addAttribute("address", checkoutSession.getAddress());
 
-        Address address = addressService.findById(checkoutSession.getAddressId());
-        model.addAttribute("address", address);
+        PromotionalCouponResponseDto promotionalCouponResponseDto = promotionalCouponService.getPromotionalCouponOrReturnNull(checkoutSession.getPromotionalCouponCode());
+        model.addAttribute("promotionalCoupon", promotionalCouponResponseDto);
 
-        List<CreditCardDto> creditCards = checkoutSession.getCreditCardIds().stream()
-                .map(creditCardId -> {
-                    CreditCard creditCard = creditCardService.findCreditCard(creditCardId);
-                    return CreditCardMapper.toCreditCardDto(creditCard);
-                })
-                .toList();
+        List<CreditCardDto> creditCards = checkoutService.getCreditCardsDto(checkoutSession);
         model.addAttribute("creditCards", creditCards);
 
         model.addAttribute("items", cartItems);
@@ -176,9 +220,7 @@ public class CheckoutController {
 
     @PostMapping("/save")
     public String buyCart(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
-        if(checkoutSession.getAddressId() == null) return "redirect:/checkout/address";
-
-        if (checkoutSession.getCreditCardIds().isEmpty()) return "redirect:/checkout/billing";
+        if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
 
         transactionService.generateTransaction(checkoutSession);
 

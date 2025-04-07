@@ -5,12 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.UserStatus;
+import org.fatec.esportiva.mapper.AddressMapper;
+import org.fatec.esportiva.mapper.CartMapper;
 import org.fatec.esportiva.mapper.ClientMapper;
+import org.fatec.esportiva.mapper.ExchangeVoucherMapper;
 import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.request.ClientDto;
+import org.fatec.esportiva.response.AddressResponseDto;
+import org.fatec.esportiva.response.CartResponseDto;
+import org.fatec.esportiva.response.ExchangeVoucherResponseDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +29,9 @@ public class ClientService {
     private final CreditCardService creditCardService;
     private final ExchangeVoucherService exchangeVoucherService;
     private final AuthService authService;
+    private final CurrencyService currencyService;
+    private final FreightService freightService;
+    private final CartMapper cartMapper;
 
     @Transactional
     public Client save(ClientDto clientDto) {
@@ -83,6 +93,27 @@ public class ClientService {
 
     public Optional<Client> findById(Long id) {
         return clientRepository.findById(id);
+    }
+
+    public CartResponseDto getCart(){
+        Cart cart = getAuthenticatedClient().getCart();
+
+        return cartMapper.toCartResponseDto(cart);
+    }
+
+    public List<ExchangeVoucherResponseDto> getClientVouchers(){
+        return  getAuthenticatedClient().getExchangeVouchers().stream()
+                .map(voucher -> ExchangeVoucherMapper.toExchangeVoucherResponseDto(voucher, currencyService.format(voucher.getValue())))
+                .toList();
+    }
+
+    public List<AddressResponseDto> getClientAddresses(){
+        return getAuthenticatedClient().getAddresses().stream()
+                .map(address -> {
+                    BigDecimal freight = freightService.calculate(address.getCep().getState(), getCart().items());
+                    return AddressMapper.toAddressDtoResponse(address, freight, currencyService.format(freight));
+                })
+                .toList();
     }
 
     public void deleteClient(Client user) {

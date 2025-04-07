@@ -96,7 +96,7 @@ public class ProductService {
             if(product1.getStockQuantity() < order.getQuantity() || order.getQuantity() > product.getBlockedQuantity()){
                 throw new RuntimeException("Conflito na quantidade de itens comprados");
             }
-            product1.setStockQuantity(product.getStockQuantity() - order.getQuantity());
+            product1.setStockQuantity(product1.getStockQuantity() - order.getQuantity());
             product1.setBlockedQuantity(product1.getBlockedQuantity() - order.getQuantity());
             productRepository.save(product1);
         });

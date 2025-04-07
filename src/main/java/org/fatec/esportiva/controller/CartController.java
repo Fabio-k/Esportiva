@@ -2,7 +2,7 @@ package org.fatec.esportiva.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.response.CartResponseDto;
-import org.fatec.esportiva.service.CartService;
+import org.fatec.esportiva.service.ClientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/cart")
 @RequiredArgsConstructor
 public class CartController {
-    private final CartService cartService;
+    private final ClientService clientService;
 
     @GetMapping
     public String getCart(Model model) throws Exception{
-        CartResponseDto cartResponseDto = cartService.getCart();
+        CartResponseDto cartResponseDto = clientService.getCart();
         model.addAttribute("cartItems", cartResponseDto.items());
         return "cart";
     }

@@ -5,7 +5,9 @@ import org.fatec.esportiva.entity.Address;
 import org.fatec.esportiva.entity.Cep;
 import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.request.AddressDto;
+import org.fatec.esportiva.response.AddressResponseDto;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,5 +61,18 @@ public class AddressMapper {
 
     public List<AddressDto> toAddressDtoList(List<Address> addresses) {
         return addresses.stream().map(address -> AddressMapper.toAddressDto(address)).toList();
+    }
+
+    public AddressResponseDto toAddressDtoResponse(Address address, BigDecimal freight, String formattedFreight){
+        return AddressResponseDto.builder()
+                .id(address.getId())
+                .addressIdentificationPhrase(address.getAddressIdentificationPhrase())
+                .street(address.getCep().getStreet())
+                .city(address.getCep().getCity())
+                .state(address.getCep().getState())
+                .cep(address.getCep().getCep())
+                .freight(freight)
+                .formattedFreight(formattedFreight)
+                .build();
     }
 }

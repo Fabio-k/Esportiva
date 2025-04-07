@@ -26,11 +26,19 @@ public class LogListener {
         this.authService = authService;
     }
 
+    public String getUser(){
+        try{
+            return authService.getAuthenticatedUser().getUsername();
+        }catch (Exception e){
+            return "system";
+        }
+    }
+
     // Detecta qualquer commit depois de acontecer do tipo INSERT
     @PostPersist
     public void afterInsert(Object entity) throws Exception {
         Log log = new Log();
-        log.setUser(authService.getAuthenticatedUser().getUsername());
+        log.setUser(getUser());
         log.setTimestamp(LocalDateTime.now());
         log.setOperation("INSERT");
         log.setOperationContent(entity.toString());
@@ -42,7 +50,7 @@ public class LogListener {
     @PostUpdate
     public void afterUpdate(Object entity) throws Exception {
         Log log = new Log();
-        log.setUser(authService.getAuthenticatedUser().getUsername());
+        log.setUser(getUser());
         log.setTimestamp(LocalDateTime.now());
         log.setOperation("UPDATE");
         log.setOperationContent(entity.toString());

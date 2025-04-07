@@ -5,6 +5,7 @@ import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.request.ExchangeVoucherDto;
 
 import lombok.experimental.UtilityClass;
+import org.fatec.esportiva.response.ExchangeVoucherResponseDto;
 
 @UtilityClass
 public class ExchangeVoucherMapper {
@@ -20,6 +21,14 @@ public class ExchangeVoucherMapper {
                 .id(exchangeVoucher.getId())
                 .value(exchangeVoucher.getValue())
                 .client(exchangeVoucher.getClient())
+                .build();
+    }
+
+    public ExchangeVoucherResponseDto toExchangeVoucherResponseDto(ExchangeVoucher exchangeVoucher, String formattedValue) {
+        return ExchangeVoucherResponseDto.builder()
+                .id(exchangeVoucher.getId())
+                .value(exchangeVoucher.getValue())
+                .formattedValue(formattedValue)
                 .build();
     }
 }

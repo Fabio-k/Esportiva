@@ -16,6 +16,11 @@ import lombok.RequiredArgsConstructor;
 public class ExchangeVoucherService {
     private final ExchangeVoucherRepository exchangeVoucherRepository;
 
+    public void validateExchangeVoucherOwnership(List<Long> voucherIds, Long clientId){
+        List<ExchangeVoucher> vouchers = exchangeVoucherRepository.findAllByIdInAndClientId(voucherIds, clientId);
+        if(voucherIds.size() != vouchers.size()) throw new IllegalArgumentException("Um ou mais vouchers não foram encontrados");
+    }
+
     public List<ExchangeVoucher> updateOrCreateExchangeVoucher(Client client,
             List<ExchangeVoucherDto> exchangeVoucherDto) {
         return exchangeVoucherDto.stream().map(c -> {
@@ -29,5 +34,9 @@ public class ExchangeVoucherService {
 
             return ExchangeVoucherMapper.toExchangeVoucher(client, c);
         }).toList();
+    }
+
+    public List<ExchangeVoucher> findAllById(List<Long> ids){
+        return exchangeVoucherRepository.findAllById(ids);
     }
 }

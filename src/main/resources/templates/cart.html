@@ -96,18 +96,11 @@
         </div>
         <div id="priceBox" th:attr="hidden=${cartItems.size() == 0}">
             <h4> Resumo da compra </h4>
-            <form>
-                <label th:for="discountCupom">Cupom de desconto</label>
-                <div style="display: flex;">
-                    <input th:type="text" id="discountCupom">
-                    <button type="submit">Aplicar</button>
-                </div>
-            </form>
             <div style="display: flex; justify-content: space-between;">
                 <p>Total</p>
                 <p id="totalPrice">R$ 48,32</p>
             </div>
-            <a id="buyButton" th:href="@{/checkout/address}">Continuar compra</a>
+            <a class="primaryButton" style="display: block;margin-top: 40px" th:href="@{/checkout/address}">Continuar compra</a>
         </div>
     </main>
     <script th:src="@{/js/productQuantityControl.js}"></script>
