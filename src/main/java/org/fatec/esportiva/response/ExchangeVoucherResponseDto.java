@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Builder
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class ExchangeVoucherResponseDto {
 
     private Long id;

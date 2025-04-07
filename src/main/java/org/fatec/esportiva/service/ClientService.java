@@ -107,6 +107,15 @@ public class ClientService {
                 .toList();
     }
 
+    public List<AddressResponseDto> getClientAddresses(){
+        return getAuthenticatedClient().getAddresses().stream()
+                .map(address -> {
+                    BigDecimal freight = freightService.calculate(address.getCep().getState(), getCart().items());
+                    return AddressMapper.toAddressDtoResponse(address, freight, currencyService.format(freight));
+                })
+                .toList();
+    }
+
     public void deleteClient(Client user) {
         clientRepository.delete(user);
     }

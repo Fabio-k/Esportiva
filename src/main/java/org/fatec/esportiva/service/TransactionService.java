@@ -56,7 +56,7 @@ public class TransactionService {
 
     @Transactional
     public void generateTransaction(CheckoutSession checkoutSession){
-        Address address = addressService.findById(checkoutSession.getAddressId());
+        Address address = addressService.findById(checkoutSession.getAddress().getId());
         List<CreditCard> creditCards = checkoutSession.getCreditCardIds().stream().map(creditCardService::findCreditCard).toList();
 
         Client client = clientService.getAuthenticatedClient();

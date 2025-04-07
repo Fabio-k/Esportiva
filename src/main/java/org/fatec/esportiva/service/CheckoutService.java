@@ -26,8 +26,9 @@ public class CheckoutService {
         if(checkoutSession.getExchangeVoucherIds() != null){
             totalDiscount = getTotalDiscount(checkoutSession);
         }
-
-        return getCartTotalPrice().subtract(totalDiscount).max(BigDecimal.ZERO);
+        BigDecimal freight = BigDecimal.ZERO;
+        if(checkoutSession.getAddress() != null) freight = checkoutSession.getAddress().getFreight();
+        return getCartTotalPrice().add(freight).subtract(totalDiscount).max(BigDecimal.ZERO);
     }
 
     public BigDecimal getCartTotalPrice(){
