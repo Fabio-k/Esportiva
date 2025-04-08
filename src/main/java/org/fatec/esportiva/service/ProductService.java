@@ -89,18 +89,6 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void updateQuantityAfterPurchase(List<Order> orders) {
-        orders.forEach(order -> {
-            Product product = order.getProduct();
-            Product product1 = findById(product.getId());
-            if(product1.getStockQuantity() < order.getQuantity() || order.getQuantity() > product.getBlockedQuantity()){
-                throw new RuntimeException("Conflito na quantidade de itens comprados");
-            }
-            product1.setStockQuantity(product1.getStockQuantity() - order.getQuantity());
-            product1.setBlockedQuantity(product1.getBlockedQuantity() - order.getQuantity());
-            productRepository.save(product1);
-        });
-    }
     public void deleteClient(Optional<Product> product) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
