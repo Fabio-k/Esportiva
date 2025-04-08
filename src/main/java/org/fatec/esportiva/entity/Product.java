@@ -90,6 +90,14 @@ public class Product {
         return costValue.multiply(marginOfProfit).setScale(2, RoundingMode.HALF_UP);
     }
 
+    public void decreaseStock(int quantity){
+        if(quantity > stockQuantity || quantity > blockedQuantity)
+            throw new RuntimeException("Conflito na quantidade de itens comprados");
+
+        this.stockQuantity -= quantity;
+        this.blockedQuantity -= quantity;
+    }
+
     @Override
     public String toString() {
         return """

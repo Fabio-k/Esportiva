@@ -29,6 +29,7 @@ public class TransactionService {
     private final ClientRepository clientRepository;
     private final OrderService orderService;
     private final CartService cartService;
+    private final ProductService productService;
 
     // Constante para melhorar legibilidade
     private static final BigDecimal ZERO = BigDecimal.valueOf(0);
@@ -83,28 +84,26 @@ public class TransactionService {
         Transaction transaction = getNonOptional(transactionRepository.findById(id));
         OrderStatus status = transaction.getStatus();
 
-
         if (status == OrderStatus.EM_PROCESSAMENTO) {
             if (approve) {
-                // Dá a baixa no estoque aqui e desbloqueia os produtos
                 transaction.setStatus(OrderStatus.EM_TRANSITO);
-                propagateStatusToOrder(transaction, approve);
+                propagateStatusToOrder(transaction, true);
             } else {
                 // Reembolsa o cliente
                 transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
-                propagateStatusToOrder(transaction, approve);
+                propagateStatusToOrder(transaction, false);
             }
         } else if (status == OrderStatus.EM_TRANSITO) {
             if (approve) {
                 // Vai para a casa do cliente
                 transaction.setStatus(OrderStatus.ENTREGUE);
-                propagateStatusToOrder(transaction, approve);
+                propagateStatusToOrder(transaction, true);
             } else {
                 // Produto que estava indo para o cliente, volta para o estoque antes de chegar
                 // na sua casa
                 // Reembolsa o cliente
                 transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
-                propagateStatusToOrder(transaction, approve);
+                propagateStatusToOrder(transaction, false);
             }
         }
 
@@ -113,7 +112,7 @@ public class TransactionService {
                 // Aparece um aviso para o cliente que a troca foi aceita
                 // Pode ser uma lista de produtos que estão nesse estado
                 transaction.setStatus(OrderStatus.EM_TROCA);
-                propagateStatusToOrder(transaction, approve);
+                propagateStatusToOrder(transaction, true);
             } else {
                 // Não faz nada, porque o cliente só pode solicitar devolução ou fazer nada
             }
@@ -123,7 +122,7 @@ public class TransactionService {
             if (approve) {
                 // Troca aceita
                 transaction.setStatus(OrderStatus.TROCADO);
-                propagateStatusToOrder(transaction, approve);
+                propagateStatusToOrder(transaction, true);
             } else {
                 // Troca recusada, não faz nada
                 transaction.setStatus(OrderStatus.TROCA_RECUSADA);
@@ -137,11 +136,11 @@ public class TransactionService {
                 // Repõe o estoque quando a troca é finalizada
                 // Reembolsa o cliente
                 transaction.setStatus(OrderStatus.TROCA_FINALIZADA);
-                propagateStatusToOrder(transaction, approve);
+                propagateStatusToOrder(transaction, true);
             } else {
                 // Produto não chegou na loja, troca recusada novamente
                 transaction.setStatus(OrderStatus.TROCA_RECUSADA);
-                propagateStatusToOrder(transaction, approve);
+                propagateStatusToOrder(transaction, false);
             }
 
         }

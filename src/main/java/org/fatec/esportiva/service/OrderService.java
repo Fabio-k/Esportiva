@@ -53,10 +53,7 @@ public class OrderService {
             if (approve == true) {
                 // Dá a baixa no estoque aqui e desbloqueia os produtos
                 order.setStatus(OrderStatus.EM_TRANSITO);
-                int quantity = product.getStockQuantity();
-                product.setStockQuantity(quantity - order.getQuantity());
-                product.setBlockedQuantity(quantity - order.getQuantity());
-
+                product.decreaseStock(order.getQuantity());
             } else {
                 // Reembolsa o cliente
                 order.setStatus(OrderStatus.COMPRA_CANCELADA);
