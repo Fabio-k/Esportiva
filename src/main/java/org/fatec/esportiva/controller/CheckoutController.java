@@ -9,6 +9,7 @@ import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.request.AddressDto;
 import org.fatec.esportiva.request.CreditCardDto;
+import org.fatec.esportiva.response.AddressResponseDto;
 import org.fatec.esportiva.response.CartItemResponseDto;
 import org.fatec.esportiva.response.PromotionalCouponResponseDto;
 import org.fatec.esportiva.service.*;
@@ -219,13 +220,22 @@ public class CheckoutController {
     }
 
     @PostMapping("/save")
-    public String buyCart(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
+    public String buyCart(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
         if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
+        List<CartItemResponseDto> items = clientService.getCart().items();
+        AddressResponseDto address = checkoutSession.getAddress();
 
-        transactionService.generateTransaction(checkoutSession);
+        Transaction transaction = transactionService.generateTransaction(checkoutSession);
+        try{
+            checkoutService.validatePayment(checkoutSession);
+        } catch (IllegalArgumentException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            transactionService.denyTransaction(transaction);
+        }
 
-
-        return "redirect:/";
+        model.addAttribute("items", items);
+        model.addAttribute("address", address);
+        return "/checkout/result";
     }
 
 }

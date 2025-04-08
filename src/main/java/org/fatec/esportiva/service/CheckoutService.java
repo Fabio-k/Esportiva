@@ -112,4 +112,14 @@ public class CheckoutService {
         if(hasRemainingAmountToPay && getCreditCardsDto(checkoutSession).isEmpty())
             throw new IllegalArgumentException("Meios de pagamento insuficientes");
     }
+
+    public void validatePayment(CheckoutSession checkoutSession){
+        List<CreditCardDto> creditCards = getCreditCardsDto(checkoutSession);
+
+        creditCards.forEach(creditCardDto -> {
+            if(creditCardDto.getNumber().equals("5115199853098847")){
+                throw new IllegalArgumentException("Cartão de crédito inválido");
+            }
+        });
+    }
 }

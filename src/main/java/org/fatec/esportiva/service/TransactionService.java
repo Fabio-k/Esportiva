@@ -48,12 +48,8 @@ public class TransactionService {
         return transactionRepository.findById(id);
     }
 
-    public Boolean isCardValid(String number){
-        return !number.equals("5115199853098847");
-    }
-
     @Transactional
-    public void generateTransaction(CheckoutSession checkoutSession){
+    public Transaction generateTransaction(CheckoutSession checkoutSession){
         Address address = addressService.findById(checkoutSession.getAddress().getId());
         List<CreditCard> creditCards = checkoutSession.getCreditCardIds().stream().map(creditCardService::findCreditCard).toList();
 
@@ -76,7 +72,7 @@ public class TransactionService {
         transaction.setOrders(orders);
 
         cartService.cleanCart();
-        transactionRepository.save(transaction);
+        return transactionRepository.save(transaction);
     }
 
     // Máquina de estados que controla a transições conforme cada aprovação
@@ -202,5 +198,16 @@ public class TransactionService {
         } else {
             throw new NoSuchElementException("Optional está vazio.");
         }
+    }
+
+    @Transactional
+    public void denyTransaction(Transaction transaction) {
+        List<Order> orders = transaction.getOrders();
+
+        orders.forEach(order -> {
+            productService.returnBlockedProductQuantity(order.getProduct().getId(), (short) order.getQuantity());
+        });
+
+        transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
     }
 }
