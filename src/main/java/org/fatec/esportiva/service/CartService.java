@@ -80,6 +80,12 @@ public class CartService {
         return total;
     }
 
+    public void setToNotified(Long id, Boolean isNotified){
+        Cart cart = findCartById(id);
+        cart.setIsNotified(isNotified);
+        cartRepository.save(cart);
+    }
+
     private BigDecimal getItemTotalPrice(CartItem cartItem){
         BigDecimal quantity = BigDecimal.valueOf(cartItem.getQuantity());
         return cartItem.getProduct().getPriceWithMargin().multiply(quantity);
@@ -107,6 +113,10 @@ public class CartService {
     private Optional<CartItem> getCartItemByProductId(List<CartItem> cartItems, Long productId){
         return  cartItems.stream().filter(item ->
                 item.getProduct().getId().equals(productId)).findFirst();
+    }
+
+    private Cart findCartById(Long id){
+        return cartRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Carrinho não encontrado"));
     }
 
 
