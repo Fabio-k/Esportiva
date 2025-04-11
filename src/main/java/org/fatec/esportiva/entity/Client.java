@@ -76,6 +76,9 @@ public class Client implements UserDetails {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExchangeVoucher> exchangeVouchers;
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+
     @NotNull
     @Column(name = "cli_endereco_preferencial")
     private Long preferentialAddress;
