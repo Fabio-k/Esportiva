@@ -1,4 +1,4 @@
-package org.fatec.esportiva.controller;
+package org.fatec.esportiva.controller.api;
 
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.request.CartItemRequestDto;

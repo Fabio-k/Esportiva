@@ -52,8 +52,13 @@
         </nav>
         <div style="display: flex; gap: 20px; margin-right: 8rem; align-items: center">
             <span sec:authorize="hasRole('ROLE_CLIENT')"><a th:href="@{/orders}" data-turbo="false" class="productLink">Compras</a></span>
-            <div style="width: 28px" sec:authorize="hasRole('ROLE_CLIENT')">
-                <img th:src="@{/images/icons/notification.svg}"  style="width: 100%">
+            <div id="notificationContainer" style="position:relative; width: 28px" sec:authorize="hasRole('ROLE_CLIENT')">
+                <img th:src="@{/images/icons/notification.svg}" id="notificationIcon"  style="width: 100%">
+                <div id="notificationDiv" style="position:absolute; min-width: 25rem; left: revert-layer; right: 0">
+                    <div style="height: 28px"></div>
+                    <div id="notificationList" style="background-color: white; box-shadow: 0px 0px 5px rgb(211, 211, 211); padding: 10px; max-height: 158px; min-height: 158px; overflow: auto;">
+                    </div>
+                </div>
             </div>
             <div style="width: 30px">
                 <a th:href="@{/cart}" sec:authorize="hasRole('ROLE_CLIENT')" ><img th:src="@{/images/icons/cart.svg}" style="width: 100%"></a>

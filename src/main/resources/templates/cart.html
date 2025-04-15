@@ -223,5 +223,6 @@
            updatePrices();
          }
     </script>
+  <script th:src="@{/js/notification.js}" sec:authorize="hasRole('ROLE_CLIENT')"></script>
 </body>
 </html>

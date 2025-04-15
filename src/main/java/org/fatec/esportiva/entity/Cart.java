@@ -29,4 +29,7 @@ public class Cart {
 
     @Column(name = "car_criado_em")
     private LocalDateTime createdAt;
+
+    @Column(name = "car_notificado")
+    private Boolean isNotified;
 }
