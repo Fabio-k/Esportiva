@@ -147,6 +147,28 @@
           modal.classList.add("hidden");
         }
       })
+
+      function formatDate(dateTime){
+        const date = new Date(dateTime);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+      }
+
+      async function getNotifications(){
+        const response = await fetch("/api/notifications");
+        const result = await response.json();
+        console.log(result);
+        const notificationDiv = document.getElementById("notificationList");
+        for(let notification of result){
+            const div = document.createElement("div");
+            div.style = "display: flex; justify-content: space-between";
+            div.innerHTML = `<p>${notification.message}</p><p>${formatDate(notification.createdAt)}</p>`;
+            notificationDiv.appendChild(div);
+        }
+      }
+
+      getNotifications();
   </script>
 </body>
 </html>

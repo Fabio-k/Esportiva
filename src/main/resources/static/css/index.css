@@ -109,6 +109,14 @@ li:hover .subCategoryMenu,  .subCategoryMenu:hover{
     display: block;
 }
 
+#notificationDiv{
+    display: none;
+}
+
+#notificationContainer:hover #notificationDiv, #notificationDiv:hover{
+    display: block;
+}
+
 
 .categoryList {
     list-style-type: none;
