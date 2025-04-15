@@ -26,4 +26,15 @@ public class NotificationService {
         List<Notification> notifications = notificationRepository.findAllByClientOrderByCreatedAtDesc(client);
         return notifications.stream().map(NotificationMapper::toNotificationResponseDto).toList();
     }
+
+    public void markAsViewed(List<Long> ids) {
+        Client client = clientService.getAuthenticatedClient();
+        List<Notification> notifications = notificationRepository.findAllByIdInAndClientId(ids, client.getId());
+
+        for(Notification notification : notifications){
+            notification.setIsViewed(true);
+        }
+
+        notificationRepository.saveAll(notifications);
+    }
 }
