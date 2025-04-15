@@ -26,6 +26,9 @@ public class CartScheduledTask {
     @Value("${cart.product.timeoutInMinutes}")
     private int cartTimeoutInMinutes;
 
+    @Value("${cart.expire.notification.inMinutes}")
+    private int cartExpireNotificationInMinutes;
+
     @Scheduled(fixedRateString = "${cart.cleanup.intervalInMillis:60000}")
     @Transactional
     public void freeCarts(){
@@ -37,10 +40,10 @@ public class CartScheduledTask {
         });
     }
 
-    @Scheduled(fixedRateString = "${notification.cleanup.intervalInMillis:60000}")
+    @Scheduled(fixedRateString = "${cart.expire.notification.intervalInMillis:60000}")
     @Transactional
-    public void notifyClientCartTimeout(){
-        List<Cart> carts =  cartRepository.findByCreatedAtBeforeAndIsNotifiedFalse(LocalDateTime.now().plusMinutes(5));
+    public void notifyClientsAboutCartTimeout(){
+        List<Cart> carts =  cartRepository.findByCreatedAtBeforeAndIsNotifiedFalse(LocalDateTime.now().plusMinutes(cartExpireNotificationInMinutes));
         carts.forEach(cart -> {
             List<CartItem> cartItems = cart.getCartItems();
             if(!cartItems.isEmpty()){

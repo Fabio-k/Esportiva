@@ -1,5 +1,6 @@
 package org.fatec.esportiva.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.Notification;
@@ -17,6 +18,8 @@ public class NotificationService {
     private final ClientService clientService;
 
     public void createNotification(Client client, String message){
+        if(client == null) throw new IllegalArgumentException("Cliente não pode ser nulo");
+        if(message == null || message.trim().isEmpty()) throw new IllegalArgumentException("Mensagem não pode estar vazia");
         Notification notification = new Notification(client, message);
         notificationRepository.save(notification);
     }
@@ -27,7 +30,9 @@ public class NotificationService {
         return notifications.stream().map(NotificationMapper::toNotificationResponseDto).toList();
     }
 
+    @Transactional
     public void markAsViewed(List<Long> ids) {
+        if(ids == null || ids.isEmpty()) return;
         Client client = clientService.getAuthenticatedClient();
         List<Notification> notifications = notificationRepository.findAllByIdInAndClientId(ids, client.getId());
 

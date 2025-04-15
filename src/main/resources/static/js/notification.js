@@ -4,7 +4,7 @@ setInterval(() => getNotifications(), 5000);
 document.getElementById('notificationContainer').addEventListener('mouseenter', () => {
     let newNotifications = []
     document.querySelectorAll(".notificationCard").forEach(notification => {
-        if (notification.dataset.isViewed == "false"){
+        if (notification.dataset.isViewed === "false"){
             newNotifications.push(notification.dataset.id);
         }
     });
