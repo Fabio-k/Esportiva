@@ -56,10 +56,11 @@
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 20px">
+                <div style="display: flex; gap: 20px" th:if="${order.status != T(org.fatec.esportiva.entity.enums.OrderStatus).TROCA_RECUSADA}">
                     <p class="inactiveText" th:classappend="${order.status == T(org.fatec.esportiva.entity.enums.OrderStatus).EM_TROCA} ? activeText : ''">Em processamento</p>
                     <p class="inactiveText" th:classappend="${order.isSuccessfullyTraded()} ? activeText : ''">Trocado</p>
                 </div>
+                <p style="color: red" th:if="${order.status == T(org.fatec.esportiva.entity.enums.OrderStatus).TROCA_RECUSADA}">Troca recusada</p>
             </div>
 
         </section>

@@ -22,7 +22,7 @@ public enum OrderStatus {
     }
 
     public Boolean isBeignTraded(){
-        return this == EM_TROCA || this == TROCADO || this == TROCA_FINALIZADA;
+        return this == EM_TROCA || this == TROCADO || this == TROCA_FINALIZADA || this == TROCA_RECUSADA;
     }
 
     public boolean isBeignDelivered() {
