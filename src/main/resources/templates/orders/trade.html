@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: defaultHeader }"></header>
+    <main class="card">
+        <div style="width: 300px; border-radius: 50px">
+            <img th:src="${order.product.image}" style="width: 100%">
+        </div>
+
+        <p th:text="${order.product.name}"></p>
+          <form th:action="@{/orders/trade/{id}(id=${order.id})}" method="post">
+              <input type="hidden" name="_method" th:value="PATCH" />
+              <label th:for="tradeQuantity">Selecione a quantidade de itens que deseja trocar</label>
+              <select id="tradeQuantity" name="tradeQuantity">
+                    <option
+                        th:each="i : ${#numbers.sequence(1, order.quantity)}"
+                        th:value="${i}"
+                        th:text="${i}"
+                    ></option>
+              </select>
+              <button class="primaryButton" style="margin-top: 40px" type="submit">Confirmar Troca</button>
+          </form>
+    </main>
+</body>
+</html>
