@@ -1,12 +1,10 @@
-package org.fatec.esportiva.response;
+package org.fatec.esportiva.dto.response;
 
 import lombok.*;
 
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @Builder

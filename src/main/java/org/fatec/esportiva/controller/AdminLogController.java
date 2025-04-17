@@ -2,7 +2,7 @@ package org.fatec.esportiva.controller;
 
 import java.util.List;
 
-import org.fatec.esportiva.request.LogDto;
+import org.fatec.esportiva.dto.request.LogDto;
 import org.fatec.esportiva.service.LogService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

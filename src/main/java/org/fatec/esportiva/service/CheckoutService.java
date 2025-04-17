@@ -5,8 +5,8 @@ import org.fatec.esportiva.entity.CreditCard;
 import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.mapper.CreditCardMapper;
-import org.fatec.esportiva.request.CreditCardDto;
-import org.fatec.esportiva.response.PromotionalCouponResponseDto;
+import org.fatec.esportiva.dto.request.CreditCardDto;
+import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

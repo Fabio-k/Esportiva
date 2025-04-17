@@ -1,8 +1,7 @@
 package org.fatec.esportiva.service;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.entity.CartItem;
-import org.fatec.esportiva.response.CartItemResponseDto;
+import org.fatec.esportiva.dto.response.CartItemResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

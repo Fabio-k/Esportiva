@@ -1,10 +1,10 @@
 package org.fatec.esportiva.mapper;
 
 import org.fatec.esportiva.entity.Transaction;
-import org.fatec.esportiva.request.TransactionDto;
+import org.fatec.esportiva.dto.request.TransactionDto;
 
 import lombok.experimental.UtilityClass;
-import org.fatec.esportiva.response.TransactionResponseDto;
+import org.fatec.esportiva.dto.response.TransactionResponseDto;
 
 @UtilityClass
 public class TransactionMapper {

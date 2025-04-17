@@ -16,8 +16,8 @@ import org.fatec.esportiva.mapper.OrderMapper;
 import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.repository.OrderRepository;
 import org.fatec.esportiva.repository.ProductRepository;
-import org.fatec.esportiva.request.OrderDto;
-import org.fatec.esportiva.response.OrderResponseDto;
+import org.fatec.esportiva.dto.request.OrderDto;
+import org.fatec.esportiva.dto.response.OrderResponseDto;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -176,14 +176,14 @@ public class OrderService {
     public void tradeOrder(Long id, Short quantity) {
         Client client = clientService.getAuthenticatedClient();
         Order order = orderRepository.findByTransactionClientIdAndId(client.getId(), id).orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
-        if (order.hasEnoughDeliveredQuantity(quantity)) throw new IllegalArgumentException("Quantidade inválida");
+        if (order.hasInsufficientQuantity(quantity) || order.getStatus() != OrderStatus.ENTREGUE) throw new IllegalArgumentException("Quantidade inválida");
         order.setQuantity(order.getQuantity() - quantity);
         orderRepository.save(order);
         Order newOrder = Order.builder()
                 .transaction(order.getTransaction())
                 .product(order.getProduct())
                 .quantity(quantity)
-                .status(order.getStatus())
+                .status(OrderStatus.ENTREGUE)
                 .build();
 
         newOrder = orderRepository.save(newOrder);

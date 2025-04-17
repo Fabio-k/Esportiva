@@ -28,6 +28,7 @@ public class OrdersController {
 
     @PatchMapping("/trade/{id}")
     public String patchTrade(@PathVariable Long id, @RequestParam(name = "tradeQuantity") Short quantity){
+        if(quantity <= 0) throw new IllegalArgumentException("Quantidade a ser trocada deve ser maior do que 0");
         orderService.tradeOrder(id, quantity);
         return "redirect:/orders";
     }

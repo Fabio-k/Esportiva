@@ -1,4 +1,4 @@
-package org.fatec.esportiva.request;
+package org.fatec.esportiva.dto.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;

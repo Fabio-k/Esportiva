@@ -1,7 +1,7 @@
 package org.fatec.esportiva.controller.api;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.response.NotificationResponseDto;
+import org.fatec.esportiva.dto.response.NotificationResponseDto;
 import org.fatec.esportiva.service.NotificationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

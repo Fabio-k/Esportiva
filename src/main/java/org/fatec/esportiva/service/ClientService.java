@@ -10,10 +10,10 @@ import org.fatec.esportiva.mapper.CartMapper;
 import org.fatec.esportiva.mapper.ClientMapper;
 import org.fatec.esportiva.mapper.ExchangeVoucherMapper;
 import org.fatec.esportiva.repository.ClientRepository;
-import org.fatec.esportiva.request.ClientDto;
-import org.fatec.esportiva.response.AddressResponseDto;
-import org.fatec.esportiva.response.CartResponseDto;
-import org.fatec.esportiva.response.ExchangeVoucherResponseDto;
+import org.fatec.esportiva.dto.request.ClientDto;
+import org.fatec.esportiva.dto.response.AddressResponseDto;
+import org.fatec.esportiva.dto.response.CartResponseDto;
+import org.fatec.esportiva.dto.response.ExchangeVoucherResponseDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 

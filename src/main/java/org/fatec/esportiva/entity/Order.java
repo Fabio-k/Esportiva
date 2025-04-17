@@ -54,16 +54,16 @@ public class Order {
                 transaction.getId());
     }
 
-    public Boolean hasEnoughDeliveredQuantity(Short tradedQuantity){
-        return this.quantity < tradedQuantity || status != OrderStatus.ENTREGUE;
+    public Boolean hasInsufficientQuantity(int tradedQuantity){
+        return this.quantity < tradedQuantity;
     }
 
 
-    public Boolean isBeignTraded(){
-        return status.isBeignTraded();
+    public Boolean isBeingTraded(){
+        return status.isBeingTraded();
     }
 
-    public boolean isBeignDelivered() {
-        return status.isBeignDelivered();
+    public boolean isInDeliveryProcess() {
+        return status.isInDeliveryProcess();
     }
 }

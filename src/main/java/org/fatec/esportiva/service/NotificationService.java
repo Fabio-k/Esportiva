@@ -7,7 +7,7 @@ import org.fatec.esportiva.entity.Notification;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.mapper.NotificationMapper;
 import org.fatec.esportiva.repository.NotificationRepository;
-import org.fatec.esportiva.response.NotificationResponseDto;
+import org.fatec.esportiva.dto.response.NotificationResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -6,7 +6,7 @@ import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.mapper.ExchangeVoucherMapper;
 import org.fatec.esportiva.repository.ExchangeVoucherRepository;
-import org.fatec.esportiva.request.ExchangeVoucherDto;
+import org.fatec.esportiva.dto.request.ExchangeVoucherDto;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

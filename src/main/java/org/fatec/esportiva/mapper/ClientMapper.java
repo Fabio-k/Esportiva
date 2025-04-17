@@ -2,7 +2,7 @@ package org.fatec.esportiva.mapper;
 
 import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.entity.Client;
-import org.fatec.esportiva.request.ClientDto;
+import org.fatec.esportiva.dto.request.ClientDto;
 
 @UtilityClass
 public class ClientMapper {

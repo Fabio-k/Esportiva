@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.ProductStatus;
-import org.fatec.esportiva.request.ProductCategoryDto;
-import org.fatec.esportiva.request.ProductDto;
+import org.fatec.esportiva.dto.request.ProductCategoryDto;
+import org.fatec.esportiva.dto.request.ProductDto;
 
 import org.fatec.esportiva.service.ProductService;
 import org.springframework.stereotype.Controller;

@@ -2,7 +2,7 @@ package org.fatec.esportiva.mapper;
 
 import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.entity.PromotionalCoupon;
-import org.fatec.esportiva.response.PromotionalCouponResponseDto;
+import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
 
 import java.math.BigDecimal;
 

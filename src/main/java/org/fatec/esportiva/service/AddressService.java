@@ -8,7 +8,7 @@ import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.repository.AddressCategoryRepository;
 import org.fatec.esportiva.repository.AddressRepository;
-import org.fatec.esportiva.request.AddressDto;
+import org.fatec.esportiva.dto.request.AddressDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

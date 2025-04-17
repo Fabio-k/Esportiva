@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Cep;
 import org.fatec.esportiva.mapper.CepMapper;
 import org.fatec.esportiva.repository.CepRepository;
-import org.fatec.esportiva.request.AddressDto;
+import org.fatec.esportiva.dto.request.AddressDto;
 import org.springframework.stereotype.Service;
 
 @Service

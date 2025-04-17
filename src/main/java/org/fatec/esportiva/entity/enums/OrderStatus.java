@@ -21,11 +21,11 @@ public enum OrderStatus {
         return displayName;
     }
 
-    public Boolean isBeignTraded(){
+    public Boolean isBeingTraded(){
         return this == EM_TROCA || this == TROCADO || this == TROCA_FINALIZADA || this == TROCA_RECUSADA;
     }
 
-    public boolean isBeignDelivered() {
+    public boolean isInDeliveryProcess() {
         return this == ENTREGUE || this == EM_TRANSITO || this == EM_PROCESSAMENTO;
     }
 }

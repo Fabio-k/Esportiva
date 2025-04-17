@@ -9,9 +9,8 @@ import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.CartMapper;
 import org.fatec.esportiva.repository.CartItemRepository;
 import org.fatec.esportiva.repository.CartRepository;
-import org.fatec.esportiva.request.CartItemRequestDto;
-import org.fatec.esportiva.response.CartItemResponseDto;
-import org.fatec.esportiva.response.CartResponseDto;
+import org.fatec.esportiva.dto.request.CartItemRequestDto;
+import org.fatec.esportiva.dto.response.CartItemResponseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

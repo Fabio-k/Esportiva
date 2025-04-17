@@ -1,7 +1,7 @@
 package org.fatec.esportiva.controller.api;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.response.ProductResponseDto;
+import org.fatec.esportiva.dto.response.ProductResponseDto;
 import org.fatec.esportiva.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

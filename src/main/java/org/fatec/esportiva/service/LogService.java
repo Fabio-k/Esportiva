@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.fatec.esportiva.mapper.LogMapper;
 import org.fatec.esportiva.repository.LogRepository;
-import org.fatec.esportiva.request.LogDto;
+import org.fatec.esportiva.dto.request.LogDto;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package org.fatec.esportiva.request;
+package org.fatec.esportiva.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

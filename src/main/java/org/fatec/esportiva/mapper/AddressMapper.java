@@ -4,8 +4,8 @@ import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.entity.Address;
 import org.fatec.esportiva.entity.Cep;
 import org.fatec.esportiva.entity.Client;
-import org.fatec.esportiva.request.AddressDto;
-import org.fatec.esportiva.response.AddressResponseDto;
+import org.fatec.esportiva.dto.request.AddressDto;
+import org.fatec.esportiva.dto.response.AddressResponseDto;
 
 import java.math.BigDecimal;
 import java.util.HashSet;

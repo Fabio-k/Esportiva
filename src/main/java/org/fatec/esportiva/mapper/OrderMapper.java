@@ -2,10 +2,10 @@ package org.fatec.esportiva.mapper;
 
 import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.entity.Order;
-import org.fatec.esportiva.request.OrderDto;
+import org.fatec.esportiva.dto.request.OrderDto;
 
-import org.fatec.esportiva.response.OrderByStatusResponseDto;
-import org.fatec.esportiva.response.OrderResponseDto;
+import org.fatec.esportiva.dto.response.OrderByStatusResponseDto;
+import org.fatec.esportiva.dto.response.OrderResponseDto;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,11 +47,11 @@ public class OrderMapper {
         for(Order order : orders){
              orderResponseDto = toOrderResponseDto(order);
 
-            if(order.isBeignDelivered()){
+            if(order.isInDeliveryProcess()){
                 orderByStatusResponseDto.getDeliveredOrders().add(orderResponseDto);
                 orderResponseDto.setTotalProductQuantity(order.getQuantity());
 
-            } else if (order.isBeignTraded()) {
+            } else if (order.isBeingTraded()) {
                 orderByStatusResponseDto.getTradedOrders().add(orderResponseDto);
             }
         }
