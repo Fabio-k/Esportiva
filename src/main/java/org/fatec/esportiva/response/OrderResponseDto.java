@@ -20,4 +20,12 @@ public class OrderResponseDto {
     public Boolean isSuccessfullyTraded(){
         return status == OrderStatus.TROCADO || status == OrderStatus.TROCA_FINALIZADA;
     }
+
+    public Boolean isTradeRefused(){
+        return status == OrderStatus.TROCA_RECUSADA;
+    }
+
+    public  Boolean isTradeAccepted(){
+        return status == OrderStatus.EM_TROCA;
+    }
 }

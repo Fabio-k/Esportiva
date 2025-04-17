@@ -60,7 +60,7 @@ public class OrderService {
 
         // Máquina de estados
         if  (status == OrderStatus.EM_PROCESSAMENTO) {
-            if (approve == true) {
+            if (approve) {
                 // Dá a baixa no estoque aqui e desbloqueia os produtos
                 order.setStatus(OrderStatus.EM_TRANSITO);
                 product.decreaseStock(order.getQuantity());
@@ -72,7 +72,7 @@ public class OrderService {
         }
 
         else if (status == OrderStatus.EM_TRANSITO) {
-            if (approve == true) {
+            if (approve) {
                 // Vai para a casa do cliente
                 order.setStatus(OrderStatus.ENTREGUE);
             } else {
@@ -86,7 +86,7 @@ public class OrderService {
         }
 
         else if (status == OrderStatus.ENTREGUE) {
-            if (approve == true) {
+            if (approve) {
                 // Aparece um aviso para o cliente que a troca foi aceita
                 // Pode ser uma lista de produtos que estão nesse estado
                 order.setStatus(OrderStatus.EM_TROCA);
@@ -97,9 +97,11 @@ public class OrderService {
         }
 
         else if (status == OrderStatus.EM_TROCA) {
-            if (approve == true) {
+            if (approve) {
                 // Troca aceita
                 order.setStatus(OrderStatus.TROCADO);
+                voucherValue = calculateVoucherValue(order);
+                client = refundVoucher(client, voucherValue);
             } else {
                 // Troca recusada, não faz nada
                 order.setStatus(OrderStatus.TROCA_RECUSADA);
@@ -108,13 +110,11 @@ public class OrderService {
         }
 
         else if (status == OrderStatus.TROCADO) {
-            if (approve == true) {
+            if (approve) {
                 // Repõe o estoque quando a troca é finalizada
                 // Reembolsa o cliente
                 order.setStatus(OrderStatus.TROCA_FINALIZADA);
                 product.setStockQuantity(product.getStockQuantity() + order.getQuantity());
-                voucherValue = calculateVoucherValue(order);
-                client = refundVoucher(client, voucherValue);
             } else {
                 // Produto não chegou na loja, troca recusada novamente
                 order.setStatus(OrderStatus.TROCA_RECUSADA);
