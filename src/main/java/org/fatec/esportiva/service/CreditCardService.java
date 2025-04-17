@@ -6,7 +6,7 @@ import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.CreditCard;
 import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.repository.CreditCardRepository;
-import org.fatec.esportiva.request.CreditCardDto;
+import org.fatec.esportiva.dto.request.CreditCardDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

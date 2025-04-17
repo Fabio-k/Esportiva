@@ -3,8 +3,8 @@ package org.fatec.esportiva.controller;
 import java.util.List;
 
 import org.fatec.esportiva.entity.enums.OrderStatus;
-import org.fatec.esportiva.request.OrderDto;
-import org.fatec.esportiva.request.TransactionDto;
+import org.fatec.esportiva.dto.request.OrderDto;
+import org.fatec.esportiva.dto.request.TransactionDto;
 import org.fatec.esportiva.service.OrderService;
 import org.fatec.esportiva.service.TransactionService;
 import org.springframework.stereotype.Controller;

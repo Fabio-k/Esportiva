@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.fatec.esportiva.entity.CartItem;
-import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.fatec.esportiva.mapper.ProductMapper;
 import org.fatec.esportiva.repository.ProductRepository;
-import org.fatec.esportiva.request.ProductDto;
-import org.fatec.esportiva.response.ProductResponseDto;
+import org.fatec.esportiva.dto.request.ProductDto;
+import org.fatec.esportiva.dto.response.ProductResponseDto;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;

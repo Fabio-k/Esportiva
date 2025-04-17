@@ -10,10 +10,10 @@ INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car
 ('6011737478309686', 'DISCOVER', 'Vanessa V. Hausten', '647', '3');
 
 INSERT INTO cep(cep_cep, cep_logradouro, cep_bairro, cep_cidade, cep_estado, cep_pais) VALUES
-('13424794', 'Rua das Laranjeiras', 'Vila das Rosas', 'Pindamonhangaba', 'São Paulo', 'Brasil'),
-('08490690', 'Avenida Rodrigo Souza', 'Vila Madalena', 'São Paulo', 'São Paulo', 'Brasil'),
-('13337550', 'Estrada dos Desalmados', 'Bela Vista', 'Ponta Grossa', 'Minas Gerais', 'Brasil'),
-('11348310', 'Caminho da Luz', 'Pamonha', 'Americana', 'Paraná', 'Brasil');
+('08343000', 'Travessa Somos Todos Iguais', 'Jardim da Conquista', 'São Paulo', 'São Paulo', 'Brasil'),
+('60332070', 'Rua Grito de Alerta', 'Barra do Ceará', 'Fortaleza', 'Ceará', 'Brasil'),
+('35407971', 'Rua Rodrigo Silva', 'Vila Aparecida', 'Ouro Preto', 'Minas Gerais', 'Brasil'),
+('52191440', 'Rua Só Nós Dois', 'Brejo de Beberibe', 'Recife', 'Pernambuco',  'Brasil');
 
 INSERT INTO enderecos (end_numero, end_tipo_residencia, end_tipo_logradouro, end_frase_identificacao, end_observacao, end_cli_id, end_cep_id) VALUES
 ('123', 'CASA', 'RUA', 'Minha Casa', '', '1', '1'),

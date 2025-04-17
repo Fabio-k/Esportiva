@@ -1,4 +1,4 @@
-package org.fatec.esportiva.request;
+package org.fatec.esportiva.dto.request;
 
 import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.Transaction;

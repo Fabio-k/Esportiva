@@ -32,7 +32,20 @@
                     <p class="inactiveText" th:classappend="${transaction.isDelivered()} ? activeText : ''">Entregue</p>
                 </div>
             </div>
-            <div th:each="order : ${transaction.orders}">
+            <div style="display: flex; justify-content: space-between" th:each="order : ${transaction.orders.deliveredOrders}">
+                <div style="display: flex; gap: 20px">
+                    <div style="width: 80px">
+                        <img th:src="${order.product.image}" style="width: 100%">
+                    </div>
+                    <div>
+                        <p th:text="${order.product.name}"></p>
+                        <p th:text="'Quantidade: ' + ${order.totalProductQuantity}"></p>
+                    </div>
+                </div>
+                <a class="primaryButton" style="height: fit-content" th:if="${transaction.isDelivered() && order.quantity != 0}" th:href="@{/orders/trade/{id}(id=${order.id})}">Solicitar Troca</a>
+            </div>
+            <h3 th:if="${transaction.orders.tradedOrders.size() > 0}">Trocas</h3>
+            <div style="display: flex; justify-content: space-between" th:each="order : ${transaction.orders.tradedOrders}">
                 <div style="display: flex; gap: 20px">
                     <div style="width: 80px">
                         <img th:src="${order.product.image}" style="width: 100%">
@@ -42,7 +55,14 @@
                         <p th:text="'Quantidade: ' + ${order.quantity}"></p>
                     </div>
                 </div>
+
+                <div style="display: flex; gap: 20px" th:if="${!order.isTradeRefused()}">
+                    <p class="inactiveText" th:classappend="${order.isTradeAccepted()} ? activeText : ''">Em processamento</p>
+                    <p class="inactiveText" th:classappend="${order.isSuccessfullyTraded()} ? activeText : ''">Trocado</p>
+                </div>
+                <p style="color: red" th:if="${order.isTradeRefused()}">Troca recusada</p>
             </div>
+
         </section>
         <script th:src="@{/js/notification.js}" sec:authorize="hasRole('ROLE_CLIENT')"></script>
     </main>

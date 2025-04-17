@@ -53,4 +53,17 @@ public class Order {
                 quantity,
                 transaction.getId());
     }
+
+    public Boolean hasInsufficientQuantity(int tradedQuantity){
+        return this.quantity < tradedQuantity;
+    }
+
+
+    public Boolean isBeingTraded(){
+        return status.isBeingTraded();
+    }
+
+    public boolean isInDeliveryProcess() {
+        return status.isInDeliveryProcess();
+    }
 }

@@ -2,10 +2,10 @@ package org.fatec.esportiva.mapper;
 
 import org.fatec.esportiva.entity.Product;
 
-import org.fatec.esportiva.request.ProductDto;
+import org.fatec.esportiva.dto.request.ProductDto;
 
 import lombok.experimental.UtilityClass;
-import org.fatec.esportiva.response.ProductResponseDto;
+import org.fatec.esportiva.dto.response.ProductResponseDto;
 
 @UtilityClass
 public class ProductMapper {

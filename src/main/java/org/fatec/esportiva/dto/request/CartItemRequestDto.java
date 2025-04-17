@@ -1,3 +1,3 @@
-package org.fatec.esportiva.request;
+package org.fatec.esportiva.dto.request;
 
 public record CartItemRequestDto(Long id, Short quantity) {}

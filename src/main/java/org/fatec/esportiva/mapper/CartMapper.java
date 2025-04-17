@@ -2,7 +2,7 @@ package org.fatec.esportiva.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Cart;
-import org.fatec.esportiva.response.CartResponseDto;
+import org.fatec.esportiva.dto.response.CartResponseDto;
 import org.fatec.esportiva.service.CurrencyService;
 import org.springframework.stereotype.Component;
 

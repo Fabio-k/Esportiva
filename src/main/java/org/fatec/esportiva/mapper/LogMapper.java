@@ -1,7 +1,7 @@
 package org.fatec.esportiva.mapper;
 
 import org.fatec.esportiva.entity.Log;
-import org.fatec.esportiva.request.LogDto;
+import org.fatec.esportiva.dto.request.LogDto;
 
 import lombok.experimental.UtilityClass;
 

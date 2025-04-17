@@ -3,7 +3,7 @@ package org.fatec.esportiva.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.request.UserLoginRequest;
+import org.fatec.esportiva.dto.request.UserLoginRequest;
 import org.fatec.esportiva.service.AuthService;
 import org.fatec.esportiva.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;

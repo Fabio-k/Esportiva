@@ -1,7 +1,7 @@
 package org.fatec.esportiva.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.response.ProductResponseDto;
+import org.fatec.esportiva.dto.response.ProductResponseDto;
 import org.fatec.esportiva.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

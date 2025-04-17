@@ -2,7 +2,7 @@ package org.fatec.esportiva.entity.session;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.fatec.esportiva.response.AddressResponseDto;
+import org.fatec.esportiva.dto.response.AddressResponseDto;
 
 import java.io.Serializable;
 import java.util.ArrayList;

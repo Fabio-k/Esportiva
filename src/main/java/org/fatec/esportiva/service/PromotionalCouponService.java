@@ -5,12 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.PromotionalCoupon;
 import org.fatec.esportiva.mapper.PromotionalCouponMapper;
 import org.fatec.esportiva.repository.PromotionalCouponRepository;
-import org.fatec.esportiva.response.PromotionalCouponResponseDto;
+import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 @Service
 @RequiredArgsConstructor

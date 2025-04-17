@@ -21,7 +21,6 @@ public class CartScheduledTask {
     private final CartRepository cartRepository;
     private final CartService cartService;
     private final NotificationService notificationService;
-    private final static String cartTimeoutMessage = "Os itens do carrinho serão removidos em 5 minutos";
 
     @Value("${cart.product.timeoutInMinutes}")
     private int cartTimeoutInMinutes;
@@ -47,7 +46,7 @@ public class CartScheduledTask {
         carts.forEach(cart -> {
             List<CartItem> cartItems = cart.getCartItems();
             if(!cartItems.isEmpty()){
-                notificationService.createNotification(cart.getClient(), cartTimeoutMessage);
+                notificationService.notifyCartTimeout(cart.getClient());
                 cartService.setToNotified(cart.getId(), true);
             }
         });

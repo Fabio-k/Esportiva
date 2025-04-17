@@ -1,4 +1,4 @@
-package org.fatec.esportiva.response;
+package org.fatec.esportiva.dto.response;
 
 import lombok.*;
 

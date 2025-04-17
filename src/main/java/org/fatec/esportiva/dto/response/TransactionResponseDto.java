@@ -1,12 +1,10 @@
-package org.fatec.esportiva.response;
+package org.fatec.esportiva.dto.response;
 
 import lombok.*;
 
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @Builder
@@ -20,7 +18,7 @@ public class TransactionResponseDto {
 
     private OrderStatus status;
 
-    private List<OrderResponseDto> orders = new ArrayList<>();
+    private OrderByStatusResponseDto orders;
 
     public Boolean isInProcessing(){
         return status == OrderStatus.EM_PROCESSAMENTO;
