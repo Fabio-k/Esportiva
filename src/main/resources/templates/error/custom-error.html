@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Esportiva</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+  <style>
+    main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+<header th:replace="~{fragments/header.html :: simpleHeader}"></header>
+  <main class="card">
+    <h3 th:text="'Erro: ' + ${error}"></h3>
+    <a th:href="@{/}">Voltar para a página inicial</a>
+  </main>
+</body>
+</html>
