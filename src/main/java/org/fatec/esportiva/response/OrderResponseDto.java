@@ -15,4 +15,9 @@ public class OrderResponseDto {
     private ProductResponseDto product;
     private Integer quantity;
     private OrderStatus status;
+    private Integer totalProductQuantity;
+
+    public Boolean isSuccessfullyTraded(){
+        return status == OrderStatus.TROCADO || status == OrderStatus.TROCA_FINALIZADA;
+    }
 }

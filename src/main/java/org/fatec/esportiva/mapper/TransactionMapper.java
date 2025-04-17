@@ -13,7 +13,7 @@ public class TransactionMapper {
                 .id(transaction.getId())
                 .status(transaction.getStatus())
                 .purchaseDate(transaction.getPurchaseDate())
-                .orders(transaction.getOrders().stream().map(OrderMapper::toOrderResponseDto).toList())
+                .orders(OrderMapper.toOrderByStatusResponseDto(transaction.getOrders()))
                 .build();
     }
 

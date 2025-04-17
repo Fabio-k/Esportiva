@@ -20,7 +20,7 @@ public class TransactionResponseDto {
 
     private OrderStatus status;
 
-    private List<OrderResponseDto> orders = new ArrayList<>();
+    private OrderByStatusResponseDto orders;
 
     public Boolean isInProcessing(){
         return status == OrderStatus.EM_PROCESSAMENTO;

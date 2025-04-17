@@ -4,7 +4,11 @@ import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.request.OrderDto;
 
+import org.fatec.esportiva.response.OrderByStatusResponseDto;
 import org.fatec.esportiva.response.OrderResponseDto;
+
+import java.util.List;
+import java.util.Objects;
 
 @UtilityClass
 public class OrderMapper {
@@ -34,5 +38,32 @@ public class OrderMapper {
                 .product(ProductMapper.toProductResponseDto(order.getProduct()))
                 .quantity(order.getQuantity())
                 .build();
+    }
+
+    public OrderByStatusResponseDto toOrderByStatusResponseDto(List<Order> orders){
+        OrderByStatusResponseDto orderByStatusResponseDto = new OrderByStatusResponseDto();
+        OrderResponseDto orderResponseDto;
+
+        for(Order order : orders){
+             orderResponseDto = toOrderResponseDto(order);
+
+            if(order.isBeignDelivered()){
+                orderByStatusResponseDto.getDeliveredOrders().add(orderResponseDto);
+                orderResponseDto.setTotalProductQuantity(order.getQuantity());
+
+            } else if (order.isBeignTraded()) {
+                orderByStatusResponseDto.getTradedOrders().add(orderResponseDto);
+            }
+        }
+
+        for(OrderResponseDto tradedOrder : orderByStatusResponseDto.getTradedOrders()){
+            for(OrderResponseDto deliveredOrder : orderByStatusResponseDto.getDeliveredOrders()){
+                if (Objects.equals(deliveredOrder.getProduct().id(), tradedOrder.getProduct().id())){
+                    deliveredOrder.setTotalProductQuantity(deliveredOrder.getTotalProductQuantity() + tradedOrder.getQuantity());
+                }
+            }
+        }
+
+        return orderByStatusResponseDto;
     }
 }
