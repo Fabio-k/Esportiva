@@ -53,4 +53,17 @@ public class Order {
                 quantity,
                 transaction.getId());
     }
+
+    public Boolean hasEnoughDeliveredQuantity(Short tradedQuantity){
+        return this.quantity < tradedQuantity || status != OrderStatus.ENTREGUE;
+    }
+
+
+    public Boolean isBeignTraded(){
+        return status.isBeignTraded();
+    }
+
+    public boolean isBeignDelivered() {
+        return status.isBeignDelivered();
+    }
 }

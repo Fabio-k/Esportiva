@@ -20,4 +20,12 @@ public enum OrderStatus {
     public  String getDisplayName(){
         return displayName;
     }
+
+    public Boolean isBeignTraded(){
+        return this == EM_TROCA || this == TROCADO || this == TROCA_FINALIZADA;
+    }
+
+    public boolean isBeignDelivered() {
+        return this == ENTREGUE || this == EM_TRANSITO || this == EM_PROCESSAMENTO;
+    }
 }
