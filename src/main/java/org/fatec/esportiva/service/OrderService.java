@@ -29,6 +29,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ClientRepository clientRepository;
     private final ClientService clientService;
+    private final NotificationService notificationService;
 
     // Constantes para aumentar a legibilidade
     private static final BigDecimal ZERO = BigDecimal.ZERO;
@@ -99,6 +100,7 @@ public class OrderService {
         else if (status == OrderStatus.EM_TROCA) {
             if (approve) {
                 // Troca aceita
+                notificationService.notifyTradeAccepted(order);
                 order.setStatus(OrderStatus.TROCADO);
                 voucherValue = calculateVoucherValue(order);
                 client = refundVoucher(client, voucherValue);
