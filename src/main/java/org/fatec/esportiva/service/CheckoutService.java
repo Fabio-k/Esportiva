@@ -21,6 +21,7 @@ public class CheckoutService {
     private final ExchangeVoucherService exchangeVoucherService;
     private final PromotionalCouponService promotionalCouponService;
     private final CreditCardService creditCardService;
+    private final ClientService clientService;
 
     public BigDecimal calculateTotalPrice(CheckoutSession checkoutSession){
         BigDecimal totalDiscount = BigDecimal.ZERO;
@@ -127,5 +128,19 @@ public class CheckoutService {
                 throw new IllegalArgumentException("Cartão de crédito inválido");
             }
         });
+    }
+
+    public void generateExchangeVoucher(CheckoutSession checkoutSession){
+        if(!checkoutSession.getCreditCardIds().isEmpty()) return;
+
+        BigDecimal freight = getFreight(checkoutSession.getAddress());
+        BigDecimal totalCost = getCartTotalPrice().add(freight);
+        BigDecimal result = totalCost
+                .subtract(getExchangeVouchersTotalPrice(checkoutSession))
+                .subtract(getPromotionalCouponDiscount(checkoutSession.getPromotionalCouponCode()));
+
+        if(result.compareTo(BigDecimal.ZERO) > -1) return;
+        BigDecimal extraExchangeCouponMoney = result.multiply(BigDecimal.valueOf(-1));
+        exchangeVoucherService.createExchangeVoucher(clientService.getAuthenticatedClient(), extraExchangeCouponMoney);
     }
 }

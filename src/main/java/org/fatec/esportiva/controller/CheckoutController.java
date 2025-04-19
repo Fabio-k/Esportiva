@@ -39,6 +39,7 @@ public class CheckoutController {
     private final CheckoutService checkoutService;
     private final PromotionalCouponService promotionalCouponService;
     private final FreightService freightService;
+    private final CartService cartService;
 
     @ModelAttribute("checkoutSession")
     public CheckoutSession createSession(){
@@ -232,6 +233,9 @@ public class CheckoutController {
             model.addAttribute("errorMessage", e.getMessage());
             transactionService.denyTransaction(transaction);
         }
+
+        checkoutService.generateExchangeVoucher(checkoutSession);
+        cartService.cleanCart();
 
         model.addAttribute("items", items);
         model.addAttribute("address", address);
