@@ -7,6 +7,8 @@ import lombok.*;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.listeners.LogListener;
 
+import java.math.BigDecimal;
+
 @Entity
 @EntityListeners(LogListener.class)
 @AllArgsConstructor
@@ -65,5 +67,10 @@ public class Order {
 
     public boolean isInDeliveryProcess() {
         return status.isInDeliveryProcess();
+    }
+
+    public BigDecimal getTotalPrice(){
+        BigDecimal quantity = BigDecimal.valueOf(this.quantity);
+        return product.getPriceWithMargin().multiply(quantity);
     }
 }

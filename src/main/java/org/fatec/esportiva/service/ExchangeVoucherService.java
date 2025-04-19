@@ -1,5 +1,6 @@
 package org.fatec.esportiva.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.fatec.esportiva.entity.Client;
@@ -15,6 +16,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ExchangeVoucherService {
     private final ExchangeVoucherRepository exchangeVoucherRepository;
+
+    public void createExchangeVoucher(Client client, BigDecimal value){
+        ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
+        exchangeVoucher.setId(null);
+        exchangeVoucher.setValue(value);
+        exchangeVoucher.setClient(client);
+        exchangeVoucherRepository.save(exchangeVoucher);
+    }
 
     public void validateExchangeVoucherOwnership(List<Long> voucherIds, Long clientId){
         List<ExchangeVoucher> vouchers = exchangeVoucherRepository.findAllByIdInAndClientId(voucherIds, clientId);

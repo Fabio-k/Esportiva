@@ -30,6 +30,7 @@ public class OrderService {
     private final ClientRepository clientRepository;
     private final ClientService clientService;
     private final NotificationService notificationService;
+    private final ExchangeVoucherService exchangeVoucherService;
 
     // Constantes para aumentar a legibilidade
     private static final BigDecimal ZERO = BigDecimal.ZERO;
@@ -52,8 +53,7 @@ public class OrderService {
     }
 
     // Máquina de estados que controla a transições conforme cada aprovação
-    public BigDecimal changeState(long id, boolean approve) {
-        BigDecimal voucherValue = ZERO; // Por padrão, o valor que nada aconteceu é zero
+    public void changeState(long id, boolean approve) {
         Order order = getNonOptional(orderRepository.findById(id));
         Product product = order.getProduct();
         Client client = order.getTransaction().getClient();
@@ -68,7 +68,6 @@ public class OrderService {
             } else {
                 // Reembolsa o cliente
                 order.setStatus(OrderStatus.COMPRA_CANCELADA);
-                voucherValue = calculateVoucherValue(order);
             }
         }
 
@@ -82,7 +81,6 @@ public class OrderService {
                 // Reembolsa o cliente
                 order.setStatus(OrderStatus.COMPRA_CANCELADA);
                 product.setStockQuantity(product.getStockQuantity() + order.getQuantity());
-                voucherValue = calculateVoucherValue(order);
             }
         }
 
@@ -102,8 +100,7 @@ public class OrderService {
                 // Troca aceita
                 notificationService.notifyTradeAccepted(order);
                 order.setStatus(OrderStatus.TROCADO);
-                voucherValue = calculateVoucherValue(order);
-                client = refundVoucher(client, voucherValue);
+                exchangeVoucherService.createExchangeVoucher(client, order.getTotalPrice());
             } else {
                 // Troca recusada, não faz nada
                 order.setStatus(OrderStatus.TROCA_RECUSADA);
@@ -123,44 +120,9 @@ public class OrderService {
             }
         }
 
-        else {
-            // Não faz nada nos outros estados
-        }
-
         orderRepository.save(order);
         productRepository.save(product);
-        clientRepository.save(client);
-        return voucherValue; // Caso tenha vários produtos, soma tudo e gera um cupom somente
-    }
-
-    // Cálculo do valor do cupom (Valor gasto com esse produto)
-    private BigDecimal calculateVoucherValue(Order order) {
-        // Margem de lucro em porcentagem
-        BigDecimal voucherValue = order.getProduct().getProfitMargin();
-        // Margem de lucro em decimal = (Margem de lucro em porcentagem / 100) + 1
-        voucherValue = voucherValue.divide(HUNDRED).add(ONE);
-        // Preço do produto = Margem de lucro * Custo do produto
-        voucherValue = voucherValue.multiply(order.getProduct().getCostValue());
-        // Valor do cupom = Preço do produto * Quantidade do produto
-        voucherValue = voucherValue.multiply(BigDecimal.valueOf(order.getQuantity()));
-
-        return voucherValue;
-    }
-
-    // Gera cupom para o cliente, reembolsando o produto
-    private Client refundVoucher(Client client, BigDecimal voucherValue) {
-        // Cria um novo cupom
-        ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
-        exchangeVoucher.setId(null);
-        exchangeVoucher.setValue(voucherValue);
-        exchangeVoucher.setClient(client);
-
-        // Adiciona o novo cupom a lista de cupons que o cliente já tinha
-        List<ExchangeVoucher> exchangeVouchers = client.getExchangeVouchers();
-        exchangeVouchers.add(exchangeVoucher);
-        client.setExchangeVouchers(exchangeVouchers);
-
-        return client;
+        clientRepository.save(client);// Caso tenha vários produtos, soma tudo e gera um cupom somente
     }
 
     // Remove o "Optional" do tipo que o linter reclama
