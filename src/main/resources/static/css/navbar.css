@@ -41,3 +41,9 @@ nav a:hover {
     width: 60px;
     height: 60px;
 }
+
+/* Espelha uma imagem. Útil para a seta  */
+.mirror {
+    transform: scaleX(-1);
+    /* Espelha verticalmente */
+}
