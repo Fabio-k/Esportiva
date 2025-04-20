@@ -193,6 +193,6 @@ public class OrderService {
                 .build();
 
         newOrder = orderRepository.save(newOrder);
-        changeState(newOrder.getId(), true);
+        changeState(newOrder.getId(), true, false);
     }
 }

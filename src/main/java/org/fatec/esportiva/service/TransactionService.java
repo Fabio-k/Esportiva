@@ -23,8 +23,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TransactionService {
     private final ClientService clientService;
-    private final AddressService addressService;
-    private final CreditCardService creditCardService;
     private final TransactionRepository transactionRepository;
     private final ClientRepository clientRepository;
     private final OrderService orderService;
@@ -49,17 +47,13 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction generateTransaction(CheckoutSession checkoutSession){
-        Address address = addressService.findById(checkoutSession.getAddress().getId());
-        List<CreditCard> creditCards = checkoutSession.getCreditCardIds().stream().map(creditCardService::findCreditCard).toList();
-
+    public Transaction generateTransaction(CheckoutSession checkoutSession) {
         Client client = clientService.getAuthenticatedClient();
         Transaction transaction = Transaction.builder()
                 .client(client)
                 .status(OrderStatus.EM_PROCESSAMENTO)
                 .purchaseDate(LocalDate.now())
                 .build();
-
 
         List<Order> orders = client.getCart().getCartItems().stream()
                 .map(cartItem -> {
@@ -163,7 +157,7 @@ public class TransactionService {
         // Se os pedidos retornarem algum valor, quer dizer que é para gerar cupons de
         // reembolso
         for (Order order : transaction.getOrders()) {
-            BigDecimal value = orderService.changeState(order.getId(), approve);
+            BigDecimal value = orderService.changeState(order.getId(), approve, false);
             totalValue = totalValue.add(value);
         }
 
