@@ -60,9 +60,23 @@ public class AdminLogisticController {
 
     @GetMapping("/return_finished")
     public String returnFinished(Model model) {
-        List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCADO);
+        List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCA_FINALIZADA);
         model.addAttribute("orders", orders);
         return "admin/logistic/return_finished";
+    }
+
+    @GetMapping("/cancel_deliver")
+    public String cancelDeliver(Model model) {
+        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.COMPRA_CANCELADA);
+        model.addAttribute("transactions", transactions);
+        return "admin/logistic/cancel_deliver";
+    }
+
+    @GetMapping("/cancel_refund")
+    public String cancelRefund(Model model) {
+        List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCA_RECUSADA);
+        model.addAttribute("orders", orders);
+        return "admin/logistic/cancel_refund";
     }
 
     @GetMapping("/approve")
