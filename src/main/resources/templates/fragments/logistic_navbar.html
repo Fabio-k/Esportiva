@@ -48,8 +48,8 @@
                 <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
 
                 <!-- Troca finalizada -->
-                <li class="navbar-image">
-                    <img th:src="@{/images/money.svg}" />
+                <li th:classappend="${activeItem == 'return_finished' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/return_finished"><img th:src="@{/images/money.svg}" /></a>
                 </li>
             </ul>
         </nav>

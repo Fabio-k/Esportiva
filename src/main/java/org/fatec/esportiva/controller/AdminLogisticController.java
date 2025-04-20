@@ -58,6 +58,13 @@ public class AdminLogisticController {
         return "admin/logistic/returned";
     }
 
+    @GetMapping("/return_finished")
+    public String returnFinished(Model model) {
+        List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCADO);
+        model.addAttribute("orders", orders);
+        return "admin/logistic/return_finished";
+    }
+
     @GetMapping("/approve")
     public String deliveryPipeline(Model model,
             HttpServletRequest request,
