@@ -45,14 +45,15 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public OrderResponseDto findByClientIdAndId(Long id){
+    public OrderResponseDto findByClientIdAndId(Long id) {
         Client client = clientService.getAuthenticatedClient();
-        Order order = orderRepository.findByTransactionClientIdAndId(client.getId(), id).orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+        Order order = orderRepository.findByTransactionClientIdAndId(client.getId(), id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
         return OrderMapper.toOrderResponseDto(order);
     }
 
     // Máquina de estados que controla a transições conforme cada aprovação
-    public BigDecimal changeState(long id, boolean approve) {
+    public BigDecimal changeState(long id, boolean approve, boolean stock) {
         BigDecimal voucherValue = ZERO; // Por padrão, o valor que nada aconteceu é zero
         Order order = getNonOptional(orderRepository.findById(id));
         Product product = order.getProduct();
@@ -60,7 +61,7 @@ public class OrderService {
         OrderStatus status = order.getStatus();
 
         // Máquina de estados
-        if  (status == OrderStatus.EM_PROCESSAMENTO) {
+        if (status == OrderStatus.EM_PROCESSAMENTO) {
             if (approve) {
                 // Dá a baixa no estoque aqui e desbloqueia os produtos
                 order.setStatus(OrderStatus.EM_TRANSITO);
@@ -116,7 +117,10 @@ public class OrderService {
                 // Repõe o estoque quando a troca é finalizada
                 // Reembolsa o cliente
                 order.setStatus(OrderStatus.TROCA_FINALIZADA);
-                product.setStockQuantity(product.getStockQuantity() + order.getQuantity());
+                // Somente retorna ao estoque se o usuário desejar (RF0043)
+                if (stock) {
+                    product.setStockQuantity(product.getStockQuantity() + order.getQuantity());
+                }
             } else {
                 // Produto não chegou na loja, troca recusada novamente
                 order.setStatus(OrderStatus.TROCA_RECUSADA);
@@ -175,8 +179,10 @@ public class OrderService {
     @Transactional
     public void tradeOrder(Long id, Short quantity) {
         Client client = clientService.getAuthenticatedClient();
-        Order order = orderRepository.findByTransactionClientIdAndId(client.getId(), id).orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
-        if (order.hasInsufficientQuantity(quantity) || order.getStatus() != OrderStatus.ENTREGUE) throw new IllegalArgumentException("Quantidade inválida");
+        Order order = orderRepository.findByTransactionClientIdAndId(client.getId(), id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+        if (order.hasInsufficientQuantity(quantity) || order.getStatus() != OrderStatus.ENTREGUE)
+            throw new IllegalArgumentException("Quantidade inválida");
         order.setQuantity(order.getQuantity() - quantity);
         orderRepository.save(order);
         Order newOrder = Order.builder()

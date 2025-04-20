@@ -83,6 +83,7 @@ public class AdminLogisticController {
     public String deliveryPipeline(Model model,
             HttpServletRequest request,
             @RequestParam(value = "approval", required = true) boolean approval,
+            @RequestParam(value = "stock", required = true) boolean stock,
             @RequestParam(value = "transaction", required = false, defaultValue = "") String transactionId,
             @RequestParam(value = "order", required = false, defaultValue = "") String orderId) throws Exception {
 
@@ -92,7 +93,7 @@ public class AdminLogisticController {
 
         } else if (orderId != "") {
             long id = Long.parseLong(orderId);
-            orderService.changeState(id, approval);
+            orderService.changeState(id, approval, stock);
 
         } else {
             throw new Exception("Ao aprovar uma transação/ordem, ambos os ID ficaram nulos");
