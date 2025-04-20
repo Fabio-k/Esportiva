@@ -61,7 +61,7 @@ public class CheckoutController {
 
     @ModelAttribute("exchangeVoucherTotalPrice")
     public String totalExchangeVoucherPrice(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
-        return currencyService.format(checkoutService.getExchangeVouchersTotalPrice(checkoutSession));
+        return currencyService.format(checkoutService.getExchangeVouchersTotalPrice(checkoutSession.getExchangeVoucherIds()));
     }
 
     @ModelAttribute("productsTotalPrice")
