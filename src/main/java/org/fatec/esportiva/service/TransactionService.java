@@ -26,10 +26,9 @@ public class TransactionService {
     private final AddressService addressService;
     private final CreditCardService creditCardService;
     private final TransactionRepository transactionRepository;
-    private final ClientRepository clientRepository;
     private final OrderService orderService;
-    private final CartService cartService;
     private final ProductService productService;
+    private final ExchangeVoucherService exchangeVoucherService;
 
     // Constante para melhorar legibilidade
     private static final BigDecimal ZERO = BigDecimal.valueOf(0);
@@ -71,7 +70,6 @@ public class TransactionService {
 
         transaction.setOrders(orders);
 
-        cartService.cleanCart();
         return transactionRepository.save(transaction);
     }
 
@@ -88,6 +86,7 @@ public class TransactionService {
                 // Reembolsa o cliente
                 transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
                 propagateStatusToOrder(transaction, false);
+                refundSingleVoucher(transaction);
             }
         } else if (status == OrderStatus.EM_TRANSITO) {
             if (approve) {
@@ -100,6 +99,7 @@ public class TransactionService {
                 // Reembolsa o cliente
                 transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
                 propagateStatusToOrder(transaction, false);
+                refundSingleVoucher(transaction);
             }
         }
 
@@ -114,37 +114,6 @@ public class TransactionService {
             }
         }
 
-        else if (status == OrderStatus.EM_TROCA) {
-            if (approve) {
-                // Troca aceita
-                transaction.setStatus(OrderStatus.TROCADO);
-                propagateStatusToOrder(transaction, true);
-            } else {
-                // Troca recusada, não faz nada
-                transaction.setStatus(OrderStatus.TROCA_RECUSADA);
-                propagateStatusToOrder(transaction, approve);
-            }
-
-        }
-
-        else if (status == OrderStatus.TROCADO) {
-            if (approve) {
-                // Repõe o estoque quando a troca é finalizada
-                // Reembolsa o cliente
-                transaction.setStatus(OrderStatus.TROCA_FINALIZADA);
-                propagateStatusToOrder(transaction, true);
-            } else {
-                // Produto não chegou na loja, troca recusada novamente
-                transaction.setStatus(OrderStatus.TROCA_RECUSADA);
-                propagateStatusToOrder(transaction, false);
-            }
-
-        }
-
-        else {
-            // Não faz nada nos outros estados
-        }
-
         // Atualiza a transação
         // Se aprovar todos os pedidos da transação, pode apagar ele
         if (transaction.getOrders().isEmpty()) {
@@ -157,38 +126,22 @@ public class TransactionService {
     }
 
     private void propagateStatusToOrder(Transaction transaction, boolean approve) throws Exception {
-        BigDecimal totalValue = ZERO;
 
         // Propaga o status para os pedidos
         // Se os pedidos retornarem algum valor, quer dizer que é para gerar cupons de
         // reembolso
         for (Order order : transaction.getOrders()) {
-            BigDecimal value = orderService.changeState(order.getId(), approve);
-            totalValue = totalValue.add(value);
-        }
-
-        // Se o valor do cupom for maior que zero, quer dizer que há algo para
-        // reembolsar
-        if (totalValue.compareTo(ZERO) > 0) {
-            refundSingleVoucher(transaction, totalValue);
+            orderService.changeState(order.getId(), approve);
         }
     }
 
     // Gera cupom para o cliente, reembolsando o produto
-    private void refundSingleVoucher(Transaction transaction, BigDecimal voucherValue) {
+    private void refundSingleVoucher(Transaction transaction) {
         Client client = transaction.getClient();
-
+        BigDecimal voucherValue = transaction.getTotalCost();
+        if(voucherValue.compareTo(BigDecimal.ZERO) < 1) return;
         // Cria um novo cupom
-        ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
-        exchangeVoucher.setId(null);
-        exchangeVoucher.setValue(voucherValue);
-        exchangeVoucher.setClient(client);
-
-        // Adiciona o novo cupom a lista de cupons que o cliente já tinha
-        List<ExchangeVoucher> exchangeVouchers = client.getExchangeVouchers();
-        exchangeVouchers.add(exchangeVoucher);
-        client.setExchangeVouchers(exchangeVouchers);
-        clientRepository.save(client);
+        exchangeVoucherService.createExchangeVoucher(client, voucherValue);
     }
 
     // Remove o "Optional" do tipo que o linter reclama

@@ -1,6 +1,7 @@
 package org.fatec.esportiva.service;
 
 import lombok.RequiredArgsConstructor;
+import org.fatec.esportiva.dto.response.AddressResponseDto;
 import org.fatec.esportiva.entity.CreditCard;
 import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.entity.session.CheckoutSession;
@@ -20,15 +21,18 @@ public class CheckoutService {
     private final ExchangeVoucherService exchangeVoucherService;
     private final PromotionalCouponService promotionalCouponService;
     private final CreditCardService creditCardService;
+    private final ClientService clientService;
 
     public BigDecimal calculateTotalPrice(CheckoutSession checkoutSession){
-        BigDecimal totalDiscount = BigDecimal.ZERO;
-        if(checkoutSession.getExchangeVoucherIds() != null){
-            totalDiscount = getTotalDiscount(checkoutSession);
-        }
-        BigDecimal freight = BigDecimal.ZERO;
-        if(checkoutSession.getAddress() != null) freight = checkoutSession.getAddress().getFreight();
+        BigDecimal totalDiscount = getTotalDiscount(checkoutSession);
+        BigDecimal freight = getFreight(checkoutSession.getAddress());
         return getCartTotalPrice().add(freight).subtract(totalDiscount).max(BigDecimal.ZERO);
+    }
+
+    public BigDecimal getFreight(AddressResponseDto address){
+        BigDecimal freight = BigDecimal.ZERO;
+        if(address != null) freight = address.getFreight();
+        return freight;
     }
 
     public BigDecimal getCartTotalPrice(){
@@ -36,19 +40,20 @@ public class CheckoutService {
     }
 
     public BigDecimal getTotalDiscount(CheckoutSession checkoutSession){
-        return getExchangeVouchersTotalPrice(checkoutSession).add(getPromotionalCouponDiscount(checkoutSession));
+        return getExchangeVouchersTotalPrice(checkoutSession.getExchangeVoucherIds()).add(getPromotionalCouponDiscount(checkoutSession.getPromotionalCouponCode()));
     }
 
-    public BigDecimal getExchangeVouchersTotalPrice(CheckoutSession checkoutSession){
-        List <ExchangeVoucher> vouchers = exchangeVoucherService.findAllById(checkoutSession.getExchangeVoucherIds());
+    public BigDecimal getExchangeVouchersTotalPrice(List<Long> exchangeVoucherIds){
+        if(exchangeVoucherIds == null) return BigDecimal.ZERO;
+        List <ExchangeVoucher> vouchers = exchangeVoucherService.findAllById(exchangeVoucherIds);
         return vouchers.stream()
                 .map(ExchangeVoucher::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public  BigDecimal getPromotionalCouponDiscount(CheckoutSession checkoutSession){
+    public  BigDecimal getPromotionalCouponDiscount(String promotionalCouponCode){
         BigDecimal promotionalCouponDiscount = BigDecimal.ZERO;
-        PromotionalCouponResponseDto responseDto = promotionalCouponService.getPromotionalCouponOrReturnNull(checkoutSession.getPromotionalCouponCode());
+        PromotionalCouponResponseDto responseDto = promotionalCouponService.getPromotionalCouponOrReturnNull(promotionalCouponCode);
         if(responseDto != null)  {
             promotionalCouponDiscount = responseDto.discountPrice();
         }
@@ -87,11 +92,10 @@ public class CheckoutService {
         List <ExchangeVoucher> vouchers = exchangeVoucherService.findAllById(checkoutSession.getExchangeVoucherIds());
         if (vouchers.isEmpty()) return;
 
-        BigDecimal freight = BigDecimal.ZERO;
-        if(checkoutSession.getAddress() != null) freight = checkoutSession.getAddress().getFreight();
+        BigDecimal freight = getFreight(checkoutSession.getAddress());
 
-        BigDecimal priceWithoutExchangeVouchers = getCartTotalPrice().add(freight).subtract(getPromotionalCouponDiscount(checkoutSession));
-        if (getExchangeVouchersTotalPrice(checkoutSession).compareTo(priceWithoutExchangeVouchers) < 1) return;
+        BigDecimal priceWithoutExchangeVouchers = getCartTotalPrice().add(freight).subtract(getPromotionalCouponDiscount(checkoutSession.getPromotionalCouponCode()));
+        if (getExchangeVouchersTotalPrice(checkoutSession.getExchangeVoucherIds()).compareTo(priceWithoutExchangeVouchers) < 1) return;
 
         vouchers.sort((a, b) -> b.getValue().compareTo(a.getValue()));
 
@@ -121,5 +125,18 @@ public class CheckoutService {
                 throw new IllegalArgumentException("Cartão de crédito inválido");
             }
         });
+    }
+
+    public void generateExchangeVoucher(CheckoutSession checkoutSession){
+        if(!checkoutSession.getCreditCardIds().isEmpty()) return;
+
+        BigDecimal freight = getFreight(checkoutSession.getAddress());
+        BigDecimal totalCost = getCartTotalPrice().add(freight);
+        BigDecimal result = totalCost
+                .subtract(getTotalDiscount(checkoutSession));
+
+        if(result.compareTo(BigDecimal.ZERO) >= 0) return;
+        BigDecimal extraExchangeCouponMoney = result.multiply(BigDecimal.valueOf(-1));
+        exchangeVoucherService.createExchangeVoucher(clientService.getAuthenticatedClient(), extraExchangeCouponMoney);
     }
 }

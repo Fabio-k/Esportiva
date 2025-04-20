@@ -27,6 +27,9 @@ public class ExchangeVoucher {
     @Column(name = "ctr_valor", precision = 10, scale = 2)
     private BigDecimal value;
 
+    @Column(name = "ctr_usado")
+    private Boolean isUsed = false;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "ctr_cli_id")
