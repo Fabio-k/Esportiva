@@ -1,13 +1,19 @@
 package org.fatec.esportiva.ai;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.math.RoundingMode;
 
 import org.fatec.esportiva.dto.request.AIDto;
 import org.fatec.esportiva.dto.request.ProductDto;
+import org.fatec.esportiva.dto.response.OrderResponseDto;
+import org.fatec.esportiva.dto.response.TransactionResponseDto;
 import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.fatec.esportiva.service.ProductService;
+import org.fatec.esportiva.service.TransactionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -28,10 +34,12 @@ public class AI {
     private final String modelName = "gemini-2.0-flash";
     private final RestClient restClient;
     private final ProductService productService;
+    private final TransactionService transactionService;
 
-    public AI(RestClient.Builder builder, ProductService productService) {
+    public AI(RestClient.Builder builder, ProductService productService, TransactionService transactionService) {
         this.restClient = builder.baseUrl(geminiApiBaseUrl).build();
         this.productService = productService;
+        this.transactionService = transactionService;
     }
 
     // Estou usando os exemplos REST
@@ -45,9 +53,10 @@ public class AI {
         // Define o content type: -H 'Content-Type: application/json' \
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String userText = "Recomende produtos com base na consulta e histórico do usuário, e da seguinte lista de produtos (Nome|Preço|Descrição):\n";
+        String userText = "Recomende produtos com base...\n";
         userText += getAvailableProducts();
-        userText += "Consulta do usuário:" + aiDto.message();
+        userText += getClientHistory();
+        userText += "E na Consulta do usuário: " + aiDto.message();
 
         String requestBody = String.format("""
                 {
@@ -110,21 +119,51 @@ public class AI {
     }
 
     private String getAvailableProducts() {
+        // Define o título dos produtos disponíveis e como a IA vai interpretar a tabela
+        String availableProducts = "Na seguinte lista de produtos (Nome|Preço|Descrição):\n";
+
         // Remove todos os atributos indisponíveis (Pelo Status e quantidade no estoque)
         List<ProductDto> productList = productService.getProducts("", ProductStatus.ATIVO, 100000, null);
         List<ProductDto> filteredList = productList.stream()
                 .filter(product -> (product.getStockQuantity() - product.getBlockedQuantity()) > 0)
                 .collect(Collectors.toList());
 
-        String availableProducts = "";
-
         // Obtém somente os atributos relevantes: Nome | Preço | Descrição
         for (ProductDto product : filteredList) {
             availableProducts += product.getName() + "|"
-                    + product.getCostValue().multiply(product.getProfitMargin()).toString() + "|"
+                    + product.getCostValue().multiply(product.getProfitMargin().add(BigDecimal.ONE))
+                            .setScale(2, RoundingMode.HALF_UP).toString()
+                    + "|"
                     + product.getDescription() + "\n";
         }
 
         return availableProducts;
+    }
+
+    private String getClientHistory() {
+        // Define o título da seção do histórico do cliente e como a IA vai interpretar
+        // a tabela
+        String clientHistory = "No histórico do cliente (Nome|Quantidade comprada):\n";
+        Map<String, Integer> productsHistory = new HashMap<>();
+
+        // Obtém todos os produtos que estão no fluxo de compras (Do carrinho até a casa
+        // do cliente)
+        // Esses produtos são considerados compras efetuadas (O pipeline de devolução
+        // pode se considerar 'compra não efetuada')
+        List<TransactionResponseDto> clientTransactions = transactionService.getTransactions();
+        for (TransactionResponseDto transaction : clientTransactions) {
+            for (OrderResponseDto order : transaction.getOrders().getDeliveredOrders()) {
+                String productName = order.getProduct().getName();
+                Integer productQuantity = order.getQuantity();
+                productsHistory.put(productName, productsHistory.getOrDefault(productName, 0) + productQuantity);
+            }
+        }
+
+        // Converte os valores obtidos para a string
+        for (Map.Entry<String, Integer> element : productsHistory.entrySet()) {
+            clientHistory += element.getKey() + "|" + element.getValue() + "\n";
+        }
+
+        return clientHistory;
     }
 }
