@@ -129,7 +129,6 @@ CREATE TABLE produtos (
     pro_data_entrada              DATE NOT NULL,
     pro_quantidade_estoque        INTEGER NOT NULL,
     pro_quantidade_bloqueada      INTEGER NOT NULL,
-    pro_margem_lucro              NUMERIC(10,2) NOT NULL,
     pro_valor_custo               NUMERIC(10,2) NOT NULL,
     pro_categoria_inativacao      VARCHAR(23) NOT NULL,
     pro_justificativa_inativacao  VARCHAR(50) NOT NULL,

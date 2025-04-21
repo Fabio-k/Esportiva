@@ -26,7 +26,7 @@ public class CartItem implements Serializable {
     private Short quantity;
 
     @ManyToOne
-    @JoinColumn(name = "itc_car_id")
+    @JoinColumn(name = "itc_crr_id")
     private Cart cart;
 
     @ManyToOne

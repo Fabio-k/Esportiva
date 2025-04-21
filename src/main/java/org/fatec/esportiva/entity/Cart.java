@@ -17,19 +17,19 @@ import java.util.List;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "car_id")
+    @Column(name = "crr_id")
     private Long id;
 
     @OneToMany(mappedBy = "cart", orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "car_cli_id")
+    @JoinColumn(name = "crr_cli_id")
     private Client client;
 
-    @Column(name = "car_criado_em")
+    @Column(name = "crr_criado_em")
     private LocalDateTime createdAt;
 
-    @Column(name = "car_notificado")
+    @Column(name = "crr_notificado")
     private Boolean isNotified;
 }

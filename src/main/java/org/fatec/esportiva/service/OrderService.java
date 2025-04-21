@@ -140,7 +140,7 @@ public class OrderService {
     // Cálculo do valor do cupom (Valor gasto com esse produto)
     private BigDecimal calculateVoucherValue(Order order) {
         // Margem de lucro em porcentagem
-        BigDecimal voucherValue = order.getProduct().getProfitMargin();
+        BigDecimal voucherValue = order.getProduct().getPricingGroup().getProfitMargin();
         // Margem de lucro em decimal = (Margem de lucro em porcentagem / 100) + 1
         voucherValue = voucherValue.divide(HUNDRED).add(ONE);
         // Preço do produto = Margem de lucro * Custo do produto
