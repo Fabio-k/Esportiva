@@ -111,7 +111,7 @@ public class AI {
 
     private String getAvailableProducts() {
         // Remove todos os atributos indisponíveis (Pelo Status e quantidade no estoque)
-        List<ProductDto> productList = productService.getProducts(null, ProductStatus.ATIVO, 100000, null);
+        List<ProductDto> productList = productService.getProducts("", ProductStatus.ATIVO, 100000, null);
         List<ProductDto> filteredList = productList.stream()
                 .filter(product -> (product.getStockQuantity() - product.getBlockedQuantity()) > 0)
                 .collect(Collectors.toList());
