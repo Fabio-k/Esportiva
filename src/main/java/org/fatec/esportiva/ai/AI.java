@@ -3,6 +3,7 @@ package org.fatec.esportiva.ai;
 import java.util.List;
 import java.util.Map;
 
+import org.fatec.esportiva.dto.request.AIDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -15,9 +16,10 @@ import org.springframework.web.client.RestClient;
 
 @RestController
 public class AI {
-    // Usa a chave API declarada no arquivo .env (Esse arquivo não é versionado no Git por questões de segurança)
+    // Usa a chave API declarada no arquivo .env (Esse arquivo não é versionado no
+    // Git por questões de segurança)
     @Value("${API_KEY}")
-    private String apiKey; 
+    private String apiKey;
     private final String geminiApiBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/";
     private final String modelName = "gemini-2.0-flash";
     private final RestClient restClient;
@@ -32,18 +34,19 @@ public class AI {
     // https://ai.google.dev/gemini-api/docs/text-generation?hl=pt-br
     @SuppressWarnings("unchecked")
     @PostMapping("/admin/models")
-    public String chat(@RequestBody String userText) {
+    public String chat(@RequestBody AIDto aiDto) {
         HttpHeaders headers = new HttpHeaders();
         // Define o content type: -H 'Content-Type: application/json' \
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        userText = """
+        String userText = """
                 Recomende produtos da seguinte lista com base na consulta do usuário:
                 Nome: Camiseta Algodão, Preço: 29.99, Descrição: Camiseta básica de algodão macio.
                 Nome: Calça Jeans Slim, Preço: 79.99, Descrição: Calça jeans corte slim fit.
                 Nome: Tênis Esportivo, Preço: 129.99, Descrição: Tênis confortável para corrida e treino.
-                Consulta do usuário: Preciso de algo confortável para usar no dia a dia.
+                Consulta do usuário:
                 """;
+        userText = userText + aiDto.message();
 
         String requestBody = String.format("""
                 {

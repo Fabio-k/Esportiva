@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,25 +9,29 @@
         main {
             margin: 0 8rem;
         }
+
         .productRecomendation {
             padding: 1rem;
             margin-bottom: 20px;
         }
-        #productList{
+
+        #productList {
             display: flex;
             gap: 10px;
         }
-        #chatButton{
+
+        #chatButton {
             position: fixed;
             bottom: 40px;
             right: 40px;
             background-color: #ffffff;
             padding: 10px;
-            width:50px;
+            width: 50px;
             height: 50px;
             border-radius: 50%;
             cursor: pointer;
         }
+
         #chatModal {
             background-color: #ffffff;
             position: fixed;
@@ -40,32 +45,39 @@
             flex-direction: column;
             padding: 10px;
         }
-        #messagesDiv{
+
+        #messagesDiv {
             flex-grow: 1;
             overflow-y: auto;
         }
-        .userMessage{
+
+        .userMessage {
             background-color: #eff2ff;
             padding: 10px;
             border-radius: 10px;
             margin-bottom: 15px;
         }
+
         .chatInput {
             display: flex;
             padding: 5px;
             gap: 10px;
         }
-        .chatInput input{
+
+        .chatInput input {
             flex-grow: 1;
             border-radius: 20px;
             padding: 10px;
         }
+
         .chatInput button {
             width: fit-content;
         }
-        .productCard{
+
+        .productCard {
             width: fit-content;
         }
+
         .productSection {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -73,83 +85,108 @@
         }
     </style>
 </head>
+
 <body>
-  <header th:replace="~{fragments/header :: defaultHeader }"></header>
+    <header th:replace="~{fragments/header :: defaultHeader }"></header>
 
-  <main>
+    <main>
 
-      <section class="card productRecomendation">
-          <h1>Produtos recomendados</h1>
-          <div id="productList">
-              <a th:href="@{/product}" class="productLink">
-                  <div>
-                      <div style="width: 160px; height: 180px;">
-                          <img th:src="@{/images/ball.png}" style="width: 100%;">
-                      </div>
-                          <p>Bola de volei</p>
-                          <p>R$ 48,32</p>
-                  </div>
+        <section class="card productRecomendation">
+            <h1>Produtos recomendados</h1>
+            <div id="productList">
+                <a th:href="@{/product}" class="productLink">
+                    <div>
+                        <div style="width: 160px; height: 180px;">
+                            <img th:src="@{/images/ball.png}" style="width: 100%;">
+                        </div>
+                        <p>Bola de vôlei</p>
+                        <p>R$ 48,32</p>
+                    </div>
                 </a>
-          </div>
-      </section>
-      <section class="productSection">
-          <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}">
-              <div class="card productCard">
-                  <div style="width: 160px; height: 180px;">
-                      <img th:src="${product.image}" style="width: 100%;">
-                  </div>
-                  <p th:text="${product.name}" style="min-height: 46px;"></p>
-                  <h3 th:text="${product.getFormattedPrice()}" style="font-weight: normal"></h3>
-              </div>
-          </a>
-      </section>
+            </div>
+        </section>
+        <section class="productSection">
+            <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${products}">
+                <div class="card productCard">
+                    <div style="width: 160px; height: 180px;">
+                        <img th:src="${product.image}" style="width: 100%;">
+                    </div>
+                    <p th:text="${product.name}" style="min-height: 46px;"></p>
+                    <h3 th:text="${product.getFormattedPrice()}" style="font-weight: normal"></h3>
+                </div>
+            </a>
+        </section>
 
-      <div id="chatButton" onclick="toggleChat()"><img th:src="@{/images/chat.svg}" style="width:100%"></div>
-      <div id="chatModal" class="hidden">
-          <p>Chat</p>
-          <div id="messagesDiv">
+        <div id="chatButton" onclick="toggleChat()"><img th:src="@{/images/chat.svg}" style="width:100%"></div>
+        <div id="chatModal" class="hidden">
+            <p>Chat</p>
+            <div id="messagesDiv">
 
-          </div>
-          <div class="chatInput">
-              <input type="text" id="message"/>
-              <button type="button" onclick="sendMessage()">Enviar</button>
-          </div>
-      </div>
-  </main>
-  <script>
-      let messages = [];
+            </div>
+            <div class="chatInput">
+                <input type="text" id="message" />
+                <button type="button" onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        let messages = [];
 
-      function sendMessage(){
-        const message = document.getElementById("message").value.trim();
-        const messagesDiv = document.getElementById("messagesDiv");
+        async function sendMessage() {
+            const message = document.getElementById("message").value.trim();
+            const messagesDiv = document.getElementById("messagesDiv");
 
-        if(message != ""){
-            messages.push(message)
-            const span = document.createElement("span");
-            span.textContent = message;
-            span.style.display = "block";
-            span.classList = "userMessage"
-            messagesDiv.appendChild(span);
-            document.getElementById("message").value = "";
+            if (message != "") {
+                messages.push(message)
+                const span = document.createElement("span");
+                span.textContent = message;
+                span.style.display = "block";
+                span.classList = "userMessage"
+                messagesDiv.appendChild(span);
+                document.getElementById("message").value = "";
+
+                // Envia a mensagem para a IA
+                const body = {
+                    message: message,
+                };
+                const response = await sendAI(body);
+                alert(response)
+            }
         }
-      }
 
-      function toggleChat(){
-        console.log("clicked")
-        document.getElementById("chatModal").classList.toggle("hidden");
-      }
+        // Envia a mensagem para a IA e recebe a resposta
+        async function sendAI(body) {
+            const response = await fetch("/api/ai/message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            }
+            )
+            xxx = await response.json();
 
-      document.addEventListener("click", (event) => {
-        const modal = document.getElementById("chatModal");
-        const chatButton = document.getElementById("chatButton");
-
-        if(!modal.classList.contains("hidden") && !modal.contains(event.target) && !chatButton.contains(event.target)){
-          modal.classList.add("hidden");
+            if (!response.ok) return null;
+            return await response.json();
         }
-      })
 
-  </script>
+        function toggleChat() {
+            console.log("clicked")
+            document.getElementById("chatModal").classList.toggle("hidden");
+        }
 
-  <script th:src="@{/js/notification.js}" sec:authorize="hasRole('ROLE_CLIENT')"></script>
+        document.addEventListener("click", (event) => {
+            const modal = document.getElementById("chatModal");
+            const chatButton = document.getElementById("chatButton");
+
+            if (!modal.classList.contains("hidden") && !modal.contains(event.target) && !chatButton.contains(event.target)) {
+                modal.classList.add("hidden");
+            }
+        })
+
+    </script>
+
+    <script th:src="@{/js/notification.js}" sec:authorize="hasRole('ROLE_CLIENT')"></script>
 </body>
+
 </html>
