@@ -19,6 +19,7 @@ public class ProductMapper {
                 .costValue(productDto.getCostValue())
                 .status(productDto.getInactivationCategory())
                 .inactivationJustification(productDto.getInactivationJustification())
+                .description(productDto.getDescription())
                 .build();
     }
 
@@ -34,6 +35,7 @@ public class ProductMapper {
                 .costValue(product.getCostValue())
                 .inactivationCategory(product.getStatus())
                 .inactivationJustification(product.getInactivationJustification())
+                .description(product.getDescription())
                 .build();
     }
 

@@ -2,8 +2,12 @@ package org.fatec.esportiva.ai;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.fatec.esportiva.dto.request.AIDto;
+import org.fatec.esportiva.dto.request.ProductDto;
+import org.fatec.esportiva.entity.enums.ProductStatus;
+import org.fatec.esportiva.service.ProductService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -23,9 +27,11 @@ public class AI {
     private final String geminiApiBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/";
     private final String modelName = "gemini-2.0-flash";
     private final RestClient restClient;
+    private final ProductService productService;
 
-    public AI(RestClient.Builder builder) {
+    public AI(RestClient.Builder builder, ProductService productService) {
         this.restClient = builder.baseUrl(geminiApiBaseUrl).build();
+        this.productService = productService;
     }
 
     // Estou usando os exemplos REST
@@ -39,14 +45,9 @@ public class AI {
         // Define o content type: -H 'Content-Type: application/json' \
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String userText = """
-                Recomende produtos da seguinte lista com base na consulta do usuário:
-                Nome: Camiseta Algodão, Preço: 29.99, Descrição: Camiseta básica de algodão macio.
-                Nome: Calça Jeans Slim, Preço: 79.99, Descrição: Calça jeans corte slim fit.
-                Nome: Tênis Esportivo, Preço: 129.99, Descrição: Tênis confortável para corrida e treino.
-                Consulta do usuário:
-                """;
-        userText = userText + aiDto.message();
+        String userText = "Recomende produtos com base na consulta e histórico do usuário, e da seguinte lista de produtos (Nome|Preço|Descrição):\n";
+        userText += getAvailableProducts();
+        userText += "Consulta do usuário:" + aiDto.message();
 
         String requestBody = String.format("""
                 {
@@ -106,5 +107,24 @@ public class AI {
         } else {
             return "Falha ao chamar a API do Gemini. Status: " + responseEntity.getStatusCode();
         }
+    }
+
+    private String getAvailableProducts() {
+        // Remove todos os atributos indisponíveis (Pelo Status e quantidade no estoque)
+        List<ProductDto> productList = productService.getProducts(null, ProductStatus.ATIVO, 100000, null);
+        List<ProductDto> filteredList = productList.stream()
+                .filter(product -> (product.getStockQuantity() - product.getBlockedQuantity()) > 0)
+                .collect(Collectors.toList());
+
+        String availableProducts = "";
+
+        // Obtém somente os atributos relevantes: Nome | Preço | Descrição
+        for (ProductDto product : filteredList) {
+            availableProducts += product.getName() + "|"
+                    + product.getCostValue().multiply(product.getProfitMargin()).toString() + "|"
+                    + product.getDescription() + "\n";
+        }
+
+        return availableProducts;
     }
 }
