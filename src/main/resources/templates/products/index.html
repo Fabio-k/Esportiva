@@ -52,10 +52,63 @@
         }
 
         .userMessage {
+            /* Necessário para exibir a ponta do balão corretamente */
+            position: relative;
+            /* Sem isso a ponta some na borda do div do chat */
+            width: 95%;
             background-color: #eff2ff;
             padding: 10px;
             border-radius: 10px;
             margin-bottom: 15px;
+            /* Permite visualizar a ponta do balão */
+            margin-left: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* align-self: flex-end; */
+        }
+
+        /* Ponta do balão no canto inferior esquerdo apontando para a esquerda */
+        .userMessage::after {
+            content: "";
+            position: absolute;
+            bottom: 10px;
+            /* Ajuste a posição vertical da ponta */
+            left: -10px;
+            /* Posiciona a ponta para fora da bolha à esquerda */
+            width: 0;
+            height: 0;
+            /* Cria o triângulo apontando para a esquerda */
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid #eff2ff;
+        }
+
+        .aiMessage {
+            /* Necessário para exibir a ponta do balão corretamente */
+            position: relative;
+            /* Sem isso a ponta some na borda do div do chat */
+            width: 95%;
+            background-color: #b6bbd3;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* align-self: flex-start; */
+        }
+
+        /* Ponta no canto inferior direito apontando para a direita */
+        .aiMessage::after {
+            content: "";
+            position: absolute;
+            /* Ajuste a posição vertical da ponta */
+            bottom: 10px;
+            /* Posiciona a ponta para fora da bolha à direita */
+            right: -10px;
+            width: 0;
+            height: 0;
+            /* Cria o triângulo apontando para a direita */
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid #b6bbd3;
         }
 
         .chatInput {
@@ -137,20 +190,34 @@
             const messagesDiv = document.getElementById("messagesDiv");
 
             if (message != "") {
+                // Insere a mensagem do usuário
                 messages.push(message)
-                const span = document.createElement("span");
-                span.textContent = message;
-                span.style.display = "block";
-                span.classList = "userMessage"
-                messagesDiv.appendChild(span);
+                const spanUser = document.createElement("span");
+                spanUser.textContent = message;
+                spanUser.style.display = "block";
+                spanUser.classList = "userMessage"
+                messagesDiv.appendChild(spanUser);
                 document.getElementById("message").value = "";
 
                 // Envia a mensagem para a IA
                 const body = {
                     message: message,
                 };
-                const response = await sendAI(body);
-                alert(response)
+                let iaResponse = await sendAI(body);
+
+                // Insere a resposta da IA
+                messages.push(iaResponse)
+                const spanAI = document.createElement("span");
+
+                // Converte ** para <b></b>
+                iaResponse = iaResponse.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+
+                // Adiciona os outros atributos da resposta
+                spanAI.textContent = iaResponse;
+                spanAI.innerHTML = iaResponse;
+                spanAI.style.display = "block";
+                spanAI.classList = "aiMessage"
+                messagesDiv.appendChild(spanAI);
             }
         }
 
@@ -164,10 +231,9 @@
                 body: JSON.stringify(body)
             }
             )
-            xxx = await response.json();
-
             if (!response.ok) return null;
-            return await response.json();
+            const responseText = await response.json()
+            return responseText.reply;
         }
 
         function toggleChat() {
