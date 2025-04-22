@@ -53,10 +53,26 @@ public class AI {
         // Define o content type: -H 'Content-Type: application/json' \
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        List<String> chatHistory = aiDto.message();
+
         String userText = "Recomende produtos com base...\n";
         userText += getAvailableProducts();
         userText += getClientHistory();
-        userText += "E na Consulta do usuário: " + aiDto.message();
+
+        if (chatHistory.size() == 1) {
+            // Não tem histórico ainda, só a conversa
+        } else if (chatHistory.size() == 2) {
+            // Esse caso acho quase impossível de acontecer, porque a conversa flui assim:
+            // Cliente -> IA -> Cliente -> IA ...
+            userText += "E histórico da última conversa com AI: " + chatHistory.get(0);
+        } else if (chatHistory.size() == 3) {
+            userText += "E histórico da última conversa com AI: " + chatHistory.get(0) + "|" + chatHistory.get(1);
+        }
+        // Premissa: Sempre vai ter no máximo 3 mensagens do histórico
+        // (Para não passar do limite dos tokens da API gratuita do Gemini)
+
+        // A última mensagem sempre é a pergunta que o usuário acabou de fazer
+        userText += "E na Consulta do usuário: " + chatHistory.get(chatHistory.size() - 1);
 
         String requestBody = String.format("""
                 {

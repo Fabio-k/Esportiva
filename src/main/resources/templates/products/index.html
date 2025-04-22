@@ -201,7 +201,8 @@
 
                 // Envia a mensagem para a IA
                 const body = {
-                    message: message,
+                    // Pega a consulta atual do usuário e a interação anterior para contexto do histórico de conversa
+                    message: messages.slice(-3),
                 };
                 let iaResponse = await sendAI(body);
 

@@ -1,4 +1,6 @@
 package org.fatec.esportiva.dto.request;
 
-public record AIDto(String message) {
+import java.util.List;
+
+public record AIDto(List<String> message) {
 }
