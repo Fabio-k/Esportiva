@@ -1,6 +1,5 @@
 package org.fatec.esportiva.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -8,7 +7,6 @@ import java.util.Optional;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.fatec.esportiva.entity.Client;
-import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.OrderStatus;
@@ -32,11 +30,6 @@ public class OrderService {
     private final NotificationService notificationService;
     private final ExchangeVoucherService exchangeVoucherService;
 
-    // Constantes para aumentar a legibilidade
-    private static final BigDecimal ZERO = BigDecimal.ZERO;
-    private static final BigDecimal ONE = BigDecimal.ONE;
-    private static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
-
     public List<OrderDto> getTransactions(OrderStatus status) {
         return orderRepository.findAllByStatus(status)
                 .stream().map(OrderMapper::toOrderDto).toList();
@@ -54,7 +47,7 @@ public class OrderService {
     }
 
     // Máquina de estados que controla a transições conforme cada aprovação
-    public void changeState(long id, boolean approve) {
+    public void changeState(long id, boolean approve, boolean stock) {
         Order order = getNonOptional(orderRepository.findById(id));
         Product product = order.getProduct();
         Client client = order.getTransaction().getClient();

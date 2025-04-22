@@ -13,7 +13,6 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.TransactionMapper;
-import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.repository.TransactionRepository;
 import org.fatec.esportiva.dto.request.TransactionDto;
 import org.fatec.esportiva.dto.response.TransactionResponseDto;
@@ -27,9 +26,6 @@ public class TransactionService {
     private final OrderService orderService;
     private final ProductService productService;
     private final ExchangeVoucherService exchangeVoucherService;
-
-    // Constante para melhorar legibilidade
-    private static final BigDecimal ZERO = BigDecimal.valueOf(0);
 
     public List<TransactionResponseDto> getTransactions() {
         return transactionRepository.findAllByClientOrderByPurchaseDateDesc(clientService.getAuthenticatedClient())
@@ -133,7 +129,8 @@ public class TransactionService {
     private void refundSingleVoucher(Transaction transaction) {
         Client client = transaction.getClient();
         BigDecimal voucherValue = transaction.getTotalCost();
-        if(voucherValue.compareTo(BigDecimal.ZERO) < 1) return;
+        if (voucherValue.compareTo(BigDecimal.ZERO) < 1)
+            return;
         // Cria um novo cupom
         exchangeVoucherService.createExchangeVoucher(client, voucherValue);
     }
