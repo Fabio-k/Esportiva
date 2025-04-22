@@ -251,6 +251,16 @@
             }
         })
 
+
+        // Permite que ao apertar ENTER no input do chat, envie ele para a IA
+        const inputChat = document.getElementById('message');
+        inputChat.addEventListener('keydown', function (event) {
+            // Verifica se a tecla pressionada é Enter
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Se necessário, previne a ação padrão
+                sendMessage(); // Chama a função para enviar a mensagem
+            }
+        });
     </script>
 
     <script th:src="@{/js/notification.js}" sec:authorize="hasRole('ROLE_CLIENT')"></script>
