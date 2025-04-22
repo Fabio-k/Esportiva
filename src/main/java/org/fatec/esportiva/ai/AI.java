@@ -28,7 +28,7 @@ import org.springframework.web.client.RestClient;
 public class AI {
     // Usa a chave API declarada no arquivo .env (Esse arquivo não é versionado no
     // Git por questões de segurança)
-    @Value("${API_KEY}")
+    @Value("${ai.api.key}")
     private String apiKey;
     private final String geminiApiBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/";
     private final String modelName = "gemini-2.0-flash";
