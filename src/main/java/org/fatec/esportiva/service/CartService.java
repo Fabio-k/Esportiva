@@ -70,22 +70,13 @@ public class CartService {
 
     public BigDecimal getTotalCartPrice() {
         Cart cart = clientService.getAuthenticatedClient().getCart();
-        BigDecimal total = cart.getCartItems().stream()
-                .map(this::getItemTotalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return total;
+        return  cart.getTotalPrice();
     }
 
     public void setToNotified(Long id, Boolean isNotified) {
         Cart cart = findCartById(id);
         cart.setIsNotified(isNotified);
         cartRepository.save(cart);
-    }
-
-    private BigDecimal getItemTotalPrice(CartItem cartItem) {
-        BigDecimal quantity = BigDecimal.valueOf(cartItem.getQuantity());
-        return cartItem.getProduct().getPriceWithMargin().multiply(quantity);
     }
 
     private void updateCartCreatedAt(Cart cart) {

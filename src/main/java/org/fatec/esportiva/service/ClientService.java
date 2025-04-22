@@ -102,7 +102,8 @@ public class ClientService {
     }
 
     public List<ExchangeVoucherResponseDto> getClientVouchers(){
-        return  getAuthenticatedClient().getExchangeVouchers().stream()
+        List<ExchangeVoucher> validExchangeVouchers = exchangeVoucherService.findAllValidExchangeVouchersByClientId(getAuthenticatedClient().getId());
+        return  validExchangeVouchers.stream()
                 .map(voucher -> ExchangeVoucherMapper.toExchangeVoucherResponseDto(voucher, currencyService.format(voucher.getValue())))
                 .toList();
     }

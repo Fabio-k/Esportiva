@@ -1,5 +1,6 @@
 package org.fatec.esportiva.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.fatec.esportiva.entity.Client;
@@ -16,8 +17,16 @@ import lombok.RequiredArgsConstructor;
 public class ExchangeVoucherService {
     private final ExchangeVoucherRepository exchangeVoucherRepository;
 
+    public void createExchangeVoucher(Client client, BigDecimal value){
+        ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
+        exchangeVoucher.setId(null);
+        exchangeVoucher.setValue(value);
+        exchangeVoucher.setClient(client);
+        exchangeVoucherRepository.save(exchangeVoucher);
+    }
+
     public void validateExchangeVoucherOwnership(List<Long> voucherIds, Long clientId){
-        List<ExchangeVoucher> vouchers = exchangeVoucherRepository.findAllByIdInAndClientId(voucherIds, clientId);
+        List<ExchangeVoucher> vouchers = exchangeVoucherRepository.findAllByIdInAndClientIdAndIsUsedFalse(voucherIds, clientId);
         if(voucherIds.size() != vouchers.size()) throw new IllegalArgumentException("Um ou mais vouchers não foram encontrados");
     }
 
@@ -39,4 +48,14 @@ public class ExchangeVoucherService {
     public List<ExchangeVoucher> findAllById(List<Long> ids){
         return exchangeVoucherRepository.findAllById(ids);
     }
+    public List<ExchangeVoucher> findAllValidExchangeVouchersByClientId(Long clientId){return exchangeVoucherRepository.findAllByClientIdAndIsUsedFalse(clientId);}
+
+    public void markAsUsedExchangeVouchers(List<Long> ids, Long clientId){
+        List<ExchangeVoucher> vouchers = exchangeVoucherRepository.findAllByIdInAndClientIdAndIsUsedFalse(ids, clientId);
+        for(ExchangeVoucher exchangeVoucher : vouchers){
+            exchangeVoucher.setIsUsed(true);
+        }
+        exchangeVoucherRepository.saveAll(vouchers);
+    }
+
 }

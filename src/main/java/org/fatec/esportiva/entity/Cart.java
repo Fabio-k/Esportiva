@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,4 +33,10 @@ public class Cart {
 
     @Column(name = "crr_notificado")
     private Boolean isNotified;
+
+    public BigDecimal getTotalPrice(){
+        return cartItems.stream()
+                .map(CartItem::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

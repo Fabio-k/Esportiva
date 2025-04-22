@@ -39,6 +39,7 @@ public class CheckoutController {
     private final CheckoutService checkoutService;
     private final PromotionalCouponService promotionalCouponService;
     private final FreightService freightService;
+    private final CartService cartService;
 
     @ModelAttribute("checkoutSession")
     public CheckoutSession createSession(){
@@ -60,7 +61,7 @@ public class CheckoutController {
 
     @ModelAttribute("exchangeVoucherTotalPrice")
     public String totalExchangeVoucherPrice(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
-        return currencyService.format(checkoutService.getExchangeVouchersTotalPrice(checkoutSession));
+        return currencyService.format(checkoutService.getExchangeVouchersTotalPrice(checkoutSession.getExchangeVoucherIds()));
     }
 
     @ModelAttribute("productsTotalPrice")
@@ -228,10 +229,16 @@ public class CheckoutController {
         Transaction transaction = transactionService.generateTransaction(checkoutSession);
         try{
             checkoutService.validatePayment(checkoutSession);
+            exchangeVoucherService.validateExchangeVoucherOwnership(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());
         } catch (IllegalArgumentException e){
             model.addAttribute("errorMessage", e.getMessage());
             transactionService.denyTransaction(transaction);
         }
+
+        exchangeVoucherService.markAsUsedExchangeVouchers(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());
+        checkoutService.generateExchangeVoucher(checkoutSession);
+        cartService.cleanCart();
+
 
         model.addAttribute("items", items);
         model.addAttribute("address", address);
