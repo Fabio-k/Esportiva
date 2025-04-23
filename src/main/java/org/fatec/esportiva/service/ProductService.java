@@ -38,7 +38,7 @@ public class ProductService {
     }
 
     public List<ProductResponseDto> getAllAvailableProducts(){
-        return productRepository.findAvailableProducts().stream()
+        return productRepository.findAvailableProducts(ProductStatus.ATIVO).stream()
                 .map(ProductMapper::toProductResponseDto)
                 .toList();
     }
