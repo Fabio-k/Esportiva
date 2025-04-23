@@ -10,8 +10,4 @@ public record ProductResponseDto(Long id, int quantity, String name, BigDecimal 
         NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         return format.format(price);
     }
-
-    public String getName(){
-        return name;
-    }
 }
