@@ -27,6 +27,8 @@ INSERT INTO pedidos (ped_status, ped_quantidade, ped_tra_id, ped_pro_id) VALUES
 ('EM_PROCESSAMENTO', '5', '7', '9'),
 ('ENTREGUE', '0', '8', '9'),
 ('EM_TROCA', '1', '8', '9'),
+('ENTREGUE', '0', '9', '5'),
+('ENTREGUE', '0', '9', '2'),
 ('EM_TROCA', '4', '9', '5'),
 ('EM_TROCA', '2', '9', '2'),
 ('ENTREGUE', '0', '10', '1'),
