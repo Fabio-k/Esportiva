@@ -55,6 +55,10 @@ async function sendAI(body) {
     return responseText.reply;
 }
 
+function toggleChat(){
+    document.getElementById("chatModal").classList.toggle("hidden");
+}
+
 document.addEventListener("click", (event) => {
     const modal = document.getElementById("chatModal");
     const chatButton = document.getElementById("chatButton");
