@@ -14,12 +14,6 @@ public class OrdersController {
     private final TransactionService transactionService;
     private final OrderService orderService;
 
-    @GetMapping
-    public String getOrders(Model model){
-        model.addAttribute("transactions", transactionService.getTransactions());
-        return "/orders/index";
-    }
-
     @GetMapping("/trade/{id}")
     public String trade(Model model, @PathVariable Long id){
         model.addAttribute("order", orderService.findByClientIdAndId(id));

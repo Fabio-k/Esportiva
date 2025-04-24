@@ -30,7 +30,7 @@
                   <p th:text="'total pago: ' + ${cartTotalPrice}"></p>
               </div>
           </div>
-          <a th:if="${errorMessage == null}" class="primaryButton" th:href="@{/orders}">Ir para a página compras</a>
+          <a th:if="${errorMessage == null}" class="primaryButton" th:href="@{/transactions}">Ir para a página compras</a>
           <a th:if="${errorMessage != null}" th:href="@{/}">Voltar para a tela inicial</a>
       </div>
   </main>

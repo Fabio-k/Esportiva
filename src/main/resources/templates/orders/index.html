@@ -26,11 +26,26 @@
         <section class="card transaction" th:each="transaction : ${transactions}">
             <div style="display: flex; align-items: center; gap: 30px;">
                 <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM YYYY')}"></h3>
-                <div style="display: flex; gap: 20px">
-                    <p class="inactiveText" th:classappend="${transaction.isInProcessing()} ? activeText : ''">Em processamento</p>
-                    <p class="inactiveText" th:classappend="${transaction.isInTransit()} ? activeText : ''">Em trânsito</p>
-                    <p class="inactiveText" th:classappend="${transaction.isDelivered()} ? activeText : ''">Entregue</p>
+                <div style="flex-grow: 1; display: flex; justify-content: space-between;">
+                    <div style="display: flex; gap: 20px" th:if="${!transaction.isCancelled()}">
+                        <p class="inactiveText" th:classappend="${transaction.isInProcessing()} ? activeText : ''">Em processamento</p>
+                        <p class="inactiveText" th:classappend="${transaction.isInTransit()} ? activeText : ''">Em trânsito</p>
+                        <p class="inactiveText" th:classappend="${transaction.isDelivered()} ? activeText : ''">Entregue</p>
+                        <div style="display: flex; gap: 20px" th:if="${transaction.isInTradeProcess()}">
+                            <p class="inactiveText" th:classappend="${transaction.isInTrade()} ? activeText : ''">Em troca</p>
+                            <p class="inactiveText" th:classappend="${transaction.isTraded()} ? activeText : ''">trocado</p>
+                        </div>
+                    </div>
+                    <p th:if="${transaction.isCancelled()}">Compra cancelada</p>
+                    <div style="margin: auto 0">
+                        <form th:action="@{/transactions/trade/{id}(id=${transaction.getId()})}" method="post">
+                            <input type="hidden" name="_method" th:value="PATCH" />
+                            <button type="submit" class="primaryLink" th:attr="disabled=${!transaction.isDelivered() || transaction.isOrdersInTrade()}">Solicitar troca de todos os itens do pedido</button>
+                        </form>
+
+                    </div>
                 </div>
+
             </div>
             <div style="display: flex; justify-content: space-between" th:each="order : ${transaction.orders.deliveredOrders}">
                 <div style="display: flex; gap: 20px">
@@ -56,11 +71,7 @@
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 20px" th:if="${!order.isTradeRefused()}">
-                    <p class="inactiveText" th:classappend="${order.isTradeAccepted()} ? activeText : ''">Em processamento</p>
-                    <p class="inactiveText" th:classappend="${order.isSuccessfullyTraded()} ? activeText : ''">Trocado</p>
-                </div>
-                <p style="color: red" th:if="${order.isTradeRefused()}">Troca recusada</p>
+                <p th:text="${order.status.getDisplayName()}"></p>
             </div>
 
         </section>

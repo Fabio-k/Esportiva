@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.fatec.esportiva.entity.*;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +65,7 @@ public class TransactionService {
     }
 
     // Máquina de estados que controla a transições conforme cada aprovação
-    public void changeState(long id, boolean approve) throws Exception {
+    public void changeState(long id, boolean approve){
         Transaction transaction = getNonOptional(transactionRepository.findById(id));
         OrderStatus status = transaction.getStatus();
 
@@ -115,11 +116,17 @@ public class TransactionService {
         }
     }
 
-    private void propagateStatusToOrder(Transaction transaction, boolean approve) throws Exception {
+    private void propagateStatusToOrder(Transaction transaction, boolean approve) {
 
         // Propaga o status para os pedidos
         // Se os pedidos retornarem algum valor, quer dizer que é para gerar cupons de
         // reembolso
+        if(transaction.getStatus() == OrderStatus.EM_TROCA && approve){
+            for (Order order : transaction.getOrders()) {
+                orderService.tradeOrder(order.getId(), (short) order.getQuantity());
+            }
+            return;
+        }
         for (Order order : transaction.getOrders()) {
             orderService.changeState(order.getId(), approve, false);
         }
@@ -153,5 +160,11 @@ public class TransactionService {
         });
 
         transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
+    }
+
+    public void requestTrade(Long id) {
+        Client client = clientService.getAuthenticatedClient();
+        Transaction transaction = transactionRepository.findByClientAndIdAndStatus(client, id, OrderStatus.ENTREGUE   ).orElseThrow(() -> new EntityNotFoundException("Transação não encontrada"));
+        changeState(transaction.getId(), true);
     }
 }
