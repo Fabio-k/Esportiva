@@ -121,12 +121,6 @@ public class TransactionService {
         // Propaga o status para os pedidos
         // Se os pedidos retornarem algum valor, quer dizer que é para gerar cupons de
         // reembolso
-        if(transaction.getStatus() == OrderStatus.EM_TROCA && approve){
-            for (Order order : transaction.getOrders()) {
-                orderService.tradeOrder(order.getId(), (short) order.getQuantity());
-            }
-            return;
-        }
         for (Order order : transaction.getOrders()) {
             orderService.changeState(order.getId(), approve, false);
         }
@@ -164,7 +158,9 @@ public class TransactionService {
 
     public void requestTrade(Long id) {
         Client client = clientService.getAuthenticatedClient();
-        Transaction transaction = transactionRepository.findByClientAndIdAndStatus(client, id, OrderStatus.ENTREGUE   ).orElseThrow(() -> new EntityNotFoundException("Transação não encontrada"));
-        changeState(transaction.getId(), true);
+        Transaction transaction = transactionRepository.findByClientAndIdAndStatus(client, id, OrderStatus.ENTREGUE).orElseThrow(() -> new EntityNotFoundException("Transação não encontrada"));
+        for (Order order : transaction.getOrders()) {
+            orderService.tradeOrder(order.getId(), (short) order.getQuantity());
+        }
     }
 }
