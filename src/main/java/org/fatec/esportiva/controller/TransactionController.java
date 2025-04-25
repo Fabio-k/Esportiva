@@ -1,19 +1,25 @@
 package org.fatec.esportiva.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.fatec.esportiva.dto.response.TransactionResponseDto;
 import org.fatec.esportiva.service.TransactionService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 @Controller
 @RequestMapping("/transactions")
 @RequiredArgsConstructor
 public class TransactionController {
     private final TransactionService transactionService;
+    private final TemplateEngine templateEngine;
 
     @GetMapping
     public String getTransactions(Model model){
@@ -22,8 +28,13 @@ public class TransactionController {
     }
 
     @PatchMapping("/trade/{id}")
-    public String requestTrade(@PathVariable Long id){
+    public ResponseEntity<String> requestTrade(@PathVariable Long id){
         transactionService.requestTrade(id);
-        return "redirect:/transactions";
+        TransactionResponseDto transaction = transactionService.getTransaction(id);
+        Context context = new Context();
+        context.setVariable("transaction", transaction);
+        String turboStream = templateEngine.process("orders/turbo/transactionCard", context);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "text/vnd.turbo-stream.html").body(turboStream);
     }
 }

@@ -2,6 +2,7 @@ package org.fatec.esportiva.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -38,8 +39,12 @@ public class TransactionService {
                 .stream().map(TransactionMapper::toTransactionDto).toList();
     }
 
-    public Optional<Transaction> findById(Long id) {
-        return transactionRepository.findById(id);
+    public TransactionResponseDto getTransaction(Long id){
+        return TransactionMapper.toTransactionResponseDto(findById(id));
+    }
+
+    public Transaction findById(Long id) {
+        return transactionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("transação não encontrada"));
     }
 
     @Transactional
@@ -159,7 +164,8 @@ public class TransactionService {
     public void requestTrade(Long id) {
         Client client = clientService.getAuthenticatedClient();
         Transaction transaction = transactionRepository.findByClientAndIdAndStatus(client, id, OrderStatus.ENTREGUE).orElseThrow(() -> new EntityNotFoundException("Transação não encontrada"));
-        for (Order order : transaction.getOrders()) {
+        List<Order> orders = new ArrayList<>(transaction.getOrders());
+        for (Order order : orders) {
             orderService.tradeOrder(order.getId(), (short) order.getQuantity());
         }
     }
