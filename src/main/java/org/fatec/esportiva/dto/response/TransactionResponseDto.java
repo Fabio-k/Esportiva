@@ -2,6 +2,7 @@ package org.fatec.esportiva.dto.response;
 
 import lombok.*;
 
+import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.time.LocalDate;
@@ -31,4 +32,14 @@ public class TransactionResponseDto {
     public Boolean isDelivered(){
         return status == OrderStatus.ENTREGUE;
     }
+
+    public Boolean isCancelled() {return status == OrderStatus.COMPRA_CANCELADA;}
+
+    public Boolean isInTradeProcess() { return isInTrade() || isTraded();}
+
+    public Boolean isInTrade(){return status == OrderStatus.EM_TROCA || status == OrderStatus.TROCADO;}
+
+    public Boolean isTraded(){return status == OrderStatus.TROCA_FINALIZADA;}
+
+    public Boolean isOrdersInTrade(){return !orders.tradedOrders.isEmpty();}
 }

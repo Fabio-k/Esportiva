@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Product;
+import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.mapper.OrderMapper;
 import org.fatec.esportiva.repository.ClientRepository;
@@ -16,6 +17,7 @@ import org.fatec.esportiva.repository.OrderRepository;
 import org.fatec.esportiva.repository.ProductRepository;
 import org.fatec.esportiva.dto.request.OrderDto;
 import org.fatec.esportiva.dto.response.OrderResponseDto;
+import org.fatec.esportiva.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class OrderService {
     private final ClientService clientService;
     private final NotificationService notificationService;
     private final ExchangeVoucherService exchangeVoucherService;
+    private final TransactionRepository transactionRepository;
 
     public List<OrderDto> getTransactions(OrderStatus status) {
         return orderRepository.findAllByStatus(status)
@@ -140,14 +143,21 @@ public class OrderService {
             throw new IllegalArgumentException("Quantidade inválida");
         order.setQuantity(order.getQuantity() - quantity);
         orderRepository.save(order);
+
         Order newOrder = Order.builder()
                 .transaction(order.getTransaction())
                 .product(order.getProduct())
                 .quantity(quantity)
-                .status(OrderStatus.ENTREGUE)
+                .status(OrderStatus.EM_TROCA)
                 .build();
 
-        newOrder = orderRepository.save(newOrder);
-        changeState(newOrder.getId(), true, false);
+        orderRepository.save(newOrder);
+
+        // Atualizar a transação, incluindo o novo pedido na coleção de orders
+        Transaction transaction = order.getTransaction(); // Obtém a transação do pedido existente
+        transaction.getOrders().add(newOrder); // Adiciona o novo pedido à lista de orders
+
+        // Salvar a transação para garantir que o relacionamento seja persistido
+        transactionRepository.save(transaction);
     }
 }

@@ -2,10 +2,12 @@ package org.fatec.esportiva.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.fatec.esportiva.entity.*;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +39,12 @@ public class TransactionService {
                 .stream().map(TransactionMapper::toTransactionDto).toList();
     }
 
-    public Optional<Transaction> findById(Long id) {
-        return transactionRepository.findById(id);
+    public TransactionResponseDto getTransaction(Long id){
+        return TransactionMapper.toTransactionResponseDto(findById(id));
+    }
+
+    public Transaction findById(Long id) {
+        return transactionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("transação não encontrada"));
     }
 
     @Transactional
@@ -64,7 +70,7 @@ public class TransactionService {
     }
 
     // Máquina de estados que controla a transições conforme cada aprovação
-    public void changeState(long id, boolean approve) throws Exception {
+    public void changeState(long id, boolean approve){
         Transaction transaction = getNonOptional(transactionRepository.findById(id));
         OrderStatus status = transaction.getStatus();
 
@@ -115,7 +121,7 @@ public class TransactionService {
         }
     }
 
-    private void propagateStatusToOrder(Transaction transaction, boolean approve) throws Exception {
+    private void propagateStatusToOrder(Transaction transaction, boolean approve) {
 
         // Propaga o status para os pedidos
         // Se os pedidos retornarem algum valor, quer dizer que é para gerar cupons de
@@ -153,5 +159,14 @@ public class TransactionService {
         });
 
         transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
+    }
+
+    public void requestTrade(Long id) {
+        Client client = clientService.getAuthenticatedClient();
+        Transaction transaction = transactionRepository.findByClientAndIdAndStatus(client, id, OrderStatus.ENTREGUE).orElseThrow(() -> new EntityNotFoundException("Transação não encontrada"));
+        List<Order> orders = new ArrayList<>(transaction.getOrders());
+        for (Order order : orders) {
+            orderService.tradeOrder(order.getId(), (short) order.getQuantity());
+        }
     }
 }

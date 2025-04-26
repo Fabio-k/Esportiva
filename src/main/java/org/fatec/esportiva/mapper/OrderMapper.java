@@ -6,6 +6,7 @@ import org.fatec.esportiva.dto.request.OrderDto;
 
 import org.fatec.esportiva.dto.response.OrderByStatusResponseDto;
 import org.fatec.esportiva.dto.response.OrderResponseDto;
+import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,7 +48,7 @@ public class OrderMapper {
         for(Order order : orders){
              orderResponseDto = toOrderResponseDto(order);
 
-            if(order.isInDeliveryProcess()){
+            if(order.isInDeliveryProcess() || order.getStatus() == OrderStatus.COMPRA_CANCELADA){
                 orderByStatusResponseDto.getDeliveredOrders().add(orderResponseDto);
                 orderResponseDto.setTotalProductQuantity(order.getQuantity());
 
