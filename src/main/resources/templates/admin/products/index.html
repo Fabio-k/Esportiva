@@ -40,7 +40,7 @@
                     <td th:id="'stockQuantity-' + ${product.id}" th:text="${product.stockQuantity}"></td>
                     <td th:id="'blockedQuantity-' + ${product.id}" th:text="${product.blockedQuantity}">
                     </td>
-                    <td th:id="'profitMargin-' + ${product.id}" th:text="${product.profitMargin}"></td>
+                    <td th:id="'profitMargin-' + ${product.id}" th:text="${product.profitMargin * 100}"></td>
                     <td th:id="'costValue-' + ${product.id}" th:text="${product.costValue}"></td>
                     <td th:id="'inactivationCategory-' + ${product.id}" th:text="${product.inactivationCategory}"></td>
 

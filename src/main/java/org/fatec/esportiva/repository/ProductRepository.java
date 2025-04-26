@@ -11,5 +11,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT DISTINCT p FROM Product p LEFT JOIN p.categories c WHERE (:maxValue IS NULL OR p.costValue <= :maxValue) AND (:status IS NULL OR p.status = :status) AND (:category IS NULL OR c.name = :category) AND (:name is NULL OR LOWER(CAST(p.name AS text)) LIKE LOWER(CONCAT('%', :name, '%')))")
     List<Product> findWithFilter(String name, ProductStatus status, Integer maxValue, String category);
 
+    @Query("SELECT p FROM Product p WHERE p.status = :status AND (p.stockQuantity - p.blockedQuantity) > 0")
+    List<Product> findAvailableProducts(ProductStatus status);
+
     List<Product> findAllByStatus(ProductStatus status);
 }

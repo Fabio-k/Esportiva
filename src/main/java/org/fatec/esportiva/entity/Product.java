@@ -45,10 +45,6 @@ public class Product {
     private int blockedQuantity;
 
     @NotNull
-    @Column(name = "pro_margem_lucro", precision = 10, scale = 2)
-    private BigDecimal profitMargin;
-
-    @NotNull
     @Column(name = "pro_valor_custo", precision = 10, scale = 2)
     private BigDecimal costValue;
 
@@ -85,13 +81,13 @@ public class Product {
     @JoinTable(name = "pertence", joinColumns = @JoinColumn(name = "per_pro_id"), inverseJoinColumns = @JoinColumn(name = "per_cat_id"))
     private List<ProductCategory> categories = new ArrayList<>();
 
-    public BigDecimal getPriceWithMargin(){
+    public BigDecimal getPriceWithMargin() {
         BigDecimal marginOfProfit = BigDecimal.ONE.add(pricingGroup.getProfitMargin());
         return costValue.multiply(marginOfProfit).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public void decreaseStock(int quantity){
-        if(quantity > stockQuantity || quantity > blockedQuantity)
+    public void decreaseStock(int quantity) {
+        if (quantity > stockQuantity || quantity > blockedQuantity)
             throw new RuntimeException("Conflito na quantidade de itens comprados");
 
         this.stockQuantity -= quantity;
@@ -106,7 +102,6 @@ public class Product {
                 Data de cadastro: %s\n
                 Qtd estoque: %s\n
                 Qtd bloqueada: %s\n
-                Margem de lucro: %s\n
                 Custo: %s\n
                 Status: %s\n
                 Justificativa de inativação: %s\n
@@ -117,7 +112,6 @@ public class Product {
                 entryDate.toString(),
                 stockQuantity,
                 blockedQuantity,
-                profitMargin,
                 costValue,
                 status.getDisplayName(),
                 inactivationJustification,

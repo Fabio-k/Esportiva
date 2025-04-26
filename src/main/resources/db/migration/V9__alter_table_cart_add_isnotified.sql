@@ -1,2 +1,2 @@
 ALTER TABLE carrinhos
-ADD COLUMN car_notificado BOOLEAN DEFAULT false;
+ADD COLUMN crr_notificado BOOLEAN DEFAULT false;

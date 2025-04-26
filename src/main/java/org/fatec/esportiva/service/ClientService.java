@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.enums.Gender;
+import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.entity.enums.UserStatus;
 import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.mapper.CartMapper;
@@ -18,7 +19,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -102,7 +105,8 @@ public class ClientService {
     }
 
     public List<ExchangeVoucherResponseDto> getClientVouchers(){
-        return  getAuthenticatedClient().getExchangeVouchers().stream()
+        List<ExchangeVoucher> validExchangeVouchers = exchangeVoucherService.findAllValidExchangeVouchersByClientId(getAuthenticatedClient().getId());
+        return  validExchangeVouchers.stream()
                 .map(voucher -> ExchangeVoucherMapper.toExchangeVoucherResponseDto(voucher, currencyService.format(voucher.getValue())))
                 .toList();
     }
@@ -118,6 +122,22 @@ public class ClientService {
 
     public void deleteClient(Client user) {
         clientRepository.delete(user);
+    }
+
+    public Map<String, Integer> getClientHistory(){
+        Map<String, Integer> productHistory = new HashMap<>();
+        List<Transaction> transactions = getAuthenticatedClient().getTransactions();
+
+        for(Transaction transaction : transactions){
+            for(Order order : transaction.getOrders()){
+                if(!order.isInDeliveryProcess()) continue;
+                String productName = order.getProduct().getName();
+                Integer productQuantity = order.getQuantity();
+                productHistory.put(productName, productHistory.getOrDefault(productName, 0) + productQuantity);
+            }
+        }
+
+        return productHistory;
     }
 
     private String normalize(String value) {

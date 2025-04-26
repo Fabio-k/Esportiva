@@ -22,7 +22,7 @@
         </div>
 
         <p th:text="${order.product.name}"></p>
-          <form th:action="@{/orders/trade/{id}(id=${order.id})}" method="post">
+          <form th:action="@{/orders/trade/{id}(id=${order.id})}" method="post" data-turbo="false">
               <input type="hidden" name="_method" th:value="PATCH" />
               <label th:for="tradeQuantity">Selecione a quantidade de itens que deseja trocar</label>
               <select id="tradeQuantity" name="tradeQuantity">
@@ -32,7 +32,7 @@
                         th:text="${i}"
                     ></option>
               </select>
-              <a th:href="@{/orders}" class="secondaryButton">Cancelar</a>
+              <a th:href="@{/transactions}" class="secondaryButton">Cancelar</a>
               <button class="primaryButton" style="margin-top: 40px" type="submit">Confirmar Troca</button>
           </form>
     </main>

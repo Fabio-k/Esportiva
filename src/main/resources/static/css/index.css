@@ -150,3 +150,17 @@ li:hover .subCategoryMenu,  .subCategoryMenu:hover{
     align-items: center;
     gap: 10px;
 }
+
+.primaryLink{
+    color: blue;
+    background: inherit;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.primaryLink:disabled{
+    color: grey !important;
+    cursor: default;
+}

@@ -58,10 +58,32 @@ public class AdminLogisticController {
         return "admin/logistic/returned";
     }
 
+    @GetMapping("/return_finished")
+    public String returnFinished(Model model) {
+        List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCA_FINALIZADA);
+        model.addAttribute("orders", orders);
+        return "admin/logistic/return_finished";
+    }
+
+    @GetMapping("/cancel_deliver")
+    public String cancelDeliver(Model model) {
+        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.COMPRA_CANCELADA);
+        model.addAttribute("transactions", transactions);
+        return "admin/logistic/cancel_deliver";
+    }
+
+    @GetMapping("/cancel_refund")
+    public String cancelRefund(Model model) {
+        List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCA_RECUSADA);
+        model.addAttribute("orders", orders);
+        return "admin/logistic/cancel_refund";
+    }
+
     @GetMapping("/approve")
     public String deliveryPipeline(Model model,
             HttpServletRequest request,
             @RequestParam(value = "approval", required = true) boolean approval,
+            @RequestParam(value = "stock", required = true) boolean stock,
             @RequestParam(value = "transaction", required = false, defaultValue = "") String transactionId,
             @RequestParam(value = "order", required = false, defaultValue = "") String orderId) throws Exception {
 
@@ -71,7 +93,7 @@ public class AdminLogisticController {
 
         } else if (orderId != "") {
             long id = Long.parseLong(orderId);
-            orderService.changeState(id, approval);
+            orderService.changeState(id, approval, stock);
 
         } else {
             throw new Exception("Ao aprovar uma transação/ordem, ambos os ID ficaram nulos");

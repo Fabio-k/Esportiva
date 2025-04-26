@@ -10,9 +10,9 @@
 
 <body>
     <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('logistic')}"></header>
-    <header th:replace="~{fragments/logistic_navbar.html :: logistic_navbar('returned')}"></header>
+    <header th:replace="~{fragments/logistic_navbar.html :: logistic_navbar('cancel_deliver')}"></header>
     <main>
-        <div th:replace="~{fragments/logistic_dashboard.html :: dashboard_order('TROCADO', false, true)}"></div>
+        <div th:replace="~{fragments/logistic_dashboard.html :: dashboard_transaction('COMPRA_CANCELADA', true)}"></div>
     </main>
 </body>
 

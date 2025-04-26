@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "itens_carrinho")
@@ -26,10 +27,15 @@ public class CartItem implements Serializable {
     private Short quantity;
 
     @ManyToOne
-    @JoinColumn(name = "itc_car_id")
+    @JoinColumn(name = "itc_crr_id")
     private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "itc_pro_id")
     private Product product;
+
+    public BigDecimal getTotalPrice(){
+        BigDecimal quantity = BigDecimal.valueOf(this.quantity);
+        return product.getPriceWithMargin().multiply(quantity);
+    }
 }

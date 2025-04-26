@@ -10,6 +10,7 @@
     <header th:fragment="logistic_navbar(activeItem)"
         class="flex items-center justify-between w-full mb-10 shadow-md p-4 bg-white">
         <nav>
+            <!-- 1ª fileira: Fluxo de aprovação -->
             <ul>
                 <!-- Carrinho de compras -->
                 <li class="navbar-image">
@@ -48,9 +49,40 @@
                 <li class="navbar-image"><img th:src="@{/images/arrow.svg}" /></li>
 
                 <!-- Troca finalizada -->
-                <li class="navbar-image">
-                    <img th:src="@{/images/money.svg}" />
+                <li th:classappend="${activeItem == 'return_finished' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/return_finished"><img th:src="@{/images/money.svg}" /></a>
                 </li>
+            </ul>
+
+            <!-- 2ª fileira: Fluxo de reprovações -->
+            <ul>
+                <li class="navbar-image"></li>
+                <li class="navbar-image"></li>
+
+                <!-- Em processamento para cancelar compra -->
+                <li class="navbar-image"><img th:src="@{/images/curly-arrow.svg}" /></li>
+                <li th:classappend="${activeItem == 'cancel_deliver' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/cancel_deliver"><img th:src="@{/images/cancel-checkout.svg}" /></a>
+                </li>
+
+                <!-- Em trânsito para cancelar compra -->
+                <li class="navbar-image"><img class="mirror" th:src="@{/images/curly-arrow.svg}" /></li>
+                <li class="navbar-image"></li>
+
+                <li class="navbar-image"></li>
+                <li class="navbar-image"></li>
+
+                <!-- Em troca para cancelar devolução -->
+                <li class="navbar-image"><img th:src="@{/images/curly-arrow.svg}" /></li>
+                <li th:classappend="${activeItem == 'cancel_refund' ? 'active navbar-image' : 'navbar-image'}">
+                    <a href="/admin/logistic/cancel_refund"><img th:src="@{/images/cancel-refund.svg}" /></a>
+                </li>
+
+                <!-- Trocado para cancelar devolução -->
+                <li class="navbar-image"><img class="mirror" th:src="@{/images/curly-arrow.svg}" /></li>
+                <li class="navbar-image"></li>
+
+                <li class="navbar-image"></li>
             </ul>
         </nav>
     </header>

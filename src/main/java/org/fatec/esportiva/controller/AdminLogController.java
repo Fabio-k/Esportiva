@@ -18,7 +18,7 @@ public class AdminLogController {
     private final LogService logService;
 
     @GetMapping
-    public String getClients(Model model){
+    public String getLogs(Model model){
 
         List<LogDto> logs = logService.getLogs();
         model.addAttribute("logs", logs);

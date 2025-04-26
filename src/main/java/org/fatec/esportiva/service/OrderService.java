@@ -1,6 +1,5 @@
 package org.fatec.esportiva.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -8,9 +7,9 @@ import java.util.Optional;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.fatec.esportiva.entity.Client;
-import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Product;
+import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.mapper.OrderMapper;
 import org.fatec.esportiva.repository.ClientRepository;
@@ -18,6 +17,7 @@ import org.fatec.esportiva.repository.OrderRepository;
 import org.fatec.esportiva.repository.ProductRepository;
 import org.fatec.esportiva.dto.request.OrderDto;
 import org.fatec.esportiva.dto.response.OrderResponseDto;
+import org.fatec.esportiva.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -30,11 +30,8 @@ public class OrderService {
     private final ClientRepository clientRepository;
     private final ClientService clientService;
     private final NotificationService notificationService;
-
-    // Constantes para aumentar a legibilidade
-    private static final BigDecimal ZERO = BigDecimal.ZERO;
-    private static final BigDecimal ONE = BigDecimal.ONE;
-    private static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
+    private final ExchangeVoucherService exchangeVoucherService;
+    private final TransactionRepository transactionRepository;
 
     public List<OrderDto> getTransactions(OrderStatus status) {
         return orderRepository.findAllByStatus(status)
@@ -45,22 +42,22 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public OrderResponseDto findByClientIdAndId(Long id){
+    public OrderResponseDto findByClientIdAndId(Long id) {
         Client client = clientService.getAuthenticatedClient();
-        Order order = orderRepository.findByTransactionClientIdAndId(client.getId(), id).orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+        Order order = orderRepository.findByTransactionClientIdAndId(client.getId(), id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
         return OrderMapper.toOrderResponseDto(order);
     }
 
     // Máquina de estados que controla a transições conforme cada aprovação
-    public BigDecimal changeState(long id, boolean approve) {
-        BigDecimal voucherValue = ZERO; // Por padrão, o valor que nada aconteceu é zero
+    public void changeState(long id, boolean approve, boolean stock) {
         Order order = getNonOptional(orderRepository.findById(id));
         Product product = order.getProduct();
         Client client = order.getTransaction().getClient();
         OrderStatus status = order.getStatus();
 
         // Máquina de estados
-        if  (status == OrderStatus.EM_PROCESSAMENTO) {
+        if (status == OrderStatus.EM_PROCESSAMENTO) {
             if (approve) {
                 // Dá a baixa no estoque aqui e desbloqueia os produtos
                 order.setStatus(OrderStatus.EM_TRANSITO);
@@ -68,7 +65,6 @@ public class OrderService {
             } else {
                 // Reembolsa o cliente
                 order.setStatus(OrderStatus.COMPRA_CANCELADA);
-                voucherValue = calculateVoucherValue(order);
             }
         }
 
@@ -82,7 +78,6 @@ public class OrderService {
                 // Reembolsa o cliente
                 order.setStatus(OrderStatus.COMPRA_CANCELADA);
                 product.setStockQuantity(product.getStockQuantity() + order.getQuantity());
-                voucherValue = calculateVoucherValue(order);
             }
         }
 
@@ -102,8 +97,7 @@ public class OrderService {
                 // Troca aceita
                 notificationService.notifyTradeAccepted(order);
                 order.setStatus(OrderStatus.TROCADO);
-                voucherValue = calculateVoucherValue(order);
-                client = refundVoucher(client, voucherValue);
+                exchangeVoucherService.createExchangeVoucher(client, order.getTotalPrice());
             } else {
                 // Troca recusada, não faz nada
                 order.setStatus(OrderStatus.TROCA_RECUSADA);
@@ -116,51 +110,19 @@ public class OrderService {
                 // Repõe o estoque quando a troca é finalizada
                 // Reembolsa o cliente
                 order.setStatus(OrderStatus.TROCA_FINALIZADA);
-                product.setStockQuantity(product.getStockQuantity() + order.getQuantity());
+                // Somente retorna ao estoque se o usuário desejar (RF0043)
+                if (stock) {
+                    product.setStockQuantity(product.getStockQuantity() + order.getQuantity());
+                }
             } else {
                 // Produto não chegou na loja, troca recusada novamente
                 order.setStatus(OrderStatus.TROCA_RECUSADA);
             }
         }
 
-        else {
-            // Não faz nada nos outros estados
-        }
-
         orderRepository.save(order);
         productRepository.save(product);
-        clientRepository.save(client);
-        return voucherValue; // Caso tenha vários produtos, soma tudo e gera um cupom somente
-    }
-
-    // Cálculo do valor do cupom (Valor gasto com esse produto)
-    private BigDecimal calculateVoucherValue(Order order) {
-        // Margem de lucro em porcentagem
-        BigDecimal voucherValue = order.getProduct().getProfitMargin();
-        // Margem de lucro em decimal = (Margem de lucro em porcentagem / 100) + 1
-        voucherValue = voucherValue.divide(HUNDRED).add(ONE);
-        // Preço do produto = Margem de lucro * Custo do produto
-        voucherValue = voucherValue.multiply(order.getProduct().getCostValue());
-        // Valor do cupom = Preço do produto * Quantidade do produto
-        voucherValue = voucherValue.multiply(BigDecimal.valueOf(order.getQuantity()));
-
-        return voucherValue;
-    }
-
-    // Gera cupom para o cliente, reembolsando o produto
-    private Client refundVoucher(Client client, BigDecimal voucherValue) {
-        // Cria um novo cupom
-        ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
-        exchangeVoucher.setId(null);
-        exchangeVoucher.setValue(voucherValue);
-        exchangeVoucher.setClient(client);
-
-        // Adiciona o novo cupom a lista de cupons que o cliente já tinha
-        List<ExchangeVoucher> exchangeVouchers = client.getExchangeVouchers();
-        exchangeVouchers.add(exchangeVoucher);
-        client.setExchangeVouchers(exchangeVouchers);
-
-        return client;
+        clientRepository.save(client);// Caso tenha vários produtos, soma tudo e gera um cupom somente
     }
 
     // Remove o "Optional" do tipo que o linter reclama
@@ -175,18 +137,27 @@ public class OrderService {
     @Transactional
     public void tradeOrder(Long id, Short quantity) {
         Client client = clientService.getAuthenticatedClient();
-        Order order = orderRepository.findByTransactionClientIdAndId(client.getId(), id).orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
-        if (order.hasInsufficientQuantity(quantity) || order.getStatus() != OrderStatus.ENTREGUE) throw new IllegalArgumentException("Quantidade inválida");
+        Order order = orderRepository.findByTransactionClientIdAndId(client.getId(), id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+        if (order.hasInsufficientQuantity(quantity) || order.getStatus() != OrderStatus.ENTREGUE)
+            throw new IllegalArgumentException("Quantidade inválida");
         order.setQuantity(order.getQuantity() - quantity);
         orderRepository.save(order);
+
         Order newOrder = Order.builder()
                 .transaction(order.getTransaction())
                 .product(order.getProduct())
                 .quantity(quantity)
-                .status(OrderStatus.ENTREGUE)
+                .status(OrderStatus.EM_TROCA)
                 .build();
 
-        newOrder = orderRepository.save(newOrder);
-        changeState(newOrder.getId(), true);
+        orderRepository.save(newOrder);
+
+        // Atualizar a transação, incluindo o novo pedido na coleção de orders
+        Transaction transaction = order.getTransaction(); // Obtém a transação do pedido existente
+        transaction.getOrders().add(newOrder); // Adiciona o novo pedido à lista de orders
+
+        // Salvar a transação para garantir que o relacionamento seja persistido
+        transactionRepository.save(transaction);
     }
 }

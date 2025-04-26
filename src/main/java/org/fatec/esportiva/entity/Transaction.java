@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.Builder.Default;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,5 +55,9 @@ public class Transaction {
                 id,
                 status.getDisplayName(),
                 purchaseDate.toString());
+    }
+
+    public BigDecimal getTotalCost(){
+        return orders.stream().map(Order::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
