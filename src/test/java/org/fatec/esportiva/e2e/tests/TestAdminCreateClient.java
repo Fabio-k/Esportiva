@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.fatec.esportiva.e2e.E2E;
-import org.fatec.esportiva.e2e.pageObjects.DashboardPage;
+import org.fatec.esportiva.e2e.pageObjects.UserDashboardPage;
 import org.fatec.esportiva.e2e.pageObjects.LoginPage;
 import org.fatec.esportiva.e2e.pageObjects.UserFormPage;
 import org.fatec.esportiva.entity.enums.CreditCardBrand;
@@ -19,7 +19,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class TestAdminCreateClient extends E2E {
     private LoginPage login;
-    private DashboardPage dashboard;
+    private UserDashboardPage dashboard;
     private UserFormPage userForm;
 
     @BeforeEach
@@ -27,7 +27,7 @@ public class TestAdminCreateClient extends E2E {
         browser = new ChromeDriver(options);
         browser.get(baseUrl);
         login = new LoginPage(browser);
-        dashboard = new DashboardPage(browser);
+        dashboard = new UserDashboardPage(browser);
         userForm = new UserFormPage(browser);
     }
 
