@@ -60,14 +60,14 @@ public class ProductDashboardPage {
         return date.getText();
     }
 
-    public String getStockQuantity(int id) {
+    public int getStockQuantity(int id) {
         WebElement date = driver.findElement(By.id("stockQuantity-" + id));
-        return date.getText();
+        return Integer.parseInt(date.getText());
     }
 
-    public String getBlockedQuantity(int id) {
+    public int getBlockedQuantity(int id) {
         WebElement date = driver.findElement(By.id("blockedQuantity-" + id));
-        return date.getText();
+        return Integer.parseInt(date.getText());
     }
 
     public String getProfitMargin(int id) {

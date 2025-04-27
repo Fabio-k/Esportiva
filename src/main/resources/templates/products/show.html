@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8" >
-    <title>esportiva</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+  <meta charset="UTF-8">
+  <title>esportiva</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
   <style>
     main {
       margin: 0 auto;
       width: 80%;
     }
 
-      aside{
-          position: fixed;
-          top: 0;
-          right: 0;
-          background-color: white;
-          box-shadow: 0px 0px 5px rgb(211, 211, 211);
-          width: 20%;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
+    aside {
+      position: fixed;
+      top: 0;
+      right: 0;
+      background-color: white;
+      box-shadow: 0px 0px 5px rgb(211, 211, 211);
+      width: 20%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
   </style>
   <link rel="stylesheet" type="text/css" th:href="@{/css/quantityControl.css}">
 </head>
+
 <body>
-<header th:replace="~{fragments/header :: defaultHeader }"></header>
+  <header th:replace="~{fragments/header :: defaultHeader }"></header>
   <main>
     <input type="hidden" id="productId" th:value="${product.id}">
     <div style="margin-bottom: 30px">
-      <button onclick="window.history.back()" class="primaryButton">Voltar</button>
+      <button id="button-return" onclick="window.history.back()" class="primaryButton">Voltar</button>
     </div>
     <section class="card" style="display: flex; gap: 30px; justify-content:center;">
       <div style="width: 30%">
@@ -54,7 +56,8 @@
             <p id="availableQuantity" style="margin:0;" th:text="${product.quantity} + ' disponível'"></p>
           </div>
         </div>
-        <button id="addProductButton" th:attr="disabled=${product.quantity < 1}" class="primaryButton" onclick="addItem()" style="width: 100%" type="button">Adicionar ao carrinho</button>
+        <button id="addProductButton" th:attr="disabled=${product.quantity < 1}" class="primaryButton"
+          onclick="addItem()" style="width: 100%" type="button">Adicionar ao carrinho</button>
       </section>
     </section>
   </main>
@@ -67,89 +70,90 @@
     <p id="productQuantity"></p>
     <a th:href="@{/cart}">Ir para o carrinho</a>
   </aside>
-<script>
-  async function requestAddItem(body){
-   const response = await fetch("/api/cart/product", {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json"
-       },
-       body: JSON.stringify(body)
-     }
-   )
+  <script>
+    async function requestAddItem(body) {
+      const response = await fetch("/api/cart/product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      }
+      )
 
-   if(!response.ok) return null;
-   return await response.json();
- };
+      if (!response.ok) return null;
+      return await response.json();
+    };
 
- async function addItem(){
-   const quantity = document.getElementById("quantityItem").innerText;
-   const productId = document.getElementById("productId").value;
-   const body = {
-     id: productId,
-     quantity: quantity
-   };
+    async function addItem() {
+      const quantity = document.getElementById("quantityItem").innerText;
+      const productId = document.getElementById("productId").value;
+      const body = {
+        id: productId,
+        quantity: quantity
+      };
 
-   const response = await requestAddItem(body);
-   updateContent(quantity);
-   if(response == null) return;
-   document.getElementById("availableQuantity").innerText = response.product.quantity + ' disponível';
-   document.getElementById("productName").innerText = response.product.name;
-   document.getElementById("productQuantity").innerText = response.quantity + ' unidade(s)';
-   document.getElementById("productImage").src = response.product.image;
-   document.querySelector("aside").classList.toggle("hidden");
- }
-
- function getId(){
-   const id = document.getElementById("productId");
-   return id.value;
- }
- async function checkAvailability(id){
-   if(isNaN(id)) return;
-   const response = await fetch(`/api/products/${id}`);
-   if(!response.ok) throw Error("error on request status: " + response.status);
-   const result = await response.json();
-   return result.quantity;
- }
-
- async function modifyQuantity(button, value){
-   const quantityItem = document.getElementById(`quantityItem`);
-   const increaseButton = document.getElementById("increaseButton");
-   let currentQuantity = parseInt(quantityItem.innerText);
-   if(value < 0 && currentQuantity < 2){
-     return
-   }
-
-   updateContent(currentQuantity + value);
- }
-
- async function updateContent(currentQuantity){
-  const quantity = await checkAvailability(getId());
-   document.getElementById("availableQuantity").innerText = quantity + ' disponível';
-   if(quantity == 0){
-    document.getElementById("noStockTitle").hidden = false;
-    document.getElementById("productControlDiv").hidden = true;
-    document.getElementById("addProductButton").disabled = true;
-   }
-
-   if(currentQuantity >= quantity){
-     quantityItem.innerText = quantity;
-     increaseButton.disabled = true;
-     return;
-   } else {
-     increaseButton.disabled = false;
-   }
-
-   quantityItem.innerText = currentQuantity;
- }
-
-  window.addEventListener("click", (event) => {
-    const asideMenu = document.getElementById("asideMenu");
-    if(!asideMenu.classList.contains("hidden") && !asideMenu.contains(event.target)){
-      asideMenu.classList.add("hidden");
+      const response = await requestAddItem(body);
+      updateContent(quantity);
+      if (response == null) return;
+      document.getElementById("availableQuantity").innerText = response.product.quantity + ' disponível';
+      document.getElementById("productName").innerText = response.product.name;
+      document.getElementById("productQuantity").innerText = response.quantity + ' unidade(s)';
+      document.getElementById("productImage").src = response.product.image;
+      document.querySelector("aside").classList.toggle("hidden");
     }
-  })
-</script>
-<script th:src="@{/js/notification.js}" sec:authorize="hasRole('ROLE_CLIENT')"></script>
+
+    function getId() {
+      const id = document.getElementById("productId");
+      return id.value;
+    }
+    async function checkAvailability(id) {
+      if (isNaN(id)) return;
+      const response = await fetch(`/api/products/${id}`);
+      if (!response.ok) throw Error("error on request status: " + response.status);
+      const result = await response.json();
+      return result.quantity;
+    }
+
+    async function modifyQuantity(button, value) {
+      const quantityItem = document.getElementById(`quantityItem`);
+      const increaseButton = document.getElementById("increaseButton");
+      let currentQuantity = parseInt(quantityItem.innerText);
+      if (value < 0 && currentQuantity < 2) {
+        return
+      }
+
+      updateContent(currentQuantity + value);
+    }
+
+    async function updateContent(currentQuantity) {
+      const quantity = await checkAvailability(getId());
+      document.getElementById("availableQuantity").innerText = quantity + ' disponível';
+      if (quantity == 0) {
+        document.getElementById("noStockTitle").hidden = false;
+        document.getElementById("productControlDiv").hidden = true;
+        document.getElementById("addProductButton").disabled = true;
+      }
+
+      if (currentQuantity >= quantity) {
+        quantityItem.innerText = quantity;
+        increaseButton.disabled = true;
+        return;
+      } else {
+        increaseButton.disabled = false;
+      }
+
+      quantityItem.innerText = currentQuantity;
+    }
+
+    window.addEventListener("click", (event) => {
+      const asideMenu = document.getElementById("asideMenu");
+      if (!asideMenu.classList.contains("hidden") && !asideMenu.contains(event.target)) {
+        asideMenu.classList.add("hidden");
+      }
+    })
+  </script>
+  <script th:src="@{/js/notification.js}" sec:authorize="hasRole('ROLE_CLIENT')"></script>
 </body>
+
 </html>
