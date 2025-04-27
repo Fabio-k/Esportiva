@@ -11,7 +11,7 @@
     <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('analysis')}"></header>
     <main class="bg-gray-100 p-20">
         <section class="flex flex-col items-center gap-10 mb-20">
-            <h1 class="text-4xl font-bold">Comparar categorias e produtos</h1>
+            <h1 class="text-4xl font-bold">Comparar categorias e/ou produtos</h1>
 
             <select id="historySelect" class="bg-white px-4 py-2 rounded-xl border-2">
                 <option>Selecione uma categoria ou produto</option>
@@ -28,10 +28,10 @@
     </main>
 
     <script>
-        const traces = []
+        let traces = []
+        const select = document.getElementById("historySelect");
 
         document.getElementById("historySelect").addEventListener("change", () => {
-            const select = document.getElementById("historySelect");
             let historyId = select.value;
             const selectedOption = select.options[select.selectedIndex];
             const isCategory = selectedOption.dataset.iscategory === "true";
@@ -62,13 +62,24 @@
             selectedOption.hidden = true;
             const traceButton = document.createElement("button");
             traceButton.innerText = selectedOption.innerText;
-            traceButton.addEventListener("click", () => deleteTrace(this))
+            traceButton.addEventListener("click", function(){deleteTrace(this)})
             traceButton.classList = "px-4 py-2 bg-gray-200 rounded-xl cursor-pointer"
             document.getElementById("traces").appendChild(traceButton);
         })
 
         function deleteTrace(button){
+            const option = Array.from(select.options).find(option => option.innerText === button.innerText);
+            if (option){
+                option.hidden = false;
+            }
+            button.remove();
+            traces = traces.filter(trace => trace.name !== button.innerText);
 
+            let layout = {
+                autosize: true
+            }
+
+            Plotly.react('myDiv', traces, layout, {displayModeBar: false});
         }
     </script>
 </body>
