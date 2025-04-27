@@ -9,23 +9,67 @@
 
 <body>
     <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('analysis')}"></header>
-    <div id="myDiv"></div>
+    <main class="bg-gray-100 p-20">
+        <section class="flex flex-col items-center gap-10 mb-20">
+            <h1 class="text-4xl font-bold">Comparar categorias e produtos</h1>
+
+            <select id="historySelect" class="bg-white px-4 py-2 rounded-xl border-2">
+                <option>Selecione uma categoria ou produto</option>
+                <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}" data-isCategory="true"></option>
+                <option th:each="product : ${products}" th:text="${product.name}" th:value="${product.id}"></option>
+            </select>
+            <div id="traces" class="flex gap-10"></div>
+
+        </section>
+
+        <section class="flex">
+            <div id="myDiv" class="bg-white rounded shadow-md flex-grow min-h-[500px]"></div>
+        </section>
+    </main>
+
     <script>
-        var trace1 = {
-          x: [1, 2, 3, 4],
-          y: [10, 15, 13, 17],
-          type: 'scatter'
-        };
+        const traces = []
 
-        var trace2 = {
-          x: [1, 2, 3, 4],
-          y: [16, 5, 11, 9],
-          type: 'scatter'
-        };
+        document.getElementById("historySelect").addEventListener("change", () => {
+            const select = document.getElementById("historySelect");
+            let historyId = select.value;
+            const selectedOption = select.options[select.selectedIndex];
+            const isCategory = selectedOption.dataset.iscategory === "true";
+            if(historyId == null || historyId === "Selecione uma categoria ou produto") return;
 
-        var data = [trace1, trace2];
+            fetch(`/api/history?id=${historyId}&isCategory=${isCategory}`)
+            .then(response => response.json())
+            .then(data => {
+                const dates = data.map(item => item.purchaseDate);
+                const totals = data.map(item => item.totalOrders);
+                let trace = {
+                  x: dates,
+                  y: totals,
+                  type: 'scatter',
+                  name: selectedOption.innerText
+                };
 
-        Plotly.newPlot('myDiv', data);
+                let layout = {
+                    autosize: true
+                }
+
+                traces.push(trace);
+
+                Plotly.react('myDiv', traces, layout, {displayModeBar: false});
+            });
+
+            select.selectedIndex = 0;
+            selectedOption.hidden = true;
+            const traceButton = document.createElement("button");
+            traceButton.innerText = selectedOption.innerText;
+            traceButton.addEventListener("click", () => deleteTrace(this))
+            traceButton.classList = "px-4 py-2 bg-gray-200 rounded-xl cursor-pointer"
+            document.getElementById("traces").appendChild(traceButton);
+        })
+
+        function deleteTrace(button){
+
+        }
     </script>
 </body>
 

@@ -108,8 +108,7 @@ public class AiService {
                    Você não deve responder perguntas sobre preferências pessoais, esportes em geral, nem interações sociais.
                    Se a pergunta não é sobre recomendação de um artigo esportivo responda dessa maneira:
                    'Desculpe, só posso ajudar com dúvidas sobre os produtos à venda na loja Esportiva.'
-                   Não tente adaptar a pergunta ou sugerir produtos com base em suposições. Apenas responda quando a pergunta for diretamente sobre um produto.
-                   Para dar detaque a certas palavras como o nome de produtos use as tags strong ou em"
+                   Não tente adaptar a pergunta ou sugerir produtos com base em suposições. Apenas responda quando a pergunta for diretamente sobre um produto."
                     }
                 ]
                 },

@@ -3,6 +3,7 @@ package org.fatec.esportiva.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.fatec.esportiva.dto.request.ProductCategoryDto;
 import org.fatec.esportiva.entity.CartItem;
 import org.fatec.esportiva.entity.Product;
 import org.fatec.esportiva.entity.enums.ProductStatus;
@@ -19,6 +20,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+
+    public List<ProductCategoryDto> getAllProducts(){
+        return productRepository.findAll().stream()
+                .map(product -> new ProductCategoryDto(product.getId(), product.getName())).toList();
+    }
 
     @Transactional
     public Product save(ProductDto productDto) {
