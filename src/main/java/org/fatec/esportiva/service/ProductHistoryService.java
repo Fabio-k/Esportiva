@@ -16,7 +16,6 @@ public class ProductHistoryService {
     private final ProductHistoryRepository productHistoryRepository;
 
     public List<CategoryProductHistoryView> getCategoryOrProductHistoryById(Long id, Boolean isCategory, LocalDate startDate, LocalDate endDate) {
-        List<OrderStatus> allowedStatus = List.of(OrderStatus.EM_PROCESSAMENTO, OrderStatus.EM_TRANSITO, OrderStatus.ENTREGUE, OrderStatus.TROCA_RECUSADA);
-        return productHistoryRepository.getCategoryOrProductHistoryById(id, isCategory, startDate, endDate, allowedStatus);
+        return productHistoryRepository.getCategoryOrProductHistoryById(id, isCategory, startDate, endDate, OrderStatus.getSalesReportStatus());
     }
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fatec.esportiva.entity.enums.OrderStatus;
+import org.hibernate.annotations.Immutable;
 
 import java.time.LocalDate;
 
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@Immutable
 public class ProductHistory {
     @Id
     @Column(name = "id")

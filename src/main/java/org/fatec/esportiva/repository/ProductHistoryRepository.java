@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface ProductHistoryRepository extends JpaRepository<ProductHistory, Long> {
     @Query("""
-            SELECT o.purchaseDate AS purchaseDate, SUM(o.totalOrders) AS totalOrders
+            SELECT o.purchaseDate AS purchaseDate, SUM(o.totalOrders) AS totalQuantity
             FROM ProductHistory o
             WHERE (o.status IN :allowedStatus)
             AND ((:isCategory = true AND o.categoryId = :id) OR (:isCategory = false AND o.productId = :id))

@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 public interface CategoryProductHistoryView {
     LocalDate getPurchaseDate();
-    Long getTotalOrders();
+    Long getTotalQuantity();
 }

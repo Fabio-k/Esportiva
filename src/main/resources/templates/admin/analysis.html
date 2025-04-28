@@ -41,10 +41,19 @@
         let endDate = null;
 
         function fetchHistory(historyId, isCategory){
-            let url = `/api/history?id=${historyId}&isCategory=${isCategory}`;
+            let url = `/api/sales-history?id=${historyId}&isCategory=${isCategory}`;
             if(startDate) url += `&startDate=${startDate}`;
             if(endDate) url += `&endDate=${endDate}`;
-            return fetch(url).then(response => response.json());
+            return fetch(url)
+                .then(response => {
+                    if(!response.ok) throw new Error(`Erro: ${response.status}`);
+                    return response.json();
+                })
+                .catch(err => {
+                    console.error("Erro na requisição: ", err);
+                    return [];
+                    }
+                );
         }
 
         document.getElementById("historySelect").addEventListener("change", () => {
@@ -56,7 +65,7 @@
             fetchHistory(historyId, isCategory)
             .then(data => {
                 const dates = data.map(item => item.purchaseDate);
-                const totals = data.map(item => item.totalOrders);
+                const totals = data.map(item => item.totalQuantity);
                 pieLabels.push(selectedOption.innerText);
                 pieValues.push(totals.reduce(sum))
                 let trace = {
@@ -114,7 +123,7 @@
 
                 return fetchHistory(historyId, isCategory)
                     .then(data => {
-                        let values = data.map(item => item.totalOrders)
+                        let values = data.map(item => item.totalQuantity)
                         let pieIndex = pieLabels.indexOf(trace.name);
                         if (values.length > 0) pieValues[pieIndex] = values.reduce(sum);
                         else pieValues[pieIndex] = 0;

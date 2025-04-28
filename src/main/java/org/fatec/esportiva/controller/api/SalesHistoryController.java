@@ -11,10 +11,10 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class CategoryHistoryController {
+public class SalesHistoryController {
     private final ProductHistoryService productHistoryService;
 
-    @GetMapping("/api/history")
+    @GetMapping("/api/sales-history")
     public ResponseEntity<List<CategoryProductHistoryView>> categories(@RequestParam Long id, @RequestParam Boolean isCategory, @RequestParam(required = false) LocalDate startDate, @RequestParam(required = false) LocalDate endDate){
         return ResponseEntity.ok(productHistoryService.getCategoryOrProductHistoryById(id, isCategory, startDate, endDate));
     }
