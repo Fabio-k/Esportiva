@@ -226,7 +226,7 @@ public class CheckoutController {
         List<CartItemResponseDto> items = clientService.getCart().items();
         AddressResponseDto address = checkoutSession.getAddress();
 
-        Transaction transaction = transactionService.generateTransaction(checkoutSession);
+        Transaction transaction = transactionService.generateTransaction();
         try{
             checkoutService.validatePayment(checkoutSession);
             exchangeVoucherService.validateExchangeVoucherOwnership(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());
