@@ -32,6 +32,7 @@ public class TestAdminUpdateClient extends E2E {
         browser.quit();
     }
 
+    // @traceto(RF0022)
     @Test
     void adminUpdateUser() {
         login.login("Fábio");
@@ -56,6 +57,7 @@ public class TestAdminUpdateClient extends E2E {
         sleepForVisualization();
     }
 
+    // @traceto(RF0022)
     @Test
     void adminUpdateUserWithFail() {
         login.login("Fábio");

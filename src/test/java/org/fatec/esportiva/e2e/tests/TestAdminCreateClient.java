@@ -36,6 +36,7 @@ public class TestAdminCreateClient extends E2E {
         browser.quit();
     }
 
+    // @traceto(RF0021;RF0026;RF0027)
     @Test
     void adminCanCreateUser() {
         login.login("Fábio");
@@ -96,6 +97,7 @@ public class TestAdminCreateClient extends E2E {
         sleepForVisualization();
     }
 
+    //@traceto(RN0021;RN0022;RN0023;RN0024;RN0025;RN0026)
     @Test
     void returnErrorsBecauseOfMissingRequiredFields() {
         login.login("Fábio");

@@ -1,7 +1,6 @@
 package org.fatec.esportiva.e2e.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -54,6 +53,7 @@ public class TestClientShopping extends E2E {
         browser.quit();
     }
 
+    // @traceto(RN0033)
     @Test
     void normalFlowShopping() {
         // Fluxo simples, sem realizar nenhum teste de robustez

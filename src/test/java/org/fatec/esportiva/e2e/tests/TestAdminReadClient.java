@@ -29,6 +29,7 @@ public class TestAdminReadClient extends E2E {
         browser.quit();
     }
 
+    // @traceto(RF0024)
     @Test
     void adminReadTable() {
         login.login("Fábio");
@@ -59,6 +60,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserStatus(3), "Inativo");
     }
 
+    // @traceto(RF0024)
     @Test
     void adminOneFilter() {
         login.login("Fábio");
@@ -79,6 +81,7 @@ public class TestAdminReadClient extends E2E {
         sleepForVisualization();
     }
 
+    // @traceto(RF0024)
     @Test
     void adminTwoFilter() {
         login.login("Fábio");

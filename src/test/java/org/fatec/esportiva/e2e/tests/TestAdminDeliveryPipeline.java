@@ -34,6 +34,7 @@ public class TestAdminDeliveryPipeline extends E2E {
         browser.quit();
     }
 
+    // @traceto(RF0038;RF0039;RF0041;RF0042;RF0043;RN0039;RN0040;RN0042)
     @Test
     void adminCheckTransitions() {
         // O teste checa se todas as transições acontecem corretamente
@@ -89,6 +90,7 @@ public class TestAdminDeliveryPipeline extends E2E {
         sleepForVisualization();
     }
 
+    // @traceto(RF0043;RF0053;RF0054)
     @Test
     void adminStockAndDelivery() {
         // O teste verifica se as transições inserem ou removem do estoque corretamente

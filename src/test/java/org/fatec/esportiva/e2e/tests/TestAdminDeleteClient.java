@@ -28,6 +28,7 @@ public class TestAdminDeleteClient extends E2E {
         browser.quit();
     }
 
+    // @traceto(RF0023)
     @Test
     void adminDeleteClient() {
         login.login("Fábio");
@@ -36,6 +37,7 @@ public class TestAdminDeleteClient extends E2E {
         sleepForVisualization();
     }
 
+    // @traceto(RF0023)
     @Test
     void adminNotDeleteClient() {
         login.login("Fábio");
