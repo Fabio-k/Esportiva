@@ -1,4 +1,4 @@
-CREATE MATERIALIZED VIEW historico_compras AS
+CREATE VIEW historico_compras AS
 SELECT
     row_number() OVER () as id,
     c.cat_id,

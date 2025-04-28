@@ -28,7 +28,7 @@
 
         <section class="flex flex-col gap-10">
             <div id="myDiv" class="bg-white rounded shadow-md flex-grow min-h-[500px]"></div>
-            <div id="pie"></div>
+            <div id="pie" class="bg-white rounded shadow-md"></div>
         </section>
     </main>
 
@@ -114,8 +114,13 @@
 
                 return fetchHistory(historyId, isCategory)
                     .then(data => {
+                        let values = data.map(item => item.totalOrders)
+                        let pieIndex = pieLabels.indexOf(trace.name);
+                        if (values.length > 0) pieValues[pieIndex] = values.reduce(sum);
+                        else pieValues[pieIndex] = 0;
+
                         trace.x = data.map(item => item.purchaseDate);
-                        trace.y = data.map(item => item.totalOrders);
+                        trace.y = values;
                     });
             });
 
