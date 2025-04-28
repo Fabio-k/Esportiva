@@ -29,7 +29,7 @@ public class ProductHistory {
     @Column(name = "pro_id")
     private Long productId;
 
-    @Column(name = "pro_nome")
+    @Column(name = "pro_nome_produto")
     private String productName;
 
     @Column(name = "total_de_compras")

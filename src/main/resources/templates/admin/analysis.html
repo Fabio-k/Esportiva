@@ -12,12 +12,16 @@
     <main class="bg-gray-100 p-20">
         <section class="flex flex-col items-center gap-10 mb-20">
             <h1 class="text-4xl font-bold">Comparar categorias e/ou produtos</h1>
+            <article class="flex gap-10">
+                <select id="historySelect" class="bg-white px-4 py-2 rounded-xl border-2">
+                    <option>Selecione uma categoria ou produto</option>
+                    <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}" data-isCategory="true"></option>
+                    <option th:each="product : ${products}" th:text="${product.name}" th:value="${product.id}"></option>
+                </select>
+                <input type="date" name="" id="startDate">
+                <input type="date" name="" id="endDate">
+            </article>
 
-            <select id="historySelect" class="bg-white px-4 py-2 rounded-xl border-2">
-                <option>Selecione uma categoria ou produto</option>
-                <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}" data-isCategory="true"></option>
-                <option th:each="product : ${products}" th:text="${product.name}" th:value="${product.id}"></option>
-            </select>
             <div id="traces" class="flex gap-10"></div>
 
         </section>
@@ -30,6 +34,15 @@
     <script>
         let traces = []
         const select = document.getElementById("historySelect");
+        let startDate = null;
+        let endDate = null;
+
+        function fetchHistory(historyId, isCategory){
+            let url = `/api/history?id=${historyId}&isCategory=${isCategory}`;
+            if(startDate) url += `&startDate=${startDate}`;
+            if(endDate) url += `&endDate=${endDate}`;
+            return fetch(url).then(response => response.json());
+        }
 
         document.getElementById("historySelect").addEventListener("change", () => {
             let historyId = select.value;
@@ -37,8 +50,7 @@
             const isCategory = selectedOption.dataset.iscategory === "true";
             if(historyId == null || historyId === "Selecione uma categoria ou produto") return;
 
-            fetch(`/api/history?id=${historyId}&isCategory=${isCategory}`)
-            .then(response => response.json())
+            fetchHistory(historyId, isCategory)
             .then(data => {
                 const dates = data.map(item => item.purchaseDate);
                 const totals = data.map(item => item.totalOrders);
@@ -49,13 +61,9 @@
                   name: selectedOption.innerText
                 };
 
-                let layout = {
-                    autosize: true
-                }
-
                 traces.push(trace);
 
-                Plotly.react('myDiv', traces, layout, {displayModeBar: false});
+                renderTraces();
             });
 
             select.selectedIndex = 0;
@@ -75,10 +83,38 @@
             button.remove();
             traces = traces.filter(trace => trace.name !== button.innerText);
 
-            let layout = {
-                autosize: true
-            }
+            renderTraces();
+        }
 
+        document.getElementById("startDate").addEventListener("change", function(){
+            startDate = this.value;
+            applyDateFilter(this)
+        });
+        document.getElementById("endDate").addEventListener("change", function(){
+            endDate = this.value;
+            applyDateFilter(this);
+         });
+
+        function applyDateFilter() {
+            let promises = traces.map(trace => {
+                let selectedOption = Array.from(select.options).find(option => option.innerText === trace.name);
+                let historyId = selectedOption.value;
+                let isCategory = selectedOption.dataset.iscategory === "true";
+
+                return fetchHistory(historyId, isCategory)
+                    .then(data => {
+                        trace.x = data.map(item => item.purchaseDate);
+                        trace.y = data.map(item => item.totalOrders);
+                    });
+            });
+
+            Promise.all(promises).then(() => renderTraces());
+        }
+
+
+
+        function renderTraces(){
+            let layout = { autosize: true };
             Plotly.react('myDiv', traces, layout, {displayModeBar: false});
         }
     </script>
