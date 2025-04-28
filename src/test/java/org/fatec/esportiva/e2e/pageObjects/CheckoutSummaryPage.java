@@ -40,7 +40,7 @@ public class CheckoutSummaryPage {
         return freight.getText();
     }
 
-    public String getVouchersValue() {
+    public String getExchangeVouchersValue() {
         WebElement vouchers = driver.findElement(By.id("summaryVouchers"));
 
         return vouchers.getText();

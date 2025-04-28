@@ -7,11 +7,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class CartIndividualProduct {
+public class CartIndividualProductPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    public CartIndividualProduct(WebDriver driver) {
+    public CartIndividualProductPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
     }
@@ -27,7 +27,7 @@ public class CartIndividualProduct {
         wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
     }
 
-    public void goToCart(String search) {
+    public void goToCart() {
         // Após inserir o produto no carrinho, você pode ir até ele
         WebElement link = driver.findElement(By.linkText("Ir para o carrinho"));
         String currentUrl = driver.getCurrentUrl();
