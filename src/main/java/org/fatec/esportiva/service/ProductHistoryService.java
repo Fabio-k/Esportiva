@@ -2,6 +2,7 @@ package org.fatec.esportiva.service;
 
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.dto.projection.CategoryProductHistoryView;
+import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.repository.ProductHistoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public class ProductHistoryService {
     private final ProductHistoryRepository productHistoryRepository;
 
     public List<CategoryProductHistoryView> getCategoryOrProductHistoryById(Long id, Boolean isCategory, LocalDate startDate, LocalDate endDate) {
-        return productHistoryRepository.getCategoryOrProductHistoryById(id, isCategory, startDate, endDate);
+        List<OrderStatus> allowedStatus = List.of(OrderStatus.EM_PROCESSAMENTO, OrderStatus.EM_TRANSITO, OrderStatus.ENTREGUE, OrderStatus.TROCA_RECUSADA);
+        return productHistoryRepository.getCategoryOrProductHistoryById(id, isCategory, startDate, endDate, allowedStatus);
     }
 }

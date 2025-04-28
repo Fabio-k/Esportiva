@@ -1,12 +1,10 @@
 package org.fatec.esportiva.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.time.LocalDate;
 
@@ -37,4 +35,8 @@ public class ProductHistory {
 
     @Column(name = "tra_data_compra")
     private LocalDate purchaseDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ped_status")
+    private OrderStatus status;
 }
