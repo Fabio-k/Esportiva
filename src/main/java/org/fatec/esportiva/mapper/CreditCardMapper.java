@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.entity.CreditCard;
 import org.fatec.esportiva.dto.request.CreditCardDto;
+import org.fatec.esportiva.utils.StringUtils;
 
 import java.math.BigDecimal;
 
@@ -29,6 +30,6 @@ public class CreditCardMapper {
     }
 
     public SplitCreditCardDto toSplitCreditCardDto(CreditCard creditCard, BigDecimal value){
-        return new SplitCreditCardDto(creditCard.getId(), creditCard.getNumber(), value);
+        return new SplitCreditCardDto(creditCard.getId(), StringUtils.maskCreditCardNumber(creditCard.getNumber()), value);
     }
 }
