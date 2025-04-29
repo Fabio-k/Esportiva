@@ -24,7 +24,7 @@ public class AiService {
     private final ClientService clientService;
     private final RestClient restClient;
 
-    public String getRecommendationAnswer(List<String> chatHistory){
+    public String getRecommendationAnswer(List<String> chatHistory) {
         String prompt = getRecommendationPrompt(chatHistory);
         String requestBody = getRequestBody(prompt);
 
@@ -42,7 +42,7 @@ public class AiService {
         return processAnswer(responseEntity);
     }
 
-    private String getRecommendationPrompt(List<String> chatHistory){
+    private String getRecommendationPrompt(List<String> chatHistory) {
         String userText = "Recomende produtos com base...\n";
         userText += getAvailableProducts();
         userText += getClientHistory();
@@ -97,53 +97,60 @@ public class AiService {
         return clientHistory;
     }
 
-    private String getRequestBody(String prompt){
-        return String.format("""
-                {
-                "system_instruction": {
-                "parts": [
-                    {
-                    "text": "Você é um assistente virtual da loja de artigos esportivos Esportiva.
-                   Sua única função é recomendar produtos à venda na loja.
-                   Você não deve responder perguntas sobre preferências pessoais, esportes em geral, nem interações sociais.
-                   Se a pergunta não é sobre recomendação de um artigo esportivo responda dessa maneira:
-                   'Desculpe, só posso ajudar com dúvidas sobre os produtos à venda na loja Esportiva.'
-                   Não tente adaptar a pergunta ou sugerir produtos com base em suposições. Apenas responda quando a pergunta for diretamente sobre um produto.
-                   Para dar detaque a certas palavras como o nome de produtos use as tags strong ou em"
-                    }
-                ]
-                },
-                  "contents": [{
-                    "parts": [{"text": "%s"}]
-                  }]
-                }
-                """, prompt);
+    private String getRequestBody(String prompt) {
+        return String.format(
+                """
+                        {
+                        "system_instruction": {
+                        "parts": [
+                            {
+                            "text": "Você é um assistente virtual da loja de artigos esportivos Esportiva.
+                           Sua única função é recomendar produtos à venda na loja.
+                           Você não deve responder perguntas sobre preferências pessoais, esportes em geral, nem interações sociais.
+                           Se a pergunta não é sobre recomendação de um artigo esportivo responda dessa maneira:
+                           'Desculpe, só posso ajudar com dúvidas sobre os produtos à venda na loja Esportiva.'
+                           Não tente adaptar a pergunta ou sugerir produtos com base em suposições. Apenas responda quando a pergunta for diretamente sobre um produto.
+                           Para dar destaque a certas palavras como o nome de produtos use as tags strong ou em"
+                            }
+                        ]
+                        },
+                          "contents": [{
+                            "parts": [{"text": "%s"}]
+                          }]
+                        }
+                        """,
+                prompt);
     }
 
-    private String processAnswer(ResponseEntity<Map<String, Object>> responseEntity){
+    private String processAnswer(ResponseEntity<Map<String, Object>> responseEntity) {
         if (!responseEntity.getStatusCode().is2xxSuccessful() || responseEntity.getBody() == null)
             throw new AiResponseException("Falha ao chamar a API do Gemini. Status: " + responseEntity.getStatusCode());
 
         Map<String, Object> responseBody = responseEntity.getBody();
         List<Map<String, Object>> candidates = getList(responseBody, "candidates");
-        if(candidates.isEmpty()) throw new AiResponseException("Lista candidates está vazia");
+        if (candidates.isEmpty())
+            throw new AiResponseException("Lista candidates está vazia");
 
         Map<String, Object> content = getMap(candidates.getFirst(), "content");
         List<Map<String, String>> parts = getList(content, "parts");
-        if(parts.isEmpty()) throw new AiResponseException("Lista parts está vazia");
+        if (parts.isEmpty())
+            throw new AiResponseException("Lista parts está vazia");
 
         String answer = parts.getFirst().get("text");
-        if (answer == null || answer.isEmpty()) throw new AiResponseException("resposta está vazia ou nula");
+        if (answer == null || answer.isEmpty())
+            throw new AiResponseException("resposta está vazia ou nula");
         return answer;
     }
 
-    private <T> List<T> getList(Map<String, ?> map, String key){
+    @SuppressWarnings("unchecked")
+    private <T> List<T> getList(Map<String, ?> map, String key) {
         Object value = map.get(key);
         return (value instanceof List) ? (List<T>) value : List.of();
     }
 
-    private Map<String, Object> getMap(Map<String, ?> map, String key){
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> getMap(Map<String, ?> map, String key) {
         Object value = map.get(key);
-        return (value instanceof Map<?,?>) ? (Map<String, Object>) value : Map.of();
+        return (value instanceof Map<?, ?>) ? (Map<String, Object>) value : Map.of();
     }
 }
