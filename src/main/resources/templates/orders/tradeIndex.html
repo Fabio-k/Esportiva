@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+  <style>
+    main {
+        margin: 0 8rem;
+    }
+    .transaction{
+        width: 100%;
+        margin-bottom: 30px;
+        border-radius: 5px;
+    }
+    .inactiveText{
+        color: gray;
+    }
+    .activeText{
+        color: green;
+    }
+  </style>
+  <script th:src="@{/js/turbo.umd.js}"></script>
+</head>
+<body>
+<header th:replace="~{fragments/header :: defaultHeader }"></header>
+<main>
+  <div style="display: flex; gap: 20px">
+    <a th:href="@{/transactions}" style="text-decoration: none;" data-turbo="false"><h3>Compras</h3></a>
+    <h3 style="color:gray;">Trocas</h3>
+  </div>
+  <section th:if="${transaction.orders.tradedOrders.size() > 0}" th:id="'transaction_' + ${transaction.id}" class="card transaction" th:each="transaction : ${transactions}">
+    <div style="display: flex; align-items: center; gap: 30px;">
+      <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM YYYY')}"></h3>
+    </div>
+      <div style="display: flex; justify-content: space-between" th:each="order : ${transaction.orders.tradedOrders}">
+        <div style="display: flex; gap: 20px">
+          <div style="width: 80px">
+            <img th:src="${order.product.image}" style="width: 100%">
+          </div>
+          <div>
+            <p th:text="${order.product.name}"></p>
+            <p th:text="'Quantidade: ' + ${order.quantity}"></p>
+          </div>
+        </div>
+
+      <p th:text="${order.status.getDisplayName()}"></p>
+    </div>
+
+  </section>
+  <script th:src="@{/js/notification.js}" sec:authorize="hasRole('ROLE_CLIENT')"></script>
+</main>
+</body>
+</html>

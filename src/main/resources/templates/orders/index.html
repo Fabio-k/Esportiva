@@ -23,7 +23,10 @@
 <body>
     <header th:replace="~{fragments/header :: defaultHeader }"></header>
     <main>
-        <h3>Compras</h3>
+        <div style="display: flex; gap: 20px">
+            <h3 style="color:gray;">Compras</h3>
+            <a th:href="@{/transactions/trade}" style="text-decoration: none;" data-turbo="false"><h3>Trocas</h3></a>
+        </div>
         <section th:id="'transaction_' + ${transaction.id}" class="card transaction" th:each="transaction : ${transactions}">
             <div style="display: flex; align-items: center; gap: 30px;">
                 <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM YYYY')}"></h3>
@@ -55,21 +58,6 @@
                 </div>
                 <a class="primaryButton" style="height: fit-content" th:if="${transaction.isDelivered() && order.quantity != 0}" th:href="@{/orders/trade/{id}(id=${order.id})}">Solicitar Troca</a>
             </div>
-            <h3 th:if="${transaction.orders.tradedOrders.size() > 0}">Trocas</h3>
-            <div style="display: flex; justify-content: space-between" th:each="order : ${transaction.orders.tradedOrders}">
-                <div style="display: flex; gap: 20px">
-                    <div style="width: 80px">
-                        <img th:src="${order.product.image}" style="width: 100%">
-                    </div>
-                    <div>
-                        <p th:text="${order.product.name}"></p>
-                        <p th:text="'Quantidade: ' + ${order.quantity}"></p>
-                    </div>
-                </div>
-
-                <p th:text="${order.status.getDisplayName()}"></p>
-            </div>
-
         </section>
         <script th:src="@{/js/notification.js}" sec:authorize="hasRole('ROLE_CLIENT')"></script>
     </main>
