@@ -7,6 +7,8 @@ import lombok.*;
 import org.fatec.esportiva.entity.enums.CreditCardBrand;
 import org.fatec.esportiva.listeners.LogListener;
 
+import java.time.LocalDateTime;
+
 @Entity
 @EntityListeners(LogListener.class)
 @AllArgsConstructor
@@ -38,6 +40,12 @@ public class CreditCard {
     @NotNull
     @Column(name = "car_codigo_seguranca")
     private String securityCode;
+
+    @Column(name = "car_temporario")
+    private Boolean isTemporary;
+
+    @Column(name = "car_expira_em")
+    private LocalDateTime expireAt;
 
     @ManyToOne
     @JoinColumn(name = "car_cli_id")
