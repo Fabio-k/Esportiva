@@ -51,7 +51,7 @@ public class MainPage {
         wait.until(ExpectedConditions.stalenessOf(link));
     }
 
-    public void linkClientHistory(String search) {
+    public void linkClientHistory() {
         WebElement link = driver.findElement(By.linkText("Compras"));
         String currentUrl = driver.getCurrentUrl();
 
@@ -61,7 +61,7 @@ public class MainPage {
         wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
     }
 
-    public void linkCart(String search) {
+    public void linkCart() {
         WebElement link = driver.findElement(By.id("link-cart"));
         String currentUrl = driver.getCurrentUrl();
 

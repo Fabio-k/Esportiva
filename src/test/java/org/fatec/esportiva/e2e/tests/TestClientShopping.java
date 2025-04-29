@@ -53,7 +53,7 @@ public class TestClientShopping extends E2E {
         browser.quit();
     }
 
-    // @traceto(RN0033)
+    // @traceto(RN0033;RF0034;RN0037)
     @Test
     void normalFlowShopping() {
         // Fluxo simples, sem realizar nenhum teste de robustez
@@ -100,6 +100,66 @@ public class TestClientShopping extends E2E {
         assertEquals(1, clientHistoryPage.getItemQuantity(0, 0));
         assertEquals(getCurrentDate(), clientHistoryPage.getTransactionDate(0));
         assertEquals("Em processamento", clientHistoryPage.getTransactionStatus(0));
+
+        sleepForVisualization();
+    }
+
+    // @traceto(RF0031;RF0032;RF0033;RF0034;RN0031;RN0037;RN0038)
+    @Test
+    void editShoppingWithoutAddingAddressOrCard() {
+        // Fluxo onde o usuário altera a compra em várias etapas
+        // Além de alterar a quantidade para testar a robustez
+        // Sem adicionar um novo endereço ou cartão
+        // Testa também a formatação de compras acima de R$ 1.000,00
+        login.login("Carlos Silva");
+
+        // Escolhe o tênis e valida os limites do estoque (Máximo)
+        // E tenta inserir valores negativos ou zero (Mínimo)
+        mainPage.selectProduct(2);
+        cartIndividualProductPage.increaseButton(10);
+        cartIndividualProductPage.decreaseButton(8);
+        cartIndividualProductPage.increaseButton(2);
+        cartIndividualProductPage.addProductToCart();
+        cartIndividualProductPage.returnMainPage();
+
+        // Escolhe a rede de vôlei e verifica se é possível adicionar produto sem
+        // estoque
+        mainPage.selectProduct(5);
+        cartIndividualProductPage.addProductToCart();
+        cartIndividualProductPage.returnMainPage();
+
+        // Edita a compra dentro do carrinho
+        mainPage.linkCart();
+        cartAllProductsPage.increaseButton(0, 1);
+        assertEquals("Tênis Adidas CourtJam", cartAllProductsPage.getItemName(0));
+        assertEquals("4", cartAllProductsPage.getItemQuantity(0));
+        assertEquals("R$ 1.300,00", cartAllProductsPage.getItemTotalValue(0));
+        assertEquals("R$ 1.300,00", cartAllProductsPage.getTotalPrice());
+        cartAllProductsPage.continueShopping();
+
+        // Muda para o endereço do trabalho
+        checkoutAddressPage.selectAddress(1);
+        assertEquals("R$ 1.300,00", checkoutAddressPage.getProductValue());
+        assertEquals("R$ 26,00", checkoutAddressPage.getFreight());
+        assertEquals("R$ 1.326,00", checkoutAddressPage.getTotalPrice());
+        checkoutAddressPage.continueShopping();
+
+        // Usa 2 cartões de crédito como forma de pagamento
+        checkoutPaymentPage.selectCreditCard(0);
+        checkoutPaymentPage.selectCreditCard(1); // Cartão inválido
+        assertEquals("R$ 1.300,00", checkoutPaymentPage.getProductsTotalPrice());
+        assertEquals("R$ 26,00", checkoutPaymentPage.getFreightValue());
+        assertEquals("R$ 1.326,00", checkoutPaymentPage.getTotalPrice());
+        checkoutPaymentPage.continueShopping(true);
+
+        // Verifica o resumo da compra
+        assertEquals("R$ 1.300,00", checkoutSummaryPage.getProductsTotalPrice());
+        assertEquals("R$ 26,00", checkoutSummaryPage.getFreightValue());
+        assertEquals("R$ 1.300,00", checkoutSummaryPage.getTotalPrice());
+        checkoutSummaryPage.confirmShopping();
+
+        // A compra falhou devido ao cartão de crédito inválido
+        checkoutFinalPage.clickButtonFailShopping();
 
         sleepForVisualization();
     }

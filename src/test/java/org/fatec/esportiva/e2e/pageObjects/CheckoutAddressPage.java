@@ -35,7 +35,7 @@ public class CheckoutAddressPage {
     public void selectAddress(int position){
         WebElement addressContainer = driver.findElement(By.id("address-list"));
         // Encontra todos os itens e retorna somente um da posição desejada
-        List<WebElement> allAddress = addressContainer.findElements(By.cssSelector(".card addressCard"));
+        List<WebElement> allAddress = addressContainer.findElements(By.cssSelector(".card.addressCard"));
         WebElement address = allAddress.get(position);
 
         address.click();
