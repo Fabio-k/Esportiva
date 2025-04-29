@@ -60,8 +60,9 @@ public class TestClientShopping extends E2E {
         // Somente comprar uma bola
         login.login("Carlos Silva");
         mainPage.searchProduct("Bola");
+        mainPage.selectProduct(1);
 
-        cartIndividualProductPage.increaseButton(3);
+        cartIndividualProductPage.increaseButton(0);
         cartIndividualProductPage.addProductToCart();
         cartIndividualProductPage.goToCart();
 
@@ -84,13 +85,13 @@ public class TestClientShopping extends E2E {
         assertEquals("R$ 649,08", checkoutPaymentPage.getProductsTotalPrice());
         assertEquals("R$ 12,00", checkoutPaymentPage.getFreightValue());
         assertEquals("R$ 661,08", checkoutPaymentPage.getTotalPrice());
-        checkoutPaymentPage.continueShopping();
+        checkoutPaymentPage.continueShopping(true);
 
         // Verifica se os valores continuam consistentes no resumo da compra
         assertEquals("R$ 649,08", checkoutSummaryPage.getProductsTotalPrice());
         assertEquals("R$ 12,00", checkoutSummaryPage.getFreightValue());
         assertEquals("- R$ 20,00", checkoutSummaryPage.getExchangeVouchersValue());
-        assertEquals("R$ 641,08", checkoutSummaryPage.getFreightValue());
+        assertEquals("R$ 641,08", checkoutSummaryPage.getTotalPrice());
         checkoutSummaryPage.confirmShopping();
 
         // A compra foi finalizada com sucesso
@@ -108,7 +109,7 @@ public class TestClientShopping extends E2E {
         LocalDate currentDate = LocalDate.now();
 
         // Criar o formatter para o formato desejado
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM. yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
         // Formatar a data
         return currentDate.format(formatter);

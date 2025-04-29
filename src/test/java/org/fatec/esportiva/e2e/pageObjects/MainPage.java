@@ -29,7 +29,7 @@ public class MainPage {
         WebElement searchBar = driver.findElement(By.id("searchInput"));
 
         searchBar.clear();
-        searchBar.sendKeys(search);
+        searchBar.sendKeys(search + "\n"); // Pressiona ENTER para executar a busca
     }
 
     public String getNotificationMessage(int position) {

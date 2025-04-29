@@ -3,6 +3,7 @@ package org.fatec.esportiva.e2e.pageObjects;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -29,10 +30,17 @@ public class CartIndividualProductPage {
 
     public void goToCart() {
         // Após inserir o produto no carrinho, você pode ir até ele
-        WebElement link = driver.findElement(By.linkText("Ir para o carrinho"));
+        WebElement link = driver.findElement(By.id("link-cart")); // Ícone do carrinho na aba de navegação
         String currentUrl = driver.getCurrentUrl();
 
-        link.click();
+        try {
+            link.click();
+        } catch (ElementClickInterceptedException e) {
+            // Se o ícone do carrinho foi oculto pela barra de ir a página, clique nelas
+            // então
+            WebElement link2 = driver.findElement(By.linkText("Ir para o carrinho"));
+            link2.click();
+        }
 
         // Espera a nova página ser carregada, quando a URL atual fica inválida
         wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
@@ -57,13 +65,12 @@ public class CartIndividualProductPage {
     public void addProductToCart() {
         // Retorna ao menu inicial
         WebElement button = driver.findElement(By.id("addProductButton"));
-
-        String currentUrl = driver.getCurrentUrl();
-
         button.click();
-
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+        try {
+            Thread.sleep(800); // Tempo para o BD responder
+        } catch (InterruptedException e) {
+            // ...
+        }
     }
 
     public String getProductName() {

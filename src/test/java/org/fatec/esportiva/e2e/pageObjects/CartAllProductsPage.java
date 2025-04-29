@@ -34,8 +34,7 @@ public class CartAllProductsPage {
 
     public String getItemName(int position) {
         WebElement item = findItem(position);
-        WebElement link = item.findElement(By.xpath("//p[@class='productLink'"));
-        WebElement pElement = link.findElement(By.tagName("p"));
+        WebElement pElement = item.findElement(By.tagName("p"));
         return pElement.getText();
     }
 
@@ -47,7 +46,7 @@ public class CartAllProductsPage {
 
     public String getItemTotalValue(int position) {
         WebElement item = findItem(position);
-        WebElement totalPrice = item.findElement(By.xpath("//p[@class='itemTotalPrice'"));
+        WebElement totalPrice = item.findElement(By.className("itemTotalPrice"));
         return totalPrice.getText();
     }
 

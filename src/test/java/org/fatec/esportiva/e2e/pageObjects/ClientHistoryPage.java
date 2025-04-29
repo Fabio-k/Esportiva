@@ -44,7 +44,7 @@ public class ClientHistoryPage {
         WebElement transaction = getCardTransaction(cardPosition);
 
         // As informações do card estão no primeiro div
-        WebElement transactionAttributes = transaction.findElement(By.cssSelector("> div"));
+        WebElement transactionAttributes = transaction.findElement(By.tagName("div"));
 
         // A data fica dentro do h3
         WebElement date = transactionAttributes.findElement(By.tagName("h3"));
@@ -61,22 +61,22 @@ public class ClientHistoryPage {
         WebElement transaction = getCardTransaction(cardPosition);
         WebElement item = getItem(transaction, itemPosition);
 
-        WebElement firstDiv = item.findElement(By.xpath("//div[position()=1]"));
-        WebElement itemAttributes = firstDiv.findElement(By.xpath("//div[position()=2]"));
+        WebElement firstDiv = item.findElement(By.tagName("div"));
+        WebElement itemAttributes = firstDiv.findElements(By.xpath("./div")).get(1);
 
-        WebElement name = itemAttributes.findElement(By.xpath("//p[position()=1]"));
-        return name.getText();
-
+        WebElement name = itemAttributes.findElements(By.tagName("p")).get(0);
+        String itemName = name.getText();
+        return itemName;
     }
 
     public int getItemQuantity(int cardPosition, int itemPosition) {
         WebElement transaction = getCardTransaction(cardPosition);
         WebElement item = getItem(transaction, itemPosition);
 
-        WebElement firstDiv = item.findElement(By.xpath("//div[position()=1]"));
-        WebElement itemAttributes = firstDiv.findElement(By.xpath("//div[position()=2]"));
+        WebElement firstDiv = item.findElement(By.tagName("div"));
+        WebElement itemAttributes = firstDiv.findElements(By.xpath("./div")).get(1);
 
-        WebElement quantity = itemAttributes.findElement(By.xpath("//p[position()=2]"));
+        WebElement quantity = itemAttributes.findElements(By.tagName("p")).get(1);
         return Integer.parseInt(quantity.getText().replace("Quantidade: ", ""));
     }
 
@@ -84,7 +84,7 @@ public class ClientHistoryPage {
         WebElement transaction = getCardTransaction(cardPosition);
         WebElement item = getItem(transaction, itemPosition);
 
-        WebElement firstDiv = item.findElement(By.xpath("//div[position()=1]"));
+        WebElement firstDiv = item.findElement(By.tagName("div"));
         WebElement statusReturn = firstDiv.findElement(By.cssSelector(" > p"));
         return statusReturn.getText();
     }
@@ -99,14 +99,15 @@ public class ClientHistoryPage {
 
     private WebElement getCardTransaction(int cardPosition) {
         // Encontra todos os itens e retorna somente um da posição desejada
-        List<WebElement> allTransactions = driver.findElements(By.cssSelector(".card transaction"));
+        List<WebElement> allTransactions = driver.findElements(By.cssSelector(".card.transaction"));
         return allTransactions.get(cardPosition);
     }
 
     private WebElement getItem(WebElement cardTransaction, int itemPosition) {
         // Seleciona todos os filhos <div>, menos o primeiro
         // * O primeiro é o elemento relacionado ao título
-        List<WebElement> allItens = cardTransaction.findElements(By.cssSelector("> div:not(:first-child)"));
+        List<WebElement> allItens = cardTransaction.findElements(By.xpath("./div"));
+        itemPosition++; // O primeiro 'div' contém as informações da transação, não o item
         return allItens.get(itemPosition);
     }
 }
