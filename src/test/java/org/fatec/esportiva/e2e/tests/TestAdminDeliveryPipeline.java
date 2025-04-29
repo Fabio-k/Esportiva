@@ -6,6 +6,7 @@ import org.fatec.esportiva.e2e.E2E;
 import org.fatec.esportiva.e2e.pageObjects.UserDashboardPage;
 import org.fatec.esportiva.e2e.pageObjects.DeliveryDashboardPage;
 import org.fatec.esportiva.e2e.pageObjects.LoginPage;
+import org.fatec.esportiva.e2e.pageObjects.MainPage;
 import org.fatec.esportiva.e2e.pageObjects.ProductDashboardPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ public class TestAdminDeliveryPipeline extends E2E {
     private UserDashboardPage userDashboard;
     private ProductDashboardPage productDashboard;
     private DeliveryDashboardPage deliveryDashboard;
+    private MainPage mainPage;
 
     @BeforeEach
     void beforeEach() {
@@ -27,6 +29,7 @@ public class TestAdminDeliveryPipeline extends E2E {
         userDashboard = new UserDashboardPage(browser);
         productDashboard = new ProductDashboardPage(browser);
         deliveryDashboard = new DeliveryDashboardPage(browser);
+        mainPage = new MainPage(browser);
     }
 
     @AfterEach
@@ -125,6 +128,25 @@ public class TestAdminDeliveryPipeline extends E2E {
         assertEquals(kitBlocked, productDashboard.getBlockedQuantity(6));
         assertEquals(kneeBraceStock - 5, productDashboard.getStockQuantity(9));
         assertEquals(kneeBraceBlocked - 5, productDashboard.getBlockedQuantity(9));
+
+        sleepForVisualization();
+    }
+
+    // @traceto(RNF0046)
+    @Test
+    void productExchangeNotification() {
+        // O teste verifica se a aprovação da devolução gera uma notificação
+        login.login("Fábio");
+
+        // Aprova a devolução de um produto
+        productDashboard.navigateAdminPages("Entrega");
+        deliveryDashboard.navigateDeliveryPipeline("returning");
+        deliveryDashboard.orderApprove(8, "approve", true);
+        deliveryDashboard.navigateAdminPages("Logout");
+
+        // Loga como o cliente e checa a notificação
+        login.login("Carlos Silva");
+        assertEquals("A troca do produto Bola de Vôlei Mikasa 350VW foi aceita\n", mainPage.getNotificationMessage(0));
 
         sleepForVisualization();
     }
