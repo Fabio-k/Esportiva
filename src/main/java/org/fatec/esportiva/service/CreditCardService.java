@@ -42,10 +42,12 @@ public class CreditCardService {
         }).toList();
     }
 
-    public CreditCardDto createCreditCard(Client client, CreditCardDto creditCardDto){
+    public CreditCardDto createCreditCard(Client client, CreditCardDto creditCardDto, Boolean isTemporary){
         CreditCard creditCard = CreditCardMapper.toCreditCard(creditCardDto);
         creditCard.setClient(client);
         creditCard.setId(null);
+        creditCard.setIsTemporary(isTemporary);
+        creditCard.setExpireAt(LocalDateTime.now());
         return CreditCardMapper.toCreditCardDto(creditCardRepository.save(creditCard));
     }
 

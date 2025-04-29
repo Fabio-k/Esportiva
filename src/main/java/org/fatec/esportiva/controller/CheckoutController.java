@@ -117,15 +117,6 @@ public class CheckoutController {
                 .map(CreditCardMapper::toCreditCardDto).toList();
         List<CreditCardDto> allCreditCards = new ArrayList<>(creditCards);
 
-        if (checkoutSession.getCreditCardIds() != null) {
-            Set<Long> uniqueCreditCards = creditCards.stream().map(CreditCardDto::getId).collect(Collectors.toSet());
-
-            checkoutSession.getCreditCardIds().stream()
-                    .filter(uniqueCreditCards::add)
-                    .map(creditCardService::findCreditCard)
-                    .map(CreditCardMapper::toCreditCardDto)
-                    .forEach(allCreditCards::add);
-        }
         PromotionalCouponResponseDto promotionalCouponResponseDto = promotionalCouponService.getPromotionalCouponOrReturnNull(checkoutSession.getPromotionalCouponCode());
         model.addAttribute("promotionalCoupon", promotionalCouponResponseDto);
         model.addAttribute("vouchers", clientService.getClientVouchers());
@@ -189,11 +180,7 @@ public class CheckoutController {
         }
         CreditCardDto savedCreditCard;
 
-        if (saveCreditCard){
-            savedCreditCard = creditCardService.createCreditCard(clientService.getAuthenticatedClient(), dto);
-        } else {
-            savedCreditCard = creditCardService.saveCreditCard(dto);
-        }
+        savedCreditCard = creditCardService.createCreditCard(clientService.getAuthenticatedClient(), dto, saveCreditCard);
 
         checkoutSession.getCreditCardIds().add(savedCreditCard.getId());
         return "redirect:/checkout/billing";
