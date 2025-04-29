@@ -25,7 +25,7 @@
     <main>
         <div style="display: flex; gap: 20px">
             <h3 style="color:gray;">Compras</h3>
-            <a th:href="@{/transactions/trade}" style="text-decoration: none;"><h3>Trocas</h3></a>
+            <a th:href="@{/transactions/trade}" style="text-decoration: none;" data-turbo="false"><h3>Trocas</h3></a>
         </div>
         <section th:id="'transaction_' + ${transaction.id}" class="card transaction" th:each="transaction : ${transactions}">
             <div style="display: flex; align-items: center; gap: 30px;">
