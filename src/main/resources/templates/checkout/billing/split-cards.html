@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <title>Esportiva</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
+</head>
+<body>
+  <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
+  <div th:if="${errorMessage}" class="errorMessageDiv">
+    <span th:text="${errorMessage}"></span><div style="width:20px" id="errorMessageCloseButton"><img th:src="@{/images/icons/close.svg}" style="width:100%; cursor: pointer;" alt="fechar"></div>
+  </div>
+  <main>
+    <section>
+      <form th:action="@{/checkout/billing/split-cards/save}" method="post" th:object="${creditCards}">
+        <h1>Escolher como pagar</h1>
+        
+        <div class="card" style="margin-bottom:10px"  th:each="creditCard, iterStat : *{creditCards}">
+          <input type="hidden"  th:field="*{creditCards[__${iterStat.index}__].id}">
+          <p th:text="${creditCard.number}"></p>
+          <input type="hidden" th:id="'creditCardValue' + ${iterStat.index}" th:field="*{creditCards[__${iterStat.index}__].value}">
+          <input type="text" oninput="moneyMask(this)" th:attr="data-index=${iterStat.index}">
+        </div>
+        <button class="primaryButton" type="submit">Continuar</button>
+      </form>
+    </section>
+    <section class="card">
+
+      <h1>Resumo da compra</h1>
+      <div id="discountCouponDiv" class="hidden" style="display: flex; justify-content: space-between;">
+        <p id="discountCouponCode"></p>
+        <p id="discountCouponValue"></p>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <p>Produto(s)</p>
+        <p th:text="${productsTotalPrice}"></p>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <p>Frete</p>
+        <p th:text="${checkoutSession.getAddress().getFormattedFreight()}"></p>
+      </div>
+      <div style="display: flex; justify-content: space-between;" th:classappend="${exchangeVoucherTotalPrice.equals('R$&nbsp;0,00')} ? 'hidden' : ''">
+        <p>Cupon(s)</p>
+        <p th:text="'- ' + ${exchangeVoucherTotalPrice}"></p>
+      </div>
+      <div th:if="${promotionalCoupon != null}" style="display: flex; justify-content: space-between;">
+        <p th:text="${promotionalCoupon.code}"></p>
+        <p th:text="${promotionalCoupon.discountValue}"></p>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <p>Total</p>
+        <p th:text="${cartTotalPrice}"></p>
+      </div>
+    </section>
+  </main>
+  <script>
+    function moneyMask(input) {
+      let value = input.value.replace(/\D/g, "");
+
+      value = (Number(value) / 100).toFixed(2) + "";
+      value = value.replace(".", ",");
+      value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+      input.value = value;
+      const index = input.dataset.index;
+      console.log(index)
+      document.getElementById(`creditCardValue${index}`).value = normalizeMoney(value);
+    }
+
+    function normalizeMoney(value){
+      return value.replace(/\./g, "").replace(",", ".");
+    }
+  </script>
+</body>
+</html>

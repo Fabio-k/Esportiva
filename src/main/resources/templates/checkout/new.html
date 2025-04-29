@@ -57,6 +57,13 @@
             <p>Cupon(s)</p>
             <p th:text="'- ' + ${exchangeVoucherTotalPrice}"></p>
           </div>
+          <div th:if="${!creditCardPayment.isEmpty()}">
+            <p>Pago com cartão</p>
+            <div th:each="payment : ${creditCardPayment}" style="display: flex; justify-content: space-between;">
+              <p th:text="${payment.number}"></p>
+              <p th:text="${payment.formattedPrice}"></p>
+            </div>
+          </div>
           <div style="display: flex; justify-content: space-between;">
             <p>Total</p>
             <p th:text="${cartTotalPrice}"></p>

@@ -1,5 +1,7 @@
 package org.fatec.esportiva.entity.enums;
 
+import java.util.List;
+
 public enum OrderStatus {
     CARRINHO_COMPRAS("Carrinho de compras"),
     EM_PROCESSAMENTO("Em processamento"),
@@ -27,5 +29,9 @@ public enum OrderStatus {
 
     public boolean isInDeliveryProcess() {
         return this == ENTREGUE || this == EM_TRANSITO || this == EM_PROCESSAMENTO;
+    }
+
+    public static List<OrderStatus> getSalesReportStatus(){
+        return List.of(EM_PROCESSAMENTO, EM_TRANSITO, ENTREGUE, TROCA_RECUSADA);
     }
 }
