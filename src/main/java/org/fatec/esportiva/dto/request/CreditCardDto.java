@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import org.fatec.esportiva.entity.enums.CreditCardBrand;
+import org.fatec.esportiva.utils.StringUtils;
 
 @AllArgsConstructor
 @Builder
@@ -38,7 +39,6 @@ public class CreditCardDto {
     }
 
     public String numberMask(){
-        if(number.length() < 12) return "";
-        return "**** " + number.substring(number.length() - 4);
+       return StringUtils.maskCreditCardNumber(this.number);
     }
 }

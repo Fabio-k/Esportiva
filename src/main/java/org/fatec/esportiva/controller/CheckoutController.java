@@ -2,6 +2,7 @@ package org.fatec.esportiva.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.fatec.esportiva.dto.request.SplitCreditCardForm;
 import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.mapper.AddressMapper;
@@ -128,9 +129,8 @@ public class CheckoutController {
     @GetMapping("/billing/new")
     public String newBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,Model model){
         if(isCartEmpty()) return "redirect:/cart";
-        if(checkoutSession.getAddress() == null){
-            return "redirect:/checkout/address";
-        }
+        if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
+
         model.addAttribute("creditCard", new CreditCardDto());
         return "checkout/billing/new";
     }
@@ -140,7 +140,8 @@ public class CheckoutController {
                               @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds,
                               @RequestParam(name = "exchangeVouchers", required = false) List<Long> exchangeVoucherIds,
                               @RequestParam(name = "promotionalCouponCode", required = false) String promotionalCouponCode,
-                              RedirectAttributes redirectAttributes
+                              RedirectAttributes redirectAttributes,
+                              Model model
     ){
         if(isCartEmpty()) return "redirect:/cart";
         if(exchangeVoucherIds != null){
@@ -168,7 +169,20 @@ public class CheckoutController {
             return "redirect:/checkout/billing";
         }
 
+        List<Long> clientCreditCardsIds = checkoutSession.getCreditCardIds();
+        if(clientCreditCardsIds.size() > 1) return "redirect:/checkout/billing/split-cards";
+
         return "redirect:/checkout/new";
+    }
+
+    @GetMapping("/billing/split-cards")
+    public String splitCards(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
+        List<Long> clientCreditCardsIds = checkoutSession.getCreditCardIds();
+        if(clientCreditCardsIds.size() < 2) return "redirect:/checkout/billing";
+        SplitCreditCardForm splitCreditCardForm = new SplitCreditCardForm();
+        splitCreditCardForm.getCreditCards().addAll(creditCardService.findAllByIdAndClientId(clientCreditCardsIds, client().getId()));
+        model.addAttribute("creditCards", splitCreditCardForm);
+        return "/checkout/billing/split-cards";
     }
 
     @PostMapping("/billing/credit_card/save")
@@ -203,6 +217,8 @@ public class CheckoutController {
         model.addAttribute("creditCards", creditCards);
 
         model.addAttribute("items", cartItems);
+
+        model.addAttribute("creditCardPayment", checkoutSession.getCreditCardPayments());
 
         return "checkout/new";
     }
