@@ -19,7 +19,8 @@
         <div class="card" style="margin-bottom:10px"  th:each="creditCard, iterStat : *{creditCards}">
           <input type="hidden"  th:field="*{creditCards[__${iterStat.index}__].id}">
           <p th:text="${creditCard.number}"></p>
-          <input type="number" th:field="*{creditCards[__${iterStat.index}__].value}">
+          <input type="hidden" th:id="'creditCardValue' + ${iterStat.index}" th:field="*{creditCards[__${iterStat.index}__].value}">
+          <input type="text" oninput="moneyMask(this)" th:attr="data-index=${iterStat.index}">
         </div>
         <button class="primaryButton" type="submit">Continuar</button>
       </form>
@@ -53,5 +54,23 @@
       </div>
     </section>
   </main>
+  <script>
+    function moneyMask(input) {
+      let value = input.value.replace(/\D/g, "");
+
+      value = (Number(value) / 100).toFixed(2) + "";
+      value = value.replace(".", ",");
+      value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+      input.value = value;
+      const index = input.dataset.index;
+      console.log(index)
+      document.getElementById(`creditCardValue${index}`).value = normalizeMoney(value);
+    }
+
+    function normalizeMoney(value){
+      return value.replace(/\./g, "").replace(",", ".");
+    }
+  </script>
 </body>
 </html>
