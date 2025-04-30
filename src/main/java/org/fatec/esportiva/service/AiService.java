@@ -97,29 +97,26 @@ public class AiService {
         return clientHistory;
     }
 
-    private String getRequestBody(String prompt) {
-        return String.format(
-                """
-                        {
-                        "system_instruction": {
-                        "parts": [
-                            {
-                            "text": "Você é um assistente virtual da loja de artigos esportivos Esportiva.
-                           Sua única função é recomendar produtos à venda na loja.
-                           Você não deve responder perguntas sobre preferências pessoais, esportes em geral, nem interações sociais.
-                           Se a pergunta não é sobre recomendação de um artigo esportivo responda dessa maneira:
-                           'Desculpe, só posso ajudar com dúvidas sobre os produtos à venda na loja Esportiva.'
-                           Não tente adaptar a pergunta ou sugerir produtos com base em suposições. Apenas responda quando a pergunta for diretamente sobre um produto.
-                           Para dar destaque a certas palavras como o nome de produtos use as tags strong ou em"
-                            }
-                        ]
-                        },
-                          "contents": [{
-                            "parts": [{"text": "%s"}]
-                          }]
-                        }
-                        """,
-                prompt);
+    private String getRequestBody(String prompt){
+        return String.format("""
+                {
+                "system_instruction": {
+                "parts": [
+                    {
+                    "text": "Você é um assistente virtual da loja de artigos esportivos Esportiva.
+                   Sua única função é recomendar produtos à venda na loja.
+                   Você não deve responder perguntas sobre preferências pessoais, esportes em geral, nem interações sociais.
+                   Se a pergunta não é sobre recomendação de um artigo esportivo responda dessa maneira:
+                   'Desculpe, só posso ajudar com dúvidas sobre os produtos à venda na loja Esportiva.'
+                   Não tente adaptar a pergunta ou sugerir produtos com base em suposições. Apenas responda quando a pergunta for diretamente sobre um produto."
+                    }
+                ]
+                },
+                  "contents": [{
+                    "parts": [{"text": "%s"}]
+                  }]
+                }
+                """, prompt);
     }
 
     private String processAnswer(ResponseEntity<Map<String, Object>> responseEntity) {

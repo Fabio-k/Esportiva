@@ -4,10 +4,161 @@
 <head>
     <div th:replace="~{fragments/head_info.html :: head_info}"></div>
     <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
+    <script th:src="@{/js/plot.min.js}"></script>
 </head>
 
 <body>
     <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('analysis')}"></header>
+    <main class="bg-gray-100 p-20">
+        <section class="flex flex-col items-center gap-10 mb-20">
+            <h1 class="text-4xl font-bold">Comparar categorias e/ou produtos</h1>
+            <article class="flex gap-10">
+                <select id="historySelect" class="bg-white px-4 py-2 rounded-xl border-2">
+                    <option>Selecione uma categoria ou produto</option>
+                    <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}" data-isCategory="true"></option>
+                    <option th:each="product : ${products}" th:text="${product.name}" th:value="${product.id}"></option>
+                </select>
+                <input type="date" name="" id="startDate">
+                <input type="date" name="" id="endDate">
+            </article>
+
+            <div id="traces" class="flex gap-10"></div>
+
+        </section>
+
+        <section class="flex flex-col gap-10">
+            <div id="myDiv" class="bg-white rounded shadow-md flex-grow min-h-[500px]"></div>
+            <div id="pie" class="bg-white rounded shadow-md"></div>
+        </section>
+    </main>
+
+    <script>
+        let traces = []
+        let pieLabels = []
+        let pieValues = []
+        const select = document.getElementById("historySelect");
+        let startDate = null;
+        let endDate = null;
+
+        function fetchHistory(historyId, isCategory){
+            let url = `/api/sales-history?id=${historyId}&isCategory=${isCategory}`;
+            if(startDate) url += `&startDate=${startDate}`;
+            if(endDate) url += `&endDate=${endDate}`;
+            return fetch(url)
+                .then(response => {
+                    if(!response.ok) throw new Error(`Erro: ${response.status}`);
+                    return response.json();
+                })
+                .catch(err => {
+                    console.error("Erro na requisição: ", err);
+                    return [];
+                    }
+                );
+        }
+
+        document.getElementById("historySelect").addEventListener("change", () => {
+            let historyId = select.value;
+            const selectedOption = select.options[select.selectedIndex];
+            const isCategory = selectedOption.dataset.iscategory === "true";
+            if(historyId == null || historyId === "Selecione uma categoria ou produto") return;
+
+            fetchHistory(historyId, isCategory)
+            .then(data => {
+                const dates = data.map(item => item.purchaseDate);
+                const totals = data.map(item => item.totalQuantity);
+                pieLabels.push(selectedOption.innerText);
+                pieValues.push(totals.reduce(sum))
+                let trace = {
+                  x: dates,
+                  y: totals,
+                  type: 'scatter',
+                  name: selectedOption.innerText
+                };
+
+                traces.push(trace);
+
+                renderTraces();
+            });
+
+            select.selectedIndex = 0;
+            selectedOption.hidden = true;
+            const traceButton = document.createElement("button");
+            traceButton.innerText = selectedOption.innerText;
+            traceButton.addEventListener("click", function(){deleteTrace(this)})
+            traceButton.classList = "px-4 py-2 bg-gray-200 rounded-xl cursor-pointer"
+            document.getElementById("traces").appendChild(traceButton);
+        })
+
+        function deleteTrace(button){
+            const option = Array.from(select.options).find(option => option.innerText === button.innerText);
+            if (option){
+                option.hidden = false;
+            }
+            button.remove();
+            traces = traces.filter(trace => trace.name !== button.innerText);
+
+            const index = pieLabels.indexOf(button.innerText);
+            if (index !== -1) {
+                pieLabels.splice(index, 1);
+                pieValues.splice(index, 1);
+            }
+
+            renderTraces();
+        }
+
+        document.getElementById("startDate").addEventListener("change", function(){
+            startDate = this.value;
+            applyDateFilter(this)
+        });
+        document.getElementById("endDate").addEventListener("change", function(){
+            endDate = this.value;
+            applyDateFilter(this);
+         });
+
+        function applyDateFilter() {
+            let promises = traces.map(trace => {
+                let selectedOption = Array.from(select.options).find(option => option.innerText === trace.name);
+                let historyId = selectedOption.value;
+                let isCategory = selectedOption.dataset.iscategory === "true";
+
+                return fetchHistory(historyId, isCategory)
+                    .then(data => {
+                        let values = data.map(item => item.totalQuantity)
+                        let pieIndex = pieLabels.indexOf(trace.name);
+                        if (values.length > 0) pieValues[pieIndex] = values.reduce(sum);
+                        else pieValues[pieIndex] = 0;
+
+                        trace.x = data.map(item => item.purchaseDate);
+                        trace.y = values;
+                    });
+            });
+
+            Promise.all(promises).then(() => renderTraces());
+        }
+
+        function getLayout(title){
+            return {
+                autosize: true,
+                title: {
+                    text: title
+                  }
+            };
+        }
+
+        function renderTraces(){
+            Plotly.react('myDiv', traces, getLayout("Histórico de vendas"), {displayModeBar: false, responsive: true});
+            const pieData = [{
+                values: pieValues,
+                labels: pieLabels,
+                type: 'pie'
+            }]
+            Plotly.newPlot('pie', pieData, getLayout("Total de vendas"), {displayModeBar: false, responsive: true});
+        }
+
+        function sum(total, value, index, array){
+            return total + value;
+        }
+    </script>
 </body>
 
 </html>

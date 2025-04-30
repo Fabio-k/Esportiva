@@ -48,7 +48,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction generateTransaction(CheckoutSession checkoutSession) {
+    public Transaction generateTransaction() {
         Client client = clientService.getAuthenticatedClient();
         Transaction transaction = Transaction.builder()
                 .client(client)

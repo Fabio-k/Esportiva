@@ -3,6 +3,7 @@ package org.fatec.esportiva.controller;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.dto.response.TransactionResponseDto;
 import org.fatec.esportiva.service.TransactionService;
+import org.springframework.boot.Banner;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,20 @@ public class TransactionController {
         return "/orders/index";
     }
 
+    @GetMapping("/trade")
+    public String getTransactionsTrade(Model model){
+        model.addAttribute("transactions", transactionService.getTransactions());
+        return "/orders/tradeIndex";
+    }
+
+    @PatchMapping("/trade/{id}")
+    public String requestTrade(@PathVariable Long id, Model model){
+        transactionService.requestTrade(id);
+        TransactionResponseDto transaction = transactionService.getTransaction(id);
+        model.addAttribute("transaction", transaction);
+        return "redirect:/transactions/trade";
+    }
+    /*
     @PatchMapping("/trade/{id}")
     public ResponseEntity<String> requestTrade(@PathVariable Long id){
         transactionService.requestTrade(id);
@@ -37,4 +52,5 @@ public class TransactionController {
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "text/vnd.turbo-stream.html").body(turboStream);
     }
+     */
 }

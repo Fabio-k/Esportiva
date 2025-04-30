@@ -70,9 +70,9 @@
 
                 freight = getFloatValue(freight);
                 const productsValue = getFloatValue(document.getElementById("productsValue").innerText);
-                const total = (freight + productsValue).toFixed(2);
+                const total = freight + productsValue;
 
-                document.getElementById("totalPrice").innerText = `R$ ${total}`.replace('.', ',');
+                document.getElementById("totalPrice").innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             });
         }
         );

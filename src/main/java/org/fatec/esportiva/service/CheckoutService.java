@@ -1,7 +1,9 @@
 package org.fatec.esportiva.service;
 
 import lombok.RequiredArgsConstructor;
+import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.dto.response.AddressResponseDto;
+import org.fatec.esportiva.dto.response.SplitCreditCardResponseDto;
 import org.fatec.esportiva.entity.CreditCard;
 import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.entity.session.CheckoutSession;
@@ -126,6 +128,17 @@ public class CheckoutService {
             }
         });
     }
+
+    public void validateSplitPayment(CheckoutSession checkoutSession, List<SplitCreditCardDto> splitCreditCardDtos){
+        BigDecimal splitPaymentTotal = splitCreditCardDtos.stream().map(SplitCreditCardDto::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        splitCreditCardDtos.forEach(payment -> {
+            if(payment.getValue().compareTo(BigDecimal.TEN) < 0) throw new IllegalArgumentException("Cada cartão deve pagar pelo menos R$ 10,00.");
+        });
+        BigDecimal result = calculateTotalPrice(checkoutSession).subtract(splitPaymentTotal);
+        if(result.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Valor escolhido supera o valor a ser pago");
+        if(result.compareTo(BigDecimal.ZERO) > 0) throw new IllegalArgumentException("Valor escolhido é insuficiente");
+     }
 
     public void generateExchangeVoucher(CheckoutSession checkoutSession){
         if(!checkoutSession.getCreditCardIds().isEmpty()) return;
