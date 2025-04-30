@@ -8,6 +8,7 @@
 
 <body>
     <div th:fragment="dashboard_transaction(transaction_status, readonly)">
+        <h3 th:text="${#strings.replace(transaction_status, '_', ' ')}" style="text-align: center;"></h3><br>
         <table class="w-full">
             <thead>
                 <tr>
@@ -59,6 +60,7 @@
 
 
     <div th:fragment="dashboard_order(order_status, readonly, stock)">
+        <h3 th:text="${#strings.replace(order_status, '_', ' ')}" style="text-align: center;"></h3><br>
         <table class="w-full">
             <thead>
                 <tr>
