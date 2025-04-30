@@ -146,7 +146,7 @@ public class TestAdminDeliveryPipeline extends E2E {
 
         // Loga como o cliente e checa a notificação
         login.login("Carlos Silva");
-        assertEquals("A troca do produto Bola de Vôlei Mikasa 350VW foi aceita\n", mainPage.getNotificationMessage(0));
+        assertEquals("A troca do produto Bola de Vôlei Mikasa 350VW foi aceita", mainPage.getNotificationMessage(0));
 
         sleepForVisualization();
     }

@@ -33,6 +33,10 @@ public class MainPage {
     }
 
     public String getNotificationMessage(int position) {
+        // Clica no ícone para conseguir pegar o texto das notificações
+        WebElement notificationIcon = driver.findElement(By.id("notificationIcon"));
+        notificationIcon.click();
+
         WebElement notificationContainer = driver.findElement(By.id("notificationList"));
 
         // Encontra todos os itens e retorna somente um da posição desejada
@@ -40,8 +44,9 @@ public class MainPage {
         WebElement notification = notificationList.get(position);
         // O primeiro parágrafo tem a mensagem
         WebElement notificatonMessage = notification.findElement(By.tagName("p"));
+        String message = notificatonMessage.getText();
 
-        return notificatonMessage.getText();
+        return message;
     }
 
     public void selectProduct(int productId) {
