@@ -11,6 +11,7 @@ import org.fatec.esportiva.e2e.pageObjects.CartIndividualProductPage;
 import org.fatec.esportiva.e2e.pageObjects.CheckoutAddressPage;
 import org.fatec.esportiva.e2e.pageObjects.CheckoutFinalPage;
 import org.fatec.esportiva.e2e.pageObjects.CheckoutPaymentPage;
+import org.fatec.esportiva.e2e.pageObjects.CheckoutSplitCardsPage;
 import org.fatec.esportiva.e2e.pageObjects.CheckoutSummaryPage;
 import org.fatec.esportiva.e2e.pageObjects.ClientHistoryPage;
 import org.fatec.esportiva.e2e.pageObjects.LoginPage;
@@ -28,6 +29,7 @@ public class TestClientShopping extends E2E {
     private CartAllProductsPage cartAllProductsPage;
     private CheckoutAddressPage checkoutAddressPage;
     private CheckoutPaymentPage checkoutPaymentPage;
+    private CheckoutSplitCardsPage checkoutSplitCardsPage;
     private CheckoutSummaryPage checkoutSummaryPage;
     private CheckoutFinalPage checkoutFinalPage;
     private ClientHistoryPage clientHistoryPage;
@@ -42,6 +44,7 @@ public class TestClientShopping extends E2E {
         cartAllProductsPage = new CartAllProductsPage(browser);
         checkoutAddressPage = new CheckoutAddressPage(browser);
         checkoutPaymentPage = new CheckoutPaymentPage(browser);
+        checkoutSplitCardsPage = new CheckoutSplitCardsPage(browser);
         checkoutSummaryPage = new CheckoutSummaryPage(browser);
         checkoutFinalPage = new CheckoutFinalPage(browser);
         clientHistoryPage = new ClientHistoryPage(browser);
@@ -118,9 +121,9 @@ public class TestClientShopping extends E2E {
         mainPage.selectProduct(2);
         cartIndividualProductPage.increaseButton(10);
         cartIndividualProductPage.decreaseButton(8);
-        cartIndividualProductPage.increaseButton(2);
+        cartIndividualProductPage.increaseButton(2); // Espera-se 3 itens aqui
         cartIndividualProductPage.addProductToCart();
-        cartIndividualProductPage.returnMainPage();
+        cartIndividualProductPage.returnMainPage(); // Devido a subtração no estoque, sobram 2
 
         // Escolhe a rede de vôlei e verifica se é possível adicionar produto sem
         // estoque
@@ -130,7 +133,7 @@ public class TestClientShopping extends E2E {
 
         // Edita a compra dentro do carrinho
         mainPage.linkCart();
-        cartAllProductsPage.increaseButton(0, 1);
+        cartAllProductsPage.increaseButton(0, 1); // Agora há 4 tênis
         assertEquals("Tênis Adidas CourtJam", cartAllProductsPage.getItemName(0));
         assertEquals("4", cartAllProductsPage.getItemQuantity(0));
         assertEquals("R$ 1.300,00", cartAllProductsPage.getItemTotalValue(0));
@@ -152,10 +155,15 @@ public class TestClientShopping extends E2E {
         assertEquals("R$ 1.326,00", checkoutPaymentPage.getTotalPrice());
         checkoutPaymentPage.continueShopping(true);
 
+        // Como tem 2 cartões, insere os valores nele
+        checkoutSplitCardsPage.setCreditCardValue(0, "66300");
+        checkoutSplitCardsPage.setCreditCardValue(1, "66300");
+        checkoutSplitCardsPage.continueShopping(true);
+
         // Verifica o resumo da compra
         assertEquals("R$ 1.300,00", checkoutSummaryPage.getProductsTotalPrice());
         assertEquals("R$ 26,00", checkoutSummaryPage.getFreightValue());
-        assertEquals("R$ 1.300,00", checkoutSummaryPage.getTotalPrice());
+        assertEquals("R$ 1.326,00", checkoutSummaryPage.getTotalPrice());
         checkoutSummaryPage.confirmShopping();
 
         // A compra falhou devido ao cartão de crédito inválido

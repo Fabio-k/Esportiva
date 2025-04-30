@@ -47,8 +47,8 @@ public class CartIndividualProductPage {
     }
 
     public void decreaseButton(int clickTimes) {
-        if (clickTimes <= 0) {
-            throw new IllegalArgumentException("A quantidade de cliques não pode ser zero ou negativa: " + clickTimes);
+        if (clickTimes < 0) {
+            throw new IllegalArgumentException("A quantidade de cliques não pode ser negativa: " + clickTimes);
         }
 
         WebElement button = driver.findElement(By.id("decreaseButton"));
@@ -59,8 +59,8 @@ public class CartIndividualProductPage {
     }
 
     public void increaseButton(int clickTimes) {
-        if (clickTimes <= 0) {
-            throw new IllegalArgumentException("A quantidade de cliques não pode ser zero ou negativa: " + clickTimes);
+        if (clickTimes < 0) {
+            throw new IllegalArgumentException("A quantidade de cliques não pode ser negativa: " + clickTimes);
         }
 
         WebElement button = driver.findElement(By.id("increaseButton"));

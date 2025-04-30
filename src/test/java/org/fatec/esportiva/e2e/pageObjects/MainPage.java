@@ -74,6 +74,6 @@ public class MainPage {
 
         // Espera a nova página ser carregada, quando a URL atual fica inválida
         wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
 
+    }
 }

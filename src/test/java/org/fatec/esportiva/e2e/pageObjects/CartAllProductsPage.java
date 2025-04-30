@@ -57,6 +57,13 @@ public class CartAllProductsPage {
         for (int i = 0; i < clickTimes; i++) {
             button.click();
         }
+        // Tempo extra para carregar os botões e o javascript
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
     }
 
     public void decreaseButton(int position, int clickTimes) {
@@ -65,6 +72,13 @@ public class CartAllProductsPage {
 
         for (int i = 0; i < clickTimes; i++) {
             button.click();
+        }
+        // Tempo extra para carregar os botões e o javascript
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
         }
     }
 
