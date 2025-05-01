@@ -17,9 +17,14 @@ public class CartAllProductsPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
     }
 
-    public String getTotalPrice() {
-        WebElement totalPrice = driver.findElement(By.id("totalPrice"));
-        return totalPrice.getText();
+    public void returnMainPage() {
+        WebElement button = driver.findElement(By.id("button-return"));
+        String currentUrl = driver.getCurrentUrl();
+
+        button.click();
+
+        // Espera a nova página ser carregada, quando a URL atual fica inválida
+        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
     }
 
     public void continueShopping() {
@@ -47,6 +52,11 @@ public class CartAllProductsPage {
     public String getItemTotalValue(int position) {
         WebElement item = findItem(position);
         WebElement totalPrice = item.findElement(By.className("itemTotalPrice"));
+        return totalPrice.getText();
+    }
+
+    public String getTotalPrice() {
+        WebElement totalPrice = driver.findElement(By.id("totalPrice"));
         return totalPrice.getText();
     }
 
