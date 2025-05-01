@@ -32,7 +32,7 @@ public class TestAdminUpdateClient extends E2E {
         browser.quit();
     }
 
-    // @traceto(RF0022)
+    // @traceto(RF0022;RF0034)
     @Test
     void adminUpdateUser() {
         login.login("Fábio");

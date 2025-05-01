@@ -1,7 +1,6 @@
 package org.fatec.esportiva.e2e.pageObjects;
 
 import java.time.Duration;
-import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,13 +19,6 @@ public class CheckoutSplitCardsPage {
     public void setCreditCardValue(int cardIndex, String cardValue) {
         // Observação: Como o input considera também os centavos, tem que adicionar eles
         // Exemplo: R$ 427 -> 42700
-
-        // WebElement form =
-        // driver.findElement(By.cssSelector("form[action='/checkout/billing/split-cards/save']"));
-        // List<WebElement> allCards = form.findElements(By.className("card"));
-
-        // WebElement card = allCards.get(cardIndex);
-
         WebElement input = driver.findElement(By.cssSelector("input[data-index='" + cardIndex + "']"));
         input.sendKeys(cardValue);
     }

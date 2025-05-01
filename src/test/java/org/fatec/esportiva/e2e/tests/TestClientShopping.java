@@ -10,12 +10,19 @@ import org.fatec.esportiva.e2e.pageObjects.CartAllProductsPage;
 import org.fatec.esportiva.e2e.pageObjects.CartIndividualProductPage;
 import org.fatec.esportiva.e2e.pageObjects.CheckoutAddressPage;
 import org.fatec.esportiva.e2e.pageObjects.CheckoutFinalPage;
+import org.fatec.esportiva.e2e.pageObjects.CheckoutNewAddressPage;
+import org.fatec.esportiva.e2e.pageObjects.CheckoutNewCardPage;
 import org.fatec.esportiva.e2e.pageObjects.CheckoutPaymentPage;
 import org.fatec.esportiva.e2e.pageObjects.CheckoutSplitCardsPage;
 import org.fatec.esportiva.e2e.pageObjects.CheckoutSummaryPage;
 import org.fatec.esportiva.e2e.pageObjects.ClientHistoryPage;
 import org.fatec.esportiva.e2e.pageObjects.LoginPage;
 import org.fatec.esportiva.e2e.pageObjects.MainPage;
+import org.fatec.esportiva.e2e.pageObjects.UserDashboardPage;
+import org.fatec.esportiva.e2e.pageObjects.UserFormPage;
+import org.fatec.esportiva.entity.enums.CreditCardBrand;
+import org.fatec.esportiva.entity.enums.ResidencyType;
+import org.fatec.esportiva.entity.enums.StreetType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,11 +35,15 @@ public class TestClientShopping extends E2E {
     private CartIndividualProductPage cartIndividualProductPage;
     private CartAllProductsPage cartAllProductsPage;
     private CheckoutAddressPage checkoutAddressPage;
+    private CheckoutNewAddressPage checkoutNewAddressPage;
     private CheckoutPaymentPage checkoutPaymentPage;
+    private CheckoutNewCardPage checkoutNewCardPage;
     private CheckoutSplitCardsPage checkoutSplitCardsPage;
     private CheckoutSummaryPage checkoutSummaryPage;
     private CheckoutFinalPage checkoutFinalPage;
     private ClientHistoryPage clientHistoryPage;
+    private UserDashboardPage userDashboardPage;
+    private UserFormPage userFormPage;
 
     @BeforeEach
     void beforeEach() {
@@ -43,11 +54,15 @@ public class TestClientShopping extends E2E {
         cartIndividualProductPage = new CartIndividualProductPage(browser);
         cartAllProductsPage = new CartAllProductsPage(browser);
         checkoutAddressPage = new CheckoutAddressPage(browser);
+        checkoutNewAddressPage = new CheckoutNewAddressPage(browser);
         checkoutPaymentPage = new CheckoutPaymentPage(browser);
+        checkoutNewCardPage = new CheckoutNewCardPage(browser);
         checkoutSplitCardsPage = new CheckoutSplitCardsPage(browser);
         checkoutSummaryPage = new CheckoutSummaryPage(browser);
         checkoutFinalPage = new CheckoutFinalPage(browser);
         clientHistoryPage = new ClientHistoryPage(browser);
+        userDashboardPage = new UserDashboardPage(browser);
+        userFormPage = new UserFormPage(browser);
 
     }
 
@@ -56,7 +71,7 @@ public class TestClientShopping extends E2E {
         browser.quit();
     }
 
-    // @traceto(RN0033;RF0034;RN0037)
+    // @traceto(RN0033;RF0034;RN0037;RNF0021)
     @Test
     void normalFlowShopping() {
         // Fluxo simples, sem realizar nenhum teste de robustez
@@ -168,6 +183,84 @@ public class TestClientShopping extends E2E {
 
         // A compra falhou devido ao cartão de crédito inválido
         checkoutFinalPage.clickButtonFailShopping();
+
+        sleepForVisualization();
+    }
+
+    // @traceto(RF0035;RF0036)
+    @Test
+    void editShoppingAndAddressAndCard() {
+        // Fluxo onde o cliente cria um novo endereço e cartão durante a compra
+        login.login("Mariana Duarte");
+
+        // Escolhe o tênis e valida os limites do estoque (Máximo)
+        // E tenta inserir valores negativos ou zero (Mínimo)
+        mainPage.selectProduct(10);
+        cartIndividualProductPage.increaseButton(1);
+        cartIndividualProductPage.addProductToCart();
+        cartIndividualProductPage.goToCart();
+
+        // Verifica os dados da compra
+        assertEquals("Bola Vôlei Penalty VP 5000 X", cartAllProductsPage.getItemName(0));
+        assertEquals("2", cartAllProductsPage.getItemQuantity(0));
+        assertEquals("R$ 371,76", cartAllProductsPage.getItemTotalValue(0));
+        assertEquals("R$ 371,76", cartAllProductsPage.getTotalPrice());
+        cartAllProductsPage.continueShopping();
+
+        // Usa o novo endereço
+        checkoutAddressPage.newAddress();
+        checkoutNewAddressPage.setAddressIdentificationPhrase("Apartamento da Praia");
+        checkoutNewAddressPage.setAddressCep("74456300");
+        checkoutNewAddressPage.setAddressResidenceType(ResidencyType.APARTAMENTO);
+        checkoutNewAddressPage.setAddressStreetType(StreetType.RUA);
+        checkoutNewAddressPage.setAddressNumber("950");
+        checkoutNewAddressPage.setAddressObservation("Casa com vista para o mar");
+        checkoutNewAddressPage.saveAddressCheckbox(true);
+        checkoutNewAddressPage.continueShopping(true);
+        // Continua a compra
+        // checkoutAddressPage.selectAddress(1); // Endereço já fica selecionado
+        checkoutAddressPage.continueShopping();
+
+        // Usa 2 cartões de crédito como forma de pagamento
+        checkoutPaymentPage.newCreditCard();
+        checkoutNewCardPage.setCreditCardName("Mariana S. Duarte");
+        checkoutNewCardPage.setCreditCardNumber("11112222333344");
+        checkoutNewCardPage.setCreditCardCVV("565");
+        checkoutNewCardPage.setCreditCardBrand(CreditCardBrand.MASTERCARD);
+        checkoutNewCardPage.saveCreditCardCheckbox(true);
+        checkoutNewCardPage.continueShopping(true);
+        // Continua a compra
+        // checkoutPaymentPage.selectCreditCard(1); // Cartão já fica selecionado
+        checkoutPaymentPage.continueShopping(true);
+
+        // Verifica o resumo da compra
+        assertEquals("R$ 371,76", checkoutSummaryPage.getProductsTotalPrice());
+        assertEquals("R$ 18,00", checkoutSummaryPage.getFreightValue());
+        assertEquals("R$ 389,76", checkoutSummaryPage.getTotalPrice());
+        checkoutSummaryPage.confirmShopping();
+
+        // A compra foi finalizada com sucesso
+        checkoutFinalPage.clickButtonSuccessShopping();
+
+        // Checa se a informação foi adicionado no cadastro do usuário
+        clientHistoryPage.logout();
+        login.login("Fábio");
+        userDashboardPage.editUser(2);
+
+        assertEquals(false, userFormPage.getAddressCategoryResidential(1));
+        assertEquals(false, userFormPage.getAddressCategoryBilling(1));
+        assertEquals(true, userFormPage.getAddressCategoryShipping(1));
+        assertEquals("Apartamento da Praia", userFormPage.getAddressIdentificationPhrase(1));
+        assertEquals("74456-300", userFormPage.getAddressCep(1));
+        assertEquals("Apartamento", userFormPage.getAddressResidenceType(1));
+        assertEquals("Rua", userFormPage.getAddressStreetType(1));
+        assertEquals("950", userFormPage.getAddressNumber(1));
+        assertEquals("Casa com vista para o mar", userFormPage.getAddressObservation(1));
+
+        assertEquals("Mariana S. Duarte", userFormPage.getCreditCardName(1));
+        assertEquals("1111 2222 3333 44", userFormPage.getCreditCardNumber(1));
+        assertEquals("565", userFormPage.getCreditCardCVV(1));
+        assertEquals("MASTERCARD", userFormPage.getCreditCardBrand(1));
 
         sleepForVisualization();
     }
