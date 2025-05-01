@@ -57,7 +57,7 @@ public class MainPage {
     }
 
     public void linkClientHistory() {
-        WebElement link = driver.findElement(By.linkText("Compras"));
+        WebElement link = driver.findElement(By.linkText("Pedidos"));
         String currentUrl = driver.getCurrentUrl();
 
         link.click();

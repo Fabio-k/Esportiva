@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ClientHistoryPage {
@@ -32,12 +33,18 @@ public class ClientHistoryPage {
         wait.until(ExpectedConditions.stalenessOf(link));
     }
 
-    public void requestsReturnAllItens(int cardPosition) {
-        WebElement transaction = getCardTransaction(cardPosition);
-        WebElement button = transaction
-                .findElement(By.xpath("//button[text()='Solicitar troca de todos os itens do pedido']"));
+    public void linkPurchasedItems() {
+        WebElement link = driver.findElement(By.cssSelector("a[href='/transactions']"));
+        link.click();
+        // Espera a nova página ser carregada, quando o link fica 'inválido'
+        wait.until(ExpectedConditions.stalenessOf(link));
+    }
 
-        button.click();
+    public void linkReturnedItems() {
+        WebElement link = driver.findElement(By.cssSelector("a[href='/transactions/trade']"));
+        link.click();
+        // Espera a nova página ser carregada, quando o link fica 'inválido'
+        wait.until(ExpectedConditions.stalenessOf(link));
     }
 
     public String getTransactionDate(int cardPosition) {
@@ -89,14 +96,6 @@ public class ClientHistoryPage {
         return statusReturn.getText();
     }
 
-    public void itemRequestReturn(int cardPosition, int itemPosition) {
-        WebElement transaction = getCardTransaction(cardPosition);
-        WebElement item = getItem(transaction, itemPosition);
-        WebElement button = item.findElement(By.cssSelector("a.primaryButton"));
-
-        button.click();
-    }
-
     private WebElement getCardTransaction(int cardPosition) {
         // Encontra todos os itens e retorna somente um da posição desejada
         List<WebElement> allTransactions = driver.findElements(By.cssSelector(".card.transaction"));
@@ -109,5 +108,46 @@ public class ClientHistoryPage {
         List<WebElement> allItens = cardTransaction.findElements(By.xpath("./div"));
         itemPosition++; // O primeiro 'div' contém as informações da transação, não o item
         return allItens.get(itemPosition);
+    }
+
+    public void requestsReturnAllItens(int cardPosition) {
+        // Já pede a devolução de todos os itens em todas as quantidades, então não tem
+        // tela nova
+        WebElement transaction = getCardTransaction(cardPosition);
+        WebElement button = transaction
+                .findElement(By.xpath("//button[text()='Solicitar troca de todos os itens do pedido']"));
+
+        button.click();
+    }
+
+    public void itemRequestReturn(int cardPosition, int itemPosition, int quantity, boolean confirm) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("A quantidade não pode ser zero ou negativa");
+        }
+
+        // Seleciona o produto para trocar (Muda de tela)
+        WebElement transaction = getCardTransaction(cardPosition);
+        WebElement item = getItem(transaction, itemPosition);
+        WebElement button = item.findElement(By.cssSelector("a.primaryButton"));
+
+        button.click();
+        // Espera a nova página ser carregada, quando o botão fica 'inválido'
+        wait.until(ExpectedConditions.stalenessOf(button));
+
+        // Seleciona a quantidade de itens e confirma
+        WebElement dropdown = driver.findElement(By.id("tradeQuantity"));
+        // Criar um objeto Select e selecionar opções
+        Select selectQuantity = new Select(dropdown);
+        selectQuantity.selectByValue(String.valueOf(quantity)); // Seleciona a opção pelo atributo 'value'
+
+        if (confirm) {
+            WebElement buttonConfirmReturn = driver.findElement(By.className("primaryButton"));
+            buttonConfirmReturn.click();
+        } else {
+            WebElement buttonCancelReturn = driver.findElement(By.className("secondaryButton"));
+            buttonCancelReturn.click();
+        }
+        // Espera a nova página ser carregada, quando o select fica 'inválido'
+        wait.until(ExpectedConditions.stalenessOf(dropdown));
     }
 }
