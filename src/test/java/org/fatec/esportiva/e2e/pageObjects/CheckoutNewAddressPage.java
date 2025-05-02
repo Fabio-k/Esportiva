@@ -128,6 +128,13 @@ public class CheckoutNewAddressPage {
         if (expectedPass) {
             // Espera a nova página ser carregada, quando a URL atual fica inválida
             wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+            // Tempo extra para visualizar o teste
+            try {
+                Thread.sleep(800);
+            } catch (InterruptedException e) {
+                System.out.println("A pausa foi interrompida!");
+                e.printStackTrace();
+            }
         }
     }
 }

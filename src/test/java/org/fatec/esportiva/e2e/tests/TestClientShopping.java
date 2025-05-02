@@ -71,7 +71,7 @@ public class TestClientShopping extends E2E {
         browser.quit();
     }
 
-    // @traceto(RN0033;RF0034;RN0037;RNF0021)
+    // @traceto(RN0033;RF0034;RF0052;RN0037;RNF0021)
     @Test
     void normalFlowShopping() {
         // Fluxo simples, sem realizar nenhum teste de robustez
@@ -122,7 +122,7 @@ public class TestClientShopping extends E2E {
         sleepForVisualization();
     }
 
-    // @traceto(RF0031;RF0032;RF0033;RF0034;RN0031;RN0037;RN0038)
+    // @traceto(RF0031;RF0032;RF0033;RF0034;RF0052;RN0031;RN0037;RN0038)
     @Test
     void editShoppingWithoutAddingAddressOrCard() {
         // Fluxo onde o usuário altera a compra em várias etapas
@@ -187,7 +187,7 @@ public class TestClientShopping extends E2E {
         sleepForVisualization();
     }
 
-    // @traceto(RF0035;RF0036)
+    // @traceto(RF0035;RF0036;RF0052)
     @Test
     void editShoppingAndAddressAndCard() {
         // Fluxo onde o cliente cria um novo endereço e cartão durante a compra
@@ -257,10 +257,10 @@ public class TestClientShopping extends E2E {
         assertEquals("950", userFormPage.getAddressNumber(1));
         assertEquals("Casa com vista para o mar", userFormPage.getAddressObservation(1));
 
-        assertEquals("Mariana S. Duarte", userFormPage.getCreditCardName(1));
-        assertEquals("1111 2222 3333 44", userFormPage.getCreditCardNumber(1));
-        assertEquals("565", userFormPage.getCreditCardCVV(1));
-        assertEquals("MASTERCARD", userFormPage.getCreditCardBrand(1));
+        assertEquals("Mariana S. Duarte", userFormPage.getCreditCardName(2));
+        assertEquals("1111 2222 3333 44", userFormPage.getCreditCardNumber(2));
+        assertEquals("565", userFormPage.getCreditCardCVV(2));
+        assertEquals("MASTERCARD", userFormPage.getCreditCardBrand(2));
 
         sleepForVisualization();
     }

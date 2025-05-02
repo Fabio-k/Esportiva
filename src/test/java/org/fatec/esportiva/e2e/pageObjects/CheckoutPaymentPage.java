@@ -132,5 +132,10 @@ public class CheckoutPaymentPage {
             // Espera a nova página ser carregada, quando a URL atual fica inválida
             wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
         }
+        // Fecha a mensagem de erro
+        else{
+            WebElement errorMessage = driver.findElement(By.id("errorMessageCloseButton"));
+            errorMessage.click();
+        }
     }
 }
