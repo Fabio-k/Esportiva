@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -35,6 +36,24 @@ public class CartAllProductsPage {
 
         // Espera a nova página ser carregada, quando a URL atual fica inválida
         wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+    }
+
+    public boolean isCartEmpty() {
+        try {
+            WebElement cartTitle = driver.findElement(By.tagName("h1"));
+            String message = cartTitle.getText();
+
+            // Verifica se a mensagem de carrinho vazio aparece
+            if (message == "Carrinho vazio") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        // Se não achar o elemento, é porque o carrinho está com algum item
+        catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
     public String getItemName(int position) {
