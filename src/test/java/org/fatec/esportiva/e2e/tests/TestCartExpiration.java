@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.fatec.esportiva.e2e.E2E;
 import org.fatec.esportiva.e2e.pageObjects.CartAllProductsPage;
 import org.fatec.esportiva.e2e.pageObjects.CartIndividualProductPage;
-import org.fatec.esportiva.e2e.pageObjects.CheckoutAddressPage;
 import org.fatec.esportiva.e2e.pageObjects.LoginPage;
 import org.fatec.esportiva.e2e.pageObjects.MainPage;
 import org.junit.jupiter.api.AfterEach;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 @TestPropertySource(properties = "cart.product.timeoutInMinutes=1")
@@ -54,8 +52,10 @@ public class TestCartExpiration extends E2E {
     @Test
     void cartExpiration1Minute() {
         // Verifica se o carrinho é apagado em 1 minuto
+
         // Debug
-        System.out.println("Tempo para expirar o carrinho: " + cartTimeoutInMinutes);
+        // System.out.println("Tempo para expirar o carrinho: " + cartTimeoutInMinutes);
+        // System.out.println("Intervalo de leitura: " + intervalInMillis);
 
         login.login("Vanessa Von Hausten");
         mainPage.selectProduct(1);

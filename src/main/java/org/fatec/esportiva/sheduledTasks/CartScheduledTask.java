@@ -28,10 +28,15 @@ public class CartScheduledTask {
     @Value("${cart.expire.notification.inMinutes}")
     private int cartExpireNotificationInMinutes;
 
+    // Variável para testabilidade
+    //@Value("${cart.cleanup.intervalInMillis}")
+    //private int intervalInMillis;
+
     @Scheduled(fixedRateString = "${cart.cleanup.intervalInMillis:60000}")
     @Transactional
-    public void freeCarts(){
-        List<Cart> carts =  cartRepository.findByCreatedAtBefore(LocalDateTime.now());
+    public void freeCarts() {
+
+        List<Cart> carts = cartRepository.findByCreatedAtBefore(LocalDateTime.now());
         carts.forEach(cart -> {
             removeItems(cart);
             cart.setCreatedAt(LocalDateTime.now().plusMinutes(cartTimeoutInMinutes));
@@ -41,18 +46,19 @@ public class CartScheduledTask {
 
     @Scheduled(fixedRateString = "${cart.expire.notification.intervalInMillis:60000}")
     @Transactional
-    public void notifyClientsAboutCartTimeout(){
-        List<Cart> carts =  cartRepository.findByCreatedAtBeforeAndIsNotifiedFalse(LocalDateTime.now().plusMinutes(cartExpireNotificationInMinutes));
+    public void notifyClientsAboutCartTimeout() {
+        List<Cart> carts = cartRepository.findByCreatedAtBeforeAndIsNotifiedFalse(
+                LocalDateTime.now().plusMinutes(cartExpireNotificationInMinutes));
         carts.forEach(cart -> {
             List<CartItem> cartItems = cart.getCartItems();
-            if(!cartItems.isEmpty()){
+            if (!cartItems.isEmpty()) {
                 notificationService.notifyCartTimeout(cart.getClient());
                 cartService.setToNotified(cart.getId(), true);
             }
         });
     }
 
-    private void removeItems(Cart cart){
+    private void removeItems(Cart cart) {
         List<CartItem> copyCartItems = new ArrayList<>(cart.getCartItems());
         copyCartItems.forEach(cartItem -> {
             cartService.removeItem(cartItem.getId(), null, cart);
