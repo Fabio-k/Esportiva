@@ -2,8 +2,8 @@ package org.fatec.esportiva.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.fatec.esportiva.dto.response.AddressResponseDto;
 import org.fatec.esportiva.entity.address.Address;
-import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.mapper.AddressMapper;
 import org.fatec.esportiva.mapper.CartItemMapper;
@@ -110,6 +110,8 @@ public class CheckoutController {
     @PostMapping("/save")
     public String buyCart(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
         if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
+        model.addAttribute("items", clientService.getClientCartItems());
+        model.addAttribute("address", checkoutSession.getAddress());
         checkoutService.processCheckout(checkoutSession, model);
 
         return "/checkout/result";

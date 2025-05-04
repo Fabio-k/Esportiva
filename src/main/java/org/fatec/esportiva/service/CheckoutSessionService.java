@@ -97,4 +97,12 @@ public class CheckoutSessionService {
         BigDecimal extraExchangeCouponMoney = result.multiply(BigDecimal.valueOf(-1));
         exchangeVoucherService.createExchangeVoucher(clientService.getAuthenticatedClient(), extraExchangeCouponMoney);
     }
+
+    public void clearCheckoutSession(CheckoutSession checkoutSession) {
+        checkoutSession.getExchangeVoucherIds().clear();
+        checkoutSession.getCreditCardPayments().clear();
+        checkoutSession.setPromotionalCouponCode(null);
+        checkoutSession.getCreditCardIds().clear();
+        checkoutSession.setAddress(null);
+    }
 }

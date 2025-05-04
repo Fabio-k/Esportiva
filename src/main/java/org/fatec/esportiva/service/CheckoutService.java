@@ -1,17 +1,8 @@
 package org.fatec.esportiva.service;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.dto.response.AddressResponseDto;
-import org.fatec.esportiva.dto.response.CartItemResponseDto;
-import org.fatec.esportiva.entity.CreditCard;
-import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.session.CheckoutSession;
-import org.fatec.esportiva.mapper.CartItemMapper;
-import org.fatec.esportiva.mapper.CreditCardMapper;
-import org.fatec.esportiva.dto.request.CreditCardDto;
-import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
-import org.fatec.esportiva.validation.CartEmptyValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -28,9 +19,7 @@ public class CheckoutService {
     private final CheckoutSessionService checkoutSessionService;
 
     public void processCheckout(CheckoutSession checkoutSession, Model model){
-        AddressResponseDto address = checkoutSession.getAddress();
-        List<CartItemResponseDto> items = clientService.getCart().items();
-
+        checkoutSessionService.clearCheckoutSession(checkoutSession);
         Transaction transaction = transactionService.generateTransaction();
         try{
             checkoutSessionService.validatePayment(checkoutSession);
@@ -43,8 +32,5 @@ public class CheckoutService {
         exchangeVoucherService.markAsUsedExchangeVouchers(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());
         checkoutSessionService.generateExchangeVoucher(checkoutSession);
         cartService.cleanCart();
-
-        model.addAttribute("items", items);
-        model.addAttribute("address", address);
     }
 }
