@@ -60,7 +60,7 @@
             <select id="inactivationCategory" name="inactivationCategory" size="5" th:field="*{inactivationCategory}"
                 class="w-full py-1 px-2 border border-gray-300 rounded">
                 <option value="noOption">Selecione uma opção</option>
-                <option th:each="s : ${T(org.fatec.esportiva.entity.enums.ProductStatus).values()}" th:value="${s}"
+                <option th:each="s : ${T(org.fatec.esportiva.entity.product.ProductStatus).values()}" th:value="${s}"
                     th:text="${s.getDisplayName()}"></option>
             </select>
             <span class="error" th:if="${#fields.hasErrors('inactivationCategory')}"

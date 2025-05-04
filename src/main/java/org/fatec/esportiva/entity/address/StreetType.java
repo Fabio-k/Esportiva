@@ -1,4 +1,4 @@
-package org.fatec.esportiva.entity.enums;
+package org.fatec.esportiva.entity.address;
 
 public enum StreetType {
     RUA("Rua"), AVENIDA("Avenida"), PRACA("Praça"), VIELA("Viela"), RODOVIA("Rodovia"), OUTROS("Outros");

@@ -1,4 +1,4 @@
-package org.fatec.esportiva.entity.enums;
+package org.fatec.esportiva.entity.product;
 
 public enum ProductStatus {
     ATIVO("Ativo"),

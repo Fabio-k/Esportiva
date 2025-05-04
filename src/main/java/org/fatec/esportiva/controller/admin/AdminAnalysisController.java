@@ -1,4 +1,4 @@
-package org.fatec.esportiva.controller;
+package org.fatec.esportiva.controller.admin;
 
 import org.fatec.esportiva.repository.ProductCategoryRepository;
 import org.fatec.esportiva.service.ProductService;

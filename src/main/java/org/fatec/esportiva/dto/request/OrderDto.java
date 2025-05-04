@@ -1,6 +1,6 @@
 package org.fatec.esportiva.dto.request;
 
-import org.fatec.esportiva.entity.Product;
+import org.fatec.esportiva.entity.product.Product;
 import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 

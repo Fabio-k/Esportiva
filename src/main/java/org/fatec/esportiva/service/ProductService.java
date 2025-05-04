@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.fatec.esportiva.dto.request.ProductCategoryDto;
-import org.fatec.esportiva.entity.CartItem;
-import org.fatec.esportiva.entity.Product;
-import org.fatec.esportiva.entity.enums.ProductStatus;
+import org.fatec.esportiva.entity.cart.CartItem;
+import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.entity.product.ProductStatus;
 import org.fatec.esportiva.mapper.ProductMapper;
 import org.fatec.esportiva.repository.ProductRepository;
 import org.fatec.esportiva.dto.request.ProductDto;

@@ -7,9 +7,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.Builder.Default;
 
-import org.fatec.esportiva.entity.enums.AddressType;
-import org.fatec.esportiva.entity.enums.ResidencyType;
-import org.fatec.esportiva.entity.enums.StreetType;
+import org.fatec.esportiva.entity.address.AddressType;
+import org.fatec.esportiva.entity.address.ResidencyType;
+import org.fatec.esportiva.entity.address.StreetType;
 
 import java.util.HashSet;
 

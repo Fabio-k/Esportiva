@@ -1,4 +1,4 @@
-package org.fatec.esportiva.entity;
+package org.fatec.esportiva.entity.address;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

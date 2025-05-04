@@ -1,4 +1,4 @@
-package org.fatec.esportiva.entity;
+package org.fatec.esportiva.entity.product;
 
 import java.util.ArrayList;
 import java.util.List;

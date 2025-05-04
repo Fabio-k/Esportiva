@@ -1,12 +1,11 @@
-package org.fatec.esportiva.entity;
+package org.fatec.esportiva.entity.address;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.Builder.Default;
 
-import org.fatec.esportiva.entity.enums.ResidencyType;
-import org.fatec.esportiva.entity.enums.StreetType;
+import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.listeners.LogListener;
 
 import java.io.Serializable;

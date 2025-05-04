@@ -1,4 +1,4 @@
-package org.fatec.esportiva.controller;
+package org.fatec.esportiva.controller.admin;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

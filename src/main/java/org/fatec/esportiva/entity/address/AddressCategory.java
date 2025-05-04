@@ -1,6 +1,4 @@
-package org.fatec.esportiva.entity;
-
-import org.fatec.esportiva.entity.enums.AddressType;
+package org.fatec.esportiva.entity.address;
 
 import jakarta.persistence.*;
 import lombok.*;

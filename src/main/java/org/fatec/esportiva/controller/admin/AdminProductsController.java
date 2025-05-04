@@ -1,11 +1,11 @@
-package org.fatec.esportiva.controller;
+package org.fatec.esportiva.controller.admin;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.fatec.esportiva.entity.Product;
-import org.fatec.esportiva.entity.enums.ProductStatus;
+import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.entity.product.ProductStatus;
 import org.fatec.esportiva.dto.request.ProductCategoryDto;
 import org.fatec.esportiva.dto.request.ProductDto;
 

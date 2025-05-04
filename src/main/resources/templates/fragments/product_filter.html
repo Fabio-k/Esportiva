@@ -10,7 +10,7 @@
         <div>
             <select id="filter-status" name="status" th:value="${param.status}">
                 <option value="">Selecione o Status</option>
-                <option th:each="status : ${T(org.fatec.esportiva.entity.enums.ProductStatus).values()}"
+                <option th:each="status : ${T(org.fatec.esportiva.entity.product.ProductStatus).values()}"
                     th:value="${status}" th:text="${status.getDisplayName()}">Status</option>
             </select>
         </div>
@@ -18,7 +18,7 @@
         <!-- <div>
             <select id="filter-categories" name="categories" th:value="${param.categories}">
                 <option value="">Selecione a Categoria</option>
-                <option th:each="status : ${T(org.fatec.esportiva.entity.enums.ProductStatus).values()}"
+                <option th:each="status : ${T(org.fatec.esportiva.entity.product.ProductStatus).values()}"
                     th:value="${status}" th:text="${status.getDisplayName()}">Categoria</option>
             </select>
         </div> -->

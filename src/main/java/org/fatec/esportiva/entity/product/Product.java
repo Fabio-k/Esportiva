@@ -1,4 +1,4 @@
-package org.fatec.esportiva.entity;
+package org.fatec.esportiva.entity.product;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fatec.esportiva.entity.enums.ProductStatus;
 import org.fatec.esportiva.listeners.LogListener;
 
 @Entity

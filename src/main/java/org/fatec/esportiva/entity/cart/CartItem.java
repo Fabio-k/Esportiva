@@ -1,4 +1,4 @@
-package org.fatec.esportiva.entity;
+package org.fatec.esportiva.entity.cart;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.fatec.esportiva.entity.product.Product;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

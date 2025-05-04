@@ -1,9 +1,10 @@
-package org.fatec.esportiva.entity;
+package org.fatec.esportiva.entity.cart;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.fatec.esportiva.entity.Client;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
