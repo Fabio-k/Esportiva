@@ -1,19 +1,21 @@
 package org.fatec.esportiva.service;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.dto.response.AddressResponseDto;
-import org.fatec.esportiva.dto.response.SplitCreditCardResponseDto;
+import org.fatec.esportiva.dto.response.CartItemResponseDto;
 import org.fatec.esportiva.entity.CreditCard;
 import org.fatec.esportiva.entity.ExchangeVoucher;
+import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.dto.request.CreditCardDto;
 import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
+import org.fatec.esportiva.validation.CartEmptyValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -21,135 +23,28 @@ import java.util.List;
 public class CheckoutService {
     private final CartService cartService;
     private final ExchangeVoucherService exchangeVoucherService;
-    private final PromotionalCouponService promotionalCouponService;
-    private final CreditCardService creditCardService;
     private final ClientService clientService;
+    private final TransactionService transactionService;
+    private final CheckoutSessionService checkoutSessionService;
 
-    public BigDecimal calculateTotalPrice(CheckoutSession checkoutSession){
-        BigDecimal totalDiscount = getTotalDiscount(checkoutSession);
-        BigDecimal freight = getFreight(checkoutSession.getAddress());
-        return getCartTotalPrice().add(freight).subtract(totalDiscount).max(BigDecimal.ZERO);
-    }
+    public void processCheckout(CheckoutSession checkoutSession, Model model){
+        AddressResponseDto address = checkoutSession.getAddress();
+        List<CartItemResponseDto> items = clientService.getCart().items();
 
-    public BigDecimal getFreight(AddressResponseDto address){
-        BigDecimal freight = BigDecimal.ZERO;
-        if(address != null) freight = address.getFreight();
-        return freight;
-    }
-
-    public BigDecimal getCartTotalPrice(){
-        return cartService.getTotalCartPrice();
-    }
-
-    public BigDecimal getTotalDiscount(CheckoutSession checkoutSession){
-        return getExchangeVouchersTotalPrice(checkoutSession.getExchangeVoucherIds()).add(getPromotionalCouponDiscount(checkoutSession.getPromotionalCouponCode()));
-    }
-
-    public BigDecimal getExchangeVouchersTotalPrice(List<Long> exchangeVoucherIds){
-        if(exchangeVoucherIds == null) return BigDecimal.ZERO;
-        List <ExchangeVoucher> vouchers = exchangeVoucherService.findAllById(exchangeVoucherIds);
-        return vouchers.stream()
-                .map(ExchangeVoucher::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    public  BigDecimal getPromotionalCouponDiscount(String promotionalCouponCode){
-        BigDecimal promotionalCouponDiscount = BigDecimal.ZERO;
-        PromotionalCouponResponseDto responseDto = promotionalCouponService.getPromotionalCouponOrReturnNull(promotionalCouponCode);
-        if(responseDto != null)  {
-            promotionalCouponDiscount = responseDto.discountPrice();
-        }
-        return promotionalCouponDiscount;
-    }
-
-    public List<CreditCardDto> getCreditCardsDto(CheckoutSession checkoutSession){
-        return checkoutSession.getCreditCardIds().stream()
-                .map(creditCardId -> {
-                    CreditCard creditCard = creditCardService.findCreditCard(creditCardId);
-                    return CreditCardMapper.toCreditCardDto(creditCard);
-                })
-                .toList();
-    }
-
-
-    public void validateEachCartHasMinimumPaymentOfTenOnOnlyCreditCardPayment(CheckoutSession checkoutSession){
-        if(getTotalDiscount(checkoutSession).compareTo(BigDecimal.ZERO) > 0) return;
-
-        int numberOfCreditCards = getCreditCardsDto(checkoutSession).size();
-        if (numberOfCreditCards == 0) return;
-
-        BigDecimal totalPrice = calculateTotalPrice(checkoutSession);
-        if (totalPrice.divide(BigDecimal.valueOf(numberOfCreditCards), RoundingMode.UP).compareTo(BigDecimal.TEN) < 0)
-            throw new IllegalArgumentException("Cada cartão deve pagar pelo menos R$ 10,00.");
-    }
-
-    public void validateCreditCardsCannotBeUsedWhenTotalPriceIsZero(CheckoutSession checkoutSession){
-        if (getCreditCardsDto(checkoutSession).isEmpty()) return;
-
-        if(calculateTotalPrice(checkoutSession).compareTo(BigDecimal.ZERO) <= 0)
-            throw new IllegalArgumentException("O pedido já está sendo totalmente pago através de descontos. Remova os cartões de crédito para continuar.");
-    }
-
-    public void validateUnusedExchangeVouchers(CheckoutSession checkoutSession){
-        List <ExchangeVoucher> vouchers = exchangeVoucherService.findAllById(checkoutSession.getExchangeVoucherIds());
-        if (vouchers.isEmpty()) return;
-
-        BigDecimal freight = getFreight(checkoutSession.getAddress());
-
-        BigDecimal priceWithoutExchangeVouchers = getCartTotalPrice().add(freight).subtract(getPromotionalCouponDiscount(checkoutSession.getPromotionalCouponCode()));
-        if (getExchangeVouchersTotalPrice(checkoutSession.getExchangeVoucherIds()).compareTo(priceWithoutExchangeVouchers) < 1) return;
-
-        vouchers.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-
-        BigDecimal accumulated = BigDecimal.ZERO;
-        int usedVouchers = 0;
-        for(ExchangeVoucher exchangeVoucher : vouchers){
-            accumulated = accumulated.add(exchangeVoucher.getValue());
-            usedVouchers++;
-            if(accumulated.compareTo(priceWithoutExchangeVouchers) >= 0) break;
+        Transaction transaction = transactionService.generateTransaction();
+        try{
+            checkoutSessionService.validatePayment(checkoutSession);
+            exchangeVoucherService.validateExchangeVoucherOwnership(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());
+        } catch (IllegalArgumentException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            transactionService.denyTransaction(transaction);
         }
 
-        if(usedVouchers < vouchers.size())
-            throw new IllegalArgumentException("Você selecionou cupons desnecessários. Remova os cupons extras.");
-    }
+        exchangeVoucherService.markAsUsedExchangeVouchers(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());
+        checkoutSessionService.generateExchangeVoucher(checkoutSession);
+        cartService.cleanCart();
 
-    public void validateInsufficientPayment(CheckoutSession checkoutSession){
-        boolean hasRemainingAmountToPay = calculateTotalPrice(checkoutSession).compareTo(BigDecimal.ZERO) > 0;
-        if(hasRemainingAmountToPay && getCreditCardsDto(checkoutSession).isEmpty())
-            throw new IllegalArgumentException("Meios de pagamento insuficientes");
-    }
-
-    public void validatePayment(CheckoutSession checkoutSession){
-        List<CreditCardDto> creditCards = getCreditCardsDto(checkoutSession);
-
-        creditCards.forEach(creditCardDto -> {
-            if(creditCardDto.getNumber().equals("5115199853098847")){
-                throw new IllegalArgumentException("Cartão de crédito inválido");
-            }
-        });
-    }
-
-    public void validateSplitPayment(CheckoutSession checkoutSession, List<SplitCreditCardDto> splitCreditCardDtos){
-        BigDecimal splitPaymentTotal = splitCreditCardDtos.stream().map(SplitCreditCardDto::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        splitCreditCardDtos.forEach(payment -> {
-            if(payment.getValue().compareTo(BigDecimal.TEN) < 0) throw new IllegalArgumentException("Cada cartão deve pagar pelo menos R$ 10,00.");
-        });
-        BigDecimal result = calculateTotalPrice(checkoutSession).subtract(splitPaymentTotal);
-        if(result.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Valor escolhido supera o valor a ser pago");
-        if(result.compareTo(BigDecimal.ZERO) > 0) throw new IllegalArgumentException("Valor escolhido é insuficiente");
-     }
-
-    public void generateExchangeVoucher(CheckoutSession checkoutSession){
-        if(!checkoutSession.getCreditCardIds().isEmpty()) return;
-
-        BigDecimal freight = getFreight(checkoutSession.getAddress());
-        BigDecimal totalCost = getCartTotalPrice().add(freight);
-        BigDecimal result = totalCost
-                .subtract(getTotalDiscount(checkoutSession));
-
-        if(result.compareTo(BigDecimal.ZERO) >= 0) return;
-        BigDecimal extraExchangeCouponMoney = result.multiply(BigDecimal.valueOf(-1));
-        exchangeVoucherService.createExchangeVoucher(clientService.getAuthenticatedClient(), extraExchangeCouponMoney);
+        model.addAttribute("items", items);
+        model.addAttribute("address", address);
     }
 }
