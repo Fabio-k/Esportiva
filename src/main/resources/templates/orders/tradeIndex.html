@@ -24,8 +24,8 @@
 <header th:replace="~{fragments/header :: defaultHeader }"></header>
 <main>
   <div style="display: flex; gap: 20px">
-    <a th:href="@{/transactions}" style="text-decoration: none;" data-turbo="false"><h3>Compras</h3></a>
-    <h3 style="color:gray;">Trocas</h3>
+    <a th:href="@{/transactions}" style="text-decoration: none;color:black;" data-turbo="false"><h3>Compras</h3></a>
+    <h3 style="color:blue;">Trocas</h3>
   </div>
   <section th:if="${transaction.orders.tradedOrders.size() > 0}" th:id="'transaction_' + ${transaction.id}" class="card transaction" th:each="transaction : ${transactions}">
     <div style="display: flex; align-items: center; gap: 30px;">
