@@ -279,7 +279,7 @@ public class UserFormPage {
     // ####################################################################################################
     public String getName() {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("name")));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getGender() {
@@ -292,17 +292,17 @@ public class UserFormPage {
 
     public String getEmail() {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getCpf() {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cpf")));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getDateBirth() {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("dateBirth")));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getTelephoneType() {
@@ -315,7 +315,7 @@ public class UserFormPage {
 
     public String getTelephone() {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("telephone")));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     // Endereço
@@ -337,12 +337,12 @@ public class UserFormPage {
     public String getAddressIdentificationPhrase(int id) {
         WebElement content = wait
                 .until(ExpectedConditions.presenceOfElementLocated(By.id("addressIdentificationPhrase_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getAddressCep(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cep_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getAddressResidenceType(int id) {
@@ -364,54 +364,54 @@ public class UserFormPage {
 
     public String getAddressStreet(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("street_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getAddressNumber(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("number_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getAddressNeighborhood(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("neighborhood_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getAddressCity(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("city_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getAddressState(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("state_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getAddressCountry(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("country_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getAddressObservation(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("observation_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     // Cartão de crédito
     public String getCreditCardName(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("creditCardName_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getCreditCardNumber(int id) {
         WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("creditCardNumber_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getCreditCardCVV(int id) {
         WebElement content = wait
                 .until(ExpectedConditions.presenceOfElementLocated(By.id("creditCardSecurityCode_" + id)));
-        return content.getText();
+        return content.getAttribute("value");
     }
 
     public String getCreditCardBrand(int id) {

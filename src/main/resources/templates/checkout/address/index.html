@@ -1,58 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Esportiva</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
     <style>
-        .addressCard:hover{
+        .addressCard:hover {
             background-color: #f0f0f0;
         }
     </style>
 </head>
+
 <body>
-  <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
-  <main style="margin-bottom: 30px">
-    <section class="mainPanel">
-        <form th:action="@{/checkout/address/save}" method="post">
-            <h1>Escolher Endereço</h1>
+    <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
+    <main style="margin-bottom: 30px">
+        <section class="mainPanel">
+            <form id="address-list" th:action="@{/checkout/address/save}" method="post">
+                <h1>Escolher Endereço</h1>
 
-            <label th:each="address, iterStat : ${addresses}" th:for="'address_' +  ${address.id}"  class="card addressCard" style="display: flex; gap: 10px; cursor: pointer">
-                <div style="margin-top: 20px">
-                    <input type="radio" th:id="'address_' +  ${address.id}" name="selectedAddress" th:attr="data-freight=${address.formattedFreight}" th:checked="${checkoutSession.address == null ? iterStat.index == 0 : checkoutSession.address.id == address.id}" th:value="${address.id}">
-                </div>
-                <div style="flex-grow: 1">
-                    <div style="display:flex; justify-content:space-between; align-items:center">
-                        <h1 th:text="${address.addressIdentificationPhrase}"></h1>
-                        <h3 th:text="${address.formattedFreight}"></h3>
+                <label th:each="address, iterStat : ${addresses}" th:for="'address_' +  ${address.id}"
+                    class="card addressCard" style="display: flex; gap: 10px; cursor: pointer">
+                    <div style="margin-top: 20px">
+                        <input type="radio" th:id="'address_' +  ${address.id}" name="selectedAddress"
+                            th:attr="data-freight=${address.formattedFreight}"
+                            th:checked="${checkoutSession.address == null ? iterStat.index == 0 : checkoutSession.address.id == address.id}"
+                            th:value="${address.id}">
                     </div>
-                    <p th:text="${address.street} + ',' + ${address.cep}"></p>
-                </div>
-            </label>
+                    <div style="flex-grow: 1">
+                        <div style="display:flex; justify-content:space-between; align-items:center">
+                            <h1 th:text="${address.addressIdentificationPhrase}"></h1>
+                            <h3 th:text="${address.formattedFreight}"></h3>
+                        </div>
+                        <p th:text="${address.street} + ',' + ${address.cep}"></p>
+                    </div>
+                </label>
 
-          <a th:href="@{/checkout/address/new}" >Usar Novo Endereço</a>
-            <button class="primaryButton" type="submit">Continuar</button>
-        </form>
-    </section>
-    <section>
-        <div th:fragment="summary" class="card summaryDiv">
-            <h1>Resumo da compra</h1>
-            <div style="display: flex; justify-content: space-between;">
-                <p>Produto(s)</p>
-                <p id="productsValue" th:text="${productsTotalPrice}"></p>
+                <a th:href="@{/checkout/address/new}">Usar Novo Endereço</a>
+                <button id="button-continue-shopping" class="primaryButton" type="submit">Continuar</button>
+            </form>
+        </section>
+        <section>
+            <div th:fragment="summary" class="card summaryDiv">
+                <h1>Resumo da compra</h1>
+                <div style="display: flex; justify-content: space-between;">
+                    <p>Produto(s)</p>
+                    <p id="productsValue" th:text="${productsTotalPrice}"></p>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <p>Frete</p>
+                    <p id="freight"></p>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <p>Total</p>
+                    <p id="totalPrice" th:text="${cartTotalPrice}"></p>
+                </div>
             </div>
-            <div style="display: flex; justify-content: space-between;">
-                <p>Frete</p>
-                <p id="freight"></p>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-                <p>Total</p>
-                <p id="totalPrice" th:text="${cartTotalPrice}"></p>
-            </div>
-        </div>
-    </section>
-  </main>
+        </section>
+    </main>
     <script>
         const selectedRadio = document.querySelector("input[name='selectedAddress']:checked")
         document.getElementById("freight").innerText = selectedRadio.dataset.freight;
@@ -68,13 +74,14 @@
 
                 document.getElementById("totalPrice").innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             });
-            }
+        }
         );
 
-        function getFloatValue(priceText){
+        function getFloatValue(priceText) {
             priceText = parseFloat(priceText.replace('R$', '').replace('.', '').replace(',', '.').trim());
             return priceText;
         }
     </script>
 </body>
+
 </html>

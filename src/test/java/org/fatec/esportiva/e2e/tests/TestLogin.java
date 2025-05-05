@@ -32,17 +32,4 @@ public class TestLogin extends E2E {
         assertTrue(login.getErrorMessage());
         sleepForVisualization();
     }
-
-    // @Test
-    // void unauthorizeUserCannotAccessPage() {
-    // authenticateAs("Carlos Silva");
-    // browser.get(baseUrl + "/admin/clients");
-
-    // WebElement body =
-    // wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-    // String pageText = body.getText();
-
-    // assertTrue(pageText.contains("Entrar"));
-    // assertFalse(pageText.contains("carlos@gmail.com"));
-    // }
 }

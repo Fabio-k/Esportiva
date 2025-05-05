@@ -7,6 +7,7 @@ INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car
 ('4372412662447605', 'VISA', 'Carlos Silva', '757', '1'),
 ('5115199853098847', 'MASTERCARD', 'Carlos Silva', '543', '1'),
 ('344773538685170', 'AMERICAN_EXPRESS', 'Mariana Duarte', '7161', '2'),
+('450063570000745', 'DISCOVER', 'Mariana D.', '349', '2'),
 ('6011737478309686', 'DISCOVER', 'Vanessa V. Hausten', '647', '3');
 
 INSERT INTO cep(cep_cep, cep_logradouro, cep_bairro, cep_cidade, cep_estado, cep_pais) VALUES
@@ -41,9 +42,9 @@ INSERT INTO funcao (fun_end_id, fun_cae_id) VALUES
 INSERT INTO cupons_troca(ctr_valor, ctr_cli_id) VALUES
 ('50', '1'),
 ('20', '1'),
-('50', '2'),
-('20', '3'),
-('30', '3');
+('60', '2'),
+('65', '3'),
+('20', '3');
 
 
 INSERT INTO administrador (adm_nome, adm_email) VALUES

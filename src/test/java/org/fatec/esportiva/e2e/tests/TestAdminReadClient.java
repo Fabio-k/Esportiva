@@ -1,7 +1,7 @@
 package org.fatec.esportiva.e2e.tests;
 
 import org.fatec.esportiva.e2e.E2E;
-import org.fatec.esportiva.e2e.pageObjects.DashboardPage;
+import org.fatec.esportiva.e2e.pageObjects.UserDashboardPage;
 import org.fatec.esportiva.e2e.pageObjects.LoginPage;
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.UserStatus;
@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestAdminReadClient extends E2E {
     private LoginPage login;
-    private DashboardPage dashboard;
+    private UserDashboardPage dashboard;
 
     @BeforeEach
     void beforeEach() {
         browser = new ChromeDriver(options);
         browser.get(baseUrl);
         login = new LoginPage(browser);
-        dashboard = new DashboardPage(browser);
+        dashboard = new UserDashboardPage(browser);
     }
 
     @AfterEach
@@ -29,6 +29,7 @@ public class TestAdminReadClient extends E2E {
         browser.quit();
     }
 
+    // @traceto(RF0024)
     @Test
     void adminReadTable() {
         login.login("Fábio");
@@ -59,6 +60,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserStatus(3), "Inativo");
     }
 
+    // @traceto(RF0024)
     @Test
     void adminOneFilter() {
         login.login("Fábio");
@@ -79,6 +81,7 @@ public class TestAdminReadClient extends E2E {
         sleepForVisualization();
     }
 
+    // @traceto(RF0024)
     @Test
     void adminTwoFilter() {
         login.login("Fábio");

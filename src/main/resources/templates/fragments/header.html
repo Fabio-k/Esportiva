@@ -3,18 +3,21 @@
         <a th:href="@{/}" data-turbo="false">
             <img th:src="@{/images/logo.svg}" />
         </a>
-        <form th:action="@{/products/search}" method="get" style="position: relative; display: flex; align-items: center; gap: 10px" data-turbo="false">
+        <form th:action="@{/products/search}" method="get"
+            style="position: relative; display: flex; align-items: center; gap: 10px" data-turbo="false">
             <input type="text" id="searchInput" name="name" placeholder="Buscar" th:value="${param.name}">
-            <button type="submit" style="position: absolute; background-color: inherit; width: 30px; border: none; cursor: pointer"><img th:src="@{/images/icons/search.svg}" style="width: 100%"></button>
+            <button type="submit"
+                style="position: absolute; background-color: inherit; width: 30px; border: none; cursor: pointer"><img
+                    th:src="@{/images/icons/search.svg}" style="width: 100%"></button>
         </form>
         <div style="display: flex; gap: 5px; align-items: center">
             <span sec:authorize="isAuthenticated()">
-              <span sec:authentication="principal.name"></span>
-              <a th:href="@{/logout}" class="ml-4 text-red-500" data-turbo="false">Sair</a>
+                <span sec:authentication="principal.name"></span>
+                <a th:href="@{/logout}" class="ml-4 text-red-500" data-turbo="false">Sair</a>
             </span>
-                <span sec:authorize="isAnonymous()">
-              <a th:href="@{/login}" class="text-blue-500" data-turbo="false">Login</a>
-          </span>
+            <span sec:authorize="isAnonymous()">
+                <a th:href="@{/login}" class="text-blue-500" data-turbo="false">Login</a>
+            </span>
         </div>
     </div>
     <section style="display: flex; justify-content: space-between">
@@ -42,8 +45,10 @@
                         <div class="subCategoryDisplayDiv">
                             <h1>Esportes em time</h1>
                             <ul>
-                                <li><a th:href="@{/products/search?name=&category=Vôlei}" data-turbo="false">Vôlei</a></li>
-                                <li><a th:href="@{/products/search?name=&category=Futebol}" data-turbo="false">Futebol</a></li>
+                                <li><a th:href="@{/products/search?name=&category=Vôlei}" data-turbo="false">Vôlei</a>
+                                </li>
+                                <li><a th:href="@{/products/search?name=&category=Futebol}"
+                                        data-turbo="false">Futebol</a></li>
                             </ul>
                         </div>
                     </div>
@@ -56,12 +61,14 @@
                 <img th:src="@{/images/icons/notification.svg}" id="notificationIcon"  style="width: 100%">
                 <div id="notificationDiv" style="position:absolute; min-width: 25rem; left: revert-layer; right: 0">
                     <div style="height: 28px"></div>
-                    <div id="notificationList" style="background-color: white; box-shadow: 0px 0px 5px rgb(211, 211, 211); padding: 10px; max-height: 158px; min-height: 158px; overflow: auto;">
+                    <div id="notificationList"
+                        style="background-color: white; box-shadow: 0px 0px 5px rgb(211, 211, 211); padding: 10px; max-height: 158px; min-height: 158px; overflow: auto;">
                     </div>
                 </div>
             </div>
             <div style="width: 30px">
-                <a th:href="@{/cart}" sec:authorize="hasRole('ROLE_CLIENT')" ><img th:src="@{/images/icons/cart.svg}" style="width: 100%"></a>
+                <a id="link-cart" th:href="@{/cart}" sec:authorize="hasRole('ROLE_CLIENT')"><img
+                        th:src="@{/images/icons/cart.svg}" style="width: 100%"></a>
             </div>
         </div>
     </section>
@@ -69,8 +76,7 @@
 </header>
 
 <header th:fragment="simpleHeader">
-  <a th:href="@{/}">
-    <img th:src="@{/images/logo.svg}" />
-  </a>
+    <a th:href="@{/}">
+        <img th:src="@{/images/logo.svg}" />
+    </a>
 </header>
-

@@ -1,5 +1,19 @@
 let messages = [];
 
+
+// Cria uma mensagem padrão inicial da IA no chat:
+// Nota: Não precisa enviar essa mensagem para o chatbot
+const messagesDivFirstMessage = document.getElementById("messagesDiv");
+const firstIAMessage = document.createElement("span");
+firstIAMessage.textContent = "Olá! Seja bem-vindo ao Esportiva! Sou sua assistente virtual. Em que posso ajudar?";
+firstIAMessage.innerHTML = "Olá! Seja bem-vindo ao Esportiva! Sou sua assistente virtual. Em que posso ajudar?";
+firstIAMessage.style.display = "block";
+firstIAMessage.classList = "aiMessage"
+messagesDivFirstMessage.appendChild(firstIAMessage);
+messagesDivFirstMessage.scrollTop = messagesDivFirstMessage.scrollHeight;
+
+
+
 async function sendMessage() {
     const message = document.getElementById("message").value.trim();
     const messagesDiv = document.getElementById("messagesDiv");
@@ -55,7 +69,7 @@ async function sendAI(body) {
     return responseText.reply;
 }
 
-function toggleChat(){
+function toggleChat() {
     document.getElementById("chatModal").classList.toggle("hidden");
 }
 

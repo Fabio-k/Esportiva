@@ -13,13 +13,46 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class DashboardPage {
+public class UserDashboardPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    public DashboardPage(WebDriver driver) {
+    public UserDashboardPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+    }
+
+    // Navega entre as páginas do administrador
+    public void navigateAdminPages(String adminPageName) {
+        WebElement link;
+
+        // Procura o link pelo conteúdo dentro do texto
+        if (adminPageName == "Dashboard") {
+            link = driver.findElement(By.linkText("Dashboard"));
+
+        } else if (adminPageName == "Estoque") {
+            link = driver.findElement(By.linkText("Estoque"));
+
+        } else if (adminPageName == "Entrega") {
+            link = driver.findElement(By.linkText("Entrega"));
+
+        } else if (adminPageName == "Análise") {
+            link = driver.findElement(By.linkText("Análise"));
+
+        } else if (adminPageName == "Log") {
+            link = driver.findElement(By.linkText("Log"));
+
+        } else if (adminPageName == "Logout") {
+            link = driver.findElement(By.linkText("Logout"));
+
+        } else {
+            throw new IllegalArgumentException("Opção inválida: " + adminPageName);
+        }
+
+        link.click();
+
+        // Espera a nova página ser carregada, quando o link fica 'inválido'
+        wait.until(ExpectedConditions.stalenessOf(link));
     }
 
     public void clickNewUser() {
@@ -68,7 +101,6 @@ public class DashboardPage {
         WebElement field = driver.findElement(By.id("filter-name"));
         field.sendKeys(cpf);
     }
-
 
     public void setFilterGender(Gender gender) {
         WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("filter-gender")));
@@ -161,7 +193,7 @@ public class DashboardPage {
         }
     }
 
-    public Integer getUsersCount(){
+    public Integer getUsersCount() {
         try {
             WebElement tableBody = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("tbody")));
             return tableBody.findElements(By.tagName("tr")).size();

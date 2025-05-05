@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Esportiva</title>
@@ -9,30 +10,34 @@
 <style>
 
 </style>
-<body>
-  <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
-  <main>
-      <div class="card">
-          <h1 th:text="${errorMessage == null ? 'Compra realizada com sucesso' : 'Erro no processamento da compra'}"></h1>
-          <div>
-              <span th:text="${errorMessage}"></span>
 
-              <div th:if="${errorMessage == null}">
-                  <div style="display: flex; gap: 20px;" th:each="item : ${items}">
-                      <div style="width: 50px">
-                          <img  th:src="${item.product.image}" style="width: 100%">
-                      </div>
-                      <div class="itemName" style="max-width: 280px; min-width: 280px">
-                          <p th:text="${item.product.name}"></p>
-                      </div>
-                  </div>
-                  <p th:text="|Endereço: ${address.street}, ${address.state}. ${address.cep}|">Endereço</p>
-                  <p th:text="'total pago: ' + ${cartTotalPrice}"></p>
-              </div>
-          </div>
-          <a th:if="${errorMessage == null}" class="primaryButton" th:href="@{/transactions}">Ir para a página compras</a>
-          <a th:if="${errorMessage != null}" th:href="@{/}">Voltar para a tela inicial</a>
-      </div>
-  </main>
+<body>
+    <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
+    <main>
+        <div class="card">
+            <h1 th:text="${errorMessage == null ? 'Compra realizada com sucesso' : 'Erro no processamento da compra'}">
+            </h1>
+            <div>
+                <span th:text="${errorMessage}"></span>
+
+                <div th:if="${errorMessage == null}">
+                    <div style="display: flex; gap: 20px;" th:each="item : ${items}">
+                        <div style="width: 50px">
+                            <img th:src="${item.product.image}" style="width: 100%">
+                        </div>
+                        <div class="itemName" style="max-width: 280px; min-width: 280px">
+                            <p th:text="${item.product.name}"></p>
+                        </div>
+                    </div>
+                    <p th:text="|Endereço: ${address.street}, ${address.state}. ${address.cep}|">Endereço</p>
+                    <p th:text="'total pago: ' + ${cartTotalPrice}"></p>
+                </div>
+            </div>
+            <a id="button-success" th:if="${errorMessage == null}" class="primaryButton" th:href="@{/transactions}">Ir
+                para a página compras</a>
+            <a id="button-fail" th:if="${errorMessage != null}" th:href="@{/}">Voltar para a tela inicial</a>
+        </div>
+    </main>
 </body>
+
 </html>
