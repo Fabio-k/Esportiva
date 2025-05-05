@@ -5,6 +5,7 @@ import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CheckoutFinalPage {
@@ -27,7 +28,7 @@ public class CheckoutFinalPage {
     }
 
     public void clickButtonFailShopping() {
-        WebElement button = driver.findElement(By.id("button-fail"));
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("button-fail")));
         String currentUrl = driver.getCurrentUrl();
 
         button.click();

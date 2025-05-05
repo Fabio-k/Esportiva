@@ -6,6 +6,7 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CheckoutAddressPage {
@@ -53,7 +54,7 @@ public class CheckoutAddressPage {
     }
 
     public void continueShopping() {
-        WebElement button = driver.findElement(By.id("button-continue-shopping"));
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("button-continue-shopping")));
         String currentUrl = driver.getCurrentUrl();
 
         button.click();

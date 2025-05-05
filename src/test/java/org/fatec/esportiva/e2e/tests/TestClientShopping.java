@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import org.fatec.esportiva.e2e.E2E;
 import org.fatec.esportiva.e2e.pageObjects.CartAllProductsPage;
@@ -270,7 +271,7 @@ public class TestClientShopping extends E2E {
         LocalDate currentDate = LocalDate.now();
 
         // Criar o formatter para o formato desejado
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.forLanguageTag("pt-BR"));
 
         // Formatar a data
         return currentDate.format(formatter);
