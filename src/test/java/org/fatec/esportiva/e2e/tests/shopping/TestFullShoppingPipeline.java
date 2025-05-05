@@ -176,7 +176,7 @@ public class TestFullShoppingPipeline extends E2E {
 
         // Verifica se os valores continuam consistentes no cartão de crédito
         checkoutPaymentPage.selectCreditCard(0);
-        checkoutPaymentPage.selectExchangeVoucher(2); // Cupom de mesmo valor da devolução
+        checkoutPaymentPage.selectExchangeVoucher(1); // Cupom de mesmo valor da devolução
         assertEquals("R$ 371,76", checkoutPaymentPage.getProductsTotalPrice());
         assertEquals("R$ 14,00", checkoutPaymentPage.getFreightValue());
         assertEquals("R$ 385,76", checkoutPaymentPage.getTotalPrice());
