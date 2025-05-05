@@ -8,6 +8,7 @@
 
 <body>
     <div th:fragment="dashboard_transaction(transaction_status, readonly)">
+        <h3 th:text="${#strings.replace(transaction_status, '_', ' ')}" style="text-align: center;"></h3><br>
         <table class="w-full">
             <thead>
                 <tr>
@@ -23,7 +24,6 @@
                     <td th:id="'transaction-' + ${transaction.id}" th:text="${transaction.id}"></td>
                     <td th:id="'purchaseDate-' + ${transaction.id}" th:text="${transaction.displayEntryDate}">
                     <td th:id="'client-' + ${transaction.id}" th:text="${transaction.client.name}"></td>
-                    </td>
 
                     <!-- Botão de aprovar cria um pop-up para a própria página -->
                     <td th:if="${readonly == false}">
@@ -60,6 +60,7 @@
 
 
     <div th:fragment="dashboard_order(order_status, readonly, stock)">
+        <h3 th:text="${#strings.replace(order_status, '_', ' ')}" style="text-align: center;"></h3><br>
         <table class="w-full">
             <thead>
                 <tr>
@@ -77,16 +78,15 @@
                     <td th:id="'product-' + ${order.id}" th:text="${order.product.name}">
                     <td th:id="'quantity-' + ${order.id}" th:text="${order.quantity}"></td>
                     <td th:id="'client-' + ${order.id}" th:text="${order.transaction.client.name}"></td>
-                    </td>
 
                     <!-- Botão de aprovar cria um pop-up para a própria página -->
                     <td th:if="${readonly == false}">
                         <form th:if="${stock == true}" th:action="@{/admin/logistic/approve}" method="get"
-                            onsubmit="return confirm('Tem certeza que deseja aprovar este pedido?')">
+                            onsubmit="return confirm('Tem certeza que deseja aprovar este pedido e dar reentrada no estoque?')">
                             <input type="hidden" name="approval" value="true" />
                             <input type="hidden" name="stock" value="true" />
                             <input type="hidden" name="order" th:value="${order.id}" />
-                            <button th:id="'approve-' + ${order.id}" type="submit" class="btn btn-danger"
+                            <button th:id="'approve-stock-' + ${order.id}" type="submit" class="btn btn-danger"
                                 style="display: inline-flex; align-items: center">
                                 <img th:src="@{/images/approval.svg}" width="18" height="18"
                                     alt="Ícone de Aprovação" />Aprovar + Estoque

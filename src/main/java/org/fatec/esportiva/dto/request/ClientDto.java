@@ -37,7 +37,8 @@ public class ClientDto {
     @Pattern(regexp = "^[0-9]{11}$", message = "O CPF deve conter 11 dígitos numéricos")
     private String cpf;
 
-    @NotNull(message = "Status não pode ficar em branco")
+    // Status nulo permite inicializar o cliente como ATIVO por padrão
+    // @NotNull(message = "Status não pode ficar em branco")
     private UserStatus status;
 
     @NotNull(message = "Gênero não pode ficar em branco")

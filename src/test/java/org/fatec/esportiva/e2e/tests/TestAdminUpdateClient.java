@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.fatec.esportiva.e2e.E2E;
-import org.fatec.esportiva.e2e.pageObjects.DashboardPage;
+import org.fatec.esportiva.e2e.pageObjects.UserDashboardPage;
 import org.fatec.esportiva.e2e.pageObjects.LoginPage;
 import org.fatec.esportiva.e2e.pageObjects.UserFormPage;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +15,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 public class TestAdminUpdateClient extends E2E {
     // Page Models
     private LoginPage login;
-    private DashboardPage dashboard;
+    private UserDashboardPage dashboard;
     private UserFormPage userForm;
 
     @BeforeEach
@@ -23,7 +23,7 @@ public class TestAdminUpdateClient extends E2E {
         browser = new ChromeDriver(options);
         browser.get(baseUrl);
         login = new LoginPage(browser);
-        dashboard = new DashboardPage(browser);
+        dashboard = new UserDashboardPage(browser);
         userForm = new UserFormPage(browser);
     }
 
@@ -32,6 +32,7 @@ public class TestAdminUpdateClient extends E2E {
         browser.quit();
     }
 
+    // @traceto(RF0022;RF0034)
     @Test
     void adminUpdateUser() {
         login.login("Fábio");
@@ -56,6 +57,7 @@ public class TestAdminUpdateClient extends E2E {
         sleepForVisualization();
     }
 
+    // @traceto(RF0022)
     @Test
     void adminUpdateUserWithFail() {
         login.login("Fábio");

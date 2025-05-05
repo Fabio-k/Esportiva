@@ -32,6 +32,7 @@ public class E2E {
         // https://www.selenium.dev/documentation/webdriver/drivers/options/
         options = new ChromeOptions();
         options.addArguments("--start-fullscreen");
+        // options.addArguments("--headless");
     }
 
     @BeforeEach
