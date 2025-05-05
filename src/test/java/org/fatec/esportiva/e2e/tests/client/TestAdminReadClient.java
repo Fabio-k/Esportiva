@@ -1,4 +1,4 @@
-package org.fatec.esportiva.e2e.tests;
+package org.fatec.esportiva.e2e.tests.client;
 
 import org.fatec.esportiva.e2e.E2E;
 import org.fatec.esportiva.e2e.pageObjects.UserDashboardPage;
