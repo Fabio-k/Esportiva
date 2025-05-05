@@ -18,11 +18,20 @@ public class SplitCardValueValidator{
         CheckoutSession checkoutSession = context.getCheckoutSession();
         BigDecimal splitPaymentTotal = splitCreditCardDtos.stream().map(SplitCreditCardDto::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         splitCreditCardDtos.forEach(payment -> {
-            if(payment.getValue().compareTo(BigDecimal.TEN) < 0) throw new CheckoutException("Cada cartão deve pagar pelo menos R$ 10,00.", context.getRedirectPage());
+            if (isLesThanTenAndNoVoucherApplied(payment, checkoutSession))
+                throw new CheckoutException("Cada cartão deve pagar pelo menos R$ 10,00.", context.getRedirectPage());
+            if(payment.getValue().compareTo(BigDecimal.ZERO) <= 0 ) throw new CheckoutException("Cartões devem pager valor acima de R$ 0,00", context.getRedirectPage());
         });
+
         BigDecimal result = checkoutSessionService.calculateTotalPrice(checkoutSession).subtract(splitPaymentTotal);
         if(result.compareTo(BigDecimal.ZERO) < 0) throw new CheckoutException("Valor escolhido supera o valor a ser pago", context.getRedirectPage());
         if(result.compareTo(BigDecimal.ZERO) > 0) throw new CheckoutException("Valor escolhido é insuficiente", context.getRedirectPage());
+    }
+
+    private Boolean isLesThanTenAndNoVoucherApplied(SplitCreditCardDto payment, CheckoutSession checkoutSession){
+        BigDecimal totalDiscount = checkoutSessionService.getTotalDiscount(checkoutSession);
+        return payment.getValue().compareTo(BigDecimal.TEN) < 0 && totalDiscount.compareTo(BigDecimal.ZERO) == 0;
     }
 }
