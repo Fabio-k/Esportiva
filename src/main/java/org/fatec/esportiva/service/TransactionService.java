@@ -1,7 +1,7 @@
 package org.fatec.esportiva.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.fatec.esportiva.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.enums.OrderStatus;
-import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.TransactionMapper;
 import org.fatec.esportiva.repository.TransactionRepository;
@@ -53,7 +52,7 @@ public class TransactionService {
         Transaction transaction = Transaction.builder()
                 .client(client)
                 .status(OrderStatus.EM_PROCESSAMENTO)
-                .purchaseDate(LocalDate.now())
+                .purchaseDate(LocalDateTime.now())
                 .build();
 
         List<Order> orders = client.getCart().getCartItems().stream()

@@ -71,6 +71,10 @@
     function normalizeMoney(value){
       return value.replace(/\./g, "").replace(",", ".");
     }
+
+    document.getElementById('errorMessageCloseButton').addEventListener('click', function(){
+            this.closest('.errorMessageDiv').classList.toggle("hidden");
+        });
   </script>
 </body>
 </html>

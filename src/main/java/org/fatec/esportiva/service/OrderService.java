@@ -8,7 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.Order;
-import org.fatec.esportiva.entity.Product;
+import org.fatec.esportiva.entity.product.Product;
 import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.mapper.OrderMapper;

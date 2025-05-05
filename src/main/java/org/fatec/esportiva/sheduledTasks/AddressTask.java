@@ -1,7 +1,7 @@
 package org.fatec.esportiva.sheduledTasks;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.entity.Address;
+import org.fatec.esportiva.entity.address.Address;
 import org.fatec.esportiva.repository.AddressRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

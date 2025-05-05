@@ -2,8 +2,8 @@ package org.fatec.esportiva.sheduledTasks;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.entity.Cart;
-import org.fatec.esportiva.entity.CartItem;
+import org.fatec.esportiva.entity.cart.Cart;
+import org.fatec.esportiva.entity.cart.CartItem;
 import org.fatec.esportiva.repository.CartRepository;
 import org.fatec.esportiva.service.CartService;
 import org.fatec.esportiva.service.NotificationService;

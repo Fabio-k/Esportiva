@@ -2,14 +2,14 @@ package org.fatec.esportiva.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.fatec.esportiva.dto.request.CreditCardDto;
+import org.fatec.esportiva.dto.response.CartItemResponseDto;
+import org.fatec.esportiva.entity.address.Address;
 import org.fatec.esportiva.entity.*;
+import org.fatec.esportiva.entity.cart.Cart;
 import org.fatec.esportiva.entity.enums.Gender;
-import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.entity.enums.UserStatus;
-import org.fatec.esportiva.mapper.AddressMapper;
-import org.fatec.esportiva.mapper.CartMapper;
-import org.fatec.esportiva.mapper.ClientMapper;
-import org.fatec.esportiva.mapper.ExchangeVoucherMapper;
+import org.fatec.esportiva.mapper.*;
 import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.dto.request.ClientDto;
 import org.fatec.esportiva.dto.response.AddressResponseDto;
@@ -120,6 +120,16 @@ public class ClientService {
                 .toList();
     }
 
+    public List<CartItemResponseDto> getClientCartItems(){
+        return getAuthenticatedClient().getCart().getCartItems()
+                .stream().map(CartItemMapper::toCartItemResponseDto).toList();
+    }
+
+    public List<CreditCardDto> getClientCreditCards() {
+        return getAuthenticatedClient().getCreditCards().stream()
+                .map(CreditCardMapper::toCreditCardDto).toList();
+    }
+
     public void deleteClient(Client user) {
         clientRepository.delete(user);
     }
@@ -143,5 +153,4 @@ public class ClientService {
     private String normalize(String value) {
         return (value == null || value.trim().isEmpty()) ? null : value;
     }
-
 }

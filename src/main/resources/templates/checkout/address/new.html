@@ -51,7 +51,7 @@
                     th:field="*{residencyType}"
                     class="w-full py-1 px-2 border rounded">
               <option value="">Selecione o tipo de Residência</option>
-              <option th:each="rt : ${T(org.fatec.esportiva.entity.enums.ResidencyType).values()}"
+              <option th:each="rt : ${T(org.fatec.esportiva.entity.address.ResidencyType).values()}"
                       th:value="${rt}" th:text="${rt.getDisplayName()}"></option>
             </select>
           </div>
@@ -60,7 +60,7 @@
             <select th:id="streetType" th:field="*{streetType}"
                     class="w-full py-1 px-2 border rounded">
               <option value="">Selecione o tipo de logradouro</option>
-              <option th:each="st : ${T(org.fatec.esportiva.entity.enums.StreetType).values()}"
+              <option th:each="st : ${T(org.fatec.esportiva.entity.address.StreetType).values()}"
                       th:value="${st}" th:text="${st.getDisplayName()}"></option>
             </select>
           </div>

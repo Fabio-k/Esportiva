@@ -6,6 +6,7 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CheckoutPaymentPage {
@@ -134,7 +135,7 @@ public class CheckoutPaymentPage {
         }
         // Fecha a mensagem de erro
         else{
-            WebElement errorMessage = driver.findElement(By.id("errorMessageCloseButton"));
+            WebElement errorMessage = wait.until(ExpectedConditions.elementToBeClickable(By.id("errorMessageCloseButton")));
             errorMessage.click();
         }
     }

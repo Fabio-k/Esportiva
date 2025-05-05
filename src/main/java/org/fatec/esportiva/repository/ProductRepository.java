@@ -2,8 +2,8 @@ package org.fatec.esportiva.repository;
 
 import java.util.List;
 
-import org.fatec.esportiva.entity.Product;
-import org.fatec.esportiva.entity.enums.ProductStatus;
+import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.entity.product.ProductStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

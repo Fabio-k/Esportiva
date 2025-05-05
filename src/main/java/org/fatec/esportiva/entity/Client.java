@@ -3,6 +3,8 @@ package org.fatec.esportiva.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.fatec.esportiva.entity.address.Address;
+import org.fatec.esportiva.entity.cart.Cart;
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.PhoneType;
 import org.fatec.esportiva.entity.enums.UserStatus;

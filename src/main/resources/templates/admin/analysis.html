@@ -28,7 +28,7 @@
 
         <section class="flex flex-col gap-10">
             <div id="myDiv" class="bg-white rounded shadow-md flex-grow min-h-[500px]"></div>
-            <div id="pie" class="bg-white rounded shadow-md"></div>
+            <div id="totalQuantity" class="bg-white rounded shadow-md"></div>
         </section>
     </main>
 
@@ -67,7 +67,7 @@
                 const dates = data.map(item => item.purchaseDate);
                 const totals = data.map(item => item.totalQuantity);
                 pieLabels.push(selectedOption.innerText);
-                pieValues.push(totals.reduce(sum))
+                pieValues.push(totals.reduce(sum,0))
                 let trace = {
                   x: dates,
                   y: totals,
@@ -125,7 +125,7 @@
                     .then(data => {
                         let values = data.map(item => item.totalQuantity)
                         let pieIndex = pieLabels.indexOf(trace.name);
-                        if (values.length > 0) pieValues[pieIndex] = values.reduce(sum);
+                        if (values.length > 0) pieValues[pieIndex] = values.reduce(sum, 0);
                         else pieValues[pieIndex] = 0;
 
                         trace.x = data.map(item => item.purchaseDate);
@@ -141,18 +141,22 @@
                 autosize: true,
                 title: {
                     text: title
-                  }
+                  },
+                margin: {}
             };
         }
 
         function renderTraces(){
             Plotly.react('myDiv', traces, getLayout("Histórico de vendas"), {displayModeBar: false, responsive: true});
-            const pieData = [{
-                values: pieValues,
-                labels: pieLabels,
-                type: 'pie'
+            const totalQuantityData = [{
+                orientation: 'h',
+                x: pieValues,
+                y: pieLabels,
+                type: 'bar'
             }]
-            Plotly.newPlot('pie', pieData, getLayout("Total de vendas"), {displayModeBar: false, responsive: true});
+            const totalQuantityLayout = getLayout("Número de vendas");
+            totalQuantityLayout.margin.l = 350
+            Plotly.newPlot('totalQuantity', totalQuantityData, totalQuantityLayout, {displayModeBar: false, responsive: true});
         }
 
         function sum(total, value, index, array){

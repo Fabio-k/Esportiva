@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.Builder.Default;
 
-import org.fatec.esportiva.entity.PricingGroup;
-import org.fatec.esportiva.entity.enums.ProductStatus;
+import org.fatec.esportiva.entity.product.PricingGroup;
+import org.fatec.esportiva.entity.product.ProductStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

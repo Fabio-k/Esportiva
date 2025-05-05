@@ -8,6 +8,7 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class Transaction {
 
     @NotNull
     @Column(name = "tra_data_compra")
-    private LocalDate purchaseDate;
+    private LocalDateTime purchaseDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tra_status")

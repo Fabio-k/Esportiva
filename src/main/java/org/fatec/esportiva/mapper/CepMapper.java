@@ -1,7 +1,7 @@
 package org.fatec.esportiva.mapper;
 
 import lombok.experimental.UtilityClass;
-import org.fatec.esportiva.entity.Cep;
+import org.fatec.esportiva.entity.address.Cep;
 import org.fatec.esportiva.dto.request.AddressDto;
 
 @UtilityClass

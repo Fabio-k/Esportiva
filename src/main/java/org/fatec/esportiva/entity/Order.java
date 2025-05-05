@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import org.fatec.esportiva.entity.enums.OrderStatus;
+import org.fatec.esportiva.entity.product.Product;
 import org.fatec.esportiva.listeners.LogListener;
 
 import java.math.BigDecimal;

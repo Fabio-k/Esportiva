@@ -24,12 +24,12 @@
     <header th:replace="~{fragments/header :: defaultHeader }"></header>
     <main>
         <div style="display: flex; gap: 20px">
-            <h3 style="color:gray;">Compras</h3>
-            <a th:href="@{/transactions/trade}" style="text-decoration: none;" data-turbo="false"><h3>Trocas</h3></a>
+            <h3 style="color:blue;">Compras</h3>
+            <a th:href="@{/transactions/trade}" style="text-decoration: none;color:black;" data-turbo="false"><h3>Trocas</h3></a>
         </div>
         <section th:id="'transaction_' + ${transaction.id}" class="card transaction" th:each="transaction : ${transactions}">
             <div style="display: flex; align-items: center; gap: 30px;">
-                <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM YYYY')}"></h3>
+                <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM yyyy', T(java.util.Locale).forLanguageTag('pt-BR'))}"></h3>
                 <div style="flex-grow: 1; display: flex; justify-content: space-between;">
                     <div style="display: flex; gap: 20px" th:if="${!transaction.isCancelled()}">
                         <p class="inactiveText" th:classappend="${transaction.isInProcessing()} ? activeText : ''">Em processamento</p>
