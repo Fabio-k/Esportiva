@@ -19,7 +19,6 @@ public class CheckoutService {
     private final CheckoutSessionService checkoutSessionService;
 
     public void processCheckout(CheckoutSession checkoutSession, Model model){
-        checkoutSessionService.clearCheckoutSession(checkoutSession);
         Transaction transaction = transactionService.generateTransaction();
         try{
             checkoutSessionService.validatePayment(checkoutSession);
@@ -32,5 +31,6 @@ public class CheckoutService {
         exchangeVoucherService.markAsUsedExchangeVouchers(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());
         checkoutSessionService.generateExchangeVoucher(checkoutSession);
         cartService.cleanCart();
+        checkoutSessionService.clearCheckoutSession(checkoutSession);
     }
 }

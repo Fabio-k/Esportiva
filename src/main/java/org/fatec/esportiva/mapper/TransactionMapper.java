@@ -12,24 +12,15 @@ public class TransactionMapper {
         return TransactionResponseDto.builder()
                 .id(transaction.getId())
                 .status(transaction.getStatus())
-                .purchaseDate(transaction.getPurchaseDate())
+                .purchaseDate(transaction.getPurchaseDate().toLocalDate())
                 .orders(OrderMapper.toOrderByStatusResponseDto(transaction.getOrders()))
-                .build();
-    }
-
-    public Transaction toTransaction(TransactionDto transactionsDto) {
-        return Transaction.builder()
-                .purchaseDate(transactionsDto.getPurchaseDate())
-                .status(transactionsDto.getStatus())
-                .client(transactionsDto.getClient())
-                .orders(transactionsDto.getOrders())
                 .build();
     }
 
     public TransactionDto toTransactionDto(Transaction transactions) {
         return TransactionDto.builder()
                 .id(transactions.getId())
-                .purchaseDate(transactions.getPurchaseDate())
+                .purchaseDate(transactions.getPurchaseDate().toLocalDate())
                 .status(transactions.getStatus())
                 .client(transactions.getClient())
                 .orders(transactions.getOrders())

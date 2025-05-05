@@ -48,6 +48,13 @@ public class CheckoutNewAddressPage {
 
         field.clear();
         field.sendKeys(Cep);
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
     }
 
     public void setAddressResidenceType(ResidencyType residencyType) {

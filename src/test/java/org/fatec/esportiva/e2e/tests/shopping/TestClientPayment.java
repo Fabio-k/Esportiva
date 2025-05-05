@@ -297,7 +297,7 @@ public class TestClientPayment extends E2E {
         assertEquals("R$ 649,08", checkoutPaymentPage.getProductsTotalPrice());
         assertEquals("R$ 14,00", checkoutPaymentPage.getFreightValue());
         assertEquals("R$ 663,08", checkoutPaymentPage.getTotalPrice());
-        checkoutPaymentPage.continueShopping(false);
+        checkoutPaymentPage.continueShopping(true);
 
         // Verifica se os valores continuam consistentes no resumo da compra
         assertEquals("R$ 649,08", checkoutSummaryPage.getProductsTotalPrice());
