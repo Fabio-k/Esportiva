@@ -2,8 +2,8 @@ package org.fatec.esportiva.e2e.pageObjects;
 
 import java.time.Duration;
 
-import org.fatec.esportiva.entity.enums.ResidencyType;
-import org.fatec.esportiva.entity.enums.StreetType;
+import org.fatec.esportiva.entity.address.ResidencyType;
+import org.fatec.esportiva.entity.address.StreetType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
