@@ -204,6 +204,11 @@ public class TestClientPayment extends E2E {
         checkoutSplitCardsPage.setCreditCardValue(1, "350");
         checkoutSplitCardsPage.continueShopping(false);
 
+        // Testa se dá para inserir valor maior que a compra
+        checkoutSplitCardsPage.setCreditCardValue(0, "051");
+        checkoutSplitCardsPage.setCreditCardValue(1, "300");
+        checkoutSplitCardsPage.continueShopping(false);
+
         // Como tem 2 cartões, insere os valores nele
         checkoutSplitCardsPage.setCreditCardValue(0, "050");
         checkoutSplitCardsPage.setCreditCardValue(1, "300");
