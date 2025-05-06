@@ -64,8 +64,9 @@ public class TestCartExpiration extends E2E {
         cartIndividualProductPage.addProductToCart();
 
         // Aguarda 1 minuto para ir no carrinho
+        // Adiciona-se uma margem de erro de 1 segundo devido ao polling
         try {
-            Thread.sleep(60000);
+            Thread.sleep(61000);
         } catch (InterruptedException e) {
             System.out.println("A pausa foi interrompida!");
             e.printStackTrace();
