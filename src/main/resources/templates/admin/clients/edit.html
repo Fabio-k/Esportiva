@@ -19,6 +19,67 @@
       <h2 class="text-2xl font-semibold mb-4">Editar Usuário</h2>
       <div th:replace="~{fragments/user_form.html :: form}"></div>
     </div>
+
+
+    <!-- Exibe todas as transações do usuário -->
+    <!-- Aqui tem que listar especificamente as transações no fluxo normal de ida -->
+    <br>
+    <div class="mb-4">
+    <h2 class="text-2xl font-semibold mb-4">Transações do fluxo de entrega</h2>
+
+      <section th:id="'transaction_' + ${transaction.id}" class="card transaction" style="border: 2px solid black;" th:each="transaction : ${transactions}">
+        <div style="display: flex; align-items: center; gap: 30px;">
+            <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM yyyy', T(java.util.Locale).forLanguageTag('pt-BR'))}"></h3>
+            <div style="flex-grow: 1; display: flex; justify-content: space-between;">
+                <div style="display: flex; gap: 20px">
+                    <p th:if="${transaction.isInProcessing()}">Em processamento</p>
+                    <p th:if="${transaction.isInTransit()}">Em trânsito</p>
+                    <p th:if="${transaction.isDelivered()}">Entregue</p>
+                    <p th:if="${transaction.isCancelled()}">Compra cancelada</p>
+                </div>
+            </div>
+
+        </div>
+        <div style="display: flex; justify-content: space-between" th:each="order : ${transaction.orders.deliveredOrders}">
+            <div style="display: flex; gap: 20px">
+                <div style="width: 80px">
+                    <img th:src="${order.product.image}" style="width: 100%">
+                </div>
+                <div>
+                    <p th:text="${order.product.name}"></p>
+                    <p th:text="'Quantidade: ' + ${order.totalProductQuantity}"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Aqui tem que separar, porque cada item pedido pode estar em uma etapa diferente entre si -->
+    <br>
+    <h2 class="text-2xl font-semibold mb-4">Transações do fluxo de devolução</h2>
+    <section th:if="${transaction.orders.tradedOrders.size() > 0}" th:id="'transaction_' + ${transaction.id}" class="card transaction" style="border: 2px solid black;"th:each="transaction : ${transactions}">
+      <div style="display: flex; align-items: center; gap: 30px;">
+        <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM YYYY')}"></h3>
+      </div>
+        <div style="display: flex; justify-content: space-between" th:each="order : ${transaction.orders.tradedOrders}">
+          <div style="display: flex; gap: 20px">
+            <div style="width: 80px">
+              <img th:src="${order.product.image}" style="width: 100%">
+            </div>
+            <div>
+              <p th:text="${order.product.name}"></p>
+              <p th:text="'Quantidade: ' + ${order.quantity}"></p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 20px">
+            <p th:text="${order.status.getDisplayName()}"></p>
+          </div>
+      </div>
+      <br>
+    </section>
+  </div>
+
+
   </main>
   <script th:src="@{/js/form.js}"></script>
 </body>
