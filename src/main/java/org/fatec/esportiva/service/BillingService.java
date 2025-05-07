@@ -50,6 +50,7 @@ public class BillingService {
     }
 
     public void saveSplitCardAmount(CheckoutSession checkoutSession, List<SplitCreditCardDto> splitPayment){
+        checkoutSession.getCreditCardPayments().clear();
         CheckoutValidationContext context = new CheckoutValidationContext(checkoutSession, null, "/checkout/billing/split-cards");
         creditCardMinimumAmountValidator.validate(context);
         splitCardValueValidator.validate(context, splitPayment);
