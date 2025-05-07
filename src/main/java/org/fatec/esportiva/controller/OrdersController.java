@@ -2,7 +2,6 @@ package org.fatec.esportiva.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.service.OrderService;
-import org.fatec.esportiva.service.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrdersController {
-    private final TransactionService transactionService;
     private final OrderService orderService;
 
     @GetMapping("/trade/{id}")

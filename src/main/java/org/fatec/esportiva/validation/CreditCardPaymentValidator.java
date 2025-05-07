@@ -1,7 +1,6 @@
 package org.fatec.esportiva.validation;
 
 import org.fatec.esportiva.entity.session.CheckoutSession;
-import org.fatec.esportiva.service.CheckoutService;
 import org.fatec.esportiva.service.CheckoutSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 

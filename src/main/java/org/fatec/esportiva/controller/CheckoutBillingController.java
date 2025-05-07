@@ -6,21 +6,15 @@ import org.fatec.esportiva.dto.request.CreditCardDto;
 import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.dto.request.SplitCreditCardForm;
 import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
-import org.fatec.esportiva.dto.response.SplitCreditCardResponseDto;
-import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.session.CheckoutSession;
-import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.service.*;
 import org.fatec.esportiva.validation.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
