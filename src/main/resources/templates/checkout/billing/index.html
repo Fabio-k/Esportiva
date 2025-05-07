@@ -45,14 +45,14 @@
                     </div>
                 </section>
 
-                <section id="exchangeVoucherList" class="card">
-                    <p>Cupons de troca</p>
-                    <div th:each="voucher : ${vouchers}" style="margin-bottom: 10px">
+                <section id="exchangeVoucherList" class="card" style="padding: 0">
+                    <p style="padding: 10px">Cupons de troca</p>
+                    <label class="labelButton" th:each="voucher : ${vouchers}"  th:for="'voucher_' + ${voucher.id}">
                         <input type="checkbox" name="exchangeVouchers"
                             th:checked="${checkoutSession.getExchangeVoucherIds().contains(voucher.id)}"
                             th:id="'voucher_' + ${voucher.id}" th:value="${voucher.id}">
-                        <label th:for="'voucher_' + ${voucher.id}" th:text="${voucher.formattedValue}"></label>
-                    </div>
+                        <div th:text="${voucher.formattedValue}"></div>
+                    </label>
                 </section>
 
                 <button id="button-continue-shopping" class="primaryButton" type="submit">Continuar</button>

@@ -43,6 +43,8 @@ public class CheckoutBillingController {
     @GetMapping
     public String getBilling(Model model, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
         if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
+        checkoutSession.getCreditCardPayments().clear();
+        checkoutSession.getCreditCardIds().clear();
         cartEmptyValidator.validate();
         List<CreditCardDto> creditCards = clientService.getClientCreditCards();
 
@@ -81,6 +83,7 @@ public class CheckoutBillingController {
 
     @GetMapping("/split-cards")
     public String splitCards(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
+        checkoutSession.getCreditCardPayments().clear();
         List<Long> clientCreditCardsIds = checkoutSession.getCreditCardIds();
         if(clientCreditCardsIds.size() < 2) return "redirect:/checkout/billing";
         SplitCreditCardForm splitCreditCardForm = new SplitCreditCardForm();

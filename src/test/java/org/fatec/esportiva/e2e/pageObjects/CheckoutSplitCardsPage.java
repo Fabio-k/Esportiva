@@ -24,6 +24,11 @@ public class CheckoutSplitCardsPage {
         input.sendKeys(cardValue);
     }
 
+    public void clearCreditCardValue(int cardIndex){
+        WebElement input = driver.findElement(By.cssSelector("input[data-index='" + cardIndex + "']"));
+        input.clear();
+    }
+
     public String getErrorMessage() {
         // Até o momento, somente existe uma tag <span> em todo o HTML
         WebElement message = driver.findElement(By.tagName("span"));
