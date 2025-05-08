@@ -8,35 +8,50 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
 </head>
 <style>
-
+    .displayCard{
+        border-bottom: 1px solid #e8e8e8;
+        padding: 15px 10px;
+    }
 </style>
 
 <body>
     <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
     <main>
-        <div class="card">
-            <h1 th:text="${errorMessage == null ? 'Compra realizada com sucesso' : 'Erro no processamento da compra'}">
-            </h1>
-            <div>
+        <section class="card" style="display: flex; flex-direction: column; gap: 30px; height: fit-content">
+            <article>
+                <h3 th:text="${errorMessage == null ? 'Compra realizada com sucesso' : 'Erro no processamento da compra'}">
+                </h3>
                 <span th:text="${errorMessage}"></span>
 
                 <div th:if="${errorMessage == null}">
-                    <div style="display: flex; gap: 20px;" th:each="item : ${items}">
-                        <div style="width: 50px">
-                            <img th:src="${item.product.image}" style="width: 100%">
-                        </div>
-                        <div class="itemName" style="max-width: 280px; min-width: 280px">
-                            <p th:text="${item.product.name}"></p>
+                    <div class="displayCard">
+                        <p>Produtos:</p>
+                        <div style="display: flex; gap: 20px;" th:each="item : ${items}">
+                            <div style="width: 50px">
+                                <img th:src="${item.product.image}" style="width: 100%">
+                            </div>
+                            <div class="itemName" style="max-width: 280px; min-width: 280px">
+                                <p th:text="${item.product.name}"></p>
+                            </div>
                         </div>
                     </div>
-                    <p th:text="|Endereço: ${address.street}, ${address.state}. ${address.cep}|">Endereço</p>
-                    <p th:text="'total pago: ' + ${cartTotalPrice}"></p>
+                    <div class="displayCard">
+                        <p>Endereço:</p>
+                        <p th:text="|${address.street}, ${address.state}. ${address.cep}|" style="color:gray">Endereço</p>
+                    </div>
+                    <div class="displayCard">
+                        <p>Total Pago com cartão:</p>
+                        <p th:text="${cartTotalPrice}"></p>
+                    </div>
                 </div>
-            </div>
-            <a id="button-success" th:if="${errorMessage == null}" class="primaryButton" th:href="@{/transactions}">Ir
-                para a página compras</a>
-            <a id="button-fail" th:if="${errorMessage != null}" th:href="@{/}">Voltar para a tela inicial</a>
-        </div>
+
+            </article>
+            <article>
+                <a id="button-success" th:if="${errorMessage == null}" class="primaryButton" style="display:block" th:href="@{/transactions}">Ir
+                    para a página compras</a>
+                <a id="button-fail" th:if="${errorMessage != null}" th:href="@{/}">Voltar para a tela inicial</a>
+            </article>
+        </section>
     </main>
 </body>
 
