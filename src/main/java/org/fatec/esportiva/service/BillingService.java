@@ -24,6 +24,7 @@ public class BillingService {
     private final CreditCardMinimumAmountValidator creditCardMinimumAmountValidator;
     private final UnusedExchangeVouchersValidator unusedExchangeVouchersValidator;
     private final SplitCardValueValidator splitCardValueValidator;
+    private final CreditCardPaymentValidator creditCardPaymentValidator;
 
 
     public void savePaymentMethods(CheckoutSession checkoutSession, List<Long> exchangeVoucherIds, List<Long> creditCardsIds, String promotionalCouponCode){
@@ -44,6 +45,7 @@ public class BillingService {
             checkoutSession.setCreditCardIds(creditCardsIds);
 
         CheckoutValidationContext context = new CheckoutValidationContext(checkoutSession, null, "/checkout/billing");
+        creditCardPaymentValidator.validate(context);
         creditCardMinimumAmountValidator.validate(context);
         unusedExchangeVouchersValidator.validate(context);
         checkoutService.validateInsufficientPayment(checkoutSession);

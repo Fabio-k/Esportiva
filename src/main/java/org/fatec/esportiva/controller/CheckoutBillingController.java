@@ -43,8 +43,6 @@ public class CheckoutBillingController {
     @GetMapping
     public String getBilling(Model model, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
         if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
-        checkoutSession.getCreditCardPayments().clear();
-        checkoutSession.getCreditCardIds().clear();
         cartEmptyValidator.validate();
         List<CreditCardDto> creditCards = clientService.getClientCreditCards();
 

@@ -207,6 +207,8 @@ public class TestClientPayment extends E2E {
         checkoutSplitCardsPage.continueShopping(false);
 
         // Como tem 2 cartões, insere os valores nele
+        checkoutSplitCardsPage.clearCreditCardValue(0);
+        checkoutSplitCardsPage.clearCreditCardValue(1);
         checkoutSplitCardsPage.setCreditCardValue(0, "050");
         checkoutSplitCardsPage.setCreditCardValue(1, "300");
         checkoutSplitCardsPage.continueShopping(true);
