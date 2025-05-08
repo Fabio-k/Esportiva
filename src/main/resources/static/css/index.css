@@ -38,7 +38,7 @@ select {
 
 input:not([type="checkbox"], [type="radio"]), select, textarea {
   width: 100%;
-  padding: 4px 4px !important;
+  padding: 4px 4px;
   border: 1px solid rgb(212, 212, 212);
   border-radius: 5px;
 }
@@ -158,6 +158,7 @@ li:hover .subCategoryMenu,  .subCategoryMenu:hover{
     padding: 0;
     cursor: pointer;
     font-size: 16px;
+    text-decoration: none;
 }
 
 .primaryLink:disabled{

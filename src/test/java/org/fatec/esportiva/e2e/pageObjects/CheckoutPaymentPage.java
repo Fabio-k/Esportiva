@@ -77,21 +77,21 @@ public class CheckoutPaymentPage {
     public void selectCreditCard(int position) {
         WebElement creditCardContainer = driver.findElement(By.id("creditCardList"));
 
-        List<WebElement> allCreditCards = creditCardContainer.findElements(By.xpath("./div"));
+        List<WebElement> allCreditCards = creditCardContainer.findElements(By.xpath("./label"));
 
         WebElement creditCard = allCreditCards.get(position);
-        WebElement label = creditCard.findElement(By.tagName("label"));
-        label.click();
+        //WebElement label = creditCard.findElement(By.tagName("label"));
+        creditCard.click();
     }
 
     public void selectExchangeVoucher(int position) {
         WebElement exchageVoucherContainer = driver.findElement(By.id("exchangeVoucherList"));
 
-        List<WebElement> allExchangeVouchers = exchageVoucherContainer.findElements(By.xpath("./div"));
+        List<WebElement> allExchangeVouchers = exchageVoucherContainer.findElements(By.xpath("./label"));
 
         WebElement exchangeVoucher = allExchangeVouchers.get(position);
-        WebElement label = exchangeVoucher.findElement(By.tagName("label"));
-        label.click();
+        //WebElement label = exchangeVoucher.findElement(By.tagName("label"));
+        exchangeVoucher.click();
     }
 
     public void setPromotionVoucher(String promotionVoucher) {
