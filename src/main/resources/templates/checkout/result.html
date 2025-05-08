@@ -28,7 +28,7 @@
                         <p>Produtos:</p>
                         <div style="display: flex; gap: 20px;" th:each="item : ${items}">
                             <div style="width: 50px">
-                                <img th:src="${item.product.image}" style="width: 100%">
+                                <img th:src="${item.product.image}" th:alt="${item.product.name}" style="width: 100%">
                             </div>
                             <div class="itemName" style="max-width: 280px; min-width: 280px">
                                 <p th:text="${item.product.name}"></p>
