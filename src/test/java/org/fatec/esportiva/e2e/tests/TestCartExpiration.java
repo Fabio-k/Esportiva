@@ -12,10 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.TestPropertySource;
 
-@TestPropertySource(properties = "cart.product.timeoutInMinutes=1")
-@TestPropertySource(properties = "cart.cleanup.intervalInMillis=1000")
+
 public class TestCartExpiration extends E2E {
 
     // Spring sobrescreve o valor de tempo de resetar o carrinho para 1 minuto
@@ -32,6 +30,7 @@ public class TestCartExpiration extends E2E {
     private MainPage mainPage;
     private CartIndividualProductPage cartIndividualProductPage;
     private CartAllProductsPage cartAllProductsPage;
+
 
     @BeforeEach
     void beforeEach() {
@@ -56,6 +55,7 @@ public class TestCartExpiration extends E2E {
         // Debug
         // System.out.println("Tempo para expirar o carrinho: " + cartTimeoutInMinutes);
         // System.out.println("Intervalo de leitura: " + intervalInMillis);
+
 
         login.login("Vanessa Von Hausten");
         mainPage.selectProduct(1);
