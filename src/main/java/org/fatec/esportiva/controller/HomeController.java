@@ -17,8 +17,9 @@ public class HomeController {
     private final ProductService productService;
     @GetMapping
     public String getHome(Model model){
-        List<ProductResponseDto> products = productService.getProductsSummary();
+        List<ProductResponseDto> products = productService.getAllAvailableProducts();
         model.addAttribute("products", products);
+        model.addAttribute("recommendedProducts", productService.getRecommendedProducts());
         return "products/index";
     }
 }

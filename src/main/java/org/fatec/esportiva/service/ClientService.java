@@ -9,6 +9,7 @@ import org.fatec.esportiva.entity.*;
 import org.fatec.esportiva.entity.cart.Cart;
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.UserStatus;
+import org.fatec.esportiva.entity.product.Product;
 import org.fatec.esportiva.mapper.*;
 import org.fatec.esportiva.repository.ClientRepository;
 import org.fatec.esportiva.dto.request.ClientDto;
@@ -19,10 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -134,20 +132,38 @@ public class ClientService {
         clientRepository.delete(user);
     }
 
+    /**
+     * Obtém todos os produtos do cliente que se enquadrem no order.isInDeliveryProcess
+     * @return map K: nome do produto V: quantidade do produto que foi adiquirida
+     */
     public Map<String, Integer> getClientHistory(){
         Map<String, Integer> productHistory = new HashMap<>();
-        List<Transaction> transactions = getAuthenticatedClient().getTransactions();
+        List<Order> orders = getClientOrders();
 
-        for(Transaction transaction : transactions){
-            for(Order order : transaction.getOrders()){
-                if(!order.isInDeliveryProcess()) continue;
-                String productName = order.getProduct().getName();
-                Integer productQuantity = order.getQuantity();
-                productHistory.put(productName, productHistory.getOrDefault(productName, 0) + productQuantity);
-            }
+        for(Order order : orders){
+            if(!order.isInDeliveryProcess()) continue;
+            String productName = order.getProduct().getName();
+            Integer productQuantity = order.getQuantity();
+            productHistory.put(productName, productHistory.getOrDefault(productName, 0) + productQuantity);
         }
 
         return productHistory;
+    }
+
+    public List<Product> getClientProducts(){
+        List<Product> products = new ArrayList<>();
+        List<Order> orders = getClientOrders();
+
+        for(Order order : orders){
+            products.add(order.getProduct());
+        }
+        return products;
+    }
+
+    private List<Order> getClientOrders(){
+        List<Order> orders = new ArrayList<>();
+        getAuthenticatedClient().getTransactions().forEach(transaction -> orders.addAll(transaction.getOrders()));
+        return orders;
     }
 
     private String normalize(String value) {
