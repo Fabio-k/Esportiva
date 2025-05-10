@@ -6,6 +6,18 @@
     <title>Espotiva</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
+    <style>
+        .labelButton{
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #e8e8e8;
+            padding: 15px 10px;
+        }
+        .labelButton:hover{
+            background-color: #f3f3f3;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,69 +28,73 @@
                 style="width:100%; cursor: pointer;" alt="fechar"></div>
     </div>
     <main>
-        <section>
+        <section class="mainPanel">
             <form th:action="@{/checkout/billing/save}" method="post">
                 <input type="hidden" id="promotionalCouponCode" name="promotionalCouponCode"
                     th:value="${checkoutSession.promotionalCouponCode}">
                 <h1>Escolher como pagar</h1>
-                <section id="creditCardList" class="card">
-                    <div style="margin-bottom:10px" th:each="creditCard : ${creditCards}">
+                <section id="creditCardList" class="card" style="padding: 0">
+                    <label th:for="'billing_' + ${creditCard.id}" class="labelButton" th:each="creditCard : ${creditCards}">
                         <input type="checkbox"
                             th:checked="${checkoutSession.getCreditCardIds().contains(creditCard.id)}"
                             th:id="'billing_' + ${creditCard.id}" name="selectedCards" th:value="${creditCard.id}">
-                        <label th:for="'billing_' + ${creditCard.id}" th:text="${creditCard.numberMask()}"></label>
+                        <p th:text="${creditCard.numberMask()}"></p>
+                    </label>
+                    <div style="padding: 10px">
+                        <a th:href="@{/checkout/billing/new}" class="primaryLink">Usar Novo cartão de crédito</a>
                     </div>
-                    <a th:href="@{/checkout/billing/new}">Usar Novo cartão de crédito</a>
                 </section>
 
-                <section id="exchangeVoucherList" class="card">
-                    <p>Cupons de troca</p>
-                    <div th:each="voucher : ${vouchers}" style="margin-bottom: 10px">
+                <section id="exchangeVoucherList" class="card" style="padding: 0">
+                    <p style="padding: 10px">Cupons de troca</p>
+                    <label class="labelButton" th:each="voucher : ${vouchers}"  th:for="'voucher_' + ${voucher.id}">
                         <input type="checkbox" name="exchangeVouchers"
                             th:checked="${checkoutSession.getExchangeVoucherIds().contains(voucher.id)}"
                             th:id="'voucher_' + ${voucher.id}" th:value="${voucher.id}">
-                        <label th:for="'voucher_' + ${voucher.id}" th:text="${voucher.formattedValue}"></label>
-                    </div>
+                        <div th:text="${voucher.formattedValue}"></div>
+                    </label>
                 </section>
 
                 <button id="button-continue-shopping" class="primaryButton" type="submit">Continuar</button>
             </form>
         </section>
-        <section class="card">
-            <form>
-                <h1>Resumo da compra</h1>
-                <div id="discountDiv" th:classappend="${promotionalCoupon == null} ? '' : hidden">
-                    <label th:for="code">Cupom de desconto</label>
-                    <div style="display: flex;">
-                        <input th:type="text" id="code">
-                        <button id="applyDiscountButton" type="button">Aplicar</button>
+        <section>
+            <div class="card summaryDiv">
+                <form>
+                    <h1>Resumo da compra</h1>
+                    <div id="discountDiv" th:classappend="${promotionalCoupon == null} ? '' : 'hidden'">
+                        <label th:for="code">Cupom de desconto</label>
+                        <div style="display: flex;">
+                            <input th:type="text" id="code">
+                            <button id="applyDiscountButton" type="button">Aplicar</button>
+                        </div>
                     </div>
+                </form>
+                <div id="discountCouponDiv" class="hidden" style="display: flex; justify-content: space-between;">
+                    <p id="discountCouponCode"></p>
+                    <p id="discountCouponValue"></p>
                 </div>
-            </form>
-            <div id="discountCouponDiv" class="hidden" style="display: flex; justify-content: space-between;">
-                <p id="discountCouponCode"></p>
-                <p id="discountCouponValue"></p>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-                <p>Produto(s)</p>
-                <p id="summaryProductsTotalPrice" th:text="${productsTotalPrice}"></p>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-                <p>Frete</p>
-                <p id="summaryFreight" th:text="${checkoutSession.getAddress().getFormattedFreight()}"></p>
-            </div>
-            <div style="display: flex; justify-content: space-between;"
-                th:classappend="${exchangeVoucherTotalPrice.equals('R$&nbsp;0,00')} ? 'hidden' : ''">
-                <p>Cupon(s)</p>
-                <p id="summaryVouchers" th:text="'- ' + ${exchangeVoucherTotalPrice}"></p>
-            </div>
-            <div th:if="${promotionalCoupon != null}" style="display: flex; justify-content: space-between;">
-                <p th:text="${promotionalCoupon.code}"></p>
-                <p th:text="${promotionalCoupon.discountValue}"></p>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-                <p>Total</p>
-                <p id="summaryTotalPrice" th:text="${cartTotalPrice}"></p>
+                <div style="display: flex; justify-content: space-between;">
+                    <p>Produto(s)</p>
+                    <p id="summaryProductsTotalPrice" th:text="${productsTotalPrice}"></p>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <p>Frete</p>
+                    <p id="summaryFreight" th:text="${checkoutSession.getAddress().getFormattedFreight()}"></p>
+                </div>
+                <div style="display: flex; justify-content: space-between;"
+                     th:classappend="${exchangeVoucherTotalPrice.equals('R$&nbsp;0,00')} ? 'hidden' : ''">
+                    <p>Cupon(s)</p>
+                    <p id="summaryVouchers" th:text="'- ' + ${exchangeVoucherTotalPrice}"></p>
+                </div>
+                <div th:if="${promotionalCoupon != null}" style="display: flex; justify-content: space-between;">
+                    <p th:text="${promotionalCoupon.code}"></p>
+                    <p th:text="${promotionalCoupon.discountValue}"></p>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <p>Total</p>
+                    <p id="summaryTotalPrice" th:text="${cartTotalPrice}"></p>
+                </div>
             </div>
         </section>
     </main>

@@ -1,5 +1,6 @@
 package org.fatec.esportiva.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.session.CheckoutSession;
@@ -16,6 +17,7 @@ public class CheckoutService {
     private final TransactionService transactionService;
     private final CheckoutSessionService checkoutSessionService;
 
+    @Transactional
     public void processCheckout(CheckoutSession checkoutSession, Model model){
         Transaction transaction = transactionService.generateTransaction();
         try{

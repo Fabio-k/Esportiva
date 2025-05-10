@@ -47,8 +47,10 @@ public class CheckoutController {
     }
 
     @GetMapping("/address")
-    public String checkoutAddress(Model model){
+    public String checkoutAddress(Model model, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
         cartEmptyValidator.validate();
+        checkoutSession.getCreditCardPayments().clear();
+        checkoutSession.getCreditCardIds().clear();
         model.addAttribute("addresses", clientService.getClientAddresses());
         model.addAttribute("address", new AddressDto());
         return "checkout/address/index";

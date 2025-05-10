@@ -1,6 +1,7 @@
 package org.fatec.esportiva.validation;
 
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.exception.ApiException;
 import org.fatec.esportiva.exception.CheckoutException;
 import org.fatec.esportiva.service.CheckoutSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,6 @@ public class CreditCardMinimumAmountValidator implements CheckoutValidator{
 
         BigDecimal totalPrice = checkoutSessionService.calculateTotalPrice(checkoutSession);
         if (totalPrice.divide(BigDecimal.valueOf(numberOfCreditCards), RoundingMode.UP).compareTo(BigDecimal.TEN) < 0)
-            throw new CheckoutException("Cada cartão deve pagar pelo menos R$ 10,00.", context.getRedirectPage());
+            throw new ApiException("Cada cartão deve pagar pelo menos R$ 10,00.");
     }
 }

@@ -44,12 +44,12 @@ public class AdminClientsController {
     @GetMapping("/new")
     public String newClient(Model model){
         model.addAttribute("formAction", "/admin/clients/save");
-        if (!model.containsAttribute("user")) {
-            ClientDto clientDto = new ClientDto();
-            clientDto.getAddresses().add(new AddressDto());
-            clientDto.getCreditCards().add(new CreditCardDto());
-            model.addAttribute("user", clientDto);
-        }
+
+        ClientDto clientDto = new ClientDto();
+        clientDto.getAddresses().add(new AddressDto());
+        clientDto.getCreditCards().add(new CreditCardDto());
+        model.addAttribute("user", clientDto);
+
         return "admin/clients/new";
     }
 

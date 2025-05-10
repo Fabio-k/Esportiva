@@ -7,6 +7,7 @@ import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
 import org.fatec.esportiva.entity.CreditCard;
 import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.exception.CheckoutException;
 import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +73,7 @@ public class CheckoutSessionService {
     public void validateInsufficientPayment(CheckoutSession checkoutSession){
         boolean hasRemainingAmountToPay = calculateTotalPrice(checkoutSession).compareTo(BigDecimal.ZERO) > 0;
         if(hasRemainingAmountToPay && getCreditCardsDto(checkoutSession).isEmpty())
-            throw new IllegalArgumentException("Meios de pagamento insuficientes");
+            throw new CheckoutException("Meios de pagamento insuficientes", "/checkout/billing");
     }
 
     public void validatePayment(CheckoutSession checkoutSession){

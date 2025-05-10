@@ -6,67 +6,65 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/checkout.css}">
   <style>
-    .mainPanel{
-        background-color: white;
-        border-radius: 10px;
-        padding: 10px;
-        margin-bottom: 20px;
-        height: fit-content;
-      }
+
   </style>
 </head>
 <body>
   <header th:replace="~{fragments/header.html :: simpleHeader}"></header>
   <main>
     <section class="mainPanel">
-      <form th:action="@{/checkout/billing/credit_card/save}" method="post">
-      <h3 class="text-xl font-semibold mt-6 mb-4">Cartões de crédito</h3>
-        <input type="hidden" th:field="*{creditCard.id}">
+        <form th:action="@{/checkout/billing/credit_card/save}" method="post">
+          <div class="card">
+            <h3 class="text-xl font-semibold mt-6 mb-4">Cartões de crédito</h3>
+            <input type="hidden" th:field="*{creditCard.id}">
 
-        <div
-                th:replace="~{fragments/input :: input('creditCardName', 'Nome do titular', 'text', creditCard.name)}">
-        </div>
+            <div
+                    th:replace="~{fragments/input :: input('creditCardName', 'Nome do titular', 'text', creditCard.name)}">
+            </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
-          <div class="mb-4">
-            <label th:for="creditCardNumber" class="block font-medium"
-                   th:text="'Número:'"></label>
-            <input th:type="text" th:id="creditCardNumber"
-                   th:field="*{creditCard.number}" oninput="creditCardNumberMask(this)"
-                   maxlength="19" class="w-full py-1 px-2 border border-gray-300 rounded" />
-            <span class="error" th:if="${#fields.hasErrors('creditCard.number')}"
-                  th:errors="*{creditCard.number}"></span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+              <div class="mb-4">
+                <label th:for="creditCardNumber" class="block font-medium"
+                       th:text="'Número:'"></label>
+                <input th:type="text" th:id="creditCardNumber"
+                       th:field="*{creditCard.number}" oninput="creditCardNumberMask(this)"
+                       maxlength="19" class="w-full py-1 px-2 border border-gray-300 rounded" />
+                <span class="error" th:if="${#fields.hasErrors('creditCard.number')}"
+                      th:errors="*{creditCard.number}"></span>
+              </div>
+              <div class="mb-4">
+                <label th:for="creditCardSecurityCode" class="block font-medium"
+                       th:text="'CVV:'"></label>
+                <input th:type="text" th:id="creditCardSecurityCode"
+                       th:field="*{creditCard.securityCode}" maxlength="3"
+                       class="w-full py-1 px-2 border border-gray-300 rounded" />
+                <span class="error" th:if="${#fields.hasErrors('creditCard.securityCode')}"
+                      th:errors="*{creditCard.securityCode}"></span>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label th:for="creditCardBrand" class="block font-medium">Bandeira:</label>
+              <select th:id="creditCardBrand" th:field="*{creditCard.brand}"
+                      class="w-full py-1 px-2 border rounded">
+                <option th:each="ccb : ${T(org.fatec.esportiva.entity.enums.CreditCardBrand).values()}"
+                        th:value="${ccb}" th:text="${ccb}"></option>
+              </select>
+              <span class="error" th:if="${#fields.hasErrors('creditCard.brand')}"
+                    th:errors="*{creditCard.brand}"></span>
+            </div>
+
+            <div style="margin-top: 20px">
+              <input type="checkbox" name="saveCreditCard" id="saveCreditCard">
+              <label th:for="saveCreditCard">Salvar cartão de crédito</label>
+            </div>
           </div>
-          <div class="mb-4">
-            <label th:for="creditCardSecurityCode" class="block font-medium"
-                   th:text="'CVV:'"></label>
-            <input th:type="text" th:id="creditCardSecurityCode"
-                   th:field="*{creditCard.securityCode}" maxlength="3"
-                   class="w-full py-1 px-2 border border-gray-300 rounded" />
-            <span class="error" th:if="${#fields.hasErrors('creditCard.securityCode')}"
-                  th:errors="*{creditCard.securityCode}"></span>
-          </div>
-        </div>
 
-        <div class="mb-4">
-          <label th:for="creditCardBrand" class="block font-medium">Bandeira:</label>
-          <select th:id="creditCardBrand" th:field="*{creditCard.brand}"
-                  class="w-full py-1 px-2 border rounded">
-            <option th:each="ccb : ${T(org.fatec.esportiva.entity.enums.CreditCardBrand).values()}"
-                    th:value="${ccb}" th:text="${ccb}"></option>
-          </select>
-          <span class="error" th:if="${#fields.hasErrors('creditCard.brand')}"
-                th:errors="*{creditCard.brand}"></span>
-        </div>
+            <button class="primaryButton" type="submit">Continuar</button>
+        </form>
 
-        <div style="margin-top: 20px">
-          <input type="checkbox" name="saveCreditCard" id="saveCreditCard">
-          <label th:for="saveCreditCard">Salvar cartão de crédito</label>
-        </div>
-
-        <button class="primaryButton" style="margin-top: 40px" type="submit">Continuar</button>
-      </form>
     </section>
+
     <section>
       <div th:replace="~{fragments/purchaseSummary :: summary}"></div>
     </section>
