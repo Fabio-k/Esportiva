@@ -1,6 +1,7 @@
 package org.fatec.esportiva.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.fatec.esportiva.entity.product.Product;
 import org.fatec.esportiva.entity.product.ProductStatus;
@@ -15,4 +16,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAvailableProducts(ProductStatus status);
 
     List<Product> findAllByStatus(ProductStatus status);
+
+    @Query("""
+            SELECT p FROM Product p
+            JOIN p.categories c
+            WHERE p.status = :status
+            AND (p.stockQuantity - p.blockedQuantity) > 0
+            AND c.id IN :categoriesIds
+            AND p.id NOT IN :productsIds
+            """)
+    List<Product> findRecommendedProducts(ProductStatus status, Set<Long> categoriesIds, Set<Long> productsIds);
 }

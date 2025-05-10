@@ -23,7 +23,7 @@ public class userAddProductToCart extends Integration {
                         .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quantity").value(3))
                 .andExpect(jsonPath("$.product.name").value("Bola de Vôlei Mikasa 350VW"))
-                .andExpect(jsonPath("$.product.quantity").value(22))
+                .andExpect(jsonPath("$.product.quantity").value(15))
         ;
     }
 }

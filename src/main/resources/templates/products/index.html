@@ -143,17 +143,16 @@
     <header th:replace="~{fragments/header :: defaultHeader }"></header>
 
     <main>
-
         <section class="card productRecomendation">
             <h1>Produtos recomendados</h1>
-            <div id="productList">
-                <a th:href="@{/product}" class="productLink">
-                    <div>
+            <div class="productSection">
+                <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${recommendedProducts}">
+                    <div class="productCard">
                         <div style="width: 160px; height: 180px;">
-                            <img th:src="@{/images/ball.png}" style="width: 100%;">
+                            <img th:src="${product.image}" style="width: 100%;">
                         </div>
-                        <p>Bola de vôlei</p>
-                        <p>R$ 48,32</p>
+                        <p th:text="${product.name}" style="min-height: 46px;"></p>
+                        <h3 th:text="${product.getFormattedPrice()}" style="font-weight: normal"></h3>
                     </div>
                 </a>
             </div>

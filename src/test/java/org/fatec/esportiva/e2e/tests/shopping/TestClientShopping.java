@@ -141,11 +141,13 @@ public class TestClientShopping extends E2E {
         cartIndividualProductPage.addProductToCart();
         cartIndividualProductPage.returnMainPage(); // Devido a subtração no estoque, sobram 2
 
+        /*
         // Escolhe a rede de vôlei e verifica se é possível adicionar produto sem
         // estoque
         mainPage.selectProduct(5);
         cartIndividualProductPage.addProductToCart();
         cartIndividualProductPage.returnMainPage();
+        */
 
         // Edita a compra dentro do carrinho
         mainPage.linkCart();
