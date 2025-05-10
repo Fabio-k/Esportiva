@@ -1,12 +1,15 @@
 package org.fatec.esportiva.validation;
 
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.exception.CheckoutException;
 import org.fatec.esportiva.service.CheckoutService;
 import org.fatec.esportiva.service.CheckoutSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Component
 public class CreditCardPaymentValidator implements CheckoutValidator{
     @Autowired
     private CheckoutSessionService checkoutSessionService;
@@ -17,6 +20,6 @@ public class CreditCardPaymentValidator implements CheckoutValidator{
         if (checkoutSessionService.getCreditCardsDto(checkoutSession).isEmpty()) return;
 
         if(checkoutSessionService.calculateTotalPrice(checkoutSession).compareTo(BigDecimal.ZERO) <= 0)
-            throw new IllegalArgumentException("O pedido já está sendo totalmente pago através de descontos. Remova os cartões de crédito para continuar.");
+            throw new CheckoutException("O pedido já está sendo totalmente pago através de descontos. Remova os cartões de crédito para continuar.", context.getRedirectPage());
     }
 }

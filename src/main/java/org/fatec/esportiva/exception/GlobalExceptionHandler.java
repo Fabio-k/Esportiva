@@ -34,4 +34,9 @@ public class GlobalExceptionHandler {
     public String handleEmptyCartException(EmptyCartException ex){
         return "redirect:/cart";
     }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<String> handleApiException(ApiException ex){
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }

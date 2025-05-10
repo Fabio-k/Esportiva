@@ -2,6 +2,7 @@ package org.fatec.esportiva.validation;
 
 import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.exception.ApiException;
 import org.fatec.esportiva.exception.CheckoutException;
 import org.fatec.esportiva.service.CheckoutSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,13 @@ public class SplitCardValueValidator{
 
         splitCreditCardDtos.forEach(payment -> {
             if (isLesThanTenAndNoVoucherApplied(payment, checkoutSession))
-                throw new CheckoutException("Cada cartão deve pagar pelo menos R$ 10,00.", context.getRedirectPage());
-            if(payment.getValue().compareTo(BigDecimal.ZERO) <= 0 ) throw new CheckoutException("Cartões devem pager valor acima de R$ 0,00", context.getRedirectPage());
+                throw new ApiException("Cada cartão deve pagar pelo menos R$ 10,00.");
+            if(payment.getValue().compareTo(BigDecimal.ZERO) <= 0 ) throw new ApiException("Cartões devem pager valor acima de R$ 0,00");
         });
 
         BigDecimal result = checkoutSessionService.calculateTotalPrice(checkoutSession).subtract(splitPaymentTotal);
-        if(result.compareTo(BigDecimal.ZERO) < 0) throw new CheckoutException("Valor escolhido supera o valor a ser pago", context.getRedirectPage());
-        if(result.compareTo(BigDecimal.ZERO) > 0) throw new CheckoutException("Valor escolhido é insuficiente", context.getRedirectPage());
+        if(result.compareTo(BigDecimal.ZERO) < 0) throw new ApiException("Valor escolhido supera o valor a ser pago");
+        if(result.compareTo(BigDecimal.ZERO) > 0) throw new ApiException("Valor escolhido é insuficiente");
     }
 
     private Boolean isLesThanTenAndNoVoucherApplied(SplitCreditCardDto payment, CheckoutSession checkoutSession){

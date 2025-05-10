@@ -51,9 +51,11 @@ public class MainPage {
 
     public void selectProduct(int productId) {
         WebElement link = driver.findElement(By.cssSelector("a[href='/products/" + productId + "']"));
+        String currentUrl = driver.getCurrentUrl();
         link.click();
         // Espera a nova página ser carregada, quando o link fica 'inválido'
-        wait.until(ExpectedConditions.stalenessOf(link));
+        //wait.until(ExpectedConditions.stalenessOf(link));
+        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
     }
 
     public void linkClientHistory() {

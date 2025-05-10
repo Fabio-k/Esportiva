@@ -3,24 +3,17 @@ package org.fatec.esportiva.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.dto.request.CreditCardDto;
-import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.dto.request.SplitCreditCardForm;
 import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
-import org.fatec.esportiva.dto.response.SplitCreditCardResponseDto;
-import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.session.CheckoutSession;
-import org.fatec.esportiva.mapper.CreditCardMapper;
 import org.fatec.esportiva.service.*;
 import org.fatec.esportiva.validation.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -62,7 +55,7 @@ public class CheckoutBillingController {
         return "checkout/billing/index";
     }
 
-    @GetMapping("new")
+    @GetMapping("/new")
     public String newBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,Model model){
         cartEmptyValidator.validate();
         if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
@@ -88,21 +81,13 @@ public class CheckoutBillingController {
 
     @GetMapping("/split-cards")
     public String splitCards(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
+        checkoutSession.getCreditCardPayments().clear();
         List<Long> clientCreditCardsIds = checkoutSession.getCreditCardIds();
         if(clientCreditCardsIds.size() < 2) return "redirect:/checkout/billing";
         SplitCreditCardForm splitCreditCardForm = new SplitCreditCardForm();
         splitCreditCardForm.getCreditCards().addAll(creditCardService.findAllByIdAndClientId(clientCreditCardsIds, clientService.getAuthenticatedClient().getId()));
         model.addAttribute("creditCards", splitCreditCardForm);
         return "/checkout/billing/split-cards";
-    }
-
-    @PostMapping("/split-cards/save")
-    public String saveSplitCard(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @ModelAttribute SplitCreditCardForm splitCreditCardForm){
-        List<SplitCreditCardDto> creditCards = splitCreditCardForm.getCreditCards();
-        if(creditCards.size() < 2) return "redirect:/checkout/billing";
-        billingService.saveSplitCardAmount(checkoutSession, creditCards);
-
-        return "redirect:/checkout/new";
     }
 
     @PostMapping("/save")

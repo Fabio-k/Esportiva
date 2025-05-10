@@ -29,7 +29,7 @@
   </div>
   <section th:if="${transaction.orders.tradedOrders.size() > 0}" th:id="'transaction_' + ${transaction.id}" class="card transaction" th:each="transaction : ${transactions}">
     <div style="display: flex; align-items: center; gap: 30px;">
-      <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM YYYY')}"></h3>
+      <h3 th:text="${#temporals.format(transaction.purchaseDate, 'dd MMM yyyy', T(java.util.Locale).forLanguageTag('pt-BR'))}"></h3>
     </div>
       <div style="display: flex; justify-content: space-between" th:each="order : ${transaction.orders.tradedOrders}">
         <div style="display: flex; gap: 20px">
