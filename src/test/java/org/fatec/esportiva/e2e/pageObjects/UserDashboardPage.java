@@ -77,6 +77,8 @@ public class UserDashboardPage {
         Alert alertButton = driver.switchTo().alert();
         if (confirmDelete) {
             alertButton.accept();
+            // Aguarda a linha ser deletada
+            wait.until(ExpectedConditions.stalenessOf(button));
         } else {
             alertButton.dismiss();
         }

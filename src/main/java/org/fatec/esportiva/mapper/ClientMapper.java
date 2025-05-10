@@ -31,6 +31,7 @@ public class ClientMapper {
                 .dateBirth(user.getDateBirth())
                 .telephone(user.getTelephone())
                 .telephoneType(user.getTelephoneType())
+                .indexRanking(user.calculateIndexRanking())
                 .build();
     }
 }

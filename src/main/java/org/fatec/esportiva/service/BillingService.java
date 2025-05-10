@@ -1,14 +1,12 @@
 package org.fatec.esportiva.service;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.dto.request.CreditCardDto;
 import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
 import org.fatec.esportiva.dto.response.SplitCreditCardResponseDto;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.validation.*;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.List;
 

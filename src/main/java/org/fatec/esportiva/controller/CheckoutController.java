@@ -2,14 +2,10 @@ package org.fatec.esportiva.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.dto.response.AddressResponseDto;
 import org.fatec.esportiva.entity.address.Address;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.mapper.AddressMapper;
-import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.dto.request.AddressDto;
-import org.fatec.esportiva.dto.request.CreditCardDto;
-import org.fatec.esportiva.dto.response.CartItemResponseDto;
 import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
 import org.fatec.esportiva.service.*;
 import org.fatec.esportiva.validation.CartEmptyValidator;
@@ -19,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/checkout")

@@ -40,6 +40,11 @@ public class ClientService {
         client.setAddresses(addressService.createAddresses(client, clientDto.getAddresses()));
         client.setCreditCards(creditCardService.createCreditCards(client, clientDto.getCreditCards()));
         client.setStatus(UserStatus.ATIVO);
+
+        // By default, the first element is the 'default'
+        client.setPreferentialAddress(0L);
+        client.setPreferentialCard(0L);
+
         return clientRepository.save(client);
     }
 

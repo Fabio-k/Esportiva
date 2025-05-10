@@ -2,7 +2,6 @@ package org.fatec.esportiva.dto.response;
 
 import lombok.*;
 
-import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.time.LocalDate;

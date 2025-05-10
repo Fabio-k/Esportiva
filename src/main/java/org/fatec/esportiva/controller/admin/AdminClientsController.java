@@ -12,6 +12,7 @@ import org.fatec.esportiva.dto.request.AddressDto;
 import org.fatec.esportiva.dto.request.ClientDto;
 import org.fatec.esportiva.dto.request.CreditCardDto;
 import org.fatec.esportiva.service.ClientService;
+import org.fatec.esportiva.service.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequestMapping("/admin/clients")
 public class AdminClientsController {
     private final ClientService clientService;
+    private final TransactionService transactionService;
 
     @GetMapping
     public String getClients(Model model,
@@ -78,6 +80,7 @@ public class AdminClientsController {
         }
         model.addAttribute("id", id);
         model.addAttribute("formAction", "/admin/clients/update/" + id);
+        model.addAttribute("transactions", transactionService.getTransactions(id));
         return "/admin/clients/edit";
     }
 
