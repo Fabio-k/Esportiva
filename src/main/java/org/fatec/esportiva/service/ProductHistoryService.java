@@ -6,7 +6,6 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.repository.ProductHistoryRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 

@@ -10,6 +10,7 @@ import org.fatec.esportiva.entity.enums.PhoneType;
 import org.fatec.esportiva.entity.enums.UserStatus;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class ClientDto {
 
     @NotNull(message = "O tipo de telefone não pode ficar em branco")
     private PhoneType telephoneType;
+
+    private BigDecimal indexRanking;
 
     @Valid
     @Default

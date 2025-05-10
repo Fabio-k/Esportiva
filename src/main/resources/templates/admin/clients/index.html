@@ -28,6 +28,7 @@
           <th>Gênero</th>
           <th>Telefone</th>
           <th>Email</th>
+          <th>Índice</th>
           <th>Status</th>
           <th></th>
         </thead>
@@ -41,6 +42,7 @@
             <td th:id="'gender-' + ${user.id}" th:text="${user.gender.getDisplayName()}"></td>
             <td th:id="'telephone-' + ${user.id}" th:text="${user.telephone}"></td>
             <td th:id="'email-' + ${user.id}" th:text="${user.email}"></td>
+            <td th:id="'indexRanking-' + ${user.id}" th:text="${user.indexRanking}"></td>
             <td th:id="'status-' + ${user.id}" th:text="${user.status.getDisplayName()}"></td>
 
             <td>

@@ -33,6 +33,11 @@ public class TransactionService {
                 .stream().map(TransactionMapper::toTransactionResponseDto).toList();
     }
 
+    public List<TransactionResponseDto> getTransactions(long id) {
+        return transactionRepository.findAllByClientOrderByPurchaseDateDesc(clientService.findClient(id))
+                .stream().map(TransactionMapper::toTransactionResponseDto).toList();
+    }
+
     public List<TransactionDto> getTransactions(OrderStatus status) {
         return transactionRepository.findAllByStatus(status)
                 .stream().map(TransactionMapper::toTransactionDto).toList();

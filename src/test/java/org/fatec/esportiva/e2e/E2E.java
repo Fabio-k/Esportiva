@@ -14,6 +14,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
+// Problema com a propriedade é que os testes não são totalmente isolados entre si
+// Uma vez carregado o Spring Boot, eles compartilham as mesmas propriedades
+// https://stackoverflow.com/questions/48570766/override-a-property-for-a-single-spring-boot-test
+// @TestPropertySource(properties = "cart.product.timeoutInMinutes=1")
+// @TestPropertySource(properties = "cart.cleanup.intervalInMillis=1000")
 public class E2E {
     protected static WebDriver browser;
     protected static WebDriverWait wait;

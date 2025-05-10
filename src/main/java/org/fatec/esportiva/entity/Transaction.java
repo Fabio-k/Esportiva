@@ -7,7 +7,6 @@ import lombok.Builder.Default;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
