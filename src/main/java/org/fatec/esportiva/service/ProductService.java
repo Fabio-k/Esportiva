@@ -1,11 +1,11 @@
 package org.fatec.esportiva.service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.fatec.esportiva.dto.request.ProductCategoryDto;
 import org.fatec.esportiva.entity.cart.CartItem;
 import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.entity.product.ProductCategory;
 import org.fatec.esportiva.entity.product.ProductStatus;
 import org.fatec.esportiva.mapper.ProductMapper;
 import org.fatec.esportiva.repository.ProductRepository;
@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ClientService clientService;
 
     public List<ProductCategoryDto> getAllProducts(){
         return productRepository.findAll().stream()
@@ -49,8 +50,18 @@ public class ProductService {
                 .toList();
     }
 
-    public List<ProductResponseDto> getProductsSummary(){
-        return  productRepository.findAllByStatus(ProductStatus.ATIVO)
+    public List<ProductResponseDto> getRecommendedProducts(){
+        if(!clientService.isClientAuthenticated()) return List.of();
+        List<Product> products = clientService.getClientProducts();
+        Set<Long> categoriesIds = new HashSet<>();
+        Set<Long> productIds = new HashSet<>();
+        products.stream().forEach(product -> {
+            List<Long> productsCategoriesIds = product.getCategories().stream().map(ProductCategory::getId).toList();
+            categoriesIds.addAll(productsCategoriesIds);
+            productIds.add(product.getId());
+        });
+
+        return productRepository.findRecommendedProducts(ProductStatus.ATIVO, categoriesIds, productIds)
                 .stream().map(ProductMapper::toProductResponseDto).toList();
     }
 

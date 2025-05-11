@@ -57,6 +57,14 @@
             width: 100%;
             border-radius: 10px;
         }
+
+        .deleteLink {
+            cursor: pointer;
+        }
+
+        .deleteLink:hover{
+            color: red;
+        }
     </style>
     <link rel="stylesheet" type="text/css" th:href="@{/css/quantityControl.css}">
 </head>
@@ -80,7 +88,9 @@
                         <a class="productLink" th:href="@{/products/{id}(id=${item.product.id})}">
                             <p th:text="${item.product.name}"></p>
                         </a>
-                        <span onclick="removeItem(this)">Remover</span>
+                        <div>
+                            <span class="deleteLink" onclick="removeItem(this)">Remover</span>
+                        </div>
                     </div>
                 </div>
 
