@@ -143,7 +143,7 @@
     <header th:replace="~{fragments/header :: defaultHeader }"></header>
 
     <main>
-        <section class="card productRecomendation">
+        <section class="card productRecomendation" th:if="${recommendedProducts.size() > 0}">
             <h1>Produtos recomendados</h1>
             <div class="productSection">
                 <a th:href="@{/products/{id}(id=${product.id})}" class="productLink" th:each="product : ${recommendedProducts}">

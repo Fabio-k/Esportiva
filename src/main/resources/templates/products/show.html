@@ -82,7 +82,12 @@
       )
 
       if (!response.ok) return null;
-      return await response.json();
+
+      try{
+        return await response.json();
+      }catch(error){
+        window.location.href = "/login";
+      }
     };
 
     async function addItem() {

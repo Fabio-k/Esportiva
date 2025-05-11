@@ -33,4 +33,12 @@ public class AuthService implements UserDetailsService {
         }
         return (UserDetails) principal;
     }
+
+    public UserDetails getAuthenticatedUserOrReturnNull(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return null;
+        }
+        return (UserDetails) principal;
+    }
 }

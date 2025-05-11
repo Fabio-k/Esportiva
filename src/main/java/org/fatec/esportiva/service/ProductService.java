@@ -51,6 +51,7 @@ public class ProductService {
     }
 
     public List<ProductResponseDto> getRecommendedProducts(){
+        if(!clientService.isClientAuthenticated()) return List.of();
         List<Product> products = clientService.getClientProducts();
         Set<Long> categoriesIds = new HashSet<>();
         Set<Long> productIds = new HashSet<>();

@@ -97,6 +97,13 @@ public class ClientService {
         return clientRepository.findClientByEmail(userDetails.getUsername()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
+    public Boolean isClientAuthenticated(){
+        UserDetails userDetails = authService.getAuthenticatedUserOrReturnNull();
+        if(userDetails == null) return false;
+        Optional<Client> optionalClient = clientRepository.findClientByEmail(userDetails.getUsername());
+        return optionalClient.isPresent();
+    }
+
     public Optional<Client> findById(Long id) {
         return clientRepository.findById(id);
     }
