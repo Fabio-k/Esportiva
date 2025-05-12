@@ -61,7 +61,7 @@ public class TestFullShoppingPipeline extends E2E {
 
     // @traceto(RF0037;RF0040;RF0044;RN0041;RN0043)
     @Test
-    void normalFlowShopping() {
+    void flowShoppingAndExchangeProduct() {
         // Fluxo onde simula a compra, devolução e uma nova compra usando o cupom de
         // devolução
         loginPage.login("Carlos Silva");
