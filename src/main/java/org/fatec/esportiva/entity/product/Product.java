@@ -24,6 +24,7 @@ import org.fatec.esportiva.listeners.LogListener;
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pro_id")
     private Long id;
 

@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.Builder.Default;
 
 import org.fatec.esportiva.entity.product.PricingGroup;
+import org.fatec.esportiva.entity.product.ProductCategory;
 import org.fatec.esportiva.entity.product.ProductStatus;
 
 import java.math.BigDecimal;
@@ -39,10 +40,6 @@ public class ProductDto {
     @Min(value = 0, message = "Quantidade reservada pelos carrinhos de compra não pode ser negativa")
     private int blockedQuantity;
 
-    @NotNull(message = "Margem de lucro não pode ficar em branco")
-    @Min(value = 0, message = "Margem de lucro deve ser maior que 0%")
-    private BigDecimal profitMargin;
-
     @NotNull(message = "Custo não pode ficar em branco")
     @Min(value = 0, message = "O custo não pode ser negativo")
     private BigDecimal costValue;
@@ -63,9 +60,8 @@ public class ProductDto {
     @NotNull(message = "O caminho para a imagem não pode estar vazia")
     private String image;
 
-    @NotNull(message = "Referencia a uma categoria de produto não pode ficar em branco")
     @Default
-    private List<ProductCategoryDto> productCategory = new ArrayList<>();
+    private List<Long> productCategoryIds = new ArrayList<>();
 
     public String displayEntryDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
