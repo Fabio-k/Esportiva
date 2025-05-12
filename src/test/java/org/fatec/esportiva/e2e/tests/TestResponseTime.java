@@ -47,14 +47,15 @@ public class TestResponseTime extends E2E {
         cartAllProductsPage.returnMainPage();
         assertTrue(getElapsedTime(initTime, endTime) < 1000);
 
-        // Rede de vôlei
+        // Kit de marcação
         initTime = System.nanoTime();
-        mainPage.selectProduct(5);
+        mainPage.selectProduct(6);
         endTime = System.nanoTime();
         cartAllProductsPage.returnMainPage();
         assertTrue(getElapsedTime(initTime, endTime) < 1000);
 
         // Verifica com o mesmo produto novamente para avaliar repetibilidade
+        // Bola de vôlei
         initTime = System.nanoTime();
         mainPage.selectProduct(1);
         endTime = System.nanoTime();

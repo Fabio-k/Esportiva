@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class userAddProductToCart extends Integration {
 
+    // @traceto(RF0031)
     @Test
     @DisplayName("should return ok with correct data on valid request")
     @WithMockUser(username = "carlos@gmail.com", roles = "USER")
