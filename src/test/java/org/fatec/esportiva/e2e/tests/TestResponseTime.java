@@ -33,7 +33,7 @@ public class TestResponseTime extends E2E {
 
     // @traceto(RNF0011)
     @Test
-    void normalFlowShopping() {
+    void responseTimeOneSecond() {
         // Testa se as consultas do usuário retornam um tempo menor de 1 segundo
         login.login("Carlos Silva");
 
