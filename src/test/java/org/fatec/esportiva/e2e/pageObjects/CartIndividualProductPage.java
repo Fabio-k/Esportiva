@@ -56,6 +56,11 @@ public class CartIndividualProductPage {
         for (int i = 0; i < clickTimes; i++) {
             button.click();
         }
+        try {
+            Thread.sleep(150); // Tempo para o BD responder
+        } catch (InterruptedException e) {
+            // ...
+        }
     }
 
     public void increaseButton(int clickTimes) {
@@ -67,6 +72,11 @@ public class CartIndividualProductPage {
 
         for (int i = 0; i < clickTimes; i++) {
             button.click();
+        }
+        try {
+            Thread.sleep(150); // Tempo para o BD responder
+        } catch (InterruptedException e) {
+            // ...
         }
     }
 
