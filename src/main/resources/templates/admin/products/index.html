@@ -3,66 +3,92 @@
 
 <head>
     <div th:replace="~{fragments/head_info.html :: head_info}"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/dashboard_table.css}">
 </head>
 
-<body>
+<body class="overflow-hidden">
     <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('stock')}"></header>
-    <main>
-        <div class="buttonsDiv">
-            <div th:replace="~{fragments/product_filter.html :: filter}"></div>
-            <button id="filterButton" onclick="toggleFilter()" style="width: fit-content">Filtros</button>
-            <a id="createClientButton" th:href="@{/admin/products/new}" class="primaryButton">Novo Produto</a>
-        </div>
+    <main class="flex flex-1 bg-white">
+        <section class="w-[30%] p-4 [&_article]:pb-4">
+            <article>
+                <h1 id="productTitle" class="text-xl"></h1>
+                <p>id: <span id="productId"></span></p>
+            </article>
+            <article class="flex gap-10">
+                <div>
+                    <p class="text-gray-500">Em estoque:</p>
+                    <p id="productStock"></p>
+                </div>
+                <div>
+                    <p class="text-gray-500">bloqueados:</p>
+                    <p id="productBlocked"></p>
+                </div>
+            </article>
 
-        <table class="w-full">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Data de cadastro</th>
-                    <th>Qtd estoque</th>
-                    <th>Qtd bloqueada</th>
-                    <th>Custo (R$)</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
+            <div class="flex justify-center">
+                <img id="productImage" class="w-[40%]" alt="imagem do produto">
+            </div>
 
-            <tbody>
-                <tr th:each="product : ${products}">
-                    <td th:id="'product-' + ${product.id}" th:text="${product.id}"></td>
-                    <td th:id="'name-' + ${product.id}" th:text="${product.name}"></td>
-                    <td th:id="'entryDate-' + ${product.id}" th:text="${product.displayEntryDate}"></td>
-                    <td th:id="'stockQuantity-' + ${product.id}" th:text="${product.stockQuantity}"></td>
-                    <td th:id="'blockedQuantity-' + ${product.id}" th:text="${product.blockedQuantity}">
-                    </td>
-                    <td th:id="'costValue-' + ${product.id}" th:text="${product.costValue}"></td>
-                    <td th:id="'inactivationCategory-' + ${product.id}" th:text="${product.inactivationCategory}"></td>
+            <article class="flex gap-30">
+                <div>
+                    <p class="text-gray-500">Preço de venda:</p>
+                    <p id="productSalesPrice"></p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Preço de compra:</p>
+                    <p id="productCostPrice"></p>
+                </div>
+            </article>
+        </section>
+        <section class="flex-grow border-l border-gray-300">
+            <div class="buttonsDiv flex justify-end gap-10 px-10 py-5">
+                <div th:replace="~{fragments/product_filter.html :: filter}"></div>
+                <button id="filterButton" onclick="toggleFilter()" style="width: fit-content">Filtros</button>
+                <a id="createClientButton" th:href="@{/admin/products/new}" class="primaryButton inline-block">Novo Produto</a>
+            </div>
+            <article class="overflow-auto flex-grow max-h-[72vh]">
+                <table class="w-full table-auto [&_td]:p-4 [&_th]:text-left">
+                    <thead class="bg-white sticky top-0 z-10 shadow-sm">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Qtd estoque</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
 
-                    <td>
-                        <!-- Botão de editar é um link -->
-                        <a th:id="'edit-' + ${product.id}" th:href="@{/products/edit/{id}(id=${product.id})}"
-                            style="display: inline-flex; align-items: center">
-                            <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
-                        </a>
+                    <tbody>
+                        <tr th:each="product : ${products}" class="productRow border-t border-b border-gray-300 py-12 hover:bg-gray-100 cursor-pointer" th:attr="data-id=${product.id}">
+                            <td th:id="'name-' + ${product.id}" th:text="${product.name}"></td>
+                            <td th:id="'stockQuantity-' + ${product.id}" th:text="${product.stockQuantity}"></td>
+                            <td th:id="'inactivationCategory-' + ${product.id}" th:text="${product.inactivationCategory}"></td>
 
-                        <!-- Botão de deletar cria um pop-up para a própria página -->
-                        <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post"
-                            onsubmit="return confirm('Tem certeza que deseja excluir este produto?')">
-                            <input type="hidden" name="_method" value="delete" />
-                            <button th:id="'delete-' + ${product.id}" type="submit" class="btn btn-danger"
-                                style="display: inline-flex; align-items: center">
-                                <img th:src="@{/images/trash-can.svg}" width="15" height="15"
-                                    alt="Ícone de lixeira" />Deletar
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                            <td>
+                                <!-- Botão de editar é um link -->
+                                <a th:id="'edit-' + ${product.id}" th:href="@{/products/edit/{id}(id=${product.id})}"
+                                   style="display: inline-flex; align-items: center">
+                                    <img th:src="@{/images/pencil.svg}" width="15" height="15" alt="Ícone de lápis" />Editar
+                                </a>
+
+                                <!-- Botão de deletar cria um pop-up para a própria página -->
+                                <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post"
+                                      onsubmit="return confirm('Tem certeza que deseja excluir este produto?')">
+                                    <input type="hidden" name="_method" value="delete" />
+                                    <button th:id="'delete-' + ${product.id}" type="submit" class="btn btn-danger"
+                                            style="display: inline-flex; align-items: center">
+                                        <img th:src="@{/images/trash-can.svg}" width="15" height="15"
+                                             alt="Ícone de lixeira" />Deletar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+        </section>
+
 
     </main>
 
@@ -86,6 +112,41 @@
             event.preventDefault(); // Impede o comportamento padrão do botão reset
             window.location.href = '/admin/products?name=&costValue=&status='; // Redireciona para a URL desejada
         });
+
+        let firstRow = document.querySelector(".productRow")
+        getProductInformation(firstRow);
+
+        document.querySelectorAll(".productRow").forEach(row => row.addEventListener("click", () => getProductInformation(row)))
+
+        function getProductInformation(row){
+            const id = row.dataset.id;
+            document.querySelectorAll(".productRow").forEach(row => {
+              if (row.dataset.id !== id) {
+                row.classList.remove("!bg-gray-100");
+              }
+            });
+            row.classList.toggle("!bg-gray-100");
+            fetch(`/admin/api/products/${id}`).then(data => {
+                if(!data.ok) return;
+                data.json().then(result => {
+                    console.log(result);
+                    document.getElementById("productImage").src = result.image
+                    document.getElementById("productTitle").innerText = result.name
+                    document.getElementById("productStock").innerText = result.stockQuantity
+                    document.getElementById("productSalesPrice").innerText = formatCurrency(result.salesPrice)
+                    document.getElementById("productCostPrice").innerText = formatCurrency(result.costValue)
+                    document.getElementById("productBlocked").innerText = result.blockedQuantity
+                    document.getElementById("productId").innerText = result.id
+                }).catch(err => window.location.href = "/login");
+            })
+        }
+
+        function formatCurrency(value){
+            return Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value)
+        }
     </script>
 
 </body>

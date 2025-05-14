@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 import org.fatec.esportiva.dto.request.ProductCategoryDto;
+import org.fatec.esportiva.dto.response.AdminProductResponseDto;
+import org.fatec.esportiva.dto.response.ProductCategoryResponseDto;
 import org.fatec.esportiva.entity.cart.CartItem;
 import org.fatec.esportiva.entity.product.Product;
 import org.fatec.esportiva.entity.product.ProductCategory;
@@ -79,12 +81,14 @@ public class ProductService {
                 .map(ProductMapper::toProductResponseDto).toList();
     }
 
-    public Optional<Product> findProduct2(Long id) {
-        return productRepository.findById(id);
-    }
-
     public ProductResponseDto findProduct(Long id) {
         return ProductMapper.toProductResponseDto(findById(id));
+    }
+
+    public AdminProductResponseDto findProductToAdminResponseDto(Long id){
+        Product product = findById(id);
+        List<ProductCategoryResponseDto> categories = product.getCategories().stream().map(category -> new ProductCategoryResponseDto(category.getId(), category.getName())).toList();
+        return ProductMapper.toAdminProductResponseDto(product, categories);
     }
 
     public Product findById(Long id) {
@@ -119,7 +123,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void deleteClient(Optional<Product> product) {
+    public void deleteClient(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
     }
