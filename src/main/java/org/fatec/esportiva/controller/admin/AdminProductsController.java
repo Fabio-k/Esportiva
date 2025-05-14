@@ -75,8 +75,7 @@ public class AdminProductsController {
 
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
-        Optional<Product> product = productService.findProduct2(id);
-        productService.deleteClient(product);
+        productService.deleteClient(id);
         return "redirect:/admin/products";
     }
 
