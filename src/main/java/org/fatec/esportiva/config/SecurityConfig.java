@@ -7,7 +7,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -33,10 +32,13 @@ public class SecurityConfig {
                                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                                 .requestMatchers("/h2-console/**").permitAll()
                                                 .anyRequest().authenticated())
-                                .formLogin(login -> login
-                                                .loginPage("/login")
-                                                .permitAll())
-                                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-                                        .build();
+                                                .formLogin(login -> login
+                                                    .loginPage("/login")
+                                                    .permitAll()
+                                                )
+                        .exceptionHandling(
+                                exception -> exception
+                                        .accessDeniedHandler(((request, response, accessDeniedException) -> response.sendRedirect("/login"))))
+                        .build();
         }
 }
