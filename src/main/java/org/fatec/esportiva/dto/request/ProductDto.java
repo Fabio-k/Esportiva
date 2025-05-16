@@ -44,7 +44,7 @@ public class ProductDto {
     @Min(value = 0, message = "O custo não pode ser negativo")
     private BigDecimal costValue;
 
-    @NotNull(message = "Categoria de desativação não pode ficar em branco")
+    @NotNull(message = "Status não pode ficar em branco")
     private ProductStatus inactivationCategory;
 
     // Pode ter justificativa vazia (Quando não está desativado, por exemplo)

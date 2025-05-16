@@ -41,7 +41,7 @@
             <span class="error" th:if="${#fields.hasErrors('productCategoryIds')}" th:errors="*{productCategoryIds}"></span>
 
             <label for="description">Descrição do produto</label>
-            <textarea id="description" name="description" maxlength="50" required></textarea>
+            <textarea id="description" name="description" th:field="*{description}" maxlength="50" required></textarea>
             <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
 
             <label for="inactivationCategory">Status</label>
@@ -56,7 +56,7 @@
 
             <article id="inactivationJustificationDiv" class="hidden">
                 <label for="inactivationJustification">Justificativa de inativação</label>
-                <textarea id="inactivationJustification" name="inactivationJustification" maxlength="50"></textarea>
+                <textarea id="inactivationJustification"  th:field="*{inactivationJustification}" maxlength="50"></textarea>
                 <span class="error" th:if="${#fields.hasErrors('inactivationJustification')}"
                       th:errors="*{inactivationJustification}"></span>
             </article>
