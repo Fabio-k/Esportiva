@@ -9,6 +9,8 @@ import org.fatec.esportiva.entity.product.ProductStatus;
 import org.fatec.esportiva.dto.request.ProductCategoryDto;
 import org.fatec.esportiva.dto.request.ProductDto;
 
+import org.fatec.esportiva.repository.PricingGroupRepository;
+import org.fatec.esportiva.repository.ProductCategoryRepository;
 import org.fatec.esportiva.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/admin/products")
 public class AdminProductsController {
     private final ProductService productService;
+    private final ProductCategoryRepository productCategoryRepository;
+    private final PricingGroupRepository pricingGroupRepository;
 
     @GetMapping
     public String getProducts(Model model,
@@ -49,22 +53,21 @@ public class AdminProductsController {
     @GetMapping("/new")
     public String newProduct(Model model) {
         model.addAttribute("formAction", "/admin/products/save");
-        if (!model.containsAttribute("product")) {
-            ProductDto productDto = new ProductDto();
-            productDto.getProductCategory().add(new ProductCategoryDto());
-            model.addAttribute("product", productDto);
-        }
+        ProductDto productDto = new ProductDto();
+        model.addAttribute("product", productDto);
+        model.addAttribute("productCategory", productCategoryRepository.findAll());
+        model.addAttribute("pricingGroups", pricingGroupRepository.findAll());
+
         return "admin/products/new";
     }
 
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("productCategory", productCategoryRepository.findAll());
+            model.addAttribute("pricingGroups", pricingGroupRepository.findAll());
             return "admin/products/new";
         }
-
-        // Define a data atual de cadastro/atualização
-        productDto.setEntryDate(LocalDate.now());
 
         productService.save(productDto);
         return "redirect:/admin/products";
@@ -72,8 +75,7 @@ public class AdminProductsController {
 
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
-        Optional<Product> product = productService.findProduct2(id);
-        productService.deleteClient(product);
+        productService.deleteClient(id);
         return "redirect:/admin/products";
     }
 

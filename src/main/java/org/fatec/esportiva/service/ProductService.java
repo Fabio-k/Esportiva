@@ -1,13 +1,17 @@
 package org.fatec.esportiva.service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import org.fatec.esportiva.dto.request.ProductCategoryDto;
+import org.fatec.esportiva.dto.response.AdminProductResponseDto;
+import org.fatec.esportiva.dto.response.ProductCategoryResponseDto;
 import org.fatec.esportiva.entity.cart.CartItem;
 import org.fatec.esportiva.entity.product.Product;
 import org.fatec.esportiva.entity.product.ProductCategory;
 import org.fatec.esportiva.entity.product.ProductStatus;
 import org.fatec.esportiva.mapper.ProductMapper;
+import org.fatec.esportiva.repository.ProductCategoryRepository;
 import org.fatec.esportiva.repository.ProductRepository;
 import org.fatec.esportiva.dto.request.ProductDto;
 import org.fatec.esportiva.dto.response.ProductResponseDto;
@@ -20,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ProductCategoryRepository productCategoryRepository;
     private final ClientService clientService;
 
     public List<ProductCategoryDto> getAllProducts(){
@@ -30,7 +35,12 @@ public class ProductService {
     @Transactional
     public Product save(ProductDto productDto) {
         Product product = ProductMapper.toProduct(productDto);
+        List<ProductCategory> categories = productCategoryRepository.findAllByIdIn(productDto.getProductCategoryIds());
+
+        product.setCategories(categories);
+        product.setEntryDate(LocalDate.now());
         product.setStatus(ProductStatus.ATIVO);
+
         return productRepository.save(product);
     }
 
@@ -71,12 +81,14 @@ public class ProductService {
                 .map(ProductMapper::toProductResponseDto).toList();
     }
 
-    public Optional<Product> findProduct2(Long id) {
-        return productRepository.findById(id);
-    }
-
     public ProductResponseDto findProduct(Long id) {
         return ProductMapper.toProductResponseDto(findById(id));
+    }
+
+    public AdminProductResponseDto findProductToAdminResponseDto(Long id){
+        Product product = findById(id);
+        List<ProductCategoryResponseDto> categories = product.getCategories().stream().map(category -> new ProductCategoryResponseDto(category.getId(), category.getName())).toList();
+        return ProductMapper.toAdminProductResponseDto(product, categories);
     }
 
     public Product findById(Long id) {
@@ -111,7 +123,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void deleteClient(Optional<Product> product) {
+    public void deleteClient(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
     }
