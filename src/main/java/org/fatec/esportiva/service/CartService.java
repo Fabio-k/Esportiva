@@ -79,7 +79,7 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    private void updateCartCreatedAt(Cart cart) {
+    public void updateCartCreatedAt(Cart cart) {
         if (cart == null) {
             cart = clientService.getAuthenticatedClient().getCart();
         }
@@ -90,8 +90,15 @@ public class CartService {
     private void updateCartCreatedAt() {
         Cart cart = clientService.getAuthenticatedClient().getCart();
         cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
-        System.out.println(cart.getCreatedAt());
         cartRepository.save(cart);
+    }
+
+    public void removeItem(Cart cart) {
+        Optional<CartItem> cartItem = cartItemRepository.findTopByCartIdOrderByInclusionTimeAsc(cart.getId());
+        cartItem.ifPresent(item -> {
+            cartItemRepository.delete(item);
+            productService.returnBlockedProductQuantity(item.getProduct().getId(), item.getQuantity());
+        });
     }
 
     private CartItem findCartItemById(Long id) {
@@ -106,5 +113,4 @@ public class CartService {
     private Cart findCartById(Long id) {
         return cartRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Carrinho não encontrado"));
     }
-
 }

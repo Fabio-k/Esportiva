@@ -10,6 +10,7 @@ import org.fatec.esportiva.entity.product.Product;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "itens_carrinho")
@@ -34,6 +35,9 @@ public class CartItem implements Serializable {
     @ManyToOne
     @JoinColumn(name = "itc_pro_id")
     private Product product;
+
+    @Column(name = "itc_pro_data_inclusao")
+    private LocalDateTime inclusionTime;
 
     public BigDecimal getTotalPrice(){
         BigDecimal quantity = BigDecimal.valueOf(this.quantity);

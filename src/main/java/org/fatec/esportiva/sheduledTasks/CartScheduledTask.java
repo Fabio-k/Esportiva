@@ -28,18 +28,15 @@ public class CartScheduledTask {
     @Value("${cart.expire.notification.inMinutes}")
     private int cartExpireNotificationInMinutes;
 
-    // Variável para testabilidade
-    //@Value("${cart.cleanup.intervalInMillis}")
-    //private int intervalInMillis;
-
     @Scheduled(fixedRateString = "${cart.cleanup.intervalInMillis:60000}")
     @Transactional
     public void freeCarts() {
 
         List<Cart> carts = cartRepository.findByCreatedAtBefore(LocalDateTime.now());
         carts.forEach(cart -> {
-            removeItems(cart);
-            cart.setCreatedAt(LocalDateTime.now().plusMinutes(cartTimeoutInMinutes));
+            cartService.removeItem(cart);
+            cartService.updateCartCreatedAt(cart);
+            cartService.setToNotified(cart.getId(), false);
             cartRepository.save(cart);
         });
     }
@@ -55,14 +52,6 @@ public class CartScheduledTask {
                 notificationService.notifyCartTimeout(cart.getClient());
                 cartService.setToNotified(cart.getId(), true);
             }
-        });
-    }
-
-    private void removeItems(Cart cart) {
-        List<CartItem> copyCartItems = new ArrayList<>(cart.getCartItems());
-        copyCartItems.forEach(cartItem -> {
-            cartService.removeItem(cartItem.getId(), null, cart);
-            cartService.setToNotified(cart.getId(), false);
         });
     }
 }
