@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.cart.Cart;
 import org.fatec.esportiva.dto.response.CartResponseDto;
 import org.fatec.esportiva.service.CurrencyService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +15,7 @@ public class CartMapper {
     public CartResponseDto toCartResponseDto(Cart cart){
         return new CartResponseDto(cart.getCartItems().stream()
                 .map(CartItemMapper::toCartItemResponseDto)
-                .toList(), currencyService
+                .toList(), currencyService, cart.getRemovedProducts().stream().map(ProductMapper::toProductResponseDto).toList()
         );
     }
 }

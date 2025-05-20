@@ -41,6 +41,8 @@ public class CartService {
             existingItem.setQuantity((short) (cartItem.getQuantity() + existingItem.getQuantity()));
             cartItem = existingItem;
         }
+        cart.getRemovedProducts().remove(cartItem.getProduct());
+
         cartItem = cartItemRepository.save(cartItem);
         updateCartCreatedAt();
         return CartItemMapper.toCartItemResponseDto(cartItem);
@@ -96,6 +98,8 @@ public class CartService {
     public void removeItem(Cart cart) {
         Optional<CartItem> cartItem = cartItemRepository.findTopByCartIdOrderByInclusionTimeAsc(cart.getId());
         cartItem.ifPresent(item -> {
+            cart.getRemovedProducts().add(item.getProduct());
+            cartRepository.save(cart);
             cartItemRepository.delete(item);
             productService.returnBlockedProductQuantity(item.getProduct().getId(), item.getQuantity());
         });
