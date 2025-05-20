@@ -1,5 +1,6 @@
 package org.fatec.esportiva.validation;
 
+import org.fatec.esportiva.entity.cart.Cart;
 import org.fatec.esportiva.entity.cart.CartItem;
 import org.fatec.esportiva.exception.EmptyCartException;
 import org.fatec.esportiva.service.ClientService;
@@ -13,9 +14,10 @@ public class CartEmptyValidator {
     @Autowired
     private ClientService clientService;
     public void validate(){
-        List<CartItem> cartItemList = clientService.getAuthenticatedClient().getCart().getCartItems();
+        Cart cart = clientService.getAuthenticatedClient().getCart();
+        List<CartItem> cartItemList = cart.getCartItems();
 
-        if (!cartItemList.isEmpty()) return;
+        if (!cartItemList.isEmpty() && cart.getRemovedProducts().isEmpty()) return;
         throw new EmptyCartException();
     }
 }

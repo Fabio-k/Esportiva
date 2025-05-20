@@ -77,6 +77,16 @@ input:not([type="checkbox"], [type="radio"]), select, textarea {
     background-color: #adadad;
 }
 
+.disabledButton{
+    border: none;
+    background-color: #adadad;
+    padding: 15px 20px;
+    text-align: center;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
 .card {
     background-color: white;
     border-radius: 10px;
