@@ -60,4 +60,8 @@ public class Transaction {
     public BigDecimal getTotalCost(){
         return orders.stream().map(Order::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    public void addOrder(Order order){
+        orders.add(order);
+    }
 }
