@@ -62,6 +62,10 @@ public class Transaction {
     }
 
     public void addOrder(Order order){
+        if(order == null){
+            throw new IllegalArgumentException("pedido não pode ser nulo");
+        }
         orders.add(order);
+        order.setTransaction(this);
     }
 }

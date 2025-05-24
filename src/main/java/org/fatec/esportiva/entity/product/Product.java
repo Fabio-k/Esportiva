@@ -94,6 +94,10 @@ public class Product {
         this.blockedQuantity -= quantity;
     }
 
+    public void increaseStock(int quantity){
+        this.stockQuantity = this.stockQuantity + quantity;
+    }
+
     @Override
     public String toString() {
         return """

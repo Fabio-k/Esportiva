@@ -33,7 +33,7 @@ public class TradedHandler implements OrderStatusHandler {
         order.setStatus(OrderStatus.TROCA_FINALIZADA);
 
         if (context.getIsReturnStock()) {
-            order.getProduct().setStockQuantity(order.getProduct().getStockQuantity() + order.getQuantity());
+            order.getProduct().increaseStock(order.getQuantity());
         }
     }
 }

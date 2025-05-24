@@ -19,6 +19,9 @@ public class TransactionStateFactory {
     }
 
     public TransactionStateHandler getHandler(OrderStatus status){
+        if(status == null){
+            throw new IllegalArgumentException("Status não pode ser nulo");
+        }
         TransactionStateHandler handler = handlers.get(status);
         if(handler == null){
             throw new IllegalArgumentException("Nenhum handler encontrado para o status: " + status);
