@@ -95,7 +95,7 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public void removeItem(Cart cart) {
+    public void removeExpiredItem(Cart cart) {
         Optional<CartItem> cartItem = cartItemRepository.findTopByCartIdOrderByInclusionTimeAsc(cart.getId());
         cartItem.ifPresent(item -> {
             cart.getRemovedProducts().add(item.getProduct());

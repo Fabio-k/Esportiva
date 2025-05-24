@@ -19,7 +19,7 @@ import org.fatec.esportiva.service.order.OrderStatusHandler;
  *         <li>Produto que estava indo para o cliente, volta para o estoque</li>
  *         <li>muda o estado para {@link OrderStatus#COMPRA_CANCELADA} e reembolsa a compra</li>
  *     </li>
- * <ul/>
+ * </ul>
  */
 public class InTransitProcessingHandler implements OrderStatusHandler {
     @Override

@@ -10,12 +10,12 @@ import java.util.HashMap;
 public class OrderItemHandlerFactory {
     private final HashMap<OrderStatus, OrderStatusHandler> handlers = new HashMap<>();
 
-    public OrderItemHandlerFactory(){
-        handlers.put(OrderStatus.EM_PROCESSAMENTO, new InProcessingHandler());
-        handlers.put(OrderStatus.EM_TRANSITO, new InTransitProcessingHandler());
-        handlers.put(OrderStatus.ENTREGUE, new DeliveredHandler());
-        handlers.put(OrderStatus.EM_TROCA, new InTradeHandler());
-        handlers.put(OrderStatus.TROCADO, new TradedHandler());
+    public OrderItemHandlerFactory(InProcessingHandler inProcessingHandler, InTransitProcessingHandler inTransitProcessingHandler, DeliveredHandler deliveredHandler, InTradeHandler inTradeHandler ,TradedHandler tradedHandler){
+        handlers.put(OrderStatus.EM_PROCESSAMENTO, inProcessingHandler);
+        handlers.put(OrderStatus.EM_TRANSITO, inTransitProcessingHandler);
+        handlers.put(OrderStatus.ENTREGUE, deliveredHandler);
+        handlers.put(OrderStatus.EM_TROCA, inTradeHandler);
+        handlers.put(OrderStatus.TROCADO, tradedHandler);
 
     }
 

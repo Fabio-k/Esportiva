@@ -34,7 +34,7 @@ public class CartScheduledTask {
 
         List<Cart> carts = cartRepository.findByCreatedAtBefore(LocalDateTime.now());
         carts.forEach(cart -> {
-            cartService.removeItem(cart);
+            cartService.removeExpiredItem(cart);
             cartService.updateCartCreatedAt(cart);
             cartService.setToNotified(cart.getId(), false);
             cartRepository.save(cart);

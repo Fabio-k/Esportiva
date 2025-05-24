@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  *         <li>Produto que estava indo para o cliente, volta para o estoque</li>
  *         <li>Altera o estado para {@link OrderStatus#COMPRA_CANCELADA}</li>
  *     </li>
- * <ul/>
+ * </ul>
  */
 @Component
 public class TransactionInTransitHandler implements TransactionStateHandler {

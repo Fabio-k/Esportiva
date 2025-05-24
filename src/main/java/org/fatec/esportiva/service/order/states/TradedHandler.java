@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  *     <li>{@code false} Rejeitado:
  *         <p>muda o estado para {@link OrderStatus#TROCA_RECUSADA}</p>
  *     </li>
- * <ul/>
+ * </ul>
  */
 @Component
 public class TradedHandler implements OrderStatusHandler {

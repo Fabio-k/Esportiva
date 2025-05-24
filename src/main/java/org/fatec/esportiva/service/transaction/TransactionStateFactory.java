@@ -12,10 +12,10 @@ import java.util.HashMap;
 public class TransactionStateFactory {
     private final HashMap<OrderStatus, TransactionStateHandler> handlers = new HashMap<>();
 
-    public TransactionStateFactory(){
-        handlers.put(OrderStatus.EM_PROCESSAMENTO, new TransactionInProcessingHandler());
-        handlers.put(OrderStatus.EM_TRANSITO, new TransactionInTransitHandler());
-        handlers.put(OrderStatus.ENTREGUE, new TransactionDeliveredHandler());
+    public TransactionStateFactory(TransactionInProcessingHandler transactionInProcessingHandler, TransactionInTransitHandler transactionInTransitHandler, TransactionDeliveredHandler transactionDeliveredHandler){
+        handlers.put(OrderStatus.EM_PROCESSAMENTO, transactionInProcessingHandler);
+        handlers.put(OrderStatus.EM_TRANSITO, transactionInTransitHandler);
+        handlers.put(OrderStatus.ENTREGUE, transactionDeliveredHandler);
     }
 
     public TransactionStateHandler getHandler(OrderStatus status){

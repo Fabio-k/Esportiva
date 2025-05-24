@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  *     <li>{@code false} Rejeitado:
  *         <p>muda o estado para {@link OrderStatus#COMPRA_CANCELADA} e reembolsa a compra</p>
  *     </li>
- * <ul/>
+ * </ul>
  */
 @Component
 public class InProcessingHandler implements OrderStatusHandler {

@@ -1,8 +1,6 @@
 package org.fatec.esportiva.service.order;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -37,7 +35,7 @@ public class OrderService {
     private final TransactionRepository transactionRepository;
     private final OrderItemHandlerFactory orderItemHandlerFactory;
 
-    public List<OrderDto> getTransactions(OrderStatus status) {
+    public List<OrderDto> getOrdersByStatus(OrderStatus status) {
         return orderRepository.findAllByStatus(status)
                 .stream().map(OrderMapper::toOrderDto).toList();
     }

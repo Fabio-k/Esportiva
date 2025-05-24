@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  *         <li>Reembolsa o cliente com um voucher</li>
  *         <li>Altera o estado para {@link OrderStatus#COMPRA_CANCELADA}</li>
  *     </li>
- * <ul/>
+ * </ul>
  */
 @Component
 public class TransactionInProcessingHandler implements TransactionStateHandler {

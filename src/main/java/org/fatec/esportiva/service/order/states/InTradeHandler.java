@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  *     <li>{@code false} Rejeitado:
  *         <p>muda o estado para {@link OrderStatus#TROCA_RECUSADA}</p>
  *     </li>
- * <ul/>
+ * </ul>
  */
 //TODO alterar reembolso para ser equivanlente ao valor da data de compra
 @Component
