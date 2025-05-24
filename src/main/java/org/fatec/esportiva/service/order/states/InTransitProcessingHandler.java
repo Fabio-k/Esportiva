@@ -4,6 +4,7 @@ import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.service.order.OrderItemHandlerContext;
 import org.fatec.esportiva.service.order.OrderStatusHandler;
+import org.springframework.stereotype.Component;
 
 /**
  * Handler para o estado {@link OrderStatus#EM_TRANSITO} de um pedido
@@ -21,6 +22,7 @@ import org.fatec.esportiva.service.order.OrderStatusHandler;
  *     </li>
  * </ul>
  */
+@Component
 public class InTransitProcessingHandler implements OrderStatusHandler {
     @Override
     public void process(Order order, OrderItemHandlerContext context) {
