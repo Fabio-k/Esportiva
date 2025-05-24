@@ -2,7 +2,7 @@ package org.fatec.esportiva.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.dto.response.TransactionResponseDto;
-import org.fatec.esportiva.service.TransactionService;
+import org.fatec.esportiva.service.transaction.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

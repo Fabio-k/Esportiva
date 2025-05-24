@@ -12,7 +12,7 @@ import org.fatec.esportiva.dto.request.AddressDto;
 import org.fatec.esportiva.dto.request.ClientDto;
 import org.fatec.esportiva.dto.request.CreditCardDto;
 import org.fatec.esportiva.service.ClientService;
-import org.fatec.esportiva.service.TransactionService;
+import org.fatec.esportiva.service.transaction.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

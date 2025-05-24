@@ -6,7 +6,7 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.dto.request.OrderDto;
 import org.fatec.esportiva.dto.request.TransactionDto;
 import org.fatec.esportiva.service.order.OrderService;
-import org.fatec.esportiva.service.TransactionService;
+import org.fatec.esportiva.service.transaction.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

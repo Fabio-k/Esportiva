@@ -1,4 +1,4 @@
-package org.fatec.esportiva.e2e.tests.client;
+package org.fatec.esportiva.e2e.tests.shopping;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
