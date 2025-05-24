@@ -1,4 +1,4 @@
-package org.fatec.esportiva.service;
+package org.fatec.esportiva.service.transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,6 +17,10 @@ import org.fatec.esportiva.mapper.TransactionMapper;
 import org.fatec.esportiva.repository.TransactionRepository;
 import org.fatec.esportiva.dto.request.TransactionDto;
 import org.fatec.esportiva.dto.response.TransactionResponseDto;
+import org.fatec.esportiva.service.ClientService;
+import org.fatec.esportiva.service.ExchangeVoucherService;
+import org.fatec.esportiva.service.ProductService;
+import org.fatec.esportiva.service.order.OrderService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,6 +31,7 @@ public class TransactionService {
     private final OrderService orderService;
     private final ProductService productService;
     private final ExchangeVoucherService exchangeVoucherService;
+    private final TransactionStateFactory transactionStateFactory;
 
     public List<TransactionResponseDto> getTransactions() {
         return transactionRepository.findAllByClientOrderByPurchaseDateDesc(clientService.getAuthenticatedClient())
@@ -75,83 +80,15 @@ public class TransactionService {
 
     // Máquina de estados que controla a transições conforme cada aprovação
     public void changeState(long id, boolean approve){
-        Transaction transaction = getNonOptional(transactionRepository.findById(id));
+        Transaction transaction = findById(id);
         OrderStatus status = transaction.getStatus();
+        TransactionContext context = new TransactionContext(orderService, exchangeVoucherService);
 
-        if (status == OrderStatus.EM_PROCESSAMENTO) {
-            if (approve) {
-                transaction.setStatus(OrderStatus.EM_TRANSITO);
-                propagateStatusToOrder(transaction, true);
-            } else {
-                // Reembolsa o cliente
-                transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
-                propagateStatusToOrder(transaction, false);
-                refundSingleVoucher(transaction);
-            }
-        } else if (status == OrderStatus.EM_TRANSITO) {
-            if (approve) {
-                // Vai para a casa do cliente
-                transaction.setStatus(OrderStatus.ENTREGUE);
-                propagateStatusToOrder(transaction, true);
-            } else {
-                // Produto que estava indo para o cliente, volta para o estoque antes de chegar
-                // na sua casa
-                // Reembolsa o cliente
-                transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
-                propagateStatusToOrder(transaction, false);
-                refundSingleVoucher(transaction);
-            }
-        }
+        TransactionStateHandler handler = transactionStateFactory.getHandler(status);
+        handler.process(transaction, approve, context);
 
-        else if (status == OrderStatus.ENTREGUE) {
-            if (approve) {
-                // Aparece um aviso para o cliente que a troca foi aceita
-                // Pode ser uma lista de produtos que estão nesse estado
-                transaction.setStatus(OrderStatus.EM_TROCA);
-                propagateStatusToOrder(transaction, true);
-            } else {
-                // Não faz nada, porque o cliente só pode solicitar devolução ou fazer nada
-            }
-        }
+        transactionRepository.save(transaction);
 
-        // Atualiza a transação
-        // Se aprovar todos os pedidos da transação, pode apagar ele
-        if (transaction.getOrders().isEmpty()) {
-            transactionRepository.delete(transaction);
-        }
-        // Do contrário, atualiza a transação
-        else {
-            transactionRepository.save(transaction);
-        }
-    }
-
-    private void propagateStatusToOrder(Transaction transaction, boolean approve) {
-
-        // Propaga o status para os pedidos
-        // Se os pedidos retornarem algum valor, quer dizer que é para gerar cupons de
-        // reembolso
-        for (Order order : transaction.getOrders()) {
-            orderService.changeState(order.getId(), approve, false);
-        }
-    }
-
-    // Gera cupom para o cliente, reembolsando o produto
-    private void refundSingleVoucher(Transaction transaction) {
-        Client client = transaction.getClient();
-        BigDecimal voucherValue = transaction.getTotalCost();
-        if (voucherValue.compareTo(BigDecimal.ZERO) < 1)
-            return;
-        // Cria um novo cupom
-        exchangeVoucherService.createExchangeVoucher(client, voucherValue);
-    }
-
-    // Remove o "Optional" do tipo que o linter reclama
-    private static <T> T getNonOptional(Optional<T> optional) {
-        if (optional.isPresent()) {
-            return optional.get();
-        } else {
-            throw new NoSuchElementException("Optional está vazio.");
-        }
     }
 
     @Transactional

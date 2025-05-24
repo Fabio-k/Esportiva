@@ -74,4 +74,8 @@ public class Order {
         BigDecimal quantity = BigDecimal.valueOf(this.quantity);
         return product.getPriceWithMargin().multiply(quantity);
     }
+
+    public void decreaseQuantity(int quantity){
+        this.quantity = this.quantity - quantity;
+    }
 }

@@ -72,6 +72,23 @@
   <header th:replace="~{fragments/header.html :: defaultHeader}"></header>
     <main class="cartMain">
         <div id="itemList" class="card">
+            <article id="removedProductsDiv" th:if="${removedProducts.size() > 0}">
+                <h3>Itens removidos por inatividade durante <span th:text="${timeoutInMinutes}"></span> minuto(s)</h3>
+                <div th:each="rp : ${removedProducts}">
+                    <div style="display: flex; gap: 20px; margin-bottom: 20px">
+                        <div class="imgMock">
+                            <img  th:src="${rp.image}" style="width: 100%">
+                        </div>
+                        <div class="itemName" style="max-width: 280px; min-width: 280px">
+                            <a class="productLink" th:href="@{/products/{id}(id=${rp.id})}">
+                                <p th:text="${rp.name}"></p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 100%; background-color:#dddddd; height: 1px; margin-bottom: 20px"></div>
+            </article>
+
             <div  style="display: flex; flex-direction:column; align-items: center" th:if="${cartItems.size() <= 0}">
                 <h1 >Carrinho vazio</h1>
                 <a th:href="@{/}" data-turbo="false">Conferir Produtos</a>
@@ -102,7 +119,6 @@
 
                 <p style="font-weight: semi-bold; margin: 0; min-width: 90px" class="itemTotalPrice" th:data-price="${item.product.price}" th:text="${item.product.getFormattedPrice()}"></p>
             </div>
-
         </div>
         <div id="priceBox" class="card" th:attr="hidden=${cartItems.size() == 0}">
             <h4> Resumo da compra </h4>
@@ -110,7 +126,8 @@
                 <p>Total</p>
                 <p id="totalPrice">R$ 48,32</p>
             </div>
-            <a id="button-continue-shopping" class="primaryButton" style="display: block;margin-top: 40px" th:href="@{/checkout/address}">Continuar compra</a>
+            <a th:if="${removedProducts.size() == 0}" id="button-continue-shopping" class="primaryButton" style="display: block;margin-top: 40px" th:href="@{/checkout/address}">Continuar compra</a>
+            <p th:if="${removedProducts.size() > 0}" class="disabledButton">Continuar compra</p>
         </div>
     </main>
     <script th:src="@{/js/productQuantityControl.js}"></script>

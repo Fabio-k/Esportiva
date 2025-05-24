@@ -60,4 +60,12 @@ public class Transaction {
     public BigDecimal getTotalCost(){
         return orders.stream().map(Order::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    public void addOrder(Order order){
+        if(order == null){
+            throw new IllegalArgumentException("pedido não pode ser nulo");
+        }
+        orders.add(order);
+        order.setTransaction(this);
+    }
 }

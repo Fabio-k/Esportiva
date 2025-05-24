@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.fatec.esportiva.entity.Client;
+import org.fatec.esportiva.entity.product.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -34,6 +35,13 @@ public class Cart {
 
     @Column(name = "crr_notificado")
     private Boolean isNotified;
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "produtos_removidos", joinColumns = @JoinColumn(name = "pre_crr_id"), inverseJoinColumns = @JoinColumn(name = "pre_pro_id"))
+    private List<Product> removedProducts = new ArrayList<>();
 
     public BigDecimal getTotalPrice(){
         return cartItems.stream()

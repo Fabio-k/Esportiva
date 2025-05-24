@@ -5,8 +5,8 @@ import java.util.List;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.dto.request.OrderDto;
 import org.fatec.esportiva.dto.request.TransactionDto;
-import org.fatec.esportiva.service.OrderService;
-import org.fatec.esportiva.service.TransactionService;
+import org.fatec.esportiva.service.order.OrderService;
+import org.fatec.esportiva.service.transaction.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,21 +46,21 @@ public class AdminLogisticController {
 
     @GetMapping("/returning")
     public String returning(Model model) {
-        List<OrderDto> orders = orderService.getTransactions(OrderStatus.EM_TROCA);
+        List<OrderDto> orders = orderService.getOrdersByStatus(OrderStatus.EM_TROCA);
         model.addAttribute("orders", orders);
         return "admin/logistic/returning";
     }
 
     @GetMapping("/returned")
     public String returned(Model model) {
-        List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCADO);
+        List<OrderDto> orders = orderService.getOrdersByStatus(OrderStatus.TROCADO);
         model.addAttribute("orders", orders);
         return "admin/logistic/returned";
     }
 
     @GetMapping("/return_finished")
     public String returnFinished(Model model) {
-        List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCA_FINALIZADA);
+        List<OrderDto> orders = orderService.getOrdersByStatus(OrderStatus.TROCA_FINALIZADA);
         model.addAttribute("orders", orders);
         return "admin/logistic/return_finished";
     }
@@ -74,7 +74,7 @@ public class AdminLogisticController {
 
     @GetMapping("/cancel_refund")
     public String cancelRefund(Model model) {
-        List<OrderDto> orders = orderService.getTransactions(OrderStatus.TROCA_RECUSADA);
+        List<OrderDto> orders = orderService.getOrdersByStatus(OrderStatus.TROCA_RECUSADA);
         model.addAttribute("orders", orders);
         return "admin/logistic/cancel_refund";
     }

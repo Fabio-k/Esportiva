@@ -67,4 +67,13 @@ public class OrderMapper {
 
         return orderByStatusResponseDto;
     }
+
+    public Order toTradeOrder(Order order, int quantity){
+        return Order.builder()
+                .transaction(order.getTransaction())
+                .product(order.getProduct())
+                .quantity(quantity)
+                .status(OrderStatus.EM_TROCA)
+                .build();
+    }
 }
