@@ -7,14 +7,22 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class userAddProductToCart extends Integration {
+public class UserAddProductToCart extends Integration {
+    @Test
+    void shouldFailDueToBeingUnauthenticated() throws Exception{
+        String requestBody = "{ \"id\":1, \"quantity\": 3 }";
+        mockMvc.perform(post("/api/cart/product")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
 
     // @traceto(RF0031)
     @Test
-    @DisplayName("should return ok with correct data on valid request")
+    @DisplayName("user can add a product to his cart")
     @WithMockUser(username = "carlos@gmail.com", roles = "USER")
     void shouldReturnOkWithProducts() throws Exception{
         String requestBody = "{ \"id\":1, \"quantity\": 3 }";

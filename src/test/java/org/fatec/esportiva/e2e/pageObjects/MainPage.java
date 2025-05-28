@@ -30,6 +30,8 @@ public class MainPage {
 
         searchBar.clear();
         searchBar.sendKeys(search + "\n"); // Pressiona ENTER para executar a busca
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products-container")));
     }
 
     public String getNotificationMessage(int position) {

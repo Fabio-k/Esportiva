@@ -1,6 +1,7 @@
 package org.fatec.esportiva.e2e.tests.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.fatec.esportiva.e2e.E2E;
 import org.fatec.esportiva.e2e.pageObjects.UserDashboardPage;
@@ -33,7 +34,7 @@ public class TestAdminDeleteClient extends E2E {
     void adminDeleteClient() {
         login.login("Fábio");
         dashboard.deleteUser(2, true);
-        assertEquals(dashboard.getUserName(2), null);
+        assertFalse(dashboard.isUserPresent(2));
         sleepForVisualization();
     }
 

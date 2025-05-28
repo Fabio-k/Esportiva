@@ -101,12 +101,17 @@ public class TestAdminDeliveryPipeline extends E2E {
         userDashboard.navigateAdminPages("Estoque");
 
         // Verifica o valor inicial do estoque
-        int mikasaBallStock = productDashboard.getStockQuantity(1); // Bola Mikasa
-        int mikasaBallBlocked = productDashboard.getBlockedQuantity(1);
-        int kitStock = productDashboard.getStockQuantity(6); // Kit de marcação
-        int kitBlocked = productDashboard.getBlockedQuantity(6);
-        int kneeBraceStock = productDashboard.getStockQuantity(9); // Joelheira
-        int kneeBraceBlocked = productDashboard.getBlockedQuantity(9);
+        productDashboard.selectProduct(1);
+        int mikasaBallStock = productDashboard.getStockQuantity(); // Bola Mikasa
+        int mikasaBallBlocked = productDashboard.getBlockedQuantity();
+
+        productDashboard.selectProduct(6);
+        int kitStock = productDashboard.getStockQuantity(); // Kit de marcação
+        int kitBlocked = productDashboard.getBlockedQuantity();
+
+        productDashboard.selectProduct(9);
+        int kneeBraceStock = productDashboard.getStockQuantity(); // Joelheira
+        int kneeBraceBlocked = productDashboard.getBlockedQuantity();
 
         // Realiza as transições no pipeline
         productDashboard.navigateAdminPages("Entrega");
@@ -121,13 +126,18 @@ public class TestAdminDeliveryPipeline extends E2E {
         // *Isso desacopla das atualizações no banco de dados de testes
         deliveryDashboard.navigateAdminPages("Estoque");
         // Implicitamente, o pedido de devolução da bola sem reetrada está nesse assert:
-        assertEquals(mikasaBallStock - 5, productDashboard.getStockQuantity(1));
-        assertEquals(mikasaBallBlocked - 5, productDashboard.getBlockedQuantity(1));
-        assertEquals(kitStock + 2, productDashboard.getStockQuantity(6));
+        productDashboard.selectProduct(1);
+        assertEquals(mikasaBallStock - 5, productDashboard.getStockQuantity());
+        assertEquals(mikasaBallBlocked - 5, productDashboard.getBlockedQuantity());
+
+        productDashboard.selectProduct(6);
+        assertEquals(kitStock + 2, productDashboard.getStockQuantity());
         // Como é reentrada, não afeta esse atributo:
-        assertEquals(kitBlocked, productDashboard.getBlockedQuantity(6));
-        assertEquals(kneeBraceStock - 5, productDashboard.getStockQuantity(9));
-        assertEquals(kneeBraceBlocked - 5, productDashboard.getBlockedQuantity(9));
+        assertEquals(kitBlocked, productDashboard.getBlockedQuantity());
+
+        productDashboard.selectProduct(9);
+        assertEquals(kneeBraceStock - 5, productDashboard.getStockQuantity());
+        assertEquals(kneeBraceBlocked - 5, productDashboard.getBlockedQuantity());
 
         sleepForVisualization();
     }
