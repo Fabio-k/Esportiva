@@ -1,4 +1,4 @@
-package org.fatec.esportiva.controller.api;
+package org.fatec.esportiva.controller.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.dto.response.AdminProductResponseDto;

@@ -9,6 +9,7 @@ import org.fatec.esportiva.entity.ExchangeVoucher;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.exception.CheckoutException;
 import org.fatec.esportiva.mapper.CreditCardMapper;
+import org.fatec.esportiva.service.cart.CartService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

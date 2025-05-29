@@ -1,4 +1,4 @@
-package org.fatec.esportiva.service;
+package org.fatec.esportiva.service.cart;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -10,12 +10,13 @@ import org.fatec.esportiva.repository.CartItemRepository;
 import org.fatec.esportiva.repository.CartRepository;
 import org.fatec.esportiva.dto.request.CartItemRequestDto;
 import org.fatec.esportiva.dto.response.CartItemResponseDto;
+import org.fatec.esportiva.service.ClientService;
+import org.fatec.esportiva.service.ProductService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,7 @@ public class CartService {
     private final ClientService clientService;
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
+    private final CartItemManager cartItemManager;
 
     @Value("${cart.product.timeoutInMinutes}")
     private int productTimeoutInMinutes;
@@ -32,19 +34,15 @@ public class CartService {
     @Transactional
     public CartItemResponseDto addItem(CartItemRequestDto dto) {
         Cart cart = clientService.getAuthenticatedClient().getCart();
-        CartItem cartItem = productService.updateQuantity(dto.id(), dto.quantity());
-        cartItem.setCart(cart);
 
-        Optional<CartItem> optionalItem = getCartItemByProductId(cart.getCartItems(), cartItem.getProduct().getId());
-        if (optionalItem.isPresent()) {
-            CartItem existingItem = optionalItem.get();
-            existingItem.setQuantity((short) (cartItem.getQuantity() + existingItem.getQuantity()));
-            cartItem = existingItem;
-        }
-        cart.getRemovedProducts().remove(cartItem.getProduct());
+        CartItem cartItem = cartItemManager.createAndValidateItem(cart, dto, productService);
 
         cartItem = cartItemRepository.save(cartItem);
+
         updateCartCreatedAt();
+
+        cart.getRemovedProducts().remove(cartItem.getProduct());
+
         return CartItemMapper.toCartItemResponseDto(cartItem);
     }
 
@@ -108,10 +106,6 @@ public class CartService {
     private CartItem findCartItemById(Long id) {
         return cartItemRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Carrinho não encontrado"));
-    }
-
-    private Optional<CartItem> getCartItemByProductId(List<CartItem> cartItems, Long productId) {
-        return cartItems.stream().filter(item -> item.getProduct().getId().equals(productId)).findFirst();
     }
 
     private Cart findCartById(Long id) {
