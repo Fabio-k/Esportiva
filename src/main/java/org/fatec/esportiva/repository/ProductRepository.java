@@ -1,6 +1,7 @@
 package org.fatec.esportiva.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.fatec.esportiva.entity.product.Product;
@@ -26,4 +27,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             AND p.id NOT IN :productsIds
             """)
     List<Product> findRecommendedProducts(ProductStatus status, Set<Long> categoriesIds, Set<Long> productsIds);
+
+    Optional<Product> findByIdAndStatus(Long id, ProductStatus status);
 }

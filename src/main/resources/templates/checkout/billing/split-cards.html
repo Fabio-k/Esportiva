@@ -97,9 +97,10 @@
           if(response.ok)
             window.location.href = "/checkout/new";
            else{
-              response.text().then(data => {
+              response.json().then(data => {
                 const errorMessageDiv = document.querySelector(".errorMessageDiv");
-                errorMessageDiv.querySelector("span").innerText = data;
+                errorMessageDiv.querySelector("span").innerText = data.error;
+                console.log(data);
                 errorMessageDiv.classList.remove("hidden");
               })
            }

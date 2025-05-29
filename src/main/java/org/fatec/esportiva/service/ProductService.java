@@ -3,13 +3,14 @@ package org.fatec.esportiva.service;
 import java.time.LocalDate;
 import java.util.*;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.fatec.esportiva.dto.request.ProductCategoryDto;
 import org.fatec.esportiva.dto.response.AdminProductResponseDto;
 import org.fatec.esportiva.dto.response.ProductCategoryResponseDto;
-import org.fatec.esportiva.entity.cart.CartItem;
 import org.fatec.esportiva.entity.product.Product;
 import org.fatec.esportiva.entity.product.ProductCategory;
 import org.fatec.esportiva.entity.product.ProductStatus;
+import org.fatec.esportiva.exception.ApiException;
 import org.fatec.esportiva.mapper.ProductMapper;
 import org.fatec.esportiva.repository.ProductCategoryRepository;
 import org.fatec.esportiva.repository.ProductRepository;
@@ -99,20 +100,22 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    public CartItem updateQuantity(Long id, Short quantity) {
+    public Product updateQuantity(Long id, Short quantity) {
         if(quantity < 0) throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
-        Product product = findById(id);
+        Product product;
+
+        try {
+             product = findByIdAndStatus(id, ProductStatus.ATIVO);
+        }catch (EntityNotFoundException e){
+            throw new ApiException(e.getMessage());
+        }
+
         int availableStock = product.getStockQuantity() - product.getBlockedQuantity();
         if(availableStock < quantity){
-            throw new IllegalArgumentException("Estoque insuficiente");
+            throw new ApiException("Estoque insuficiente");
         }
         product.setBlockedQuantity(product.getBlockedQuantity() + quantity);
-        Product savedProduct = productRepository.save(product);
-
-        CartItem cartItem = new CartItem();
-        cartItem.setQuantity(quantity);
-        cartItem.setProduct(savedProduct);
-        return cartItem;
+        return productRepository.save(product);
     }
 
     public void returnBlockedProductQuantity(Long id, Short quantity){
@@ -128,4 +131,7 @@ public class ProductService {
         throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
     }
 
+    private Product findByIdAndStatus(Long id, ProductStatus status){
+        return productRepository.findByIdAndStatus(id, status).orElseThrow(() -> new EntityNotFoundException("Produto não foi encontrado"));
+    }
 }
