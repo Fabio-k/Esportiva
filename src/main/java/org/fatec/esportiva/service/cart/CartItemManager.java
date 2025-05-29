@@ -14,7 +14,7 @@ import java.util.Optional;
 @Component
 public class CartItemManager {
     public CartItem createAndValidateItem(Cart cart, CartItemRequestDto dto, ProductService productService){
-        if(dto.quantity() < 0) throw new ApiException("Quantidade não pode ser menor que zero");
+        if(dto.quantity() <= 0) throw new ApiException("Quantidade deve ser maior do que 0");
 
         Product product = productService.updateQuantity(dto.id(), dto.quantity());
         CartItem cartItem = new CartItem();

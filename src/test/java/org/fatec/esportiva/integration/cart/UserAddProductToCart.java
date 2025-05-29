@@ -63,7 +63,19 @@ public class UserAddProductToCart extends Integration {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("Quantidade não pode ser menor que zero"))
+                .andExpect(jsonPath("$.error").value("Quantidade deve ser maior do que 0"))
+        ;
+    }
+
+    @Test
+    @WithMockUser(username = "carlos@gmail.com", roles = "USER")
+    void shouldReturnErrorDueToZeroQuantity() throws Exception{
+        String requestBody = "{ \"id\":1, \"quantity\": 0 }";
+        mockMvc.perform(post("/api/cart/product")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Quantidade deve ser maior do que 0"))
         ;
     }
 
