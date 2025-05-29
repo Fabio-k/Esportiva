@@ -42,7 +42,10 @@ async function sendMessage() {
         const spanAI = document.createElement("span");
 
         // Converte ** para <b></b>
-        iaResponse = iaResponse.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+        iaResponse = iaResponse.replace(/\*\*\s*(\d+)\s*\|\s*(.*?)\s*\*\*/g, (fullMatch, productId, productName) => {
+            return `<a style=text-decoration:none;font-weight:bold" href="/products/${productId}">${productName}</a>`
+        });
+
 
         // Adiciona os outros atributos da resposta
         spanAI.textContent = iaResponse;

@@ -67,14 +67,14 @@ public class AiService {
 
     private String getAvailableProducts() {
         // Define o título dos produtos disponíveis e como a IA vai interpretar a tabela
-        String availableProducts = "Na seguinte lista de produtos (Nome|Preço|Descrição):\n";
+        String availableProducts = "Na seguinte lista de produtos (id|Nome|Preço|Descrição):\n";
 
         // Remove todos os atributos indisponíveis (Pelo Status e quantidade no estoque)
         List<ProductResponseDto> productList = productService.getAllAvailableProducts();
 
-        // Obtém somente os atributos relevantes: Nome | Preço | Descrição
+        // Obtém somente os atributos relevantes: id | Nome | Preço | Descrição
         for (ProductResponseDto product : productList) {
-            availableProducts += product.name() + "|"
+            availableProducts += product.id() + "" + product.name() + "|"
                     + product.getFormattedPrice()
                     + "|"
                     + product.description() + "\n";
@@ -108,7 +108,7 @@ public class AiService {
                    Você não deve responder perguntas sobre preferências pessoais, esportes em geral, nem interações sociais.
                    Se a pergunta não é sobre recomendação de um artigo esportivo responda dessa maneira:
                    'Desculpe, só posso ajudar com dúvidas sobre os produtos à venda na loja Esportiva.'
-                   Não tente adaptar a pergunta ou sugerir produtos com base em suposições. Apenas responda quando a pergunta for diretamente sobre um produto."
+                    ao mencionar o nome do produto responda nesse formato ** id | nome **"
                     }
                 ]
                 },
