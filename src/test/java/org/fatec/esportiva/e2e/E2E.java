@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 // @TestPropertySource(properties = "cart.product.timeoutInMinutes=1")
 // @TestPropertySource(properties = "cart.cleanup.intervalInMillis=1000")
 public class E2E {
-    protected static WebDriver browser;
+    protected WebDriver browser;
     protected static WebDriverWait wait;
     protected static ChromeOptions options;
     private static final int sleepDuration = 0; // Variar aqui quando for mostrar para alguém
@@ -44,11 +44,6 @@ public class E2E {
     void setup() {
         flyway.clean();
         flyway.migrate();
-    }
-
-    @AfterAll
-    static void teardown() {
-        browser.quit();
     }
 
     protected void sleepForVisualization() {

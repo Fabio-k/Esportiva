@@ -1,6 +1,7 @@
 package org.fatec.esportiva.e2e.pageObjects;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.UserStatus;
@@ -13,46 +14,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class UserDashboardPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
+public class UserDashboardPage extends AbstractAdminPage{
 
     public UserDashboardPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
-
-    // Navega entre as páginas do administrador
-    public void navigateAdminPages(String adminPageName) {
-        WebElement link;
-
-        // Procura o link pelo conteúdo dentro do texto
-        if (adminPageName == "Dashboard") {
-            link = driver.findElement(By.linkText("Dashboard"));
-
-        } else if (adminPageName == "Estoque") {
-            link = driver.findElement(By.linkText("Estoque"));
-
-        } else if (adminPageName == "Entrega") {
-            link = driver.findElement(By.linkText("Entrega"));
-
-        } else if (adminPageName == "Análise") {
-            link = driver.findElement(By.linkText("Análise"));
-
-        } else if (adminPageName == "Log") {
-            link = driver.findElement(By.linkText("Log"));
-
-        } else if (adminPageName == "Logout") {
-            link = driver.findElement(By.linkText("Logout"));
-
-        } else {
-            throw new IllegalArgumentException("Opção inválida: " + adminPageName);
-        }
-
-        link.click();
-
-        // Espera a nova página ser carregada, quando o link fica 'inválido'
-        wait.until(ExpectedConditions.stalenessOf(link));
+        super(driver, new WebDriverWait(driver, Duration.ofSeconds(3)));
     }
 
     public void clickNewUser() {
@@ -86,7 +51,11 @@ public class UserDashboardPage {
 
     public void ApplyFilter() {
         WebElement filterButton = driver.findElement(By.id("filter-submit"));
+        List<WebElement> userList = driver.findElements(By.tagName("tr"));
+        int previousCount = userList.size();
         filterButton.click();
+
+        wait.until(driver -> driver.findElements(By.tagName("tr")).size() != previousCount);
     }
 
     public void openFilter() {
@@ -133,75 +102,51 @@ public class UserDashboardPage {
     }
 
     public String getUserName(int id) {
-        try {
-            WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("name-" + id)));
-            return content.getText();
-        } catch (TimeoutException e) {
-            return null;
-        }
+        WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("name-" + id)));
+        return content.getText();
     }
 
     public String getUserCpf(int id) {
-        try {
-            WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cpf-" + id)));
-            return content.getText();
-        } catch (TimeoutException e) {
-            return null;
-        }
+        WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cpf-" + id)));
+        return content.getText();
     }
 
     public String getUserDateBirth(int id) {
-        try {
-            WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("dateBirth-" + id)));
-            return content.getText();
-        } catch (TimeoutException e) {
-            return null;
-        }
+        WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("dateBirth-" + id)));
+        return content.getText();
     }
 
     public String getUserGender(int id) {
-        try {
-            WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("gender-" + id)));
-            return content.getText();
-        } catch (TimeoutException e) {
-            return null;
-        }
+        WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("gender-" + id)));
+        return content.getText();
     }
 
     public String getUserTelephone(int id) {
-        try {
-            WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("telephone-" + id)));
-            return content.getText();
-        } catch (TimeoutException e) {
-            return null;
-        }
+        WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("telephone-" + id)));
+        return content.getText();
     }
 
     public String getUserEmail(int id) {
-        try {
-            WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email-" + id)));
-            return content.getText();
-        } catch (TimeoutException e) {
-            return null;
-        }
+        WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email-" + id)));
+        return content.getText();
     }
 
     public String getUserStatus(int id) {
-        try {
-            WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("status-" + id)));
-            return content.getText();
-        } catch (TimeoutException e) {
-            return null;
-        }
+        WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("status-" + id)));
+        return content.getText();
     }
 
     public Integer getUsersCount() {
-        try {
-            WebElement tableBody = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("tbody")));
-            return tableBody.findElements(By.tagName("tr")).size();
-        } catch (TimeoutException e) {
-            return null;
-        }
+        WebElement tableBody = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("tbody")));
+        return tableBody.findElements(By.tagName("tr")).size();
     }
 
+    public boolean isUserPresent(int id) {
+        try {
+            WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("name-" + id)));
+            return true;
+        }catch (TimeoutException e){
+            return false;
+        }
+    }
 }

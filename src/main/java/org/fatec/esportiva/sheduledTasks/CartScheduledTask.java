@@ -5,14 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.cart.Cart;
 import org.fatec.esportiva.entity.cart.CartItem;
 import org.fatec.esportiva.repository.CartRepository;
-import org.fatec.esportiva.service.CartService;
+import org.fatec.esportiva.service.cart.CartService;
 import org.fatec.esportiva.service.NotificationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

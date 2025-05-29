@@ -1,6 +1,7 @@
 package org.fatec.esportiva.e2e.pageObjects;
 
 import java.time.Duration;
+import java.util.Map;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -9,86 +10,39 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class DeliveryDashboardPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
-
+public class DeliveryDashboardPage extends AbstractAdminPage{
     public DeliveryDashboardPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
-
-    // Navega entre as páginas do administrador
-    public void navigateAdminPages(String adminPageName) {
-        WebElement link;
-
-        // Procura o link pelo conteúdo dentro do texto
-        if (adminPageName == "Dashboard") {
-            link = driver.findElement(By.linkText("Dashboard"));
-
-        } else if (adminPageName == "Estoque") {
-            link = driver.findElement(By.linkText("Estoque"));
-
-        } else if (adminPageName == "Entrega") {
-            link = driver.findElement(By.linkText("Entrega"));
-
-        } else if (adminPageName == "Análise") {
-            link = driver.findElement(By.linkText("Análise"));
-
-        } else if (adminPageName == "Log") {
-            link = driver.findElement(By.linkText("Log"));
-
-        } else if (adminPageName == "Logout") {
-            link = driver.findElement(By.linkText("Logout"));
-
-        } else {
-            throw new IllegalArgumentException("Opção inválida: " + adminPageName);
-        }
-
-        link.click();
-
-        // Espera a nova página ser carregada, quando o link fica 'inválido'
-        wait.until(ExpectedConditions.stalenessOf(link));
+        super(driver, new WebDriverWait(driver, Duration.ofSeconds(3)));
     }
 
     // Troca entre as etapas do fluxo de entrega/devolução
     public void navigateDeliveryPipeline(String pipelineStepName) {
         WebElement link;
         String currentUrl = driver.getCurrentUrl();
-
-        // Procura o link pelo conteúdo dentro do texto
-        if (pipelineStepName == "inProcessing") {
-            link = driver.findElement(By.id("link-in-processing"));
-
-        } else if (pipelineStepName == "inTransit") {
-            link = driver.findElement(By.id("link-in-transit"));
-
-        } else if (pipelineStepName == "delivered") {
-            link = driver.findElement(By.id("link-delivered"));
-
-        } else if (pipelineStepName == "returning") {
-            link = driver.findElement(By.id("link-returning"));
-
-        } else if (pipelineStepName == "returned") {
-            link = driver.findElement(By.id("link-returned"));
-
-        } else if (pipelineStepName == "returnFinished") {
-            link = driver.findElement(By.id("link-return-finished"));
-
-        } else if (pipelineStepName == "cancelDeliver") {
-            link = driver.findElement(By.id("link-cancel-deliver"));
-
-        } else if (pipelineStepName == "cancelRefund") {
-            link = driver.findElement(By.id("link-cancel-refund"));
-
-        } else {
+        String elementId = getElementId(pipelineStepName);
+        if(elementId == null) {
             throw new IllegalArgumentException("Opção inválida: " + pipelineStepName);
         }
-
+        link = driver.findElement(By.id(elementId));
         link.click();
 
         // Espera a nova página ser carregada, quando a URL atual fica inválida
         wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+    }
+
+    private static String getElementId(String pipelineStepName) {
+        Map<String, String> stepToId = Map.of(
+                "inProcessing", "link-in-processing",
+                "inTransit", "link-in-transit",
+                "delivered", "link-delivered",
+                "returning", "link-returning",
+                "returned", "link-returned",
+                "returnFinished", "link-return-finished",
+                "cancelDeliver", "link-cancel-deliver",
+                "cancelRefund", "link-cancel-refund"
+        );
+
+        return stepToId.get(pipelineStepName);
     }
 
     // Transactions (Compra como um todo)

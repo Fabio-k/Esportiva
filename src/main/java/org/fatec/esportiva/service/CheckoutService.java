@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.service.cart.CartService;
 import org.fatec.esportiva.service.transaction.TransactionService;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;

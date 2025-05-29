@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.Builder.Default;
 import java.math.BigDecimal;
+import java.util.Scanner;
 
 @Entity
 @AllArgsConstructor
@@ -20,6 +21,7 @@ public class PricingGroup {
 
     @Id
     @Column(name = "grp_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull

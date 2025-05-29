@@ -1,4 +1,4 @@
-package org.fatec.esportiva.controller;
+package org.fatec.esportiva.controller.cart;
 
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.dto.response.CartResponseDto;

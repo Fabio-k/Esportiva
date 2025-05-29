@@ -8,81 +8,56 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ProductDashboardPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
+public class ProductDashboardPage extends AbstractAdminPage{
 
     public ProductDashboardPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
-
-    // Navega entre as páginas do administrador
-    public void navigateAdminPages(String adminPageName) {
-        WebElement link;
-
-        // Procura o link pelo conteúdo dentro do texto
-        if (adminPageName == "Dashboard") {
-            link = driver.findElement(By.linkText("Dashboard"));
-
-        } else if (adminPageName == "Estoque") {
-            link = driver.findElement(By.linkText("Estoque"));
-
-        } else if (adminPageName == "Entrega") {
-            link = driver.findElement(By.linkText("Entrega"));
-
-        } else if (adminPageName == "Análise") {
-            link = driver.findElement(By.linkText("Análise"));
-
-        } else if (adminPageName == "Log") {
-            link = driver.findElement(By.linkText("Log"));
-
-        } else if (adminPageName == "Logout") {
-            link = driver.findElement(By.linkText("Logout"));
-
-        } else {
-            throw new IllegalArgumentException("Opção inválida: " + adminPageName);
-        }
-
-        link.click();
-
-        // Espera a nova página ser carregada, quando o link fica 'inválido'
-        wait.until(ExpectedConditions.stalenessOf(link));
+        super(driver, new WebDriverWait(driver, Duration.ofSeconds(3)));
     }
 
     public String getProductName(int id) {
-        WebElement date = driver.findElement(By.id("name-" + id));
-        return date.getText();
+        WebElement productNameElement = driver.findElement(By.id("name-" + id));
+        return productNameElement.getText();
     }
 
     public String getEntryDate(int id) {
-        WebElement date = driver.findElement(By.id("entryDate-" + id));
-        return date.getText();
+        WebElement entryDateElement = driver.findElement(By.id("entryDate-" + id));
+        return entryDateElement.getText();
     }
 
-    public int getStockQuantity(int id) {
-        WebElement date = driver.findElement(By.id("stockQuantity-" + id));
-        return Integer.parseInt(date.getText());
+    public void selectProduct(int id){
+        WebElement text = driver.findElement(By.id("name-" + id));
+        WebElement panelElement = driver.findElement(By.id("productId"));
+        String oldText = panelElement.getText();
+        if(panelElement.getText().equals(String.valueOf(id))) return;
+        text.click();
+        wait.until(ExpectedConditions.not(
+                ExpectedConditions.textToBePresentInElement(panelElement, oldText)
+        ));
     }
 
-    public int getBlockedQuantity(int id) {
-        WebElement date = driver.findElement(By.id("blockedQuantity-" + id));
-        return Integer.parseInt(date.getText());
+    public int getStockQuantity() {
+        WebElement stockElement = driver.findElement(By.id("productStock"));
+        return Integer.parseInt(stockElement.getText());
+    }
+
+    public int getBlockedQuantity() {
+        WebElement blockedQuantityElement = driver.findElement(By.id("productBlocked"));
+        return Integer.parseInt(blockedQuantityElement.getText());
     }
 
     public String getProfitMargin(int id) {
-        WebElement date = driver.findElement(By.id("profitMargin-" + id));
-        return date.getText();
+        WebElement profitMarginElement = driver.findElement(By.id("profitMargin-" + id));
+        return profitMarginElement.getText();
     }
 
     public String getCostValue(int id) {
-        WebElement date = driver.findElement(By.id("costValue-" + id));
-        return date.getText();
+        WebElement costValueElement = driver.findElement(By.id("costValue-" + id));
+        return costValueElement.getText();
     }
 
     public String getInactivationCategory(int id) {
-        WebElement date = driver.findElement(By.id("inactivationCategory-" + id));
-        return date.getText();
+        WebElement inactivationCategoryElement = driver.findElement(By.id("inactivationCategory-" + id));
+        return inactivationCategoryElement.getText();
     }
 
     public Integer getProductsCount() {

@@ -171,9 +171,11 @@ public class UserFormPage {
 
     public void setAddressCep(int id, String Cep) {
         WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("cep_" + id)));
+        WebElement city = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("city_" + id)));
 
         field.clear();
         field.sendKeys(Cep);
+        wait.until(driver -> !city.getAttribute("value").isEmpty());
     }
 
     public void setAddressResidenceType(int id, ResidencyType residencyType) {
