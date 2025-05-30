@@ -33,7 +33,7 @@
         }
 
         #chatModal {
-            background-color: #ffffff;
+            background-color: #e6e9f0;
             position: fixed;
             bottom: 40px;
             right: 40px;
@@ -51,67 +51,61 @@
             overflow-y: auto;
         }
 
-        .userMessage {
+        .userMessage, .aiMessage {
             /* Necessário para exibir a ponta do balão corretamente */
             position: relative;
             /* Sem isso a ponta some na borda do div do chat */
             width: 95%;
-            background-color: #eff2ff;
             padding: 10px;
             border-radius: 10px;
             margin-bottom: 15px;
-            /* Permite visualizar a ponta do balão */
-            margin-left: 14px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .userMessage::after, .aiMessage::after {
+            content: "";
+            position: absolute;
+            /* Ajuste a posição vertical da ponta */
+            bottom: 10px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+
+        .userMessage {
+            background-color: #eff2ff;
             /* align-self: flex-end; */
         }
 
         /* Ponta do balão no canto inferior esquerdo apontando para a esquerda */
         .userMessage::after {
-            content: "";
-            position: absolute;
-            bottom: 10px;
-            /* Ajuste a posição vertical da ponta */
-            left: -10px;
-            /* Posiciona a ponta para fora da bolha à esquerda */
-            width: 0;
-            height: 0;
+            /* Posiciona a ponta para fora da bolha à direita */
+            right: -10px;
+
             /* Cria o triângulo apontando para a esquerda */
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 10px solid #eff2ff;
+            border-left: 10px solid #eff2ff;
         }
 
         .aiMessage {
-            /* Necessário para exibir a ponta do balão corretamente */
-            position: relative;
-            /* Sem isso a ponta some na borda do div do chat */
-            width: 95%;
-            background-color: #b6bbd3;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* Permite visualizar a ponta do balão */
+            margin-left: 14px;
+
+            background-color: white;
             /* align-self: flex-start; */
         }
 
         /* Ponta no canto inferior direito apontando para a direita */
         .aiMessage::after {
-            content: "";
-            position: absolute;
             /* Ajuste a posição vertical da ponta */
-            bottom: 10px;
-            /* Posiciona a ponta para fora da bolha à direita */
-            right: -10px;
-            width: 0;
-            height: 0;
+            left: -10px;
+
             /* Cria o triângulo apontando para a direita */
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 10px solid #b6bbd3;
+            border-right: 10px solid #b6bbd3;
         }
 
         .chatInput {
+            position: relative;
             display: flex;
             padding: 5px;
             gap: 10px;
@@ -121,10 +115,20 @@
             flex-grow: 1;
             border-radius: 20px;
             padding: 10px;
+            padding-right:31px;
         }
 
         .chatInput button {
-            width: fit-content;
+            display: flex;
+            position: absolute;
+            background-color: transparent;
+            transform: translateY(9%);
+            right: 6px;
+            width: 31px;
+            border: none;
+            border-radius: 20px;
+            padding: 2px;
+            cursor: pointer;
         }
 
         .productCard {
@@ -177,7 +181,7 @@
             </div>
             <div class="chatInput">
                 <input type="text" id="message" />
-                <button type="button" onclick="sendMessage()">Enviar</button>
+                <button type="button" class="messageButton" onclick="sendMessage()"><img style="width: 100%" th:src="@{/images/icons/send.svg}"></button>
             </div>
         </div>
     </main>
