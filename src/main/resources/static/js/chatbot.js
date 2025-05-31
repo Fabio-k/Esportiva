@@ -1,6 +1,5 @@
 let messages = [];
 
-
 // Cria uma mensagem padrão inicial da IA no chat:
 // Nota: Não precisa enviar essa mensagem para o chatbot
 const messagesDivFirstMessage = document.getElementById("messagesDiv");
@@ -10,7 +9,29 @@ firstIAMessage.innerHTML = "Olá! Seja bem-vindo ao Esportiva! Sou sua assistent
 firstIAMessage.style.display = "block";
 firstIAMessage.classList = "aiMessage"
 messagesDivFirstMessage.appendChild(firstIAMessage);
-messagesDivFirstMessage.scrollTop = messagesDivFirstMessage.scrollHeight;
+
+let savedMessages = localStorage.getItem("chat");
+if(savedMessages){
+    try {
+        messages = JSON.parse(savedMessages);
+    }catch(e){
+        localStorage.removeItem("chat");
+        messages = [];
+    }
+
+    const messagesDiv = document.getElementById("messagesDiv");
+    for(let i = 0; i < messages.length; i++){
+        const isAi = i % 2 != 0;
+        let messageText = messages[i];
+        console.log(messages);
+
+        if(isAi){
+            messagesDiv.appendChild(getAiMessageElement(messageText));
+        } else {
+            messagesDiv.appendChild(getUserMessageElement(messageText));
+        }
+    }
+}
 
 
 
@@ -18,40 +39,31 @@ async function sendMessage() {
     const message = document.getElementById("message").value.trim();
     const messagesDiv = document.getElementById("messagesDiv");
 
-    if (message != "") {
-        // Insere a mensagem do usuário
-        messages.push(message)
-        const spanUser = document.createElement("span");
-        spanUser.textContent = message;
-        spanUser.style.display = "block";
-        spanUser.classList = "userMessage"
-        messagesDiv.appendChild(spanUser);
-        document.getElementById("message").value = "";
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    if(message.trim() === "") return;
 
-        // Envia a mensagem para a IA
-        const body = {
-            // Pega a consulta atual do usuário e a interação anterior para contexto do histórico de conversa
-            message: messages.slice(-3),
-        };
-        let iaResponse = await sendAI(body);
+    // Insere a mensagem do usuário
+    messages.push(message)
+    localStorage.setItem("chat", JSON.stringify(messages));
 
-        // Insere a resposta da IA
-        console.log(iaResponse)
-        messages.push(iaResponse)
-        const spanAI = document.createElement("span");
+    messagesDiv.appendChild(getUserMessageElement(message));
+    document.getElementById("message").value = "";
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-        // Converte ** para <b></b>
-        iaResponse = iaResponse.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+    // Envia a mensagem para a IA
+    const body = {
+        // Pega a consulta atual do usuário e a interação anterior para contexto do histórico de conversa
+        message: messages.slice(-3),
+    };
+    let iaResponse = await sendAI(body);
 
-        // Adiciona os outros atributos da resposta
-        spanAI.textContent = iaResponse;
-        spanAI.innerHTML = iaResponse;
-        spanAI.style.display = "block";
-        spanAI.classList = "aiMessage"
-        messagesDiv.appendChild(spanAI);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
+    // Insere a resposta da IA
+
+    messages.push(iaResponse)
+    localStorage.setItem("chat", JSON.stringify(messages));
+
+    messagesDiv.appendChild(getAiMessageElement(iaResponse));
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
 }
 
 // Envia a mensagem para a IA e recebe a resposta
@@ -71,6 +83,7 @@ async function sendAI(body) {
 
 function toggleChat() {
     document.getElementById("chatModal").classList.toggle("hidden");
+    document.getElementById("messagesDiv").scrollTop = document.getElementById("messagesDiv").scrollHeight;
 }
 
 document.addEventListener("click", (event) => {
@@ -92,3 +105,30 @@ inputChat.addEventListener('keydown', function (event) {
         sendMessage(); // Chama a função para enviar a mensagem
     }
 });
+
+function getAiMessageElement(iaResponse){
+    const spanAI = document.createElement("span");
+
+    // Converte para link
+    iaResponse = iaResponse.replace(/\*\*\s*(\d+)\s*\|\s*(.*?)\s*\*\*/g, (fullMatch, productId, productName) => {
+        return `<a style="text-decoration:none;font-weight:bold;color:blue" href="/products/${productId}">${productName}</a>`
+    });
+
+    iaResponse = iaResponse.replace(/\n/g, "<br>");
+
+    // Adiciona os outros atributos da resposta
+    spanAI.textContent = iaResponse;
+    spanAI.innerHTML = iaResponse;
+    spanAI.style.display = "block";
+    spanAI.classList = "aiMessage"
+
+    return spanAI;
+}
+
+function getUserMessageElement(message){
+    const spanUser = document.createElement("span");
+    spanUser.textContent = message;
+    spanUser.style.display = "block";
+    spanUser.classList = "userMessage"
+    return spanUser;
+}
