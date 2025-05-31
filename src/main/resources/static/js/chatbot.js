@@ -12,7 +12,13 @@ messagesDivFirstMessage.appendChild(firstIAMessage);
 
 let savedMessages = localStorage.getItem("chat");
 if(savedMessages){
-    messages = JSON.parse(savedMessages);
+    try {
+        messages = JSON.parse(savedMessages);
+    }catch(e){
+        localStorage.removeItem("chat");
+        messages = [];
+    }
+
     const messagesDiv = document.getElementById("messagesDiv");
     for(let i = 0; i < messages.length; i++){
         const isAi = i % 2 != 0;
@@ -77,7 +83,7 @@ async function sendAI(body) {
 
 function toggleChat() {
     document.getElementById("chatModal").classList.toggle("hidden");
-    document.getElementById("messagesDiv").scrollTop = messagesDiv.scrollHeight;
+    document.getElementById("messagesDiv").scrollTop = document.getElementById("messagesDiv").scrollHeight;
 }
 
 document.addEventListener("click", (event) => {

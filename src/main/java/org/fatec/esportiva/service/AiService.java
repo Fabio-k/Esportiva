@@ -74,7 +74,7 @@ public class AiService {
 
         // Obtém somente os atributos relevantes: id | Nome | Preço | Descrição
         for (ProductResponseDto product : productList) {
-            availableProducts += product.id() + "" + product.name() + "|"
+            availableProducts += product.id() + "|" + product.name() + "|"
                     + product.getFormattedPrice()
                     + "|"
                     + product.description() + "\n";
