@@ -21,7 +21,8 @@ public class CheckoutService {
 
     @Transactional
     public void processCheckout(CheckoutSession checkoutSession, Model model){
-        Transaction transaction = transactionService.generateTransaction();
+
+        Transaction transaction = transactionService.generateTransaction(checkoutSession.getAddress().getId());
         try{
             checkoutSessionService.validatePayment(checkoutSession);
             exchangeVoucherService.validateExchangeVoucherOwnership(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());

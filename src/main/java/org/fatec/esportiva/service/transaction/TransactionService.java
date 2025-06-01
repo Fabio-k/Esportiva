@@ -9,14 +9,18 @@ import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.fatec.esportiva.dto.response.AddressResponseDto;
 import org.fatec.esportiva.entity.*;
 import lombok.RequiredArgsConstructor;
+import org.fatec.esportiva.entity.address.Address;
+import org.fatec.esportiva.entity.address.Cep;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.mapper.CartItemMapper;
 import org.fatec.esportiva.mapper.TransactionMapper;
 import org.fatec.esportiva.repository.TransactionRepository;
 import org.fatec.esportiva.dto.request.TransactionDto;
 import org.fatec.esportiva.dto.response.TransactionResponseDto;
+import org.fatec.esportiva.service.AddressService;
 import org.fatec.esportiva.service.ClientService;
 import org.fatec.esportiva.service.ExchangeVoucherService;
 import org.fatec.esportiva.service.ProductService;
@@ -32,6 +36,7 @@ public class TransactionService {
     private final ProductService productService;
     private final ExchangeVoucherService exchangeVoucherService;
     private final TransactionStateFactory transactionStateFactory;
+    private final AddressService addressService;
 
     public List<TransactionResponseDto> getTransactions() {
         return transactionRepository.findAllByClientOrderByPurchaseDateDesc(clientService.getAuthenticatedClient())
@@ -57,12 +62,17 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction generateTransaction() {
+    public Transaction generateTransaction(Long addressId) {
+        Address address = addressService.findById(addressId);
+        Cep cep = address.getCep();
+        String addressNumber = address.getNumber();
         Client client = clientService.getAuthenticatedClient();
         Transaction transaction = Transaction.builder()
                 .client(client)
                 .status(OrderStatus.EM_PROCESSAMENTO)
                 .purchaseDate(LocalDateTime.now())
+                .cep(cep)
+                .addressNumber(addressNumber)
                 .build();
 
         List<Order> orders = client.getCart().getCartItems().stream()

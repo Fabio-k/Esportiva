@@ -144,7 +144,10 @@ CREATE TABLE transacoes (
     tra_id           SERIAL PRIMARY KEY,
     tra_data_compra  TIMESTAMP NOT NULL,
     tra_status       VARCHAR(20) NOT NULL,
-    tra_cli_id       INTEGER NOT NULL
+    tra_cli_id       INTEGER NOT NULL,
+    tra_numero_endereco VARCHAR(20),
+    tra_cep_id INTEGER NOT NULL,
+    CONSTRAINT fk_tra_cep FOREIGN KEY (tra_cep_id) REFERENCES cep(cep_id)
 );
 
 
