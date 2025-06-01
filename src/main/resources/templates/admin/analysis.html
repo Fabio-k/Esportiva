@@ -27,13 +27,18 @@
         </section>
 
         <section class="flex flex-col gap-10">
-            <div id="myDiv" class="bg-white rounded shadow-md flex-grow min-h-[500px]"></div>
+            <div class="flex justify-between gap-10">
+                <div id="myDiv" class="bg-white rounded shadow-md flex-grow min-h-[500px]"></div>
+                <div id="salesStateDiv" class="bg-white rounded shadow-md flex-grow min-h-[500px]"></div>
+            </div>
+
             <div id="totalQuantity" class="bg-white rounded shadow-md"></div>
         </section>
     </main>
 
     <script>
         let traces = []
+        let stateTraces = []
         let pieLabels = []
         let pieValues = []
         const select = document.getElementById("historySelect");
@@ -64,8 +69,22 @@
 
             fetchHistory(historyId, isCategory)
             .then(data => {
-                const dates = data.map(item => item.purchaseDate);
-                const totals = data.map(item => item.totalQuantity);
+                console.log(data);
+                const salesByState = data.salesHistoryByState;
+                const states = salesByState.map(item => item.state);
+                const totalsNum = salesByState.map(item => item.totalQuantity);
+                let stateTrace = {
+                    x: states,
+                    y: totalsNum,
+                    type: 'bar',
+                    name: selectedOption.innerText
+                };
+                stateTraces.push(stateTrace);
+                renderSalesByState()
+
+                const salesHistory = data.salesHistoryByDate;
+                const dates = salesHistory.map(item => item.purchaseDate);
+                const totals = salesHistory.map(item => item.totalQuantity);
                 pieLabels.push(selectedOption.innerText);
                 pieValues.push(totals.reduce(sum,0))
                 let trace = {
@@ -96,6 +115,7 @@
             }
             button.remove();
             traces = traces.filter(trace => trace.name !== button.innerText);
+            stateTraces = stateTraces.filter(trace => trace.name !== button.innerText);
 
             const index = pieLabels.indexOf(button.innerText);
             if (index !== -1) {
@@ -104,6 +124,7 @@
             }
 
             renderTraces();
+            renderSalesByState();
         }
 
         document.getElementById("startDate").addEventListener("change", function(){
@@ -123,17 +144,36 @@
 
                 return fetchHistory(historyId, isCategory)
                     .then(data => {
-                        let values = data.map(item => item.totalQuantity)
+                        const salesHistory = data.salesHistoryByDate;
+                        let values = salesHistory.map(item => item.totalQuantity)
                         let pieIndex = pieLabels.indexOf(trace.name);
                         if (values.length > 0) pieValues[pieIndex] = values.reduce(sum, 0);
                         else pieValues[pieIndex] = 0;
 
-                        trace.x = data.map(item => item.purchaseDate);
+                        trace.x = salesHistory.map(item => item.purchaseDate);
                         trace.y = values;
                     });
             });
 
             Promise.all(promises).then(() => renderTraces());
+
+            promises = stateTraces.map(trace => {
+                let selectedOption = Array.from(select.options).find(option => option.innerText === trace.name);
+                let historyId = selectedOption.value;
+                let isCategory = selectedOption.dataset.iscategory === "true";
+
+                return fetchHistory(historyId, isCategory)
+                    .then(data => {
+                        const salesHistory = data.salesHistoryByState;
+                        let values = salesHistory.map(item => item.totalQuantity)
+
+                        trace.x = salesHistory.map(item => item.state);
+                        trace.y = values;
+                    });
+            });
+
+           Promise.all(promises).then(() => renderSalesByState());
+
         }
 
         function getLayout(title){
@@ -142,6 +182,13 @@
                 title: {
                     text: title
                   },
+                  legend: {
+                      orientation: 'v',   // horizontal
+                      x: 0.5,              // centralizado
+                      xanchor: 'center',
+                      y: -0.2,             // abaixo do gráfico
+                      yanchor: 'top'
+                    },
                 margin: {}
             };
         }
@@ -154,9 +201,13 @@
                 y: pieLabels,
                 type: 'bar'
             }]
-            const totalQuantityLayout = getLayout("Número de vendas");
+            const totalQuantityLayout = getLayout("Número total de vendas");
             totalQuantityLayout.margin.l = 350
             Plotly.newPlot('totalQuantity', totalQuantityData, totalQuantityLayout, {displayModeBar: false, responsive: true});
+        }
+
+        function renderSalesByState(){
+            Plotly.react('salesStateDiv', stateTraces, getLayout("Venda por estado"),  {displayModeBar: false, responsive: true})
         }
 
         function sum(total, value, index, array){
