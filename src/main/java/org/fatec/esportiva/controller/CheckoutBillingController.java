@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.dto.request.CreditCardDto;
 import org.fatec.esportiva.dto.request.SplitCreditCardForm;
 import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
+import org.fatec.esportiva.dto.response.SplitCreditCardResponseDto;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.service.*;
 import org.fatec.esportiva.validation.*;
@@ -71,21 +72,20 @@ public class CheckoutBillingController {
             model.addAttribute("creditCard", dto);
             return "checkout/billing/new";
         }
-        CreditCardDto savedCreditCard;
+        SplitCreditCardResponseDto savedCreditCard = creditCardService.createCreditCard(clientService.getAuthenticatedClient(), dto, saveCreditCard);
 
-        savedCreditCard = creditCardService.createCreditCard(clientService.getAuthenticatedClient(), dto, saveCreditCard);
-
-        checkoutSession.getCreditCardIds().add(savedCreditCard.getId());
+        checkoutSession.getCreditCardPayments().add(savedCreditCard);
         return "redirect:/checkout/billing";
     }
 
     @GetMapping("/split-cards")
     public String splitCards(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
-        checkoutSession.getCreditCardPayments().clear();
-        List<Long> clientCreditCardsIds = checkoutSession.getCreditCardIds();
+        List<Long> clientCreditCardsIds = checkoutSession.getCreditCardPayments().stream().map(SplitCreditCardResponseDto::getId).toList();
+
         if(clientCreditCardsIds.size() < 2) return "redirect:/checkout/billing";
         SplitCreditCardForm splitCreditCardForm = new SplitCreditCardForm();
         splitCreditCardForm.getCreditCards().addAll(creditCardService.findAllByIdAndClientId(clientCreditCardsIds, clientService.getAuthenticatedClient().getId()));
+
         model.addAttribute("creditCards", splitCreditCardForm);
         return "/checkout/billing/split-cards";
     }
@@ -98,7 +98,7 @@ public class CheckoutBillingController {
     ){
         billingService.savePaymentMethods(checkoutSession, exchangeVoucherIds, creditCardsIds, promotionalCouponCode);
 
-        if(checkoutSession.getCreditCardIds().size() > 1) return "redirect:/checkout/billing/split-cards";
+        if(checkoutSession.getCreditCardPayments().size() > 1) return "redirect:/checkout/billing/split-cards";
 
         return "redirect:/checkout/new";
     }

@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CreditCardService {
     private final CreditCardRepository creditCardRepository;
-    private final CurrencyService currencyService;
 
     public List<CreditCard> createCreditCards(Client client, List<CreditCardDto> creditCardDtos){
         return creditCardDtos.stream().map(c -> {
@@ -50,17 +49,23 @@ public class CreditCardService {
         }).toList();
     }
 
-    public CreditCardDto createCreditCard(Client client, CreditCardDto creditCardDto, Boolean isTemporary){
+    public SplitCreditCardResponseDto createCreditCard(Client client, CreditCardDto creditCardDto, Boolean isTemporary){
         CreditCard creditCard = CreditCardMapper.toCreditCard(creditCardDto);
         creditCard.setClient(client);
         creditCard.setId(null);
         creditCard.setIsTemporary(isTemporary);
         creditCard.setExpireAt(LocalDateTime.now());
-        return CreditCardMapper.toCreditCardDto(creditCardRepository.save(creditCard));
+        creditCard = creditCardRepository.save(creditCard);
+        return CreditCardMapper.toSplitCreditCardResponseDto(creditCard.getId(), creditCard.getNumber(), BigDecimal.ZERO);
     }
 
     public CreditCard findCreditCard(Long id){
         return creditCardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cartão de crédito não encontrado"));
+    }
+
+    public SplitCreditCardResponseDto findByIdAndUserId(Long id, Long clientId){
+        CreditCard creditCard = creditCardRepository.findByIdAndClientId(id, clientId).orElseThrow(() -> new EntityNotFoundException("Cartão de crédito não encontrado"));
+        return CreditCardMapper.toSplitCreditCardResponseDto(creditCard.getId(), creditCard.getNumber(), BigDecimal.ZERO);
     }
 
     public List<SplitCreditCardDto> findAllByIdAndClientId(List<Long> ids, Long clientId){
@@ -76,15 +81,11 @@ public class CreditCardService {
         if(creditCards.size() != splitCreditCardDtos.size()) throw new IllegalArgumentException("Erro no processamento dos cartões");
 
         Map<Long, String> numberById = creditCards.stream()
-                .collect(Collectors.toMap(CreditCard::getId, creditCard -> StringUtils.maskCreditCardNumber(creditCard.getNumber())
-                ));
-
+            .collect(Collectors.toMap(CreditCard::getId, CreditCard::getNumber)
+        );
 
         return splitCreditCardDtos.stream().map(
-                dto -> new SplitCreditCardResponseDto(
-                        numberById.get(dto.getId()),
-                        currencyService.format(dto.getValue())
-                )
+                dto -> CreditCardMapper.toSplitCreditCardResponseDto(dto.getId(), numberById.get(dto.getId()), dto.getValue())
         ).toList();
     }
 }
