@@ -9,6 +9,8 @@ import org.fatec.esportiva.repository.ProductHistoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -17,8 +19,12 @@ public class ProductHistoryService {
     private final ProductHistoryRepository productHistoryRepository;
 
     public SalesHistoryResponseDto getCategoryOrProductHistoryById(Long id, Boolean isCategory, LocalDate startDate, LocalDate endDate) {
-        List<CategoryProductHistoryView> salesHistoryByDate =  productHistoryRepository.getCategoryOrProductHistoryById(id, isCategory, startDate, endDate, OrderStatus.getSalesReportStatus());
-        List<CategoryProductStateView> salesHistoryByState = productHistoryRepository.getCategoryOrProductStateHistoryById(id, isCategory, startDate, endDate, OrderStatus.getSalesReportStatus());
+        LocalDateTime endDateTime = null;
+        if (endDate != null){
+            endDateTime = endDate.atTime(LocalTime.MAX);
+        }
+        List<CategoryProductHistoryView> salesHistoryByDate =  productHistoryRepository.getCategoryOrProductHistoryById(id, isCategory, startDate, endDateTime, OrderStatus.getSalesReportStatus());
+        List<CategoryProductStateView> salesHistoryByState = productHistoryRepository.getCategoryOrProductStateHistoryById(id, isCategory, startDate, endDateTime, OrderStatus.getSalesReportStatus());
 
         SalesHistoryResponseDto salesHistoryResponseDto = new SalesHistoryResponseDto();
         salesHistoryResponseDto.getSalesHistoryByDate().addAll(salesHistoryByDate);

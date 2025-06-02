@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ProductHistoryRepository extends JpaRepository<ProductHistory, Long> {
@@ -22,7 +23,7 @@ public interface ProductHistoryRepository extends JpaRepository<ProductHistory, 
             GROUP BY o.purchaseDate
             HAVING SUM(o.totalOrders) > 0
             """) //Encontrar motivo de :startDate IS NULL dar erro
-    List<CategoryProductHistoryView> getCategoryOrProductHistoryById(Long id, Boolean isCategory, LocalDate startDate, LocalDate endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
+    List<CategoryProductHistoryView> getCategoryOrProductHistoryById(Long id, Boolean isCategory, LocalDate startDate, LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
 
     @Query("""
             SELECT o.state AS state, SUM(o.totalOrders) AS totalQuantity
@@ -34,5 +35,5 @@ public interface ProductHistoryRepository extends JpaRepository<ProductHistory, 
             GROUP BY o.state
             HAVING SUM(o.totalOrders) > 0
             """)
-    List<CategoryProductStateView> getCategoryOrProductStateHistoryById(Long id, Boolean isCategory, LocalDate startDate, LocalDate endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
+    List<CategoryProductStateView> getCategoryOrProductStateHistoryById(Long id, Boolean isCategory, LocalDate startDate, LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
 }
