@@ -48,7 +48,7 @@ document.getElementById("historySelect").addEventListener("change", () => {
         const totals = salesHistory.map(item => item.totalQuantity);
 
         pieLabels.push(selectedOption.innerText);
-        pieValues.push(totals.reduce(sum,0))
+        pieValues.push(totals.reduce((total, value) => total + value,0))
 
         let trace = {
           x: dates,
@@ -110,7 +110,7 @@ function applyDateFilter() {
                 const salesHistory = data.salesHistoryByDate;
                 let values = salesHistory.map(item => item.totalQuantity)
                 let pieIndex = pieLabels.indexOf(trace.name);
-                if (values.length > 0) pieValues[pieIndex] = values.reduce(sum, 0);
+                if (values.length > 0) pieValues[pieIndex] = values.reduce((total, value) => total + value, 0);
                 else pieValues[pieIndex] = 0;
 
                 trace.x = salesHistory.map(item => item.purchaseDate);
@@ -175,8 +175,4 @@ function renderTraces(){
 
 function renderSalesByState(){
     Plotly.react('salesStateDiv', stateTraces, getLayout("Venda por estado"),  {displayModeBar: false, responsive: true})
-}
-
-function sum(total, value, index, array){
-    return total + value;
 }

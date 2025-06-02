@@ -104,7 +104,6 @@ public class CheckoutSessionService {
         checkoutSession.getExchangeVoucherIds().clear();
         checkoutSession.getCreditCardPayments().clear();
         checkoutSession.setPromotionalCouponCode(null);
-        checkoutSession.getCreditCardPayments().clear();
         checkoutSession.setAddress(null);
     }
 }

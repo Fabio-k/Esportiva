@@ -8,9 +8,9 @@ import java.util.Locale;
 
 @UtilityClass
 public class StringUtils {
-    private static final NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.of("pt", "BR"));
 
     public String format(BigDecimal price){
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.of("pt", "BR"));
         if(price == null) return numberFormat.format(BigDecimal.ZERO);
         return numberFormat.format(price);
     }
