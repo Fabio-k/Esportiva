@@ -29,10 +29,13 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         if(elementId == null) {
             throw new IllegalArgumentException("Opção inválida: " + pipelineStepName);
         }
+
         button = wait.until(ExpectedConditions.elementToBeClickable(By.id(elementId)));
         button.click();
 
+
         // Espera a nova página ser carregada, quando a URL atual fica inválida
+        wait.until(ExpectedConditions.visibilityOfElementLocated(statusLocator));
         wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElementLocated(statusLocator, statusText)));
     }
 
@@ -69,8 +72,7 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         // Escolhe se vai aprovar ou reprovar
         By buttonLocator = By.id((approve ? "approve-" : "reprove-") + id);
 
-        button = wait.until(ExpectedConditions.elementToBeClickable(buttonLocator));
-        button.click();
+        wait.until(ExpectedConditions.elementToBeClickable(buttonLocator)).click();
 
         // Confirma a opção mo pop-up
         wait.until(ExpectedConditions.alertIsPresent());
@@ -80,6 +82,7 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         } else {
             alertButton.dismiss();
         }
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("transaction-" + id)));
     }
 
     // Orders (Itens dos pedidos)
@@ -128,7 +131,7 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
             alertButton.dismiss();
         }
 
-
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("order-" + id)));
     }
 
 }
