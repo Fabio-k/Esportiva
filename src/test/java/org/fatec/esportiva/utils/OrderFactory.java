@@ -15,9 +15,13 @@ public class OrderFactory {
     }
 
     public static Order deliveredOrder(Transaction transaction){
-        Order order = defaultOrder(transaction);
-        order.setStatus(OrderStatus.ENTREGUE);
-        return order;
+        return Order.builder()
+                .status(OrderStatus.ENTREGUE)
+                .transaction(transaction)
+                .product(ProductFactory.defaultProduct())
+                .quantity(5)
+                .build();
+
     }
 
 }
