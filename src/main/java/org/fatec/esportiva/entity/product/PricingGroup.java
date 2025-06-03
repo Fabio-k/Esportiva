@@ -33,8 +33,6 @@ public class PricingGroup {
     private BigDecimal profitMargin;
 
     @Default
-    @Column
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pro_id")
+    @OneToMany(mappedBy = "pricingGroup", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 }

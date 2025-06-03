@@ -66,6 +66,13 @@ public class Transaction {
                 purchaseDate.toString());
     }
 
+    @PrePersist
+    public void prePersist() {
+        if (purchaseDate == null) {
+            purchaseDate = LocalDateTime.now();
+        }
+    }
+
     public BigDecimal getTotalCost(){
         return orders.stream().map(Order::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }

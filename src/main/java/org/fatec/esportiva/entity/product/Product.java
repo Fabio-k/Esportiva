@@ -64,7 +64,7 @@ public class Product {
     private String image;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "pro_grp_id")
     private PricingGroup pricingGroup;
 
