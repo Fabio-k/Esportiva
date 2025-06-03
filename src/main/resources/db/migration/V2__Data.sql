@@ -1,7 +1,7 @@
-INSERT INTO clientes (cli_nome, cli_cpf, cli_data_nascimento, cli_genero, cli_status, cli_telefone, cli_telefone_tipo, cli_email, cli_endereco_preferencial, cli_cartao_preferencial) VALUES
-('Carlos Silva', '43757832060', '1986-03-30', 'MASCULINO', 'ATIVO', '11945653333', 'TELEFONE', 'carlos@gmail.com', '2', '2'),
-('Mariana Duarte', '71374904090', '1971-02-15', 'FEMININO', 'ATIVO', '11974526335', 'TELEFONE', 'marina.duarte@outlook.com', '3', '3'),
-('Vanessa Von Hausten', '94551842060', '2001-11-01', 'FEMININO', 'INATIVO', '11932301004', 'TELEFONE_VoIP', 'vanessa123@terra.com.br', '4', '4');
+INSERT INTO clientes (cli_nome, cli_cpf, cli_data_nascimento, cli_genero, cli_status, cli_telefone, cli_telefone_tipo, cli_email) VALUES
+('Carlos Silva', '43757832060', '1986-03-30', 'MASCULINO', 'ATIVO', '11945653333', 'TELEFONE', 'carlos@gmail.com'),
+('Mariana Duarte', '71374904090', '1971-02-15', 'FEMININO', 'ATIVO', '11974526335', 'TELEFONE', 'marina.duarte@outlook.com'),
+('Vanessa Von Hausten', '94551842060', '2001-11-01', 'FEMININO', 'INATIVO', '11932301004', 'TELEFONE_VoIP', 'vanessa123@terra.com.br');
 
 INSERT INTO cartoes_de_credito (car_numero, car_bandeira, car_nome_impresso, car_codigo_seguranca, car_cli_id) VALUES
 ('4372412662447605', 'VISA', 'Carlos Silva', '757', '1'),
