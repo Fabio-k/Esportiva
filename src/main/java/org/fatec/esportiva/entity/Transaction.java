@@ -45,7 +45,6 @@ public class Transaction {
     @JoinColumn(name = "tra_cep_id")
     private Cep cep;
 
-    @NotNull
     @Column(name = "tra_numero_endereco")
     private String addressNumber;
 
