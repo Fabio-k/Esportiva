@@ -23,7 +23,7 @@ public interface ProductHistoryRepository extends JpaRepository<ProductHistory, 
             GROUP BY o.purchaseDate
             HAVING SUM(o.totalOrders) > 0
             """) //Encontrar motivo de :startDate IS NULL dar erro
-    List<CategoryProductHistoryView> getCategoryOrProductHistoryById(Long id, Boolean isCategory, LocalDate startDate, LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
+    List<CategoryProductHistoryView> getCategoryOrProductHistoryById(Long id, Boolean isCategory, LocalDateTime startDate, LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
 
     @Query("""
             SELECT o.state AS state, SUM(o.totalOrders) AS totalQuantity
@@ -35,5 +35,5 @@ public interface ProductHistoryRepository extends JpaRepository<ProductHistory, 
             GROUP BY o.state
             HAVING SUM(o.totalOrders) > 0
             """)
-    List<CategoryProductStateView> getCategoryOrProductStateHistoryById(Long id, Boolean isCategory, LocalDate startDate, LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
+    List<CategoryProductStateView> getCategoryOrProductStateHistoryById(Long id, Boolean isCategory, LocalDateTime startDate, LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
 }

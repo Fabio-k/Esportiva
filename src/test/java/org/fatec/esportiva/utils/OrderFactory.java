@@ -3,15 +3,21 @@ package org.fatec.esportiva.utils;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.enums.OrderStatus;
-import org.fatec.esportiva.entity.product.Product;
 
 public class OrderFactory {
-    public static Order defaultOrder(Transaction transaction, Product product){
+    public static Order defaultOrder(Transaction transaction){
         return Order.builder()
                 .status(OrderStatus.EM_PROCESSAMENTO)
                 .transaction(transaction)
-                .product(product)
+                .product(ProductFactory.defaultProduct())
                 .quantity(5)
                 .build();
     }
+
+    public static Order deliveredOrder(Transaction transaction){
+        Order order = defaultOrder(transaction);
+        order.setStatus(OrderStatus.ENTREGUE);
+        return order;
+    }
+
 }

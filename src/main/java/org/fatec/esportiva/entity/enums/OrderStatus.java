@@ -32,6 +32,6 @@ public enum OrderStatus {
     }
 
     public static List<OrderStatus> getSalesReportStatus(){
-        return List.of(EM_PROCESSAMENTO, EM_TRANSITO, ENTREGUE, TROCA_RECUSADA);
+        return List.of(ENTREGUE, TROCA_RECUSADA);
     }
 }
