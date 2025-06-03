@@ -13,14 +13,16 @@ import java.util.List;
 @Setter
 public class CheckoutSession implements Serializable {
     private AddressResponseDto address;
-    private List<Long> creditCardIds;
     private List<Long> exchangeVoucherIds;
     private String promotionalCouponCode;
-    private List<SplitCreditCardResponseDto> creditCardPayments = new ArrayList<>();
+    private List<SplitCreditCardResponseDto> creditCardPayments;
 
     public CheckoutSession() {
         this.exchangeVoucherIds = new ArrayList<>();
-        this.creditCardIds = new ArrayList<>();
         this.creditCardPayments = new ArrayList<>();
+    }
+
+    public Boolean isUsingCreditCard(Long id){
+        return creditCardPayments.stream().anyMatch(c -> c.getId().equals(id));
     }
 }

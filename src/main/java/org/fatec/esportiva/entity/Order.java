@@ -38,7 +38,7 @@ public class Order {
     @JoinColumn(name = "ped_tra_id")
     private Transaction transaction;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ped_pro_id")
     private Product product;
 

@@ -36,7 +36,7 @@
                 <section id="creditCardList" class="card" style="padding: 0">
                     <label th:for="'billing_' + ${creditCard.id}" class="labelButton" th:each="creditCard : ${creditCards}">
                         <input type="checkbox"
-                            th:checked="${checkoutSession.getCreditCardIds().contains(creditCard.id)}"
+                            th:checked="${checkoutSession.isUsingCreditCard(creditCard.id)}"
                             th:id="'billing_' + ${creditCard.id}" name="selectedCards" th:value="${creditCard.id}">
                         <p th:text="${creditCard.numberMask()}"></p>
                     </label>

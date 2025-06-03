@@ -5,6 +5,7 @@ import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
 import org.fatec.esportiva.dto.response.SplitCreditCardResponseDto;
 import org.fatec.esportiva.entity.session.CheckoutSession;
+import org.fatec.esportiva.utils.StringUtils;
 import org.fatec.esportiva.validation.*;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class BillingService {
     private final CreditCardMinimumAmountValidator creditCardMinimumAmountValidator;
     private final UnusedExchangeVouchersValidator unusedExchangeVouchersValidator;
     private final SplitCardValueValidator splitCardValueValidator;
-    private final CreditCardPaymentValidator creditCardPaymentValidator;
+    private final NoNeedForCreditCardPaymentValidator creditCardPaymentValidator;
 
 
     public void savePaymentMethods(CheckoutSession checkoutSession, List<Long> exchangeVoucherIds, List<Long> creditCardsIds, String promotionalCouponCode){
@@ -38,9 +39,12 @@ public class BillingService {
             checkoutSession.setPromotionalCouponCode(promotionalCoupon.code());
         }
 
-        checkoutSession.getCreditCardIds().clear();
-        if(creditCardsIds != null)
-            checkoutSession.setCreditCardIds(creditCardsIds);
+        checkoutSession.getCreditCardPayments().clear();
+        if(creditCardsIds != null){
+            Long clientId = clientService.getAuthenticatedClient().getId();
+            List<SplitCreditCardResponseDto> splitCreditCardResponseDtos = creditCardsIds.stream().map(id -> creditCardService.findByIdAndUserId(id, clientId)).toList();
+            checkoutSession.getCreditCardPayments().addAll(splitCreditCardResponseDtos);
+        }
 
         CheckoutValidationContext context = new CheckoutValidationContext(checkoutSession, null, "/checkout/billing");
         creditCardPaymentValidator.validate(context);

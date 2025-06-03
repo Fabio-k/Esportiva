@@ -60,7 +60,7 @@
             <p>Cupon(s)</p>
             <p id="summaryVouchers" th:text="'- ' + ${exchangeVoucherTotalPrice}"></p>
           </div>
-          <div th:if="${!creditCardPayment.isEmpty()}">
+          <div th:if="${!creditCardPayment.isEmpty() && creditCardPayment.size() > 1}">
             <p>Pago com cartão</p>
             <div th:each="payment : ${creditCardPayment}" style="display: flex; justify-content: space-between;">
               <p th:text="${payment.number}"></p>

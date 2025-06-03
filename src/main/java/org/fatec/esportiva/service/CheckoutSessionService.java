@@ -63,9 +63,9 @@ public class CheckoutSessionService {
     }
 
     public List<CreditCardDto> getCreditCardsDto(CheckoutSession checkoutSession){
-        return checkoutSession.getCreditCardIds().stream()
-                .map(creditCardId -> {
-                    CreditCard creditCard = creditCardService.findCreditCard(creditCardId);
+        return checkoutSession.getCreditCardPayments().stream()
+                .map(creditCards -> {
+                    CreditCard creditCard = creditCardService.findCreditCard(creditCards.getId());
                     return CreditCardMapper.toCreditCardDto(creditCard);
                 })
                 .toList();
@@ -88,7 +88,7 @@ public class CheckoutSessionService {
     }
 
     public void generateExchangeVoucher(CheckoutSession checkoutSession){
-        if(!checkoutSession.getCreditCardIds().isEmpty()) return;
+        if(!checkoutSession.getCreditCardPayments().isEmpty()) return;
 
         BigDecimal freight = getFreight(checkoutSession.getAddress());
         BigDecimal totalCost = getCartTotalPrice().add(freight);
@@ -104,7 +104,6 @@ public class CheckoutSessionService {
         checkoutSession.getExchangeVoucherIds().clear();
         checkoutSession.getCreditCardPayments().clear();
         checkoutSession.setPromotionalCouponCode(null);
-        checkoutSession.getCreditCardIds().clear();
         checkoutSession.setAddress(null);
     }
 }

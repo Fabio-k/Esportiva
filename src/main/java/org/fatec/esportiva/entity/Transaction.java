@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.Builder.Default;
+import org.fatec.esportiva.entity.address.Cep;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import java.math.BigDecimal;
@@ -40,6 +41,13 @@ public class Transaction {
     @JoinColumn(name = "tra_cli_id")
     private Client client;
 
+    @ManyToOne
+    @JoinColumn(name = "tra_cep_id")
+    private Cep cep;
+
+    @Column(name = "tra_numero_endereco")
+    private String addressNumber;
+
     @Default
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
@@ -55,6 +63,13 @@ public class Transaction {
                 id,
                 status.getDisplayName(),
                 purchaseDate.toString());
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (purchaseDate == null) {
+            purchaseDate = LocalDateTime.now();
+        }
     }
 
     public BigDecimal getTotalCost(){

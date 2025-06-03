@@ -55,7 +55,7 @@ public class Address implements Serializable {
     @Column(name = "end_expira_em")
     private LocalDateTime expiredAt;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "end_cep_id")
     private Cep cep;
 

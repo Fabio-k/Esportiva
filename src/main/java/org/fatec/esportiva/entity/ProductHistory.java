@@ -38,6 +38,9 @@ public class ProductHistory {
     @Column(name = "tra_data_compra")
     private LocalDate purchaseDate;
 
+    @Column(name = "cep_estado")
+    private String state;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "ped_status")
     private OrderStatus status;

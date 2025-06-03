@@ -67,6 +67,7 @@ public class AddressMapper {
         return AddressResponseDto.builder()
                 .id(address.getId())
                 .addressIdentificationPhrase(address.getAddressIdentificationPhrase())
+                .number(address.getNumber())
                 .street(address.getCep().getStreet())
                 .city(address.getCep().getCity())
                 .state(address.getCep().getState())

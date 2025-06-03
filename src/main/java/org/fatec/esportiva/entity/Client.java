@@ -87,14 +87,6 @@ public class Client implements UserDetails {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactions = new ArrayList<>();
 
-    @NotNull
-    @Column(name = "cli_endereco_preferencial")
-    private Long preferentialAddress;
-
-    @NotNull
-    @Column(name = "cli_cartao_preferencial")
-    private Long preferentialCard;
-
     // O dado não será salvo no banco de dados, ele é derivado de suas vendas
     @Transient
     private BigDecimal indexRanking;

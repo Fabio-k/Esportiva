@@ -1,7 +1,9 @@
 package org.fatec.esportiva.e2e.pageObjects;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -17,17 +19,24 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
 
     // Troca entre as etapas do fluxo de entrega/devolução
     public void navigateDeliveryPipeline(String pipelineStepName) {
-        WebElement link;
-        String currentUrl = driver.getCurrentUrl();
+        By statusLocator;
+        WebElement button;
+
+        statusLocator = By.id("status");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(statusLocator));
+        String statusText = driver.findElement(statusLocator).getText();
         String elementId = getElementId(pipelineStepName);
         if(elementId == null) {
             throw new IllegalArgumentException("Opção inválida: " + pipelineStepName);
         }
-        link = driver.findElement(By.id(elementId));
-        link.click();
+
+        button = wait.until(ExpectedConditions.elementToBeClickable(By.id(elementId)));
+        button.click();
+
 
         // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(statusLocator));
+        wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElementLocated(statusLocator, statusText)));
     }
 
     private static String getElementId(String pipelineStepName) {
@@ -61,13 +70,9 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         WebElement button;
 
         // Escolhe se vai aprovar ou reprovar
-        if (approve) {
-            button = driver.findElement(By.id("approve-" + id));
-        } else {
-            button = driver.findElement(By.id("reprove-" + id));
-        }
+        By buttonLocator = By.id((approve ? "approve-" : "reprove-") + id);
 
-        button.click();
+        wait.until(ExpectedConditions.elementToBeClickable(buttonLocator)).click();
 
         // Confirma a opção mo pop-up
         wait.until(ExpectedConditions.alertIsPresent());
@@ -77,6 +82,7 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         } else {
             alertButton.dismiss();
         }
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("transaction-" + id)));
     }
 
     // Orders (Itens dos pedidos)
@@ -98,20 +104,22 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
 
     public void orderApprove(int id, String approve, Boolean confirm) {
         WebElement button;
+        By buttonLocator;
+        String approveId;
 
-        // Escolhe se vai aprovar ou reprovar
-        if (approve == "approveStock") {
-            button = driver.findElement(By.id("approve-stock-" + id));
+        HashMap<String, String> idByApprove = new HashMap<>();
+        idByApprove.put("approveStock", "approve-stock-");
+        idByApprove.put("approve", "approve-");
+        idByApprove.put("reprove", "reprove-");
 
-        } else if (approve == "approve") {
-            button = driver.findElement(By.id("approve-" + id));
-        } else if (approve == "reprove") {
-            button = driver.findElement(By.id("reprove-" + id));
+        approveId = idByApprove.get(approve);
 
-        } else {
+        if(approveId == null){
             throw new IllegalArgumentException("Opção inválida: " + approve);
         }
+        buttonLocator = By.id(approveId + id);
 
+        button = wait.until(ExpectedConditions.elementToBeClickable(buttonLocator));
         button.click();
 
         // Confirma a opção mo pop-up
@@ -122,6 +130,8 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         } else {
             alertButton.dismiss();
         }
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("order-" + id)));
     }
 
 }

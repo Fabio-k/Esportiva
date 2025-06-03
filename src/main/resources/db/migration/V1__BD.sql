@@ -24,8 +24,13 @@ CREATE TABLE cartoes_de_credito (
     car_codigo_seguranca  VARCHAR(4) NOT NULL,
     car_temporario BOOLEAN DEFAULT false,
     car_expira_em TIMESTAMP,
-    car_cli_id            INTEGER
+    car_cli_id            INTEGER,
+    car_favorito BOOLEAN DEFAULT FALSE
 );
+
+CREATE UNIQUE INDEX unico_cartao_favorito_por_cliente
+ON cartoes_de_credito(car_cli_id)
+WHERE car_favorito = true;
 
 
 CREATE TABLE categorias_end (
@@ -60,9 +65,7 @@ CREATE TABLE clientes (
     cli_status                  VARCHAR(10) NOT NULL,
     cli_telefone                VARCHAR(13) NOT NULL,
     cli_telefone_tipo           VARCHAR(20) NOT NULL,
-    cli_email                   VARCHAR(50) NOT NULL,
-    cli_endereco_preferencial   INTEGER NOT NULL,
-    cli_cartao_preferencial     INTEGER NOT NULL
+    cli_email                   VARCHAR(50) NOT NULL
 );
 
 
@@ -83,8 +86,13 @@ CREATE TABLE enderecos (
     end_cli_id               INTEGER NOT NULL,
     end_cep_id               INTEGER NOT NULL,
     end_temporario BOOLEAN DEFAULT false,
-    end_expira_em TIMESTAMP
+    end_expira_em TIMESTAMP,
+    end_favorito BOOLEAN DEFAULT false
 );
+
+CREATE UNIQUE INDEX unico_endereco_favorito_por_cliente
+ON enderecos(end_cli_id)
+WHERE end_favorito = true;
 
 
 CREATE TABLE funcao (
@@ -144,7 +152,10 @@ CREATE TABLE transacoes (
     tra_id           SERIAL PRIMARY KEY,
     tra_data_compra  TIMESTAMP NOT NULL,
     tra_status       VARCHAR(20) NOT NULL,
-    tra_cli_id       INTEGER NOT NULL
+    tra_cli_id       INTEGER NOT NULL,
+    tra_numero_endereco VARCHAR(20),
+    tra_cep_id INTEGER NOT NULL,
+    CONSTRAINT fk_tra_cep FOREIGN KEY (tra_cep_id) REFERENCES cep(cep_id)
 );
 
 
