@@ -3,7 +3,7 @@ package org.fatec.esportiva.service.transaction.states;
 import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.service.transaction.TransactionContext;
-import org.fatec.esportiva.service.transaction.TransactionStateHandler;
+import org.fatec.esportiva.service.transaction.TransactionState;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,14 +22,16 @@ import org.springframework.stereotype.Component;
  * </ul>
  */
 @Component
-public class TransactionInTransitHandler implements TransactionStateHandler {
+public class TransactionInTransitHandler implements TransactionState {
+
     @Override
-    public void process(Transaction transaction, Boolean isApproved, TransactionContext context) {
-        if (isApproved) {
-            transaction.setStatus(OrderStatus.ENTREGUE);
-            context.propagateStatusToOrder(transaction, true);
-            return;
-        }
+    public void approve(Transaction transaction, TransactionContext context) {
+        transaction.setStatus(OrderStatus.ENTREGUE);
+        context.propagateStatusToOrder(transaction, true);
+    }
+
+    @Override
+    public void reprove(Transaction transaction, TransactionContext context) {
         transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
         context.propagateStatusToOrder(transaction, false);
         context.refundSingleVoucher(transaction);

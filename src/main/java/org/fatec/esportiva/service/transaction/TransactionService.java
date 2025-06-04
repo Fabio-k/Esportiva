@@ -1,15 +1,11 @@
 package org.fatec.esportiva.service.transaction;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.fatec.esportiva.dto.response.AddressResponseDto;
 import org.fatec.esportiva.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.address.Address;
@@ -94,11 +90,12 @@ public class TransactionService {
         OrderStatus status = transaction.getStatus();
         TransactionContext context = new TransactionContext(orderService, exchangeVoucherService);
 
-        TransactionStateHandler handler = transactionStateFactory.getHandler(status);
-        handler.process(transaction, approve, context);
+        TransactionState handler = transactionStateFactory.getHandler(status);
+
+        if(approve) handler.approve(transaction, context);
+        else  handler.reprove(transaction, context);
 
         transactionRepository.save(transaction);
-
     }
 
     @Transactional
