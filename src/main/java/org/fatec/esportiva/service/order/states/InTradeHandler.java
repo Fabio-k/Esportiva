@@ -4,7 +4,7 @@ import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.service.order.OrderItemHandlerContext;
-import org.fatec.esportiva.service.order.OrderStatusHandler;
+import org.fatec.esportiva.service.order.OrderState;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,20 +25,18 @@ import org.springframework.stereotype.Component;
  */
 //TODO alterar reembolso para ser equivanlente ao valor da data de compra
 @Component
-public class InTradeHandler implements OrderStatusHandler {
+public class InTradeHandler implements OrderState {
+    @Override
+    public void approve(Order order, OrderItemHandlerContext context) {
+        Client client = order.getTransaction().getClient();
+
+        context.getNotificationService().notifyTradeAccepted(order);
+        order.setStatus(OrderStatus.TROCADO);
+        context.getExchangeVoucherService().createExchangeVoucher(client, order.getTotalPrice());
+    }
 
     @Override
-    public void process(Order order, OrderItemHandlerContext context) {
-        if (context.getIsApproved()) {
-            Client client = order.getTransaction().getClient();
-
-            context.getNotificationService().notifyTradeAccepted(order);
-            order.setStatus(OrderStatus.TROCADO);
-            context.getExchangeVoucherService().createExchangeVoucher(client, order.getTotalPrice());
-            return;
-        }
-
+    public void reprove(Order order, OrderItemHandlerContext context) {
         order.setStatus(OrderStatus.TROCA_RECUSADA);
-
     }
 }

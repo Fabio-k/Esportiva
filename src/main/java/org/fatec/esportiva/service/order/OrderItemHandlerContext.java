@@ -10,7 +10,6 @@ import org.fatec.esportiva.service.NotificationService;
 @Getter
 @Setter
 public class OrderItemHandlerContext {
-    private Boolean isApproved;
     private Boolean isReturnStock;
     private NotificationService notificationService;
     private ExchangeVoucherService exchangeVoucherService;
