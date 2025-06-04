@@ -6,7 +6,6 @@ import org.fatec.esportiva.entity.product.ProductCategory;
 import org.fatec.esportiva.entity.product.ProductStatus;
 import org.fatec.esportiva.integration.Integration;
 import org.fatec.esportiva.repository.PricingGroupRepository;
-import org.fatec.esportiva.repository.ProductCategoryRepository;
 import org.fatec.esportiva.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,8 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserAddProductToCart extends Integration {
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-    private ProductCategoryRepository productCategoryRepository;
     @Autowired
     private PricingGroupRepository pricingGroupRepository;
 

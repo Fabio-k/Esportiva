@@ -5,7 +5,6 @@ import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
 import org.fatec.esportiva.dto.response.SplitCreditCardResponseDto;
 import org.fatec.esportiva.entity.session.CheckoutSession;
-import org.fatec.esportiva.utils.StringUtils;
 import org.fatec.esportiva.validation.*;
 import org.springframework.stereotype.Service;
 

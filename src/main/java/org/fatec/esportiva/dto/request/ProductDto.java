@@ -7,7 +7,6 @@ import lombok.*;
 import lombok.Builder.Default;
 
 import org.fatec.esportiva.entity.product.PricingGroup;
-import org.fatec.esportiva.entity.product.ProductCategory;
 import org.fatec.esportiva.entity.product.ProductStatus;
 
 import java.math.BigDecimal;

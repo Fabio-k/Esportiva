@@ -27,6 +27,7 @@ public class ExchangeVoucher {
     @Column(name = "ctr_valor", precision = 10, scale = 2)
     private BigDecimal value;
 
+    @Builder.Default
     @Column(name = "ctr_usado")
     private Boolean isUsed = false;
 

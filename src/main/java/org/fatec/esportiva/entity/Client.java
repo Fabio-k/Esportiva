@@ -75,6 +75,7 @@ public class Client implements UserDetails {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CreditCard> creditCards;
 
+    @Builder.Default
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart = new Cart();
 
@@ -84,6 +85,7 @@ public class Client implements UserDetails {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
 
+    @Builder.Default
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactions = new ArrayList<>();
 

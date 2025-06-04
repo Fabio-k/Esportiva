@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.dto.projection.CategoryProductHistoryView;
 import org.fatec.esportiva.dto.projection.CategoryProductStateView;
 import org.fatec.esportiva.dto.response.SalesHistoryResponseDto;
-import org.fatec.esportiva.entity.ProductHistory;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.repository.ProductHistoryRepository;
 import org.springframework.stereotype.Service;

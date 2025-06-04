@@ -3,7 +3,6 @@ package org.fatec.esportiva.e2e.pageObjects;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -67,8 +66,6 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
     }
 
     public void transactionApprove(int id, Boolean approve, Boolean confirm) {
-        WebElement button;
-
         // Escolhe se vai aprovar ou reprovar
         By buttonLocator = By.id((approve ? "approve-" : "reprove-") + id);
 

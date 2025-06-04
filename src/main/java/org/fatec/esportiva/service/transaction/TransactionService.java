@@ -1,15 +1,11 @@
 package org.fatec.esportiva.service.transaction;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.fatec.esportiva.dto.response.AddressResponseDto;
 import org.fatec.esportiva.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.address.Address;
