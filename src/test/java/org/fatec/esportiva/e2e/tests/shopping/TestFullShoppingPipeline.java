@@ -123,12 +123,12 @@ public class TestFullShoppingPipeline extends E2E {
         loginPage.login("Lucas");
         userDashboardPage.navigateAdminPages("Entrega");
 
-        // Aprova a compra que acabou de fazer (ID = 11)
-        deliveryDashboardPage.transactionApprove(11, true, true);
+        // Aprova a compra que acabou de fazer (ID = 23)
+        deliveryDashboardPage.transactionApprove(23, true, true);
         deliveryDashboardPage.navigateDeliveryPipeline("inTransit");
-        deliveryDashboardPage.transactionApprove(11, true, true);
+        deliveryDashboardPage.transactionApprove(23, true, true);
         deliveryDashboardPage.navigateDeliveryPipeline("delivered");
-        assertEquals(deliveryDashboardPage.getTransactionClient(11), "Carlos Silva");
+        assertEquals(deliveryDashboardPage.getTransactionClient(23), "Carlos Silva");
         deliveryDashboardPage.navigateAdminPages("Logout");
 
         // Usuário solicita troca de um produto
@@ -144,12 +144,12 @@ public class TestFullShoppingPipeline extends E2E {
         userDashboardPage.navigateAdminPages("Entrega");
         deliveryDashboardPage.navigateDeliveryPipeline("returning");
 
-        // Aprova a compra que acabou de fazer (ID = 26)
-        deliveryDashboardPage.orderApprove(26, "approve", true);
+        // Aprova a compra que acabou de fazer (ID = 146)
+        deliveryDashboardPage.orderApprove(146, "approve", true);
         deliveryDashboardPage.navigateDeliveryPipeline("returned");
-        deliveryDashboardPage.orderApprove(26, "approveStock", true);
+        deliveryDashboardPage.orderApprove(146, "approveStock", true);
         deliveryDashboardPage.navigateDeliveryPipeline("returnFinished");
-        assertEquals(deliveryDashboardPage.getOrderClient(26), "Carlos Silva");
+        assertEquals(deliveryDashboardPage.getOrderClient(146), "Carlos Silva");
         deliveryDashboardPage.navigateAdminPages("Logout");
 
         // Volta para o usuário para fazer a compra usando o cupom de devolução

@@ -3,7 +3,6 @@ package org.fatec.esportiva.validation;
 import org.fatec.esportiva.dto.request.SplitCreditCardDto;
 import org.fatec.esportiva.entity.session.CheckoutSession;
 import org.fatec.esportiva.exception.ApiException;
-import org.fatec.esportiva.exception.CheckoutException;
 import org.fatec.esportiva.service.CheckoutSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

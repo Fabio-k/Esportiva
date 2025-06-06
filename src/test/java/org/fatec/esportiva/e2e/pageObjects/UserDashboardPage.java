@@ -143,6 +143,7 @@ public class UserDashboardPage extends AbstractAdminPage{
 
     public boolean isUserPresent(int id) {
         try {
+            @SuppressWarnings("unused")
             WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("name-" + id)));
             return true;
         }catch (TimeoutException e){

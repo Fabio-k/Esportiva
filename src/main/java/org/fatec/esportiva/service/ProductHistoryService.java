@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.dto.projection.CategoryProductHistoryView;
 import org.fatec.esportiva.dto.projection.CategoryProductStateView;
 import org.fatec.esportiva.dto.response.SalesHistoryResponseDto;
-import org.fatec.esportiva.entity.ProductHistory;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.repository.ProductHistoryRepository;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,7 @@ public class ProductHistoryService {
         startDateTime = startDate != null ?  startDate.atStartOfDay() : LocalDateTime.of(1970, 1, 1, 0, 0);
         endDateTime = endDate != null ? LocalDateTime.of(endDate.plusDays(1), LocalTime.MIN) : LocalDateTime.of(2300, 1, 1, 0, 0);
 
+        // Obtém os dados do BD para encaminhar ao front-end
         List<CategoryProductHistoryView> salesHistoryByDate =  productHistoryRepository.getCategoryOrProductHistoryById(id, isCategory, startDateTime , endDateTime, OrderStatus.getSalesReportStatus());
         List<CategoryProductStateView> salesHistoryByState = productHistoryRepository.getCategoryOrProductStateHistoryById(id, isCategory, startDateTime, endDateTime, OrderStatus.getSalesReportStatus());
         SalesHistoryResponseDto salesHistoryResponseDto = new SalesHistoryResponseDto();
