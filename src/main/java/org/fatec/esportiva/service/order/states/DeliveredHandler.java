@@ -3,7 +3,7 @@ package org.fatec.esportiva.service.order.states;
 import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.service.order.OrderItemHandlerContext;
-import org.fatec.esportiva.service.order.OrderStatusHandler;
+import org.fatec.esportiva.service.order.OrderState;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,13 +22,14 @@ import org.springframework.stereotype.Component;
  * </ul>
  */
 @Component
-public class DeliveredHandler implements OrderStatusHandler {
+public class DeliveredHandler implements OrderState {
     @Override
-    public void process(Order order, OrderItemHandlerContext context) {
-        if (context.getIsApproved()) {
-            order.setStatus(OrderStatus.EM_TROCA);
-            return;
-        }
+    public void approve(Order order, OrderItemHandlerContext context) {
+        order.setStatus(OrderStatus.EM_TROCA);
+    }
+
+    @Override
+    public void reprove(Order order, OrderItemHandlerContext context) {
         order.setStatus(OrderStatus.TROCA_RECUSADA);
     }
 }

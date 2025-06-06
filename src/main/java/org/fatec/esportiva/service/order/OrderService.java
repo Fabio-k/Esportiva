@@ -61,10 +61,14 @@ public class OrderService {
         Product product = order.getProduct();
         Client client = order.getTransaction().getClient();
         OrderStatus status = order.getStatus();
-        OrderItemHandlerContext context = new OrderItemHandlerContext(approve, stock, notificationService, exchangeVoucherService);
+        OrderItemHandlerContext context = new OrderItemHandlerContext(stock, notificationService, exchangeVoucherService);
 
-        OrderStatusHandler handler = orderItemHandlerFactory.getHandler(status);
-        handler.process(order, context);
+        OrderState handler = orderItemHandlerFactory.getHandler(status);
+        if(approve){
+            handler.approve(order, context);
+        } else {
+            handler.reprove(order, context);
+        }
 
         orderRepository.save(order);
         productRepository.save(product);

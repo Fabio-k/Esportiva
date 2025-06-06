@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 @Component
 public class OrderItemHandlerFactory {
-    private final HashMap<OrderStatus, OrderStatusHandler> handlers = new HashMap<>();
+    private final HashMap<OrderStatus, OrderState> handlers = new HashMap<>();
 
     public OrderItemHandlerFactory(InProcessingHandler inProcessingHandler, InTransitProcessingHandler inTransitProcessingHandler, DeliveredHandler deliveredHandler, InTradeHandler inTradeHandler ,TradedHandler tradedHandler){
         handlers.put(OrderStatus.EM_PROCESSAMENTO, inProcessingHandler);
@@ -19,8 +19,8 @@ public class OrderItemHandlerFactory {
 
     }
 
-    public OrderStatusHandler getHandler(OrderStatus status){
-        OrderStatusHandler handler = handlers.get(status);
+    public OrderState getHandler(OrderStatus status){
+        OrderState handler = handlers.get(status);
         if(handler == null){
             throw new IllegalArgumentException("Nenhum handler configurado para o status: " + status);
         }

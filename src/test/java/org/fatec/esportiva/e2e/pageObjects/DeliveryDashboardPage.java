@@ -119,8 +119,7 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         }
         buttonLocator = By.id(approveId + id);
 
-        button = wait.until(ExpectedConditions.elementToBeClickable(buttonLocator));
-        button.click();
+       wait.until(ExpectedConditions.elementToBeClickable(buttonLocator)).click();
 
         // Confirma a opção mo pop-up
         wait.until(ExpectedConditions.alertIsPresent());

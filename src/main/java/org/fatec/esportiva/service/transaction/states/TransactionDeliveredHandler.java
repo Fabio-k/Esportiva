@@ -3,7 +3,7 @@ package org.fatec.esportiva.service.transaction.states;
 import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.service.transaction.TransactionContext;
-import org.fatec.esportiva.service.transaction.TransactionStateHandler;
+import org.fatec.esportiva.service.transaction.TransactionState;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,10 +12,13 @@ import org.springframework.stereotype.Component;
  * <p>Não há como rejeitar a transição de entregue para em troca</p>
  */
 @Component
-public class TransactionDeliveredHandler implements TransactionStateHandler {
+public class TransactionDeliveredHandler implements TransactionState {
     @Override
-    public void process(Transaction transaction, Boolean isApproved, TransactionContext context) {
+    public void approve(Transaction transaction, TransactionContext context) {
         transaction.setStatus(OrderStatus.EM_TROCA);
         context.propagateStatusToOrder(transaction, true);
     }
+
+    @Override
+    public void reprove(Transaction transaction, TransactionContext context) {}
 }
