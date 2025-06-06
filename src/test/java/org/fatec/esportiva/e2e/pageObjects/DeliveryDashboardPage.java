@@ -100,7 +100,6 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
     }
 
     public void orderApprove(int id, String approve, Boolean confirm) {
-        WebElement button;
         By buttonLocator;
         String approveId;
 
