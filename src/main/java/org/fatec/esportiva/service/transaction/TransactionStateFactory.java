@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 @Component
 public class TransactionStateFactory {
-    private final HashMap<OrderStatus, TransactionStateHandler> handlers = new HashMap<>();
+    private final HashMap<OrderStatus, TransactionState> handlers = new HashMap<>();
 
     public TransactionStateFactory(TransactionInProcessingHandler transactionInProcessingHandler, TransactionInTransitHandler transactionInTransitHandler, TransactionDeliveredHandler transactionDeliveredHandler){
         handlers.put(OrderStatus.EM_PROCESSAMENTO, transactionInProcessingHandler);
@@ -18,11 +18,11 @@ public class TransactionStateFactory {
         handlers.put(OrderStatus.ENTREGUE, transactionDeliveredHandler);
     }
 
-    public TransactionStateHandler getHandler(OrderStatus status){
+    public TransactionState getHandler(OrderStatus status){
         if(status == null){
             throw new IllegalArgumentException("Status não pode ser nulo");
         }
-        TransactionStateHandler handler = handlers.get(status);
+        TransactionState handler = handlers.get(status);
         if(handler == null){
             throw new IllegalArgumentException("Nenhum handler encontrado para o status: " + status);
         }

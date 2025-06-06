@@ -90,11 +90,12 @@ public class TransactionService {
         OrderStatus status = transaction.getStatus();
         TransactionContext context = new TransactionContext(orderService, exchangeVoucherService);
 
-        TransactionStateHandler handler = transactionStateFactory.getHandler(status);
-        handler.process(transaction, approve, context);
+        TransactionState handler = transactionStateFactory.getHandler(status);
+
+        if(approve) handler.approve(transaction, context);
+        else  handler.reprove(transaction, context);
 
         transactionRepository.save(transaction);
-
     }
 
     @Transactional
