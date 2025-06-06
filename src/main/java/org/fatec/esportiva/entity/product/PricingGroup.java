@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.Builder.Default;
 import java.math.BigDecimal;
-import java.util.Scanner;
 
 @Entity
 @AllArgsConstructor

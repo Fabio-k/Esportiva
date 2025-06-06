@@ -1,7 +1,6 @@
 package org.fatec.esportiva.controller.api;
 
 import lombok.RequiredArgsConstructor;
-import org.fatec.esportiva.dto.projection.CategoryProductHistoryView;
 import org.fatec.esportiva.dto.response.SalesHistoryResponseDto;
 import org.fatec.esportiva.service.ProductHistoryService;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

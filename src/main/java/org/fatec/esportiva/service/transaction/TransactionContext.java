@@ -1,6 +1,5 @@
 package org.fatec.esportiva.service.transaction;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.Client;
 import org.fatec.esportiva.entity.Order;
