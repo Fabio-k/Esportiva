@@ -17,22 +17,22 @@ public interface ProductHistoryRepository extends JpaRepository<ProductHistory, 
             FROM ProductHistory o
             WHERE (o.status IN :allowedStatus)
             AND ((:isCategory = true AND o.categoryId = :id) OR (:isCategory = false AND o.productId = :id))
-            AND (o.purchaseDate >= COALESCE(:startDate, o.purchaseDate))
-            AND (o.purchaseDate <= COALESCE(:endDate, o.purchaseDate))
+            AND (o.purchaseDate > :startDate)
+            AND (o.purchaseDate < :endDate)
             GROUP BY o.purchaseDate
             HAVING SUM(o.totalOrders) > 0
             """) //Encontrar motivo de :startDate IS NULL dar erro
-    List<CategoryProductHistoryView> getCategoryOrProductHistoryById(Long id, Boolean isCategory, LocalDateTime startDate, LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
+    List<CategoryProductHistoryView> getCategoryOrProductHistoryById(Long id, Boolean isCategory,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
 
     @Query("""
             SELECT o.state AS state, SUM(o.totalOrders) AS totalQuantity
             FROM ProductHistory o
             WHERE (o.status IN :allowedStatus)
             AND ((:isCategory = true AND o.categoryId = :id) OR (:isCategory = false AND o.productId = :id))
-            AND (o.purchaseDate >= COALESCE(:startDate, o.purchaseDate))
-            AND (o.purchaseDate <= COALESCE(:endDate, o.purchaseDate))
+            AND (o.purchaseDate > :startDate)
+            AND (o.purchaseDate < :endDate)
             GROUP BY o.state
             HAVING SUM(o.totalOrders) > 0
             """)
-    List<CategoryProductStateView> getCategoryOrProductStateHistoryById(Long id, Boolean isCategory, LocalDateTime startDate, LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
+    List<CategoryProductStateView> getCategoryOrProductStateHistoryById(Long id, Boolean isCategory,@Param("startDate") LocalDateTime startDate,@Param("endDate") LocalDateTime endDate, @Param("allowedStatus") List<OrderStatus> allowedStatus);
 }
