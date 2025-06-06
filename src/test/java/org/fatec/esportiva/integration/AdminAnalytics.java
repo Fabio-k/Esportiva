@@ -154,7 +154,7 @@ public class AdminAnalytics extends Integration{
         Transaction transaction = TransactionFactory.defaultTransaction(cep);
         transaction.setClient(client);
         transaction.setStatus(OrderStatus.ENTREGUE);
-        transaction.setPurchaseDate(LocalDateTime.of(2025, 5, 7, 0, 1));
+        transaction.setPurchaseDate(LocalDateTime.of(2025, 5, 7, 0, 0));
 
         Order processingOrder = OrderFactory.defaultOrder(transaction);
         processingOrder.setStatus(OrderStatus.ENTREGUE);

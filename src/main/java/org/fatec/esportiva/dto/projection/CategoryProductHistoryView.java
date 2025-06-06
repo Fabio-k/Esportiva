@@ -1,8 +1,8 @@
 package org.fatec.esportiva.dto.projection;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface CategoryProductHistoryView {
-    LocalDate getPurchaseDate();
+    LocalDateTime getPurchaseDate();
     Long getTotalQuantity();
 }
