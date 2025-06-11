@@ -1,7 +1,7 @@
 let traces = []
 let stateTraces = []
-let pieLabels = []
-let pieValues = []
+let barLabels = []
+let barValues = []
 const select = document.getElementById("historySelect");
 let startDate = null;
 let endDate = null;
@@ -55,8 +55,8 @@ document.getElementById("historySelect").addEventListener("change", () => {
         const dates = salesHistory.map(item => item.purchaseDate);
         const totals = salesHistory.map(item => item.totalQuantity);
 
-        pieLabels.push(selectedOption.innerText);
-        pieValues.push(totals.reduce((total, value) => total + value,0))
+        barLabels.push(selectedOption.innerText);
+        barValues.push(totals.reduce((total, value) => total + value,0))
 
         let trace = {
           x: dates,
@@ -96,10 +96,10 @@ function deleteTrace(button){
     stateTraces = stateTraces.filter(trace => trace.name !== button.innerText);
 
     // Diminui a quantidade de rótulos nos gráficos
-    const index = pieLabels.indexOf(button.innerText);
+    const index = barLabels.indexOf(button.innerText);
     if (index !== -1) {
-        pieLabels.splice(index, 1);
-        pieValues.splice(index, 1);
+        barLabels.splice(index, 1);
+        barValues.splice(index, 1);
     }
 
     // Refaz os gráficos
@@ -128,9 +128,9 @@ function applyDateFilter() {
             .then(data => {
                 const salesHistory = data.salesHistoryByDate;
                 let values = salesHistory.map(item => item.totalQuantity)
-                let pieIndex = pieLabels.indexOf(trace.name);
-                if (values.length > 0) pieValues[pieIndex] = values.reduce((total, value) => total + value, 0);
-                else pieValues[pieIndex] = 0;
+                let barIndex = barLabels.indexOf(trace.name);
+                if (values.length > 0) barValues[barIndex] = values.reduce((total, value) => total + value, 0);
+                else barValues[barIndex] = 0;
 
                 trace.x = salesHistory.map(item => item.purchaseDate);
                 trace.y = values;
@@ -187,11 +187,11 @@ function renderTraces(){
     // Obtém os valores totais para fazer o gráfico de barras com o valor total
     const totalQuantityData = [];
 
-        for(let i = 0; i < pieLabels.length; i++){
+        for(let i = 0; i < barLabels.length; i++){
             let bar = {
                 x: [""],
-                y: [pieValues[i]],
-                name: pieLabels[i],
+                y: [barValues[i]],
+                name: barLabels[i],
                 type: 'bar'
             };
             totalQuantityData.push(bar);
