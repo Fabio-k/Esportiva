@@ -168,14 +168,14 @@ function getLayout(title){
         title: {
             text: title
           },
-          legend: {
-              orientation: 'v',
-              x: 0.5,
-              xanchor: 'center',
-              y: -0.2,
-              yanchor: 'top'
-            },
-        margin: {}
+        legend: {
+            orientation: 'v',
+            x: 0.5,
+            xanchor: 'center',
+            y: -1.0,    // Afasta a legenda do texto do eixo X
+            yanchor: 'top'
+        },
+        margin: {} // A margem não afasta a legenda do gráfico
     };
 }
 
@@ -192,7 +192,10 @@ function renderTraces(){
                 x: [""],
                 y: [barValues[i]],
                 name: barLabels[i],
-                type: 'bar'
+                type: 'bar',
+                hovertemplate:  
+                '<b>%{x}</b>' + // Exibe o x em negrito
+                'Valor: %{y}',  // Exibe o valor y
             };
             totalQuantityData.push(bar);
         }
