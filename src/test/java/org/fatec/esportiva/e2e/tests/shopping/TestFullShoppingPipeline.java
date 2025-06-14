@@ -111,10 +111,19 @@ public class TestFullShoppingPipeline extends E2E {
 
         // A compra foi finalizada com sucesso
         checkoutFinalPage.clickButtonSuccessShopping();
-        assertEquals("Camisa Nike Dry Fit", clientHistoryPage.getItemName(0, 0));
-        assertEquals(3, clientHistoryPage.getItemQuantity(0, 0));
-        assertEquals("Manguitos de Vôlei V100 VAP", clientHistoryPage.getItemName(0, 1));
-        assertEquals(1, clientHistoryPage.getItemQuantity(0, 1));
+        // A ordem pode variar com as execuções:
+        if(clientHistoryPage.getItemName(0, 0).equals("Camisa Nike Dry Fit")){
+            assertEquals("Camisa Nike Dry Fit", clientHistoryPage.getItemName(0, 0));
+            assertEquals(3, clientHistoryPage.getItemQuantity(0, 0));
+            assertEquals("Manguitos de Vôlei V100 VAP", clientHistoryPage.getItemName(0, 1));
+            assertEquals(1, clientHistoryPage.getItemQuantity(0, 1));
+        }
+        else{
+            assertEquals("Manguitos de Vôlei V100 VAP", clientHistoryPage.getItemName(0, 0));
+            assertEquals(1, clientHistoryPage.getItemQuantity(0, 0));
+            assertEquals("Camisa Nike Dry Fit", clientHistoryPage.getItemName(0, 1));
+            assertEquals(3, clientHistoryPage.getItemQuantity(0, 1));
+        }
         assertEquals(getCurrentDate(), clientHistoryPage.getTransactionDate(0));
         assertEquals("Em processamento", clientHistoryPage.getTransactionStatus(0));
         clientHistoryPage.logout();
@@ -144,12 +153,12 @@ public class TestFullShoppingPipeline extends E2E {
         userDashboardPage.navigateAdminPages("Entrega");
         deliveryDashboardPage.navigateDeliveryPipeline("returning");
 
-        // Aprova a compra que acabou de fazer (ID = 146)
-        deliveryDashboardPage.orderApprove(146, "approve", true);
+        // Aprova a compra que acabou de fazer (ID = 506)
+        deliveryDashboardPage.orderApprove(506, "approve", true);
         deliveryDashboardPage.navigateDeliveryPipeline("returned");
-        deliveryDashboardPage.orderApprove(146, "approveStock", true);
+        deliveryDashboardPage.orderApprove(506, "approveStock", true);
         deliveryDashboardPage.navigateDeliveryPipeline("returnFinished");
-        assertEquals(deliveryDashboardPage.getOrderClient(146), "Carlos Silva");
+        assertEquals(deliveryDashboardPage.getOrderClient(506), "Carlos Silva");
         deliveryDashboardPage.navigateAdminPages("Logout");
 
         // Volta para o usuário para fazer a compra usando o cupom de devolução
