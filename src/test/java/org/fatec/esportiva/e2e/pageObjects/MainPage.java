@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -79,5 +80,57 @@ public class MainPage {
         // Espera a nova página ser carregada, quando a URL atual fica inválida
         wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
 
+    }
+
+    public void openChatbot(){
+        WebElement button = driver.findElement(By.id("chatButton"));
+        button.click();
+
+        // Espera abrir o chat
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("chatModal")));
+    }
+
+    public void chatbotSendMessage(String message){
+        WebElement chatbotInput = driver.findElement(By.id("message"));
+        chatbotInput.sendKeys(message);
+        chatbotInput.sendKeys(Keys.ENTER);
+
+        // Espera a IA responder
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
+    }
+
+    public String chatbotGetMessage() throws Exception{
+        WebElement allChat = driver.findElement(By.id("messagesDiv")); 
+        
+        // Número de tentativas que vai esperar a IA responder
+        int numberAttempts = 10;
+        int delayByAttempt = 500;
+        for (int i = 0; i < numberAttempts; i++) {
+            // Encontra cada uma das mensagens do chat
+            List<WebElement> messages = allChat.findElements(By.tagName("span"));
+            WebElement lastMessage = messages.get(messages.size() - 1);
+
+            // Para fazer o pooling, e detectar se a IA já respondeu, detecta isso usando o atributo 'aiMessage'
+            // Se a última mensagem tiver essa classe, então a IA já respondeu o usuário
+            String classProperty = lastMessage.getAttribute("class");
+            if (classProperty != null && classProperty.contains("aiMessage")) {
+                return lastMessage.getText();
+            }
+
+            // Tempo de espera por tentativa
+            try {
+                Thread.sleep(delayByAttempt);
+            } catch (InterruptedException e) {
+                System.out.println("A pausa foi interrompida!");
+                e.printStackTrace();
+            }
+        }
+
+        throw new Exception("A IA demorou muito para responder!");
     }
 }
