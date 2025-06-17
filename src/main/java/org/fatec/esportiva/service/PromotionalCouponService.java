@@ -1,8 +1,8 @@
 package org.fatec.esportiva.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.fatec.esportiva.entity.PromotionalCoupon;
+import org.fatec.esportiva.exception.ApiException;
 import org.fatec.esportiva.mapper.PromotionalCouponMapper;
 import org.fatec.esportiva.repository.PromotionalCouponRepository;
 import org.fatec.esportiva.dto.response.PromotionalCouponResponseDto;
@@ -20,7 +20,7 @@ public class PromotionalCouponService {
     private final CurrencyService currencyService;
 
     public PromotionalCouponResponseDto getPromotionalCoupon(String code){
-        PromotionalCoupon promotionalCoupon = promotionalCouponRepository.findByCode(code).orElseThrow(() -> new EntityNotFoundException("Cupom não encontrado"));
+        PromotionalCoupon promotionalCoupon = promotionalCouponRepository.findByCode(code).orElseThrow(() -> new ApiException("Cupom não encontrado"));
         BigDecimal discount = BigDecimal.valueOf(promotionalCoupon.getDiscount() / 100.0);
         BigDecimal totalPromotionDiscount = cartService.getTotalCartPrice().multiply(discount);
         return PromotionalCouponMapper.toPromotionalCouponResponseDto(promotionalCoupon, currencyService.format(totalPromotionDiscount), totalPromotionDiscount);

@@ -69,6 +69,7 @@
                             <button id="applyDiscountButton" type="button">Aplicar</button>
                         </div>
                     </div>
+                    <span id="discountVoucherError" class="error"></span>
                 </form>
                 <div id="discountCouponDiv" class="hidden" style="display: flex; justify-content: space-between;">
                     <p id="discountCouponCode"></p>
@@ -100,9 +101,13 @@
     </main>
     <script>
         document.getElementById('applyDiscountButton').addEventListener('click', async () => {
+            document.getElementById("discountVoucherError").innerText = "";
             const code = document.getElementById('code').value;
             const response = await fetch(`/api/promotionalCoupon/${code}`);
-            if (!response.ok) return;
+            if (!response.ok){
+                document.getElementById("discountVoucherError").innerText = "Cupom não encontrado"
+                return;
+            };
             const result = await response.json();
             document.getElementById('discountDiv').hidden = true;
             document.getElementById('discountCouponDiv').classList.toggle("hidden");
