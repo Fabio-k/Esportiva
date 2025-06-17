@@ -16,14 +16,16 @@ function fetchHistory(historyId, isCategory){
     // Obtém a resposta do back-end
     return fetch(url)
         .then(response => {
-            if(!response.ok) throw new Error(`Erro: ${response.status}`);
+            if(!response.ok){
+                response.json().then(data => {
+                const errorMessageDiv = document.querySelector(".errorMessageDiv");
+                errorMessageDiv.querySelector("span").innerText = data.error;
+                console.log(data);
+                errorMessageDiv.classList.remove("hidden");
+              })
+            };
             return response.json();
         })
-        .catch(err => {
-            console.error("Erro na requisição: ", err);
-            return [];
-            }
-        );
 }
 
 // Listener para selecionar as opções a serem filtradas (Categorias ou produtos)

@@ -29,7 +29,7 @@ public interface ProductHistoryRepository extends JpaRepository<ProductHistory, 
             FROM ProductHistory o
             WHERE (o.status IN :allowedStatus)
             AND ((:isCategory = true AND o.categoryId = :id) OR (:isCategory = false AND o.productId = :id))
-            AND (o.purchaseDate > :startDate)
+            AND (o.purchaseDate >= :startDate)
             AND (o.purchaseDate < :endDate)
             GROUP BY o.state
             HAVING SUM(o.totalOrders) > 0
