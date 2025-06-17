@@ -10,6 +10,9 @@
 
 <body>
     <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('analysis')}"></header>
+    <div class="errorMessageDiv" th:classappend="${errorMessage} == null ? 'hidden' : ''">
+        <span th:text="${errorMessage}"></span><div style="width:20px" id="errorMessageCloseButton"><img th:src="@{/images/icons/close.svg}" style="width:100%; cursor: pointer;" alt="fechar"></div>
+    </div>
     <main class="flex">
         <section class="flex flex-col items-center gap-10 mb-20 w-[23%] p-5">
             <h1 class="text-4xl font-bold">Comparar categorias e/ou produtos</h1>
@@ -37,6 +40,11 @@
     </main>
 
     <script th:src="@{/js/analytics.js}"></script>
+    <script>
+        document.getElementById('errorMessageCloseButton').addEventListener('click', function(){
+            this.closest('.errorMessageDiv').classList.toggle("hidden");
+        });
+    </script>
 </body>
 
 </html>
