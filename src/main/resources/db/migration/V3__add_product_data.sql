@@ -45,7 +45,7 @@ INSERT INTO produtos (
 ('Lanterna de alpinismo', '2023-02-28', 9, 0, 50.00, 'ATIVO', 'N/A', 2, 'Lanterna com altos lúmens, ideal para explorar cavernas e ravinas', '/images/products/Lanterna de alpinismo.png'),
 
 ('Lanterna de acampamento', '2023-02-28', 9, 0, 22.00, 'ATIVO', 'N/A', 2, 'Lanterna de querosene para iluminar o acampamento, com foco em locais abertos como floresta', '/images/products/Lanterna de acampamento.jpg'),
-('Isca de pesca', '2023-02-28', 9, 0, .00, 'ATIVO', 'N/A', 1, 'Isca que simula o movimento errante de uma sardinha, ideal para pescar peixes grandes como salmão', '/images/products/Isca de pesca.webp'),
+('Isca de pesca', '2023-02-28', 9, 0, 12.00, 'ATIVO', 'N/A', 1, 'Isca que simula o movimento errante de uma sardinha, ideal para pescar peixes grandes como salmão', '/images/products/Isca de pesca.webp'),
 ('Fogão de acampamento', '2023-02-28', 9, 0, 300.00, 'ATIVO', 'N/A', 3, 'Fogão a gás ideal para acampamento ao ar livre, possui um bocal para panelas pequenas', '/images/products/Fogão de acampamento.webp'),
 ('Disco de frisbee', '2023-02-28', 9, 0, 14.00, 'ATIVO', 'N/A', 1, 'Disco de plástico, para brincar com humanos ou animais de estimação', '/images/products/Disco de frisbee.jpg'),
 ('Corda de alpinismo', '2023-02-28', 9, 0, 25.00, 'ATIVO', 'N/A', 2, 'Corda de fibras polimérica, possui alta leveza, resistência a água e a abrasão', '/images/products/Corda de alpinismo.jpg'),
