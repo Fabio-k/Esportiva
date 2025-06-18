@@ -133,6 +133,13 @@ public class ClientHistoryPage {
         button.click();
         // Espera a nova página ser carregada, quando o botão fica 'inválido'
         wait.until(ExpectedConditions.stalenessOf(button));
+        // Tempo extra para carregar a página completamente
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
 
         // Seleciona a quantidade de itens e confirma
         WebElement dropdown = driver.findElement(By.id("tradeQuantity"));
