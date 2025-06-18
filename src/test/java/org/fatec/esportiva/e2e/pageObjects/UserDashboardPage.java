@@ -136,6 +136,11 @@ public class UserDashboardPage extends AbstractAdminPage{
         return content.getText();
     }
 
+    public String getIndexRanking(int id) {
+        WebElement content = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("indexRanking-" + id)));
+        return content.getText();
+    }
+
     public Integer getUsersCount() {
         WebElement tableBody = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("tbody")));
         return tableBody.findElements(By.tagName("tr")).size();

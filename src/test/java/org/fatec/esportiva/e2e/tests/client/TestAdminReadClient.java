@@ -29,7 +29,7 @@ public class TestAdminReadClient extends E2E {
         browser.quit();
     }
 
-    // @traceto(RF0024)
+    // @traceto(RF0024;RN0027)
     @Test
     void adminReadTable() {
         login.login("Fábio");
@@ -40,6 +40,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserGender(1), "Masculino");
         assertEquals(dashboard.getUserTelephone(1), "11945653333");
         assertEquals(dashboard.getUserEmail(1), "carlos@gmail.com");
+        assertEquals(dashboard.getIndexRanking(1), "1613.74");
         assertEquals(dashboard.getUserStatus(1), "Ativo");
 
         // Mariana
@@ -49,6 +50,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserGender(2), "Feminino");
         assertEquals(dashboard.getUserTelephone(2), "11974526335");
         assertEquals(dashboard.getUserEmail(2), "marina.duarte@outlook.com");
+        assertEquals(dashboard.getIndexRanking(2), "3277.63");
         assertEquals(dashboard.getUserStatus(2), "Ativo");
 
         assertEquals(dashboard.getUserName(3), "Vanessa Von Hausten");
@@ -57,10 +59,11 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserGender(3), "Feminino");
         assertEquals(dashboard.getUserTelephone(3), "11932301004");
         assertEquals(dashboard.getUserEmail(3), "vanessa123@terra.com.br");
+        assertEquals(dashboard.getIndexRanking(3), "10505.25");
         assertEquals(dashboard.getUserStatus(3), "Inativo");
     }
 
-    // @traceto(RF0024)
+    // @traceto(RF0024;RN0027)
     @Test
     void adminOneFilter() {
         login.login("Fábio");
@@ -74,6 +77,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserGender(1), "Masculino");
         assertEquals(dashboard.getUserTelephone(1), "11945653333");
         assertEquals(dashboard.getUserEmail(1), "carlos@gmail.com");
+        assertEquals(dashboard.getIndexRanking(1), "1613.74");
         assertEquals(dashboard.getUserStatus(1), "Ativo");
 
         assertEquals(dashboard.getUsersCount(), 1);
@@ -81,7 +85,7 @@ public class TestAdminReadClient extends E2E {
         sleepForVisualization();
     }
 
-    // @traceto(RF0024)
+    // @traceto(RF0024;RN0027)
     @Test
     void adminTwoFilter() {
         login.login("Fábio");
@@ -96,6 +100,7 @@ public class TestAdminReadClient extends E2E {
         assertEquals(dashboard.getUserGender(2), "Feminino");
         assertEquals(dashboard.getUserTelephone(2), "11974526335");
         assertEquals(dashboard.getUserEmail(2), "marina.duarte@outlook.com");
+        assertEquals(dashboard.getIndexRanking(2), "3277.63");
         assertEquals(dashboard.getUserStatus(2), "Ativo");
 
         assertEquals(dashboard.getUsersCount(), 1);
