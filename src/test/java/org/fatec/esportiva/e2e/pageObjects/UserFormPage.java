@@ -439,4 +439,22 @@ public class UserFormPage {
         }
         return false;
     }
+
+    // Histórico
+    // ####################################################################################################
+    public String getTransactionDate(int id){
+        WebElement transactionCard = driver.findElement(By.id("transaction_" + id));
+        List<WebElement> AllDivs = transactionCard.findElements(By.tagName("div"));
+        WebElement firstDiv = AllDivs.get(0);
+        WebElement date = firstDiv.findElement(By.tagName("h3"));
+        return date.getText();
+    }
+
+    public String getTransactionStatus(int id){
+        WebElement transactionCard = driver.findElement(By.id("transaction_" + id));
+        List<WebElement> AllDivs = transactionCard.findElements(By.tagName("div"));
+        WebElement firstDiv = AllDivs.get(0);
+        WebElement status = firstDiv.findElement(By.tagName("div")).findElement(By.tagName("div")).findElement(By.tagName("p"));
+        return status.getText();
+    } 
 }

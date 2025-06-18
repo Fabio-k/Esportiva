@@ -88,4 +88,17 @@ public class TestAdminUpdateClient extends E2E {
 
         sleepForVisualization();
     }
+
+
+    // @traceto(RF0025)
+    @Test
+    void adminCheckTransactionsHistory() {
+        login.login("Fábio");
+        dashboard.editUser(1);
+
+        // Verifica se o histórico do usuário consta no seu perfil
+        assertEquals("25 dez. 2024", userForm.getTransactionDate(9));
+        assertEquals("Entregue", userForm.getTransactionStatus(9));
+        sleepForVisualization();
+    }
 }
