@@ -1,6 +1,7 @@
 package org.fatec.esportiva.e2e;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
@@ -34,6 +37,16 @@ public class E2E {
         options = new ChromeOptions();
         options.addArguments("--start-fullscreen");
         // options.addArguments("--headless");
+    }
+
+    // Permite carregar a chave API do arquivo '.env'
+    // Esse código é o mesmo que tem na Main (Que não é executada durante os testes)
+    @DynamicPropertySource
+    static void loadEnvProperties(DynamicPropertyRegistry registry) {
+        Dotenv dotenv = Dotenv.configure().load();
+        dotenv.entries().forEach(entry ->
+            registry.add(entry.getKey(), () -> entry.getValue())
+        );
     }
 
     @BeforeEach

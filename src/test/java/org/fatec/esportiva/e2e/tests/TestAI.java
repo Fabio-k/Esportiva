@@ -11,26 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-
-import io.github.cdimascio.dotenv.Dotenv;
 
 
 public class TestAI extends E2E {
     // Page Models
     private LoginPage login;
     private MainPage mainPage;
-
-    // Permite carregar a chave API do arquivo '.env'
-    // Esse código é o mesmo que tem na Main (Que não é executada durante os testes)
-    @DynamicPropertySource
-    static void loadEnvProperties(DynamicPropertyRegistry registry) {
-        Dotenv dotenv = Dotenv.configure().load();
-        dotenv.entries().forEach(entry ->
-            registry.add(entry.getKey(), () -> entry.getValue())
-        );
-    }
 
     @BeforeEach
     void beforeEach() {
