@@ -6,7 +6,7 @@ const select = document.getElementById("historySelect");
 let startDate = null;
 let endDate = null;
 
-function fetchHistory(historyId, isCategory){
+async function fetchHistory(historyId, isCategory){
     // Busca no BD as informações para plotar, filtrando por data, se é uma categoria
     // Parâmetros via URL
     let url = `/api/sales-history?id=${historyId}&isCategory=${isCategory}`;
@@ -14,22 +14,21 @@ function fetchHistory(historyId, isCategory){
     if(endDate) url += `&endDate=${endDate}`;
 
     // Obtém a resposta do back-end
-    return fetch(url)
-        .then(response => {
-            if(!response.ok){
-                response.json().then(data => {
-                const errorMessageDiv = document.querySelector(".errorMessageDiv");
-                errorMessageDiv.querySelector("span").innerText = data.error;
-                console.log(data);
-                errorMessageDiv.classList.remove("hidden");
-              })
-            };
-            return response.json();
-        })
+    const response = await fetch(url);
+    const data = await response.json();
+
+     if (!response.ok) {
+            const errorMessageDiv = document.querySelector(".errorMessageDiv");
+            errorMessageDiv.querySelector("span").innerText = data.error || "Erro desconhecido.";
+            console.log(data);
+            errorMessageDiv.classList.remove("hidden");
+     }
+
+    return data;
 }
 
 // Listener para selecionar as opções a serem filtradas (Categorias ou produtos)
-document.getElementById("historySelect").addEventListener("change", () => {
+document.getElementById("historySelect").addEventListener("change", async () => {
     let historyId = select.value;
     const selectedOption = select.options[select.selectedIndex];
     const isCategory = selectedOption.dataset.iscategory === "true";

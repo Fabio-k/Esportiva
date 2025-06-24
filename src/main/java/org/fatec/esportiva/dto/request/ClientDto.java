@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.Builder.Default;
 
+import org.fatec.esportiva.entity.address.AddressType;
 import org.fatec.esportiva.entity.enums.Gender;
 import org.fatec.esportiva.entity.enums.PhoneType;
 import org.fatec.esportiva.entity.enums.UserStatus;
@@ -69,6 +70,17 @@ public class ClientDto {
     @Valid
     @Default
     private List<ExchangeVoucherDto> exchangeVoucherDtos = new ArrayList<>();
+
+    @AssertTrue(message = "Deve conter apenas um endereço de cobrança")
+    public boolean isOnlyOneBillingAddress() {
+
+        if (addresses == null) return true;
+
+        long countBillingType = addresses.stream().filter(addr -> addr.getTypes() != null && addr.getTypes().contains(AddressType.COBRANCA)).count();
+
+        System.out.println("Validate this field: " + countBillingType);
+        return countBillingType == 1;
+    }
 
     public String displayDateBirth() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
