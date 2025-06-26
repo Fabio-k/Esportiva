@@ -1,50 +1,119 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-
-<head>
+  <head>
     <div th:replace="~{fragments/head_info.html :: head_info}"></div>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}" />
     <script th:src="@{/js/plot.min.js}"></script>
-</head>
+    <script src="/js/analyticsTeste.js" defer></script>
+    <script src="/js/bibliotecas/alpine.js" defer></script>
+  </head>
 
-<body>
-    <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('analysis')}"></header>
-    <div class="errorMessageDiv" th:classappend="${errorMessage} == null ? 'hidden' : ''">
-        <span th:text="${errorMessage}"></span><div style="width:20px" id="errorMessageCloseButton"><img th:src="@{/images/icons/close.svg}" style="width:100%; cursor: pointer;" alt="fechar"></div>
+  <body x-data="analytics()">
+    <header
+      th:replace="~{fragments/admin_navbar.html :: admin_navbar('analysis')}"
+    ></header>
+    <div
+      class="errorMessageDiv"
+      th:classappend="${errorMessage} == null ? 'hidden' : ''"
+    >
+      <span th:text="${errorMessage}"></span>
+      <div style="width: 20px" id="errorMessageCloseButton">
+        <img
+          th:src="@{/images/icons/close.svg}"
+          style="width: 100%; cursor: pointer"
+          alt="fechar"
+        />
+      </div>
     </div>
     <main class="flex">
-        <section class="flex flex-col items-center gap-10 mb-20 w-[23%] p-5">
-            <h1 class="text-4xl font-bold">Comparar categorias e/ou produtos</h1>
-            <article class="flex flex-col gap-10">
-                <select id="historySelect" class="bg-white px-4 py-2 rounded-xl border-2 w-full">
-                    <option>Selecione uma categoria ou produto</option>
-                    <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}" data-isCategory="true"></option>
-                    <option th:each="product : ${products}" th:text="${product.name}" th:value="${product.id}"></option>
-                </select>
-                <span>De: <input type="date" name="" id="startDate" class="bg-white"></span>
-                <span>Até: <input type="date" name="" id="endDate" class="bg-white"></span>
-            </article>
+      <section class="flex flex-col items-center gap-10 mb-20 w-[23%] p-5">
+        <h1 class="text-4xl font-bold">Comparar categorias e/ou produtos</h1>
+        <article class="flex flex-col gap-10">
+          <select
+            id="selectCategory"
+            @change="renderNewData($event)"
+            class="bg-white px-4 py-2 rounded-xl border-2 w-full"
+          >
+            <option>categorias</option>
+            <option
+              th:each="category : ${categories}"
+              th:text="${category.name}"
+              th:value="${category.id}"
+              data-isCategory="true"
+            ></option>
+          </select>
+          <select
+            id="historySelect"
+            class="bg-white px-4 py-2 rounded-xl border-2 w-full"
+            @change="renderNewData($event)"
+          >
+            <option>produtos</option>
+            <option
+              th:each="product : ${products}"
+              th:text="${product.name}"
+              th:value="${product.id}"
+            ></option>
+          </select>
+          <span
+            >De:
+            <input
+              type="date"
+              name=""
+              id="startDate"
+              class="bg-white"
+              x-model="startDate"
+              @change="applyDateFilter()"
+          /></span>
+          <span
+            >Até:
+            <input
+              type="date"
+              name=""
+              id="endDate"
+              class="bg-white"
+              x-model="endDate"
+              @change="applyDateFilter()"
+          /></span>
+        </article>
 
-            <div id="traces" class="flex flex-wrap gap-2 w-full"></div>
+        <div id="traces" class="flex flex-wrap gap-2 w-full">
+          <template x-for="label in labels" :key="label">
+            <button
+              class="flex justify-between items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-xl cursor-pointer text-blue-500"
+              @click="removeTraceByLabel(label)"
+            >
+              <img src="/images/icons/close-blue.svg" class="h-5" />
+              <p x-text="label"></p>
+            </button>
+          </template>
+        </div>
+      </section>
 
-        </section>
-
-        <section class="flex flex-col flex-grow gap-10 p-10">
-            <div id="myDiv" class="bg-white rounded shadow-md flex-grow min-h-[300px]"></div>
-            <div class="flex justify-between gap-10">
-                <div id="totalQuantity" class="bg-white rounded shadow-md min-w-[50%] min-h-[300px]"></div>
-                <div id="salesStateDiv" class="bg-white rounded shadow-md flex-grow min-h-[300px]"></div>
-            </div>
-        </section>
+      <section class="flex flex-col flex-grow gap-10 p-10">
+        <div
+          id="myDiv"
+          class="bg-white rounded shadow-md flex-grow min-h-[300px]"
+        ></div>
+        <div class="flex justify-between gap-10">
+          <div
+            id="totalQuantity"
+            class="bg-white rounded shadow-md min-w-[50%] min-h-[300px]"
+          ></div>
+          <div
+            id="salesStateDiv"
+            class="bg-white rounded shadow-md flex-grow min-h-[300px]"
+          ></div>
+        </div>
+      </section>
     </main>
 
-    <script th:src="@{/js/analytics.js}"></script>
     <script>
-        document.getElementById('errorMessageCloseButton').addEventListener('click', function(){
-            this.closest('.errorMessageDiv').classList.toggle("hidden");
+      document
+        .getElementById("errorMessageCloseButton")
+        .addEventListener("click", function () {
+          this.closest(".errorMessageDiv").classList.toggle("hidden");
         });
     </script>
-</body>
-
+  </body>
 </html>
