@@ -1,5 +1,10 @@
 <form th:fragment="form" th:action="${formAction}" th:object="${user}" method="post">
     <input type="hidden" name="_method" th:value="${id} ? 'PATCH' : 'POST'" />
+    <div th:if="${#fields.hasErrors('*')}">
+        <ul>
+            <li class="error" th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+        </ul>
+    </div>
     <h3 class="text-xl font-semibold mt-6 mb-4">Dados Pessoais</h3>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>

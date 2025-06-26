@@ -66,14 +66,14 @@ public class ProductService {
         List<Product> products = clientService.getClientProducts();
         Set<Long> categoriesIds = new HashSet<>();
         Set<Long> productIds = new HashSet<>();
-        products.stream().forEach(product -> {
+        products.forEach(product -> {
             List<Long> productsCategoriesIds = product.getCategories().stream().map(ProductCategory::getId).toList();
             categoriesIds.addAll(productsCategoriesIds);
             productIds.add(product.getId());
         });
 
         return productRepository.findRecommendedProducts(ProductStatus.ATIVO, categoriesIds, productIds)
-                .stream().map(ProductMapper::toProductResponseDto).toList();
+                .stream().limit(6).map(ProductMapper::toProductResponseDto).toList();
     }
 
     public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category) {
