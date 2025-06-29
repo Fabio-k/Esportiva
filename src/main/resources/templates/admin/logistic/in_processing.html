@@ -15,11 +15,22 @@
   >
     <div class="bg-white rounded shadow-lg p-6 w-96">
       <h2 class="text-lg font-bold mb-4">Confirmar ação</h2>
+
       <p class="mb-6">
         Tem certeza que deseja
         <span x-text="modalAction == 'approve' ? 'aprovar' : 'reprovar'"></span>
         o pedido <span class="font-bold" x-text="modalItemId"></span>?
       </p>
+      <div
+        id="isReturnToStock"
+        class="flex gap-2 mb-6"
+        x-show="modalItemStatus == 'TROCADO'"
+      >
+        <input type="checkbox" x-model="addToStock" /><label
+          for="isReturnToStock"
+          >Adicionar item ao estoque</label
+        >
+      </div>
       <div class="flex justify-end gap-3">
         <button
           class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
@@ -129,7 +140,7 @@
                 <td class="px-4 py-3" x-text="item.status"></td>
                 <td class="px-4 py-3 space-x-2">
                   <button
-                    @click="openModal(item.id, 'approve')"
+                    @click="openModal(item, 'approve')"
                     :id="`approve-${item.id}`"
                     :disabled="isDisabled(item.status)"
                     class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs disabled:bg-gray-500"
@@ -137,7 +148,7 @@
                     ✔ Aprovar
                   </button>
                   <button
-                    @click="openModal(item.id, 'reprove')"
+                    @click="openModal(item, 'reprove')"
                     :id="`reprove-${item.id}`"
                     :disabled="isDisabled(item.status)"
                     class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs disabled:bg-gray-500"

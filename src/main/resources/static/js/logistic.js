@@ -18,9 +18,12 @@ function logistic() {
     showModal: false,
     modalItemId: null,
     modalAction: null,
+    modalItemStatus: null,
+    addToStock: false,
 
-    openModal(id, action) {
-      this.modalItemId = id;
+    openModal(item, action) {
+      this.modalItemStatus = item.status;
+      this.modalItemId = item.id;
       this.modalAction = action; // 'approve' ou 'reprove'
       this.showModal = true;
     },
@@ -42,7 +45,7 @@ function logistic() {
           transactionId,
           orderId,
           isApproved: isApproved,
-          isReturnToStock: false,
+          isReturnToStock: this.addToStock,
         }),
       }).then(() => this.updateItems());
     },
@@ -52,6 +55,7 @@ function logistic() {
     },
 
     updateItems() {
+      this.addToStock = false;
       let url = this.isTransaction
         ? `/admin/api/logistic`
         : `/admin/api/logistic/orders`;
