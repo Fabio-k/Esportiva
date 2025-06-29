@@ -107,7 +107,15 @@
             </tr>
           </thead>
           <tbody>
-            <template x-for="item in items" :key="item.id">
+            <tr x-show="filteredItems().length === 0">
+              <td
+                :colspan="isTransaction ? '5' : '8'"
+                class="px-4 py-8 text-center text-gray-500"
+              >
+                Nenhum item encontrado
+              </td>
+            </tr>
+            <template x-for="item in filteredItems()" :key="item.id">
               <tr
                 class="border-t hover:bg-gray-50"
                 x-show="selectedStage === item.status.toLowerCase() || selectedStage == 'todos'"

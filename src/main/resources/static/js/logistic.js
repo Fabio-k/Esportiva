@@ -80,5 +80,13 @@ function logistic() {
 
       return false;
     },
+
+    filteredItems() {
+      return this.items.filter(
+        (item) =>
+          this.selectedStage === "todos" ||
+          this.selectedStage === item.status.toLowerCase()
+      );
+    },
   };
 }
