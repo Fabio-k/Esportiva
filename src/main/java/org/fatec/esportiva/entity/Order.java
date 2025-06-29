@@ -8,6 +8,8 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.fatec.esportiva.entity.product.Product;
 import org.fatec.esportiva.listeners.LogListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -57,12 +59,11 @@ public class Order {
                 transaction.getId());
     }
 
-    public Boolean hasInsufficientQuantity(int tradedQuantity){
+    public Boolean hasInsufficientQuantity(int tradedQuantity) {
         return this.quantity < tradedQuantity;
     }
 
-
-    public Boolean isBeingTraded(){
+    public Boolean isBeingTraded() {
         return status.isBeingTraded();
     }
 
@@ -70,12 +71,12 @@ public class Order {
         return status.isInDeliveryProcess();
     }
 
-    public BigDecimal getTotalPrice(){
+    public BigDecimal getTotalPrice() {
         BigDecimal quantity = BigDecimal.valueOf(this.quantity);
         return product.getPriceWithMargin().multiply(quantity);
     }
 
-    public void decreaseQuantity(int quantity){
+    public void decreaseQuantity(int quantity) {
         this.quantity = this.quantity - quantity;
     }
 }

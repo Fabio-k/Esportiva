@@ -40,14 +40,14 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
 
     private static String getElementId(String pipelineStepName) {
         Map<String, String> stepToId = Map.of(
-                "inProcessing", "link-in-processing",
-                "inTransit", "link-in-transit",
-                "delivered", "link-delivered",
-                "returning", "link-returning",
-                "returned", "link-returned",
-                "returnFinished", "link-return-finished",
-                "cancelDeliver", "link-cancel-deliver",
-                "cancelRefund", "link-cancel-refund"
+                "inProcessing", "link-in_processing",
+                "inTransit", "link-in_transit",
+                "delivered", "link_delivered",
+                "returning", "link_returning",
+                "returned", "link_returned",
+                "returnFinished", "link_return-finished",
+                "cancelDeliver", "link_cancel-deliver",
+                "cancelRefund", "link_cancel-refund"
         );
 
         return stepToId.get(pipelineStepName);
@@ -79,7 +79,7 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         } else {
             alertButton.dismiss();
         }
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("transaction-" + id)));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("item-" + id)));
     }
 
     // Orders (Itens dos pedidos)
@@ -126,7 +126,7 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
             alertButton.dismiss();
         }
 
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("order-" + id)));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("item-" + id)));
     }
 
 }

@@ -25,23 +25,7 @@ public class AdminLogisticController {
 
     @GetMapping("/in_processing")
     public String inProcessing(Model model) {
-        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.EM_PROCESSAMENTO);
-        model.addAttribute("transactions", transactions);
         return "admin/logistic/in_processing";
-    }
-
-    @GetMapping("/in_transit")
-    public String inTransit(Model model) {
-        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.EM_TRANSITO);
-        model.addAttribute("transactions", transactions);
-        return "admin/logistic/in_transit";
-    }
-
-    @GetMapping("/delivered")
-    public String delivered(Model model) {
-        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.ENTREGUE);
-        model.addAttribute("transactions", transactions);
-        return "admin/logistic/delivered";
     }
 
     @GetMapping("/returning")
@@ -63,13 +47,6 @@ public class AdminLogisticController {
         List<OrderDto> orders = orderService.getOrdersByStatus(OrderStatus.TROCA_FINALIZADA);
         model.addAttribute("orders", orders);
         return "admin/logistic/return_finished";
-    }
-
-    @GetMapping("/cancel_deliver")
-    public String cancelDeliver(Model model) {
-        List<TransactionDto> transactions = transactionService.getTransactions(OrderStatus.COMPRA_CANCELADA);
-        model.addAttribute("transactions", transactions);
-        return "admin/logistic/cancel_deliver";
     }
 
     @GetMapping("/cancel_refund")

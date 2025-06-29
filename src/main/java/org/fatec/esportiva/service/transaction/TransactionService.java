@@ -44,17 +44,18 @@ public class TransactionService {
                 .stream().map(TransactionMapper::toTransactionResponseDto).toList();
     }
 
-    public List<TransactionDto> getTransactions(OrderStatus status) {
-        return transactionRepository.findAllByStatus(status)
+    public List<TransactionDto> getTransactionsAdmin() {
+        return transactionRepository.findAll()
                 .stream().map(TransactionMapper::toTransactionDto).toList();
     }
 
-    public TransactionResponseDto getTransaction(Long id){
+    public TransactionResponseDto getTransaction(Long id) {
         return TransactionMapper.toTransactionResponseDto(findById(id));
     }
 
     public Transaction findById(Long id) {
-        return transactionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("transação não encontrada"));
+        return transactionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("transação não encontrada"));
     }
 
     @Transactional
@@ -85,15 +86,17 @@ public class TransactionService {
     }
 
     // Máquina de estados que controla a transições conforme cada aprovação
-    public void changeState(long id, boolean approve){
+    public void changeState(long id, boolean approve) {
         Transaction transaction = findById(id);
         OrderStatus status = transaction.getStatus();
         TransactionContext context = new TransactionContext(orderService, exchangeVoucherService);
 
         TransactionState handler = transactionStateFactory.getHandler(status);
 
-        if(approve) handler.approve(transaction, context);
-        else  handler.reprove(transaction, context);
+        if (approve)
+            handler.approve(transaction, context);
+        else
+            handler.reprove(transaction, context);
 
         transactionRepository.save(transaction);
     }
@@ -111,7 +114,8 @@ public class TransactionService {
 
     public void requestTrade(Long id) {
         Client client = clientService.getAuthenticatedClient();
-        Transaction transaction = transactionRepository.findByClientAndIdAndStatus(client, id, OrderStatus.ENTREGUE).orElseThrow(() -> new EntityNotFoundException("Transação não encontrada"));
+        Transaction transaction = transactionRepository.findByClientAndIdAndStatus(client, id, OrderStatus.ENTREGUE)
+                .orElseThrow(() -> new EntityNotFoundException("Transação não encontrada"));
         List<Order> orders = new ArrayList<>(transaction.getOrders());
         for (Order order : orders) {
             orderService.tradeOrder(order.getId(), (short) order.getQuantity());

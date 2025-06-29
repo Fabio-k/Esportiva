@@ -1,20 +1,155 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-
-<head>
+  <head>
     <div th:replace="~{fragments/head_info.html :: head_info}"></div>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/dashboard_table.css}">
-</head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}" />
+    <script src="/js/logistic.js" defer></script>
+    <script src="/js/bibliotecas/alpine.js" defer></script>
+  </head>
 
-<body>
-    <header th:replace="~{fragments/admin_navbar.html :: admin_navbar('logistic')}"></header>
-    <header th:replace="~{fragments/logistic_navbar.html :: logistic_navbar('in_processing')}"></header>
-    <main>
-        <div th:replace="~{fragments/logistic_dashboard.html :: dashboard_transaction('EM_PROCESSAMENTO', false)}">
+  <div
+    x-show="showModal"
+    style="background: rgba(0, 0, 0, 0.5)"
+    class="fixed inset-0 flex items-center justify-center z-50"
+  >
+    <div class="bg-white rounded shadow-lg p-6 w-96">
+      <h2 class="text-lg font-bold mb-4">Confirmar ação</h2>
+      <p class="mb-6">
+        Tem certeza que deseja
+        <span x-text="modalAction == 'approve' ? 'aprovar' : 'reprovar'"></span>
+        o pedido <span class="font-bold" x-text="modalItemId"></span>?
+      </p>
+      <div class="flex justify-end gap-3">
+        <button
+          class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+          @click="showModal = false"
+        >
+          Cancelar
+        </button>
+        <button
+          class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
+          x-show="modalAction == 'approve'"
+          @click="action(modalItemId, true); showModal = false"
+        >
+          Aprovar
+        </button>
+        <button
+          class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+          x-show="modalAction == 'reprove'"
+          @click="action(modalItemId, false); showModal = false"
+        >
+          Reprovar
+        </button>
+      </div>
+    </div>
+  </div>
+  <body x-data="logistic()" x-init="init()">
+    <header
+      th:replace="~{fragments/admin_navbar.html :: admin_navbar('logistic')}"
+    ></header>
+    <main class="flex justify-center items-center flex-col">
+      <section class="w-[80%]">
+        <div class="flex gap-3 mb-4">
+          <button
+            @click="isTransaction = true; updateItems()"
+            :class="isTransaction ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
+            class="px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer"
+          >
+            <span>entrega</span>
+          </button>
+          <button
+            @click="isTransaction = false; updateItems()"
+            :class="!isTransaction ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
+            class="px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer"
+          >
+            <span>devolução</span>
+          </button>
         </div>
-    </main>
-</body>
 
+        <div class="flex flex-wrap gap-3 mb-6">
+          <template x-for="(label, key) in stageLabels" :key="key">
+            <button
+              @click="selectedStage = key"
+              :class="selectedStage === key ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
+              class="px-4 py-2 rounded text-sm font-medium transition cursor-pointer"
+              x-show="label.isTransaction == isTransaction || label.title == 'todos' || label.title == 'entregue'"
+              :id="`link-${key}`"
+            >
+              <span x-text="label.title"></span>
+            </button>
+          </template>
+        </div>
+
+        <table class="min-w-full text-sm text-left">
+          <thead class="bg-gray-100 text-gray-700 uppercase">
+            <tr>
+              <th class="px-4 py-3">ID</th>
+              <th class="px-4 py-3" x-show="!isTransaction">Transação</th>
+              <th class="px-4 py-3">Cliente</th>
+              <th class="px-4 py-3" x-show="!isTransaction">Produto</th>
+              <th class="px-4 py-3" x-show="!isTransaction">Qtd</th>
+              <th class="px-4 py-3">Data</th>
+              <th class="px-4 py-3">Etapa</th>
+              <th class="px-4 py-3">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template x-for="item in items" :key="item.id">
+              <tr
+                class="border-t hover:bg-gray-50"
+                x-show="selectedStage === item.status.toLowerCase() || selectedStage == 'todos'"
+              >
+                <td class="px-4 py-3" x-text="item.id">1</td>
+                <td
+                  id="item-id"
+                  class="px-4 py-3"
+                  x-show="!isTransaction"
+                  x-text="item.transactionId"
+                ></td>
+
+                <td
+                  :id="`client-${item.id}`"
+                  class="px-4 py-3"
+                  x-text="item.client"
+                ></td>
+                <td
+                  class="px-4 py-3"
+                  x-show="!isTransaction"
+                  x-text="item.productName"
+                  :id="`product-${item.id}`"
+                ></td>
+
+                <td
+                  class="px-4 py-3"
+                  x-show="!isTransaction"
+                  x-text="item.quantity"
+                ></td>
+                <td class="px-4 py-3" x-text="item.purchaseDate"></td>
+                <td class="px-4 py-3" x-text="item.status"></td>
+                <td class="px-4 py-3 space-x-2">
+                  <button
+                    @click="openModal(item.id, 'approve')"
+                    :id="`approve-${item.id}`"
+                    :disabled="isDisabled(item.status)"
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs disabled:bg-gray-500"
+                  >
+                    ✔ Aprovar
+                  </button>
+                  <button
+                    @click="openModal(item.id, 'reprove')"
+                    :id="`reprove-${item.id}`"
+                    :disabled="isDisabled(item.status)"
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs disabled:bg-gray-500"
+                  >
+                    ✖ Reprovar
+                  </button>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
 </html>

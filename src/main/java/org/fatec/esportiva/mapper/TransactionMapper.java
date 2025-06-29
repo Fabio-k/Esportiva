@@ -22,7 +22,7 @@ public class TransactionMapper {
                 .id(transactions.getId())
                 .purchaseDate(transactions.getPurchaseDate().toLocalDate())
                 .status(transactions.getStatus())
-                .client(transactions.getClient())
+                .client(transactions.getClient().getName())
                 .orders(transactions.getOrders())
                 .build();
     }
