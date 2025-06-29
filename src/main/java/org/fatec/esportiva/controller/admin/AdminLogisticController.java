@@ -23,63 +23,8 @@ public class AdminLogisticController {
     private final TransactionService transactionService;
     private final OrderService orderService;
 
-    @GetMapping("/in_processing")
+    @GetMapping
     public String inProcessing(Model model) {
-        return "admin/logistic/in_processing";
+        return "admin/logistic/index";
     }
-
-    @GetMapping("/returning")
-    public String returning(Model model) {
-        List<OrderDto> orders = orderService.getOrdersByStatus(OrderStatus.EM_TROCA);
-        model.addAttribute("orders", orders);
-        return "admin/logistic/returning";
-    }
-
-    @GetMapping("/returned")
-    public String returned(Model model) {
-        List<OrderDto> orders = orderService.getOrdersByStatus(OrderStatus.TROCADO);
-        model.addAttribute("orders", orders);
-        return "admin/logistic/returned";
-    }
-
-    @GetMapping("/return_finished")
-    public String returnFinished(Model model) {
-        List<OrderDto> orders = orderService.getOrdersByStatus(OrderStatus.TROCA_FINALIZADA);
-        model.addAttribute("orders", orders);
-        return "admin/logistic/return_finished";
-    }
-
-    @GetMapping("/cancel_refund")
-    public String cancelRefund(Model model) {
-        List<OrderDto> orders = orderService.getOrdersByStatus(OrderStatus.TROCA_RECUSADA);
-        model.addAttribute("orders", orders);
-        return "admin/logistic/cancel_refund";
-    }
-
-    @GetMapping("/approve")
-    public String deliveryPipeline(Model model,
-            HttpServletRequest request,
-            @RequestParam(value = "approval", required = true) boolean approval,
-            @RequestParam(value = "stock", required = true) boolean stock,
-            @RequestParam(value = "transaction", required = false, defaultValue = "") String transactionId,
-            @RequestParam(value = "order", required = false, defaultValue = "") String orderId) throws Exception {
-
-        if (transactionId != "") {
-            long id = Long.parseLong(transactionId);
-            transactionService.changeState(id, approval);
-
-        } else if (orderId != "") {
-            long id = Long.parseLong(orderId);
-            orderService.changeState(id, approval, stock);
-
-        } else {
-            throw new Exception("Ao aprovar uma transação/ordem, ambos os ID ficaram nulos");
-        }
-
-        // Redireciona para a mesma página que a chamou. E o Controller renderiza
-        // corretamente interceptando a mesma URL
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
-    }
-
 }

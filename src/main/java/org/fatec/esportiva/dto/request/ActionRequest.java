@@ -1,5 +1,6 @@
 package org.fatec.esportiva.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import lombok.Setter;
 public class ActionRequest {
     private Long transactionId;
     private Long orderId;
+    @NotNull
     private Boolean isApproved;
     private Boolean isReturnToStock;
 }
