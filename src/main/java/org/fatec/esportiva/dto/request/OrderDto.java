@@ -1,7 +1,7 @@
 package org.fatec.esportiva.dto.request;
 
-import org.fatec.esportiva.entity.product.Product;
-import org.fatec.esportiva.entity.Transaction;
+import java.time.LocalDate;
+
 import org.fatec.esportiva.entity.enums.OrderStatus;
 
 import jakarta.validation.constraints.Min;
@@ -28,8 +28,11 @@ public class OrderDto {
     private int quantity;
 
     @NotNull(message = "Toda ordem de compra deve estar associada a uma transação")
-    private Transaction transaction;
+    private Long transactionId;
 
-    @NotNull(message = "Toda ordem de compra deve estar associada a um produto")
-    private Product product;
+    private LocalDate purchaseDate;
+
+    private String client;
+
+    private String productName;
 }

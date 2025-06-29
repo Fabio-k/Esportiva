@@ -40,11 +40,15 @@ public class OrderService {
                 .stream().map(OrderMapper::toOrderDto).toList();
     }
 
+    public List<OrderDto> getOrders() {
+        return orderRepository.findAll().stream().map(OrderMapper::toOrderDto).toList();
+    }
+
     public Order findById(Long id) {
         return orderRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
     }
 
-    public Order findOrderByClientIdAndId(Long id){
+    public Order findOrderByClientIdAndId(Long id) {
         Client client = clientService.getAuthenticatedClient();
         return orderRepository.findByTransactionClientIdAndId(client.getId(), id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
@@ -61,10 +65,11 @@ public class OrderService {
         Product product = order.getProduct();
         Client client = order.getTransaction().getClient();
         OrderStatus status = order.getStatus();
-        OrderItemHandlerContext context = new OrderItemHandlerContext(stock, notificationService, exchangeVoucherService);
+        OrderItemHandlerContext context = new OrderItemHandlerContext(stock, notificationService,
+                exchangeVoucherService);
 
         OrderState handler = orderItemHandlerFactory.getHandler(status);
-        if(approve){
+        if (approve) {
             handler.approve(order, context);
         } else {
             handler.reprove(order, context);
@@ -84,7 +89,7 @@ public class OrderService {
         processTradeOrder(order, quantity);
     }
 
-    private void validateOrder(Order order, int quantity){
+    private void validateOrder(Order order, int quantity) {
         if (order.hasInsufficientQuantity(quantity))
             throw new IllegalArgumentException("Quantidade inválida");
 
@@ -92,7 +97,7 @@ public class OrderService {
             throw new IllegalArgumentException("pedido não está com status entregue");
     }
 
-    private void processTradeOrder(Order order, int quantity){
+    private void processTradeOrder(Order order, int quantity) {
         order.decreaseQuantity(quantity);
         orderRepository.save(order);
 

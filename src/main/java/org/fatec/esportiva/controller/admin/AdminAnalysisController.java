@@ -17,7 +17,7 @@ public class AdminAnalysisController {
     private final ProductService productService;
 
     @GetMapping
-    public String inProcessing(Model model) {
+    public String getAnalysis(Model model) {
         model.addAttribute("categories", productCategoryRepository.findAll());
         model.addAttribute("products", productService.getAllProducts());
         return "admin/analysis";

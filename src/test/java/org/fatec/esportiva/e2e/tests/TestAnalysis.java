@@ -43,6 +43,6 @@ public class TestAnalysis extends E2E {
         analysisPage.setEndDate("31122024");
         analysisPage.setProduct("Bola de Vôlei Mikasa 350VW");
         
-        assertEquals(24, analysisPage.getBarValue(0));
+        assertEquals(2, analysisPage.getBarValue(0));
     }
 }

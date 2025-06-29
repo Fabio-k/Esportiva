@@ -1,6 +1,7 @@
 package org.fatec.esportiva.e2e.tests.shopping;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -133,9 +134,9 @@ public class TestFullShoppingPipeline extends E2E {
         userDashboardPage.navigateAdminPages("Entrega");
 
         // Aprova a compra que acabou de fazer (ID = 23)
-        deliveryDashboardPage.transactionApprove(23, true, true);
+        deliveryDashboardPage.transactionApprove(23, true, false);
         deliveryDashboardPage.navigateDeliveryPipeline("inTransit");
-        deliveryDashboardPage.transactionApprove(23, true, true);
+        deliveryDashboardPage.transactionApprove(23, true, false);
         deliveryDashboardPage.navigateDeliveryPipeline("delivered");
         assertEquals(deliveryDashboardPage.getTransactionClient(23), "Carlos Silva");
         deliveryDashboardPage.navigateAdminPages("Logout");
@@ -143,7 +144,7 @@ public class TestFullShoppingPipeline extends E2E {
         // Usuário solicita troca de um produto
         loginPage.login("Carlos Silva");
         mainPage.linkClientHistory();
-        clientHistoryPage.itemRequestReturn(0, 0, 2, true);
+        clientHistoryPage.itemRequestReturn(0, 1, 2, true);
         assertEquals("Camisa Nike Dry Fit", clientHistoryPage.getItemName(0, 0));
         assertEquals(2, clientHistoryPage.getItemQuantity(0, 0));
         clientHistoryPage.logout();
@@ -151,12 +152,13 @@ public class TestFullShoppingPipeline extends E2E {
         // Administrador segue fluxo de aprovações para devolver em cupons
         loginPage.login("Lucas");
         userDashboardPage.navigateAdminPages("Entrega");
+        deliveryDashboardPage.changePipelineTo("order");
         deliveryDashboardPage.navigateDeliveryPipeline("returning");
 
         // Aprova a compra que acabou de fazer (ID = 506)
-        deliveryDashboardPage.orderApprove(506, "approve", true);
+        deliveryDashboardPage.transactionApprove(506, true, false);
         deliveryDashboardPage.navigateDeliveryPipeline("returned");
-        deliveryDashboardPage.orderApprove(506, "approveStock", true);
+        deliveryDashboardPage.transactionApprove(506, true, true);
         deliveryDashboardPage.navigateDeliveryPipeline("returnFinished");
         assertEquals(deliveryDashboardPage.getOrderClient(506), "Carlos Silva");
         deliveryDashboardPage.navigateAdminPages("Logout");

@@ -3,6 +3,7 @@ package org.fatec.esportiva.e2e.pageObjects;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -11,44 +12,34 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class DeliveryDashboardPage extends AbstractAdminPage{
+public class DeliveryDashboardPage extends AbstractAdminPage {
     public DeliveryDashboardPage(WebDriver driver) {
         super(driver, new WebDriverWait(driver, Duration.ofSeconds(3)));
     }
 
     // Troca entre as etapas do fluxo de entrega/devolução
     public void navigateDeliveryPipeline(String pipelineStepName) {
-        By statusLocator;
         WebElement button;
 
-        statusLocator = By.id("status");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(statusLocator));
-        String statusText = driver.findElement(statusLocator).getText();
-        String elementId = getElementId(pipelineStepName);
-        if(elementId == null) {
+        String elementId = getStatusByName(pipelineStepName);
+        if (elementId == null) {
             throw new IllegalArgumentException("Opção inválida: " + pipelineStepName);
         }
 
         button = wait.until(ExpectedConditions.elementToBeClickable(By.id(elementId)));
         button.click();
-
-
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(ExpectedConditions.visibilityOfElementLocated(statusLocator));
-        wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElementLocated(statusLocator, statusText)));
     }
 
-    private static String getElementId(String pipelineStepName) {
+    private static String getStatusByName(String pipelineStepName) {
         Map<String, String> stepToId = Map.of(
-                "inProcessing", "link-in-processing",
-                "inTransit", "link-in-transit",
-                "delivered", "link-delivered",
-                "returning", "link-returning",
-                "returned", "link-returned",
-                "returnFinished", "link-return-finished",
-                "cancelDeliver", "link-cancel-deliver",
-                "cancelRefund", "link-cancel-refund"
-        );
+                "inProcessing", "link-em_processamento",
+                "inTransit", "link-em_transito",
+                "delivered", "link-entregue",
+                "returning", "link-em_troca",
+                "returned", "link-trocado",
+                "returnFinished", "link-troca_finalizada",
+                "cancelDeliver", "link-compra_cancelada",
+                "cancelRefund", "link-troca_recusada");
 
         return stepToId.get(pipelineStepName);
     }
@@ -65,21 +56,21 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         return client.getText();
     }
 
-    public void transactionApprove(int id, Boolean approve, Boolean confirm) {
+    public void transactionApprove(int id, Boolean approve, Boolean isReturnStock) {
         // Escolhe se vai aprovar ou reprovar
         By buttonLocator = By.id((approve ? "approve-" : "reprove-") + id);
 
         wait.until(ExpectedConditions.elementToBeClickable(buttonLocator)).click();
 
-        // Confirma a opção mo pop-up
-        wait.until(ExpectedConditions.alertIsPresent());
-        Alert alertButton = driver.switchTo().alert();
-        if (confirm) {
-            alertButton.accept();
-        } else {
-            alertButton.dismiss();
+        if(isReturnStock){
+            By checkboxLocator = By.id("isReturnToStock");
+            wait.until(ExpectedConditions.elementToBeClickable(checkboxLocator)).click();
         }
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("transaction-" + id)));
+
+        By modalButtonLocator = By.id("modal" + (approve ? "Approve-" : "Reprove-") + id);
+        wait.until(ExpectedConditions.elementToBeClickable(modalButtonLocator)).click();
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("item-" + id)));
     }
 
     // Orders (Itens dos pedidos)
@@ -99,34 +90,13 @@ public class DeliveryDashboardPage extends AbstractAdminPage{
         return client.getText();
     }
 
-    public void orderApprove(int id, String approve, Boolean confirm) {
+    public void changePipelineTo(String pipe) {
         By buttonLocator;
-        String approveId;
-
-        HashMap<String, String> idByApprove = new HashMap<>();
-        idByApprove.put("approveStock", "approve-stock-");
-        idByApprove.put("approve", "approve-");
-        idByApprove.put("reprove", "reprove-");
-
-        approveId = idByApprove.get(approve);
-
-        if(approveId == null){
-            throw new IllegalArgumentException("Opção inválida: " + approve);
-        }
-        buttonLocator = By.id(approveId + id);
-
-       wait.until(ExpectedConditions.elementToBeClickable(buttonLocator)).click();
-
-        // Confirma a opção mo pop-up
-        wait.until(ExpectedConditions.alertIsPresent());
-        Alert alertButton = driver.switchTo().alert();
-        if (confirm) {
-            alertButton.accept();
+        if(Objects.equals(pipe, "order")){
+            buttonLocator = By.id("returning-pipeline");
         } else {
-            alertButton.dismiss();
+            buttonLocator = By.id("delivery-pipeline");
         }
-
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("order-" + id)));
+        wait.until(ExpectedConditions.elementToBeClickable(buttonLocator)).click();
     }
-
 }

@@ -17,22 +17,22 @@ public class OrderMapper {
         return Order.builder()
                 .status(productDto.getStatus())
                 .quantity(productDto.getQuantity())
-                .transaction(productDto.getTransaction())
-                .product(productDto.getProduct())
                 .build();
     }
 
-    public OrderDto toOrderDto(Order product) {
+    public OrderDto toOrderDto(Order order) {
         return OrderDto.builder()
-                .id(product.getId())
-                .status(product.getStatus())
-                .quantity(product.getQuantity())
-                .transaction(product.getTransaction())
-                .product(product.getProduct())
+                .id(order.getId())
+                .status(order.getStatus())
+                .quantity(order.getQuantity())
+                .transactionId(order.getTransaction().getId())
+                .client(order.getTransaction().getClient().getName())
+                .purchaseDate(order.getTransaction().getPurchaseDate().toLocalDate())
+                .productName(order.getProduct().getName())
                 .build();
     }
 
-    public OrderResponseDto toOrderResponseDto(Order order){
+    public OrderResponseDto toOrderResponseDto(Order order) {
         return OrderResponseDto.builder()
                 .id(order.getId())
                 .status(order.getStatus())
@@ -41,14 +41,14 @@ public class OrderMapper {
                 .build();
     }
 
-    public OrderByStatusResponseDto toOrderByStatusResponseDto(List<Order> orders){
+    public OrderByStatusResponseDto toOrderByStatusResponseDto(List<Order> orders) {
         OrderByStatusResponseDto orderByStatusResponseDto = new OrderByStatusResponseDto();
         OrderResponseDto orderResponseDto;
 
-        for(Order order : orders){
-             orderResponseDto = toOrderResponseDto(order);
+        for (Order order : orders) {
+            orderResponseDto = toOrderResponseDto(order);
 
-            if(order.isInDeliveryProcess() || order.getStatus() == OrderStatus.COMPRA_CANCELADA){
+            if (order.isInDeliveryProcess() || order.getStatus() == OrderStatus.COMPRA_CANCELADA) {
                 orderByStatusResponseDto.getDeliveredOrders().add(orderResponseDto);
                 orderResponseDto.setTotalProductQuantity(order.getQuantity());
 
@@ -57,10 +57,11 @@ public class OrderMapper {
             }
         }
 
-        for(OrderResponseDto tradedOrder : orderByStatusResponseDto.getTradedOrders()){
-            for(OrderResponseDto deliveredOrder : orderByStatusResponseDto.getDeliveredOrders()){
-                if (Objects.equals(deliveredOrder.getProduct().id(), tradedOrder.getProduct().id())){
-                    deliveredOrder.setTotalProductQuantity(deliveredOrder.getTotalProductQuantity() + tradedOrder.getQuantity());
+        for (OrderResponseDto tradedOrder : orderByStatusResponseDto.getTradedOrders()) {
+            for (OrderResponseDto deliveredOrder : orderByStatusResponseDto.getDeliveredOrders()) {
+                if (Objects.equals(deliveredOrder.getProduct().id(), tradedOrder.getProduct().id())) {
+                    deliveredOrder.setTotalProductQuantity(
+                            deliveredOrder.getTotalProductQuantity() + tradedOrder.getQuantity());
                 }
             }
         }
@@ -68,7 +69,7 @@ public class OrderMapper {
         return orderByStatusResponseDto;
     }
 
-    public Order toTradeOrder(Order order, int quantity){
+    public Order toTradeOrder(Order order, int quantity) {
         return Order.builder()
                 .transaction(order.getTransaction())
                 .product(order.getProduct())
