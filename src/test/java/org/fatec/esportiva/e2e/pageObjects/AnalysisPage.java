@@ -1,6 +1,7 @@
 package org.fatec.esportiva.e2e.pageObjects;
 
 import java.util.List;
+import java.util.Map;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -8,6 +9,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AnalysisPage {
     private WebDriver driver;
@@ -79,7 +82,7 @@ public class AnalysisPage {
     }
 
 
-    public Long getBarValue(int index){
+    public int getBarValue(int index){
         // Tempo extra para carregar o gráfico
         try {
             Thread.sleep(2000);
@@ -87,8 +90,13 @@ public class AnalysisPage {
             System.out.println("A pausa foi interrompida!");
             e.printStackTrace();
         }
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         @SuppressWarnings("unchecked")
-        List<Long> barValue = (List<Long>) javascriptExecutor.executeScript("return barValues;");
-        return barValue.get(index);
+        List<Map<String, Object>> plotlyHistory = (List<Map<String, Object>>) js.executeScript(
+                "return document.getElementById('myDiv').data;"
+        );
+        Number yValue = (Number) ((List<?>) plotlyHistory.get(index).get("y")).get(0);
+        return yValue.intValue();
     }
 }

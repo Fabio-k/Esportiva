@@ -45,8 +45,8 @@ public class TestAdminDeliveryPipeline extends E2E {
         userDashboard.navigateAdminPages("Entrega");
 
         // Transições: Em processamento
-        deliveryDashboard.transactionApprove(6, true, true);
-        deliveryDashboard.transactionApprove(7, false, true);
+        deliveryDashboard.transactionApprove(6, true, false);
+        deliveryDashboard.transactionApprove(7, false, false);
 
         // Verifica as transições de "Em processamento"
         deliveryDashboard.navigateDeliveryPipeline("cancelDeliver");
@@ -55,8 +55,8 @@ public class TestAdminDeliveryPipeline extends E2E {
         assertEquals(deliveryDashboard.getTransactionClient(6), "Mariana Duarte");
 
         // Transições: Em trânsito
-        deliveryDashboard.transactionApprove(2, false, true);
-        deliveryDashboard.transactionApprove(6, true, true);
+        deliveryDashboard.transactionApprove(2, false, false);
+        deliveryDashboard.transactionApprove(6, true, false);
 
         // Verifica as transições de "Em trânsito"
         deliveryDashboard.navigateDeliveryPipeline("cancelDeliver");
@@ -67,10 +67,11 @@ public class TestAdminDeliveryPipeline extends E2E {
         // Nota: A transição de "Entregue" será feito nos testes com foco no cliente
 
         // Transições: "Em troca" (Troca Solicitada)
+        deliveryDashboard.changePipelineTo("order");
         deliveryDashboard.navigateDeliveryPipeline("returning");
-        deliveryDashboard.orderApprove(15, "reprove", true);
-        deliveryDashboard.orderApprove(8, "approve", true);
-        deliveryDashboard.orderApprove(18, "approve", true); // Usado para testar o aprovar+estoque
+        deliveryDashboard.transactionApprove(15, false, false);
+        deliveryDashboard.transactionApprove(8, true, false);
+        deliveryDashboard.transactionApprove(18, true, false); // Usado para testar o aprovar+estoque
 
         // Verifica as transições de "Em troca"
         deliveryDashboard.navigateDeliveryPipeline("cancelRefund");
@@ -79,9 +80,9 @@ public class TestAdminDeliveryPipeline extends E2E {
         assertEquals(deliveryDashboard.getOrderClient(8), "Carlos Silva");
 
         // Transições: "Trocado" (Troca Aceita)
-        deliveryDashboard.orderApprove(10, "reprove", true);
-        deliveryDashboard.orderApprove(8, "approve", true);
-        deliveryDashboard.orderApprove(18, "approveStock", true);
+        deliveryDashboard.transactionApprove(10, false, false);
+        deliveryDashboard.transactionApprove(8, true, false);
+        deliveryDashboard.transactionApprove(18, true, true);
 
         // Verifica as transições de "Trocado"
         deliveryDashboard.navigateDeliveryPipeline("cancelRefund");
@@ -115,12 +116,13 @@ public class TestAdminDeliveryPipeline extends E2E {
 
         // Realiza as transições no pipeline
         productDashboard.navigateAdminPages("Entrega");
-        deliveryDashboard.transactionApprove(7, true, true); // Bola e joelheira
+        deliveryDashboard.transactionApprove(7, true, false); // Bola e joelheira
+        deliveryDashboard.changePipelineTo("order");
         deliveryDashboard.navigateDeliveryPipeline("returning");
-        deliveryDashboard.orderApprove(8, "approve", true);
+        deliveryDashboard.transactionApprove(8, true, false);
         deliveryDashboard.navigateDeliveryPipeline("returned");
-        deliveryDashboard.orderApprove(8, "approve", true); // Bola Mikasa (Sem reentrada)
-        deliveryDashboard.orderApprove(10, "approveStock", true); // Kit de marcação (Reentrada)
+        deliveryDashboard.transactionApprove(8, true, false); // Bola Mikasa (Sem reentrada)
+        deliveryDashboard.transactionApprove(10, true, true); // Kit de marcação (Reentrada)
 
         // Verifica se o estoque variou relativo ao valor inicial
         // *Isso desacopla das atualizações no banco de dados de testes
@@ -150,8 +152,9 @@ public class TestAdminDeliveryPipeline extends E2E {
 
         // Aprova a devolução de um produto
         productDashboard.navigateAdminPages("Entrega");
+        deliveryDashboard.changePipelineTo("order");
         deliveryDashboard.navigateDeliveryPipeline("returning");
-        deliveryDashboard.orderApprove(8, "approve", true);
+        deliveryDashboard.transactionApprove(8, true, false);
         deliveryDashboard.navigateAdminPages("Logout");
 
         // Loga como o cliente e checa a notificação

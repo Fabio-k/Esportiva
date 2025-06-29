@@ -21,15 +21,12 @@
         <span x-text="modalAction == 'approve' ? 'aprovar' : 'reprovar'"></span>
         o pedido <span class="font-bold" x-text="modalItemId"></span>?
       </p>
-      <div
-        id="isReturnToStock"
-        class="flex gap-2 mb-6"
-        x-show="modalItemStatus == 'TROCADO'"
-      >
-        <input type="checkbox" x-model="addToStock" /><label
-          for="isReturnToStock"
-          >Adicionar item ao estoque</label
-        >
+      <div class="flex gap-2 mb-6" x-show="modalItemStatus == 'TROCADO'">
+        <input
+          type="checkbox"
+          x-model="addToStock"
+          id="isReturnToStock"
+        /><label for="isReturnToStock">Adicionar item ao estoque</label>
       </div>
       <div class="flex justify-end gap-3">
         <button
@@ -39,6 +36,7 @@
           Cancelar
         </button>
         <button
+          :id="`modalApprove-${modalItemId}`"
           class="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
           x-show="modalAction == 'approve'"
           @click="action(modalItemId, true); showModal = false"
@@ -46,6 +44,7 @@
           Aprovar
         </button>
         <button
+          :id="`modalReprove-${modalItemId}`"
           class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
           x-show="modalAction == 'reprove'"
           @click="action(modalItemId, false); showModal = false"
@@ -63,6 +62,7 @@
       <section class="w-[80%]">
         <div class="flex gap-3 mb-4">
           <button
+            id="deliver-pipeline"
             @click="isTransaction = true; updateItems()"
             :class="isTransaction ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
             class="px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer"
@@ -70,6 +70,7 @@
             <span>entrega</span>
           </button>
           <button
+            id="returning-pipeline"
             @click="isTransaction = false; updateItems()"
             :class="!isTransaction ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
             class="px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer"
