@@ -17,6 +17,11 @@ public class CartAllProductsPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
     }
 
+    public void refreshPage(){
+        // Simula o "F5" do navegador
+        driver.navigate().refresh();
+    }
+
     public void returnMainPage() {
         WebElement button = driver.findElement(By.id("button-return"));
         String currentUrl = driver.getCurrentUrl();

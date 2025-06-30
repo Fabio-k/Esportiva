@@ -76,4 +76,60 @@ public class TestCartExpiration extends E2E {
         // Verifica se o produto não consta mais no carrinho
         assertEquals(true, cartAllProductsPage.isCartEmpty());
     }
+
+    // @traceto(RNF0042;RN0044;RNF0045)
+    @Test
+    void cartExpirationTwoProducts() {
+        // Verifica se o carrinho é apagado na ordem de inserção
+
+        // Debug
+        // System.out.println("Tempo para expirar o carrinho: " + cartTimeoutInMinutes);
+        // System.out.println("Intervalo de leitura: " + intervalInMillis);
+
+
+        login.login("Vanessa Von Hausten");
+        mainPage.selectProduct(1);
+
+        cartIndividualProductPage.increaseButton(3);
+        cartIndividualProductPage.addProductToCart();
+
+        // Aguarda 30 segundos para inserir um novo produto
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
+        cartIndividualProductPage.returnMainPage();
+        mainPage.selectProduct(3);
+        cartIndividualProductPage.addProductToCart();
+        cartIndividualProductPage.goToCart();
+
+        assertEquals("Bola de Vôlei Mikasa 350VW", cartAllProductsPage.getItemName(0));
+        assertEquals("Camisa Nike Dry Fit", cartAllProductsPage.getItemName(1));
+        
+        // Aguarda 1 minuto
+        try {
+            Thread.sleep(60000);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
+        cartAllProductsPage.refreshPage(); // Atualiza a página
+        // Verifica se o primeiro produto inserido foi removido
+        assertEquals("Camisa Nike Dry Fit", cartAllProductsPage.getItemName(0));
+
+        // Aguarda mais 1 minuto
+        try {
+            Thread.sleep(60000);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
+        cartAllProductsPage.refreshPage(); // Atualiza a página
+        // Verifica se o produto não consta mais no carrinho
+        assertEquals(true, cartAllProductsPage.isCartEmpty());
+
+        sleepForVisualization();
+    }
 }
