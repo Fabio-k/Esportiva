@@ -10,10 +10,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class AnalysisPage {
     private WebDriver driver;
+    @SuppressWarnings("unused")
     private JavascriptExecutor javascriptExecutor;
 
     public AnalysisPage(WebDriver driver) {
