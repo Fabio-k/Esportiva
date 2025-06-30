@@ -1,11 +1,9 @@
 package org.fatec.esportiva.e2e.pageObjects;
 
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,15 +19,40 @@ public class DeliveryDashboardPage extends AbstractAdminPage {
     public void navigateDeliveryPipeline(String pipelineStepName) {
         WebElement button;
 
+        String groupId = getGroupByName(pipelineStepName);
+        if (groupId == null) {
+            throw new IllegalArgumentException("Opção inválida: " + pipelineStepName);
+        }
         String elementId = getStatusByName(pipelineStepName);
         if (elementId == null) {
             throw new IllegalArgumentException("Opção inválida: " + pipelineStepName);
         }
 
+        button = wait.until(ExpectedConditions.elementToBeClickable(By.id(groupId)));
+        button.click();
         button = wait.until(ExpectedConditions.elementToBeClickable(By.id(elementId)));
         button.click();
     }
 
+    // Obtém os links dos menus
+    // Converte os IDs do antigo formulário para o novo
+    private static String getGroupByName(String pipelineStepName) {
+        Map<String, String> stepToId = Map.of(
+                "inProcessing", "deliver-pipeline",
+                "inTransit", "deliver-pipeline",
+                "delivered", "deliver-pipeline",
+                "returning", "returning-pipeline",
+                "returned", "returning-pipeline",
+                "returnFinished", "returning-pipeline",
+                "cancelDeliver", "deliver-pipeline",
+                "cancelRefund", "returning-pipeline");
+
+        return stepToId.get(pipelineStepName);
+    }
+
+    
+
+    // Converte os IDs do antigo formulário para o novo
     private static String getStatusByName(String pipelineStepName) {
         Map<String, String> stepToId = Map.of(
                 "inProcessing", "link-em_processamento",
@@ -45,13 +68,19 @@ public class DeliveryDashboardPage extends AbstractAdminPage {
     }
 
     // Transactions (Compra como um todo)
-
     public String getTransactionDate(int id) {
         WebElement date = driver.findElement(By.id("purchaseDate-" + id));
         return date.getText();
     }
 
     public String getTransactionClient(int id) {
+        // Tempo extra para carregar a página completamente
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
         WebElement client = driver.findElement(By.id("client-" + id));
         return client.getText();
     }
@@ -86,6 +115,13 @@ public class DeliveryDashboardPage extends AbstractAdminPage {
     }
 
     public String getOrderClient(int id) {
+        // Tempo extra para carregar a página completamente
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
         WebElement client = driver.findElement(By.id("client-" + id));
         return client.getText();
     }

@@ -1,7 +1,6 @@
 package org.fatec.esportiva.e2e.tests.shopping;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

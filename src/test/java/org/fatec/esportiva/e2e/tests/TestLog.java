@@ -43,7 +43,7 @@ public class TestLog extends E2E {
 
         // Realiza a aprovação de uma das entregas
         deliveryDashboard.navigateDeliveryPipeline("returning");
-        deliveryDashboard.transactionApprove(8, true, true);
+        deliveryDashboard.transactionApprove(8, true, false);
 
         // Confirma a transição
         deliveryDashboard.navigateDeliveryPipeline("returned");
