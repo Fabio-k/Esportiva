@@ -125,6 +125,13 @@ public class ClientHistoryPage {
             throw new IllegalArgumentException("A quantidade não pode ser zero ou negativa");
         }
 
+        // Tempo extra para carregar a página completamente
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println("A pausa foi interrompida!");
+            e.printStackTrace();
+        }
         // Seleciona o produto para trocar (Muda de tela)
         WebElement transaction = getCardTransaction(cardPosition);
         WebElement item = getItem(transaction, itemPosition);
@@ -135,7 +142,7 @@ public class ClientHistoryPage {
         wait.until(ExpectedConditions.stalenessOf(button));
         // Tempo extra para carregar a página completamente
         try {
-            Thread.sleep(500);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             System.out.println("A pausa foi interrompida!");
             e.printStackTrace();

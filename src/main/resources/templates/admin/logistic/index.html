@@ -122,7 +122,7 @@
               >
                 <td class="px-4 py-3" x-text="item.id">1</td>
                 <td
-                  id="item-id"
+                  :id="item-id"
                   class="px-4 py-3"
                   x-show="!isTransaction"
                   x-text="item.transactionId"
@@ -134,19 +134,20 @@
                   x-text="item.client"
                 ></td>
                 <td
+                  :id="`product-${item.id}`"
                   class="px-4 py-3"
                   x-show="!isTransaction"
                   x-text="item.productName"
-                  :id="`product-${item.id}`"
                 ></td>
 
                 <td
+                  :id="`product-${item.id}`"
                   class="px-4 py-3"
                   x-show="!isTransaction"
                   x-text="item.quantity"
                 ></td>
-                <td class="px-4 py-3" x-text="item.purchaseDate"></td>
-                <td class="px-4 py-3" x-text="item.status"></td>
+                <td :id="`purchaseDate-${item.id}`" class="px-4 py-3" x-text="item.purchaseDate"></td>
+                <td :id="`status-${item.id}`" class="px-4 py-3" x-text="item.status"></td>
                 <td class="px-4 py-3 space-x-2">
                   <button
                     @click="openModal(item, 'approve')"
