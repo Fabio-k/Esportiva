@@ -74,7 +74,7 @@ public class CartIndividualProductPage {
             button.click();
         }
         try {
-            Thread.sleep(800); // Tempo para o BD responder
+            Thread.sleep(1500); // Tempo para o BD responder
         } catch (InterruptedException e) {
             // ...
         }

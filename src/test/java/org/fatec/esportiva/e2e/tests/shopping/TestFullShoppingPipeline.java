@@ -143,7 +143,7 @@ public class TestFullShoppingPipeline extends E2E {
         // Usuário solicita troca de um produto
         loginPage.login("Carlos Silva");
         mainPage.linkClientHistory();
-        clientHistoryPage.itemRequestReturn(0, 1, 2, true);
+        clientHistoryPage.itemRequestReturn(0, "Camisa Nike Dry Fit", 2, true);
         assertEquals("Camisa Nike Dry Fit", clientHistoryPage.getItemName(0, 0));
         assertEquals(2, clientHistoryPage.getItemQuantity(0, 0));
         clientHistoryPage.logout();

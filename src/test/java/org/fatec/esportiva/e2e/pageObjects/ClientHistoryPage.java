@@ -120,7 +120,7 @@ public class ClientHistoryPage {
         button.click();
     }
 
-    public void itemRequestReturn(int cardPosition, int itemPosition, int quantity, boolean confirm) {
+    public void itemRequestReturn(int cardPosition, String itemName, int quantity, boolean confirm) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("A quantidade não pode ser zero ou negativa");
         }
@@ -132,6 +132,21 @@ public class ClientHistoryPage {
             System.out.println("A pausa foi interrompida!");
             e.printStackTrace();
         }
+
+
+        // Quantidade de itens para iterar
+        WebElement transactionTemp = getCardTransaction(cardPosition);
+        // Busca todos os <div> que são filhos diretos
+        List<WebElement> directDivs = transactionTemp.findElements(By.xpath("./div"));
+        // Conta quantos vieram na lista
+        int count = directDivs.size();
+        int itemPosition = 0;
+        for (int i = 1; i < count; i++) {
+            if (getItemName(cardPosition, i - 1) == itemName){
+                itemPosition = i - 1;
+            }
+        }
+
         // Seleciona o produto para trocar (Muda de tela)
         WebElement transaction = getCardTransaction(cardPosition);
         WebElement item = getItem(transaction, itemPosition);
@@ -142,7 +157,7 @@ public class ClientHistoryPage {
         wait.until(ExpectedConditions.stalenessOf(button));
         // Tempo extra para carregar a página completamente
         try {
-            Thread.sleep(1500);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             System.out.println("A pausa foi interrompida!");
             e.printStackTrace();
