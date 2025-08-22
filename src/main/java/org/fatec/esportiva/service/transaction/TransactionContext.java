@@ -23,7 +23,7 @@ public class TransactionContext {
 
     public void refundSingleVoucher(Transaction transaction) {
         Client client = transaction.getClient();
-        BigDecimal voucherValue = transaction.getTotalCost();
+        BigDecimal voucherValue = transaction.getTotalPrice();
         if (voucherValue.compareTo(BigDecimal.ZERO) < 1)
             return;
         // Cria um novo cupom

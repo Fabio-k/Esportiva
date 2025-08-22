@@ -22,7 +22,7 @@ import org.fatec.esportiva.listeners.LogListener;
 @Getter
 @Setter
 @Table(name = "transacoes")
-public class Transaction {
+public class Transaction implements totalPrice{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +72,9 @@ public class Transaction {
         }
     }
 
-    public BigDecimal getTotalCost(){
+
+    @Override
+    public BigDecimal getTotalPrice(){
         return orders.stream().map(Order::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

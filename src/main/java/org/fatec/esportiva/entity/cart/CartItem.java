@@ -41,6 +41,6 @@ public class CartItem implements Serializable {
 
     public BigDecimal getTotalPrice(){
         BigDecimal quantity = BigDecimal.valueOf(this.quantity);
-        return product.getPriceWithMargin().multiply(quantity);
+        return product.getTotalPrice().multiply(quantity);
     }
 }

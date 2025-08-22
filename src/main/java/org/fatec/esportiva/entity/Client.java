@@ -113,12 +113,12 @@ public class Client implements UserDetails {
         BigDecimal transactionTotal = BigDecimal.ZERO;
 
         for (Transaction transaction : this.transactions) {
-            transactionTotal = transactionTotal.add(transaction.getTotalCost());
+            transactionTotal = transactionTotal.add(transaction.getTotalPrice());
             transactionsCount = transactionsCount.add(BigDecimal.ONE);
         }
 
         // Para evitar divisão por zero se o cliente não tem compras, retorna zero
-        if (transactionsCount == BigDecimal.ZERO){
+        if (transactionsCount.equals(BigDecimal.ZERO)){
             return BigDecimal.ZERO;
         }
         else{

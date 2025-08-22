@@ -46,7 +46,7 @@ public class ProductMapper {
     public ProductResponseDto toProductResponseDto(Product product) {
         int availableQuantity = product.getStockQuantity() - product.getBlockedQuantity();
         return new ProductResponseDto(product.getId(), availableQuantity, product.getName(),
-                product.getPriceWithMargin(), product.getDescription(), product.getImage());
+                product.getTotalPrice(), product.getDescription(), product.getImage());
     }
 
     public AdminProductResponseDto toAdminProductResponseDto(Product product, List<ProductCategoryResponseDto> categories){
@@ -58,7 +58,7 @@ public class ProductMapper {
                 .blockedQuantity(product.getBlockedQuantity())
                 .categories(categories)
                 .costValue(product.getCostValue())
-                .salesPrice(product.getPriceWithMargin())
+                .salesPrice(product.getTotalPrice())
                 .entryDate(product.getEntryDate())
                 .inactivationJustification(product.getInactivationJustification())
                 .image(product.getImage())

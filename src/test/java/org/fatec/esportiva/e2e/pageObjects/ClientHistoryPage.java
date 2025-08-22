@@ -2,6 +2,7 @@ package org.fatec.esportiva.e2e.pageObjects;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -142,7 +143,7 @@ public class ClientHistoryPage {
         int count = directDivs.size();
         int itemPosition = 0;
         for (int i = 1; i < count; i++) {
-            if (getItemName(cardPosition, i - 1) == itemName){
+            if (Objects.equals(getItemName(cardPosition, i - 1), itemName)){
                 itemPosition = i - 1;
             }
         }
@@ -157,7 +158,7 @@ public class ClientHistoryPage {
         wait.until(ExpectedConditions.stalenessOf(button));
         // Tempo extra para carregar a página completamente
         try {
-            Thread.sleep(4000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             System.out.println("A pausa foi interrompida!");
             e.printStackTrace();

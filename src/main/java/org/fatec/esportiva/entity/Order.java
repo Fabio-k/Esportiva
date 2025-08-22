@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Table(name = "pedidos")
-public class Order {
+public class Order implements totalPrice{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,22 +40,7 @@ public class Order {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ped_pro_id")
-    private Product product;
-
-    @Override
-    public String toString() {
-        return """
-                Pedido\n
-                Produto: %s\n
-                Status: %s\n
-                Quantidade: %s\n
-                Transação: %s
-                """.formatted(
-                product.getName(),
-                status.getDisplayName(),
-                quantity,
-                transaction.getId());
-    }
+    private totalPrice product;
 
     public Boolean hasInsufficientQuantity(int tradedQuantity) {
         return this.quantity < tradedQuantity;
@@ -69,9 +54,10 @@ public class Order {
         return status.isInDeliveryProcess();
     }
 
+    @Override
     public BigDecimal getTotalPrice() {
         BigDecimal quantity = BigDecimal.valueOf(this.quantity);
-        return product.getPriceWithMargin().multiply(quantity);
+        return product.getTotalPrice().multiply(quantity);
     }
 
     public void decreaseQuantity(int quantity) {
