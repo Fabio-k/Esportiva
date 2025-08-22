@@ -24,72 +24,74 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin/clients")
 public class AdminClientsController {
-    private final ClientService clientService;
-    private final TransactionService transactionService;
 
-    @GetMapping
-    public String getClients(Model model,
-                             @RequestParam(value = "name", required = false) String name,
-                             @RequestParam(value="cpf", required = false) String cpf,
-                             @RequestParam(value="email", required = false) String email,
-                             @RequestParam(value="status", required = false) UserStatus status,
-                             @RequestParam(value="gender", required = false) Gender gender
-                             ){
+	private final ClientService clientService;
 
-        List<ClientDto> clients = clientService.getClients(name, email, cpf, status, gender);
-        model.addAttribute("users", clients);
-        return "admin/clients/index";
-    }
+	private final TransactionService transactionService;
 
-    @GetMapping("/new")
-    public String newClient(Model model){
-        model.addAttribute("formAction", "/admin/clients/save");
+	@GetMapping
+	public String getClients(Model model, @RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "cpf", required = false) String cpf,
+			@RequestParam(value = "email", required = false) String email,
+			@RequestParam(value = "status", required = false) UserStatus status,
+			@RequestParam(value = "gender", required = false) Gender gender) {
 
-        ClientDto clientDto = new ClientDto();
-        clientDto.getAddresses().add(new AddressDto());
-        clientDto.getCreditCards().add(new CreditCardDto());
-        model.addAttribute("user", clientDto);
+		List<ClientDto> clients = clientService.getClients(name, email, cpf, status, gender);
+		model.addAttribute("users", clients);
+		return "admin/clients/index";
+	}
 
-        return "admin/clients/new";
-    }
+	@GetMapping("/new")
+	public String newClient(Model model) {
+		model.addAttribute("formAction", "/admin/clients/save");
 
-    @PostMapping("/save")
-    public String save(@Valid @ModelAttribute("user") ClientDto clientDto, BindingResult result, Model model){
-        if (result.hasErrors()){
-            return "admin/clients/new";
-        }
-        clientService.save(clientDto);
-        return "redirect:/admin/clients";
-    }
+		ClientDto clientDto = new ClientDto();
+		clientDto.getAddresses().add(new AddressDto());
+		clientDto.getCreditCards().add(new CreditCardDto());
+		model.addAttribute("user", clientDto);
 
-    @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Long id){
-       Client client = clientService.findClient(id);
-        clientService.deleteClient(client);
-        return "redirect:/admin/clients";
-    }
+		return "admin/clients/new";
+	}
 
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Long id, Model model){
-        if(!model.containsAttribute("user")){
-            Client user = clientService.findClient(id);
-            ClientDto userDto = ClientMapper.toUserDto(user);
-            userDto.setAddresses(AddressMapper.toAddressDtoList(user.getAddresses()));
-            userDto.setCreditCards(user.getCreditCards().stream().map(CreditCardMapper::toCreditCardDto).toList());
-            model.addAttribute("user", userDto);
-        }
-        model.addAttribute("id", id);
-        model.addAttribute("formAction", "/admin/clients/update/" + id);
-        model.addAttribute("transactions", transactionService.getTransactions(id));
-        return "/admin/clients/edit";
-    }
+	@PostMapping("/save")
+	public String save(@Valid @ModelAttribute("user") ClientDto clientDto, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			return "admin/clients/new";
+		}
+		clientService.save(clientDto);
+		return "redirect:/admin/clients";
+	}
 
-    @PatchMapping("/update/{id}")
-    public String update(@PathVariable Long id, @Valid @ModelAttribute("user") ClientDto userDto, BindingResult result, Model model){
-        if(result.hasErrors()){
-            return "admin/clients/edit";
-        }
-        clientService.update(id, userDto);
-        return "redirect:/admin/clients";
-    }
+	@DeleteMapping("/delete/{id}")
+	public String delete(@PathVariable Long id) {
+		Client client = clientService.findClient(id);
+		clientService.deleteClient(client);
+		return "redirect:/admin/clients";
+	}
+
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable Long id, Model model) {
+		if (!model.containsAttribute("user")) {
+			Client user = clientService.findClient(id);
+			ClientDto userDto = ClientMapper.toUserDto(user);
+			userDto.setAddresses(AddressMapper.toAddressDtoList(user.getAddresses()));
+			userDto.setCreditCards(user.getCreditCards().stream().map(CreditCardMapper::toCreditCardDto).toList());
+			model.addAttribute("user", userDto);
+		}
+		model.addAttribute("id", id);
+		model.addAttribute("formAction", "/admin/clients/update/" + id);
+		model.addAttribute("transactions", transactionService.getTransactions(id));
+		return "/admin/clients/edit";
+	}
+
+	@PatchMapping("/update/{id}")
+	public String update(@PathVariable Long id, @Valid @ModelAttribute("user") ClientDto userDto, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
+			return "admin/clients/edit";
+		}
+		clientService.update(id, userDto);
+		return "redirect:/admin/clients";
+	}
+
 }

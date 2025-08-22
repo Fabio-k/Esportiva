@@ -12,13 +12,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class LogService {
-    private final LogRepository logRepository;
 
-    public List<LogDto> getLogs() {
+	private final LogRepository logRepository;
 
-        List<LogDto> clients = logRepository
-                .findAll().stream()
-                .map(LogMapper::toLogDto).toList();
-        return clients;
-    }
+	public List<LogDto> getLogs() {
+
+		List<LogDto> clients = logRepository.findAll().stream().map(LogMapper::toLogDto).toList();
+		return clients;
+	}
+
 }

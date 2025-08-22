@@ -13,13 +13,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/admin/analysis")
 public class AdminAnalysisController {
-    private final ProductCategoryRepository productCategoryRepository;
-    private final ProductService productService;
 
-    @GetMapping
-    public String getAnalysis(Model model) {
-        model.addAttribute("categories", productCategoryRepository.findAll());
-        model.addAttribute("products", productService.getAllProducts());
-        return "admin/analysis";
-    }
+	private final ProductCategoryRepository productCategoryRepository;
+
+	private final ProductService productService;
+
+	@GetMapping
+	public String getAnalysis(Model model) {
+		model.addAttribute("categories", productCategoryRepository.findAll());
+		model.addAttribute("products", productService.getAllProducts());
+		return "admin/analysis";
+	}
+
 }

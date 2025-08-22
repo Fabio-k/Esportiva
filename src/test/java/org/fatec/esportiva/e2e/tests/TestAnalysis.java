@@ -11,38 +11,41 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-
 public class TestAnalysis extends E2E {
-    // Page Models
-    private LoginPage login;
-    private UserDashboardPage userDashboard;
-    private AnalysisPage analysisPage;
 
-    @BeforeEach
-    void beforeEach() {
-        browser = new ChromeDriver(options);
-        browser.get(baseUrl);
-        login = new LoginPage(browser);
-        userDashboard = new UserDashboardPage(browser);
-        analysisPage = new AnalysisPage(browser);
-    }
+	// Page Models
+	private LoginPage login;
 
-    @AfterEach
-    void afterEach() {
-        browser.quit();
-    }
+	private UserDashboardPage userDashboard;
 
-    // @traceto(RF0055;RNF0043)
-    @Test
-    void salesAnalysis() {
-        // Verifica se a análise exibe os dados corretamente
+	private AnalysisPage analysisPage;
 
-        login.login("Fábio");
-        userDashboard.navigateAdminPages("Análise");
-        analysisPage.setStartDate("01012024");
-        analysisPage.setEndDate("31122024");
-        analysisPage.setProduct("Bola de Vôlei Mikasa 350VW");
-        
-        assertEquals(2, analysisPage.getBarValue(0));
-    }
+	@BeforeEach
+	void beforeEach() {
+		browser = new ChromeDriver(options);
+		browser.get(baseUrl);
+		login = new LoginPage(browser);
+		userDashboard = new UserDashboardPage(browser);
+		analysisPage = new AnalysisPage(browser);
+	}
+
+	@AfterEach
+	void afterEach() {
+		browser.quit();
+	}
+
+	// @traceto(RF0055;RNF0043)
+	@Test
+	void salesAnalysis() {
+		// Verifica se a análise exibe os dados corretamente
+
+		login.login("Fábio");
+		userDashboard.navigateAdminPages("Análise");
+		analysisPage.setStartDate("01012024");
+		analysisPage.setEndDate("31122024");
+		analysisPage.setProduct("Bola de Vôlei Mikasa 350VW");
+
+		assertEquals(2, analysisPage.getBarValue(0));
+	}
+
 }

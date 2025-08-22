@@ -9,91 +9,98 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CartIndividualProductPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
 
-    public CartIndividualProductPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
+	private WebDriver driver;
 
-    public void returnMainPage() {
-        // Retorna ao menu inicial
-        WebElement link = driver.findElement(By.id("button-return"));
-        String currentUrl = driver.getCurrentUrl();
+	private WebDriverWait wait;
 
-        link.click();
+	public CartIndividualProductPage(WebDriver driver) {
+		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void returnMainPage() {
+		// Retorna ao menu inicial
+		WebElement link = driver.findElement(By.id("button-return"));
+		String currentUrl = driver.getCurrentUrl();
 
-    public void goToCart() {
-        // Após inserir o produto no carrinho, você pode ir até ele
-        WebElement link = driver.findElement(By.id("link-cart")); // Ícone do carrinho na aba de navegação
-        String currentUrl = driver.getCurrentUrl();
+		link.click();
 
-        try {
-            link.click();
-        } catch (ElementClickInterceptedException e) {
-            // Se o ícone do carrinho foi oculto pela barra de ir a página, clique nelas
-            // então
-            WebElement link2 = driver.findElement(By.linkText("Ir para o carrinho"));
-            link2.click();
-        }
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void goToCart() {
+		// Após inserir o produto no carrinho, você pode ir até ele
+		WebElement link = driver.findElement(By.id("link-cart")); // Ícone do carrinho na
+																	// aba de navegação
+		String currentUrl = driver.getCurrentUrl();
 
-    public void decreaseButton(int clickTimes) {
-        if (clickTimes < 0) {
-            throw new IllegalArgumentException("A quantidade de cliques não pode ser negativa: " + clickTimes);
-        }
+		try {
+			link.click();
+		}
+		catch (ElementClickInterceptedException e) {
+			// Se o ícone do carrinho foi oculto pela barra de ir a página, clique nelas
+			// então
+			WebElement link2 = driver.findElement(By.linkText("Ir para o carrinho"));
+			link2.click();
+		}
 
-        WebElement button = driver.findElement(By.id("decreaseButton"));
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
 
-        for (int i = 0; i < clickTimes; i++) {
-            button.click();
-        }
-        try {
-            Thread.sleep(150); // Tempo para o BD responder
-        } catch (InterruptedException e) {
-            // ...
-        }
-    }
+	public void decreaseButton(int clickTimes) {
+		if (clickTimes < 0) {
+			throw new IllegalArgumentException("A quantidade de cliques não pode ser negativa: " + clickTimes);
+		}
 
-    public void increaseButton(int clickTimes) {
-        if (clickTimes < 0) {
-            throw new IllegalArgumentException("A quantidade de cliques não pode ser negativa: " + clickTimes);
-        }
+		WebElement button = driver.findElement(By.id("decreaseButton"));
 
-        WebElement button = driver.findElement(By.id("increaseButton"));
+		for (int i = 0; i < clickTimes; i++) {
+			button.click();
+		}
+		try {
+			Thread.sleep(150); // Tempo para o BD responder
+		}
+		catch (InterruptedException e) {
+			// ...
+		}
+	}
 
-        for (int i = 0; i < clickTimes; i++) {
-            button.click();
-        }
-        try {
-            Thread.sleep(1500); // Tempo para o BD responder
-        } catch (InterruptedException e) {
-            // ...
-        }
-    }
+	public void increaseButton(int clickTimes) {
+		if (clickTimes < 0) {
+			throw new IllegalArgumentException("A quantidade de cliques não pode ser negativa: " + clickTimes);
+		}
 
-    public void addProductToCart() {
-        // Retorna ao menu inicial
-        WebElement button = driver.findElement(By.id("addProductButton"));
-        button.click();
-        try {
-            Thread.sleep(800); // Tempo para o BD responder
-        } catch (InterruptedException e) {
-            // ...
-        }
-    }
+		WebElement button = driver.findElement(By.id("increaseButton"));
 
-    public String getProductName() {
-        WebElement productName = driver.findElement(By.tagName("h1"));
-        return productName.getText();
-    }
+		for (int i = 0; i < clickTimes; i++) {
+			button.click();
+		}
+		try {
+			Thread.sleep(1500); // Tempo para o BD responder
+		}
+		catch (InterruptedException e) {
+			// ...
+		}
+	}
+
+	public void addProductToCart() {
+		// Retorna ao menu inicial
+		WebElement button = driver.findElement(By.id("addProductButton"));
+		button.click();
+		try {
+			Thread.sleep(800); // Tempo para o BD responder
+		}
+		catch (InterruptedException e) {
+			// ...
+		}
+	}
+
+	public String getProductName() {
+		WebElement productName = driver.findElement(By.tagName("h1"));
+		return productName.getText();
+	}
 
 }

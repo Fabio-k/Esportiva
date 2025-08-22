@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface PromotionalCouponRepository extends JpaRepository<PromotionalCoupon, Long> {
-    Optional<PromotionalCoupon> findByCode(String code);
+
+	Optional<PromotionalCoupon> findByCode(String code);
+
 }

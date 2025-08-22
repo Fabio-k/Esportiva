@@ -13,68 +13,68 @@ import java.util.Objects;
 
 @UtilityClass
 public class OrderMapper {
-    public Order toOrder(OrderDto productDto) {
-        return Order.builder()
-                .status(productDto.getStatus())
-                .quantity(productDto.getQuantity())
-                .build();
-    }
 
-    public OrderDto toOrderDto(Order order) {
-        return OrderDto.builder()
-                .id(order.getId())
-                .status(order.getStatus())
-                .quantity(order.getQuantity())
-                .transactionId(order.getTransaction().getId())
-                .client(order.getTransaction().getClient().getName())
-                .purchaseDate(order.getTransaction().getPurchaseDate().toLocalDate())
-                .productName(order.getProduct().getName())
-                .build();
-    }
+	public Order toOrder(OrderDto productDto) {
+		return Order.builder().status(productDto.getStatus()).quantity(productDto.getQuantity()).build();
+	}
 
-    public OrderResponseDto toOrderResponseDto(Order order) {
-        return OrderResponseDto.builder()
-                .id(order.getId())
-                .status(order.getStatus())
-                .product(ProductMapper.toProductResponseDto(order.getProduct()))
-                .quantity(order.getQuantity())
-                .build();
-    }
+	public OrderDto toOrderDto(Order order) {
+		return OrderDto.builder()
+			.id(order.getId())
+			.status(order.getStatus())
+			.quantity(order.getQuantity())
+			.transactionId(order.getTransaction().getId())
+			.client(order.getTransaction().getClient().getName())
+			.purchaseDate(order.getTransaction().getPurchaseDate().toLocalDate())
+			.productName(order.getProduct().getName())
+			.build();
+	}
 
-    public OrderByStatusResponseDto toOrderByStatusResponseDto(List<Order> orders) {
-        OrderByStatusResponseDto orderByStatusResponseDto = new OrderByStatusResponseDto();
-        OrderResponseDto orderResponseDto;
+	public OrderResponseDto toOrderResponseDto(Order order) {
+		return OrderResponseDto.builder()
+			.id(order.getId())
+			.status(order.getStatus())
+			.product(ProductMapper.toProductResponseDto(order.getProduct()))
+			.quantity(order.getQuantity())
+			.build();
+	}
 
-        for (Order order : orders) {
-            orderResponseDto = toOrderResponseDto(order);
+	public OrderByStatusResponseDto toOrderByStatusResponseDto(List<Order> orders) {
+		OrderByStatusResponseDto orderByStatusResponseDto = new OrderByStatusResponseDto();
+		OrderResponseDto orderResponseDto;
 
-            if (order.isInDeliveryProcess() || order.getStatus() == OrderStatus.COMPRA_CANCELADA) {
-                orderByStatusResponseDto.getDeliveredOrders().add(orderResponseDto);
-                orderResponseDto.setTotalProductQuantity(order.getQuantity());
+		for (Order order : orders) {
+			orderResponseDto = toOrderResponseDto(order);
 
-            } else if (order.isBeingTraded()) {
-                orderByStatusResponseDto.getTradedOrders().add(orderResponseDto);
-            }
-        }
+			if (order.isInDeliveryProcess() || order.getStatus() == OrderStatus.COMPRA_CANCELADA) {
+				orderByStatusResponseDto.getDeliveredOrders().add(orderResponseDto);
+				orderResponseDto.setTotalProductQuantity(order.getQuantity());
 
-        for (OrderResponseDto tradedOrder : orderByStatusResponseDto.getTradedOrders()) {
-            for (OrderResponseDto deliveredOrder : orderByStatusResponseDto.getDeliveredOrders()) {
-                if (Objects.equals(deliveredOrder.getProduct().id(), tradedOrder.getProduct().id())) {
-                    deliveredOrder.setTotalProductQuantity(
-                            deliveredOrder.getTotalProductQuantity() + tradedOrder.getQuantity());
-                }
-            }
-        }
+			}
+			else if (order.isBeingTraded()) {
+				orderByStatusResponseDto.getTradedOrders().add(orderResponseDto);
+			}
+		}
 
-        return orderByStatusResponseDto;
-    }
+		for (OrderResponseDto tradedOrder : orderByStatusResponseDto.getTradedOrders()) {
+			for (OrderResponseDto deliveredOrder : orderByStatusResponseDto.getDeliveredOrders()) {
+				if (Objects.equals(deliveredOrder.getProduct().id(), tradedOrder.getProduct().id())) {
+					deliveredOrder
+						.setTotalProductQuantity(deliveredOrder.getTotalProductQuantity() + tradedOrder.getQuantity());
+				}
+			}
+		}
 
-    public Order toTradeOrder(Order order, int quantity) {
-        return Order.builder()
-                .transaction(order.getTransaction())
-                .product(order.getProduct())
-                .quantity(quantity)
-                .status(OrderStatus.EM_TROCA)
-                .build();
-    }
+		return orderByStatusResponseDto;
+	}
+
+	public Order toTradeOrder(Order order, int quantity) {
+		return Order.builder()
+			.transaction(order.getTransaction())
+			.product(order.getProduct())
+			.quantity(quantity)
+			.status(OrderStatus.EM_TROCA)
+			.build();
+	}
+
 }

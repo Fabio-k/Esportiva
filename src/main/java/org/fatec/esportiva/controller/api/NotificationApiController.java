@@ -12,17 +12,19 @@ import java.util.List;
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
 public class NotificationApiController {
-    private final NotificationService notificationService;
 
-    @GetMapping
-    public ResponseEntity<List<NotificationResponseDto>> getNotifications(){
-        List<NotificationResponseDto> notificationResponseDtos = notificationService.getNotifications();
-        return ResponseEntity.ok(notificationResponseDtos);
-    }
+	private final NotificationService notificationService;
 
-    @PatchMapping("/viewed")
-    public  ResponseEntity<?> patchNotifications(@RequestBody List<Long> ids){
-        notificationService.markAsViewed(ids);
-        return ResponseEntity.ok().build();
-    }
+	@GetMapping
+	public ResponseEntity<List<NotificationResponseDto>> getNotifications() {
+		List<NotificationResponseDto> notificationResponseDtos = notificationService.getNotifications();
+		return ResponseEntity.ok(notificationResponseDtos);
+	}
+
+	@PatchMapping("/viewed")
+	public ResponseEntity<?> patchNotifications(@RequestBody List<Long> ids) {
+		notificationService.markAsViewed(ids);
+		return ResponseEntity.ok().build();
+	}
+
 }

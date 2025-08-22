@@ -17,40 +17,44 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class CartScheduledTask {
-    private final CartRepository cartRepository;
-    private final CartService cartService;
-    private final NotificationService notificationService;
 
-    @Value("${cart.product.timeoutInMinutes}")
-    private int cartTimeoutInMinutes;
+	private final CartRepository cartRepository;
 
-    @Value("${cart.expire.notification.inMinutes}")
-    private int cartExpireNotificationInMinutes;
+	private final CartService cartService;
 
-    @Scheduled(fixedRateString = "${cart.cleanup.intervalInMillis:60000}")
-    @Transactional
-    public void freeCarts() {
+	private final NotificationService notificationService;
 
-        List<Cart> carts = cartRepository.findByCreatedAtBefore(LocalDateTime.now());
-        carts.forEach(cart -> {
-            cartService.removeExpiredItem(cart);
-            cartService.updateCartCreatedAt(cart);
-            cartService.setToNotified(cart.getId(), false);
-            cartRepository.save(cart);
-        });
-    }
+	@Value("${cart.product.timeoutInMinutes}")
+	private int cartTimeoutInMinutes;
 
-    @Scheduled(fixedRateString = "${cart.expire.notification.intervalInMillis:60000}")
-    @Transactional
-    public void notifyClientsAboutCartTimeout() {
-        List<Cart> carts = cartRepository.findByCreatedAtBeforeAndIsNotifiedFalse(
-                LocalDateTime.now().plusMinutes(cartExpireNotificationInMinutes));
-        carts.forEach(cart -> {
-            List<CartItem> cartItems = cart.getCartItems();
-            if (!cartItems.isEmpty()) {
-                notificationService.notifyCartTimeout(cart.getClient());
-                cartService.setToNotified(cart.getId(), true);
-            }
-        });
-    }
+	@Value("${cart.expire.notification.inMinutes}")
+	private int cartExpireNotificationInMinutes;
+
+	@Scheduled(fixedRateString = "${cart.cleanup.intervalInMillis:60000}")
+	@Transactional
+	public void freeCarts() {
+
+		List<Cart> carts = cartRepository.findByCreatedAtBefore(LocalDateTime.now());
+		carts.forEach(cart -> {
+			cartService.removeExpiredItem(cart);
+			cartService.updateCartCreatedAt(cart);
+			cartService.setToNotified(cart.getId(), false);
+			cartRepository.save(cart);
+		});
+	}
+
+	@Scheduled(fixedRateString = "${cart.expire.notification.intervalInMillis:60000}")
+	@Transactional
+	public void notifyClientsAboutCartTimeout() {
+		List<Cart> carts = cartRepository
+			.findByCreatedAtBeforeAndIsNotifiedFalse(LocalDateTime.now().plusMinutes(cartExpireNotificationInMinutes));
+		carts.forEach(cart -> {
+			List<CartItem> cartItems = cart.getCartItems();
+			if (!cartItems.isEmpty()) {
+				notificationService.notifyCartTimeout(cart.getClient());
+				cartService.setToNotified(cart.getId(), true);
+			}
+		});
+	}
+
 }

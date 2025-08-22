@@ -18,21 +18,23 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class OrderDto {
-    private Long id;
 
-    @NotNull(message = "Status não pode ficar em branco")
-    private OrderStatus status;
+	private Long id;
 
-    @NotNull(message = "Quantidade de produtos em uma ordem de compra não pode ficar em branco")
-    @Min(value = 0, message = "Quantidade de produtos em uma ordem de compra não pode ser negativa")
-    private int quantity;
+	@NotNull(message = "Status não pode ficar em branco")
+	private OrderStatus status;
 
-    @NotNull(message = "Toda ordem de compra deve estar associada a uma transação")
-    private Long transactionId;
+	@NotNull(message = "Quantidade de produtos em uma ordem de compra não pode ficar em branco")
+	@Min(value = 0, message = "Quantidade de produtos em uma ordem de compra não pode ser negativa")
+	private int quantity;
 
-    private LocalDate purchaseDate;
+	@NotNull(message = "Toda ordem de compra deve estar associada a uma transação")
+	private Long transactionId;
 
-    private String client;
+	private LocalDate purchaseDate;
 
-    private String productName;
+	private String client;
+
+	private String productName;
+
 }

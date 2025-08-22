@@ -26,89 +26,99 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-    private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
-    private final ClientRepository clientRepository;
-    private final ClientService clientService;
-    private final NotificationService notificationService;
-    private final ExchangeVoucherService exchangeVoucherService;
-    private final TransactionRepository transactionRepository;
-    private final OrderItemHandlerFactory orderItemHandlerFactory;
 
-    public List<OrderDto> getOrdersByStatus(OrderStatus status) {
-        return orderRepository.findAllByStatus(status)
-                .stream().map(OrderMapper::toOrderDto).toList();
-    }
+	private final OrderRepository orderRepository;
 
-    public List<OrderDto> getOrders() {
-        return orderRepository.findAll().stream().map(OrderMapper::toOrderDto).toList();
-    }
+	private final ProductRepository productRepository;
 
-    public Order findById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
-    }
+	private final ClientRepository clientRepository;
 
-    public Order findOrderByClientIdAndId(Long id) {
-        Client client = clientService.getAuthenticatedClient();
-        return orderRepository.findByTransactionClientIdAndId(client.getId(), id)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
-    }
+	private final ClientService clientService;
 
-    public OrderResponseDto findByClientIdAndId(Long id) {
-        Order order = findOrderByClientIdAndId(id);
-        return OrderMapper.toOrderResponseDto(order);
-    }
+	private final NotificationService notificationService;
 
-    // Máquina de estados que controla a transições conforme cada aprovação
-    public void changeState(long id, boolean approve, boolean stock) {
-        Order order = findById(id);
-        Product product = order.getProduct();
-        Client client = order.getTransaction().getClient();
-        OrderStatus status = order.getStatus();
-        OrderItemHandlerContext context = new OrderItemHandlerContext(stock, notificationService,
-                exchangeVoucherService);
+	private final ExchangeVoucherService exchangeVoucherService;
 
-        OrderState handler = orderItemHandlerFactory.getHandler(status);
-        if (approve) {
-            handler.approve(order, context);
-        } else {
-            handler.reprove(order, context);
-        }
+	private final TransactionRepository transactionRepository;
 
-        orderRepository.save(order);
-        productRepository.save(product);
-        clientRepository.save(client);
-    }
+	private final OrderItemHandlerFactory orderItemHandlerFactory;
 
-    @Transactional
-    public void tradeOrder(Long id, Short quantity) {
-        Order order = findOrderByClientIdAndId(id);
+	public List<OrderDto> getOrdersByStatus(OrderStatus status) {
+		return orderRepository.findAllByStatus(status).stream().map(OrderMapper::toOrderDto).toList();
+	}
 
-        validateOrder(order, quantity);
+	public List<OrderDto> getOrders() {
+		return orderRepository.findAll().stream().map(OrderMapper::toOrderDto).toList();
+	}
 
-        processTradeOrder(order, quantity);
-    }
+	public Order findById(Long id) {
+		return orderRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+	}
 
-    private void validateOrder(Order order, int quantity) {
-        if (order.hasInsufficientQuantity(quantity))
-            throw new IllegalArgumentException("Quantidade inválida");
+	public Order findOrderByClientIdAndId(Long id) {
+		Client client = clientService.getAuthenticatedClient();
+		return orderRepository.findByTransactionClientIdAndId(client.getId(), id)
+			.orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado"));
+	}
 
-        if (order.getStatus() != OrderStatus.ENTREGUE)
-            throw new IllegalArgumentException("pedido não está com status entregue");
-    }
+	public OrderResponseDto findByClientIdAndId(Long id) {
+		Order order = findOrderByClientIdAndId(id);
+		return OrderMapper.toOrderResponseDto(order);
+	}
 
-    private void processTradeOrder(Order order, int quantity) {
-        order.decreaseQuantity(quantity);
-        orderRepository.save(order);
+	// Máquina de estados que controla a transições conforme cada aprovação
+	public void changeState(long id, boolean approve, boolean stock) {
+		Order order = findById(id);
+		Product product = order.getProduct();
+		Client client = order.getTransaction().getClient();
+		OrderStatus status = order.getStatus();
+		OrderItemHandlerContext context = new OrderItemHandlerContext(stock, notificationService,
+				exchangeVoucherService);
 
-        Order newOrder = OrderMapper.toTradeOrder(order, quantity);
-        orderRepository.save(newOrder);
+		OrderState handler = orderItemHandlerFactory.getHandler(status);
+		if (approve) {
+			handler.approve(order, context);
+		}
+		else {
+			handler.reprove(order, context);
+		}
 
-        // Atualizar a transação, incluindo o novo pedido na coleção de orders
-        Transaction transaction = order.getTransaction(); // Obtém a transação do pedido existente
-        transaction.addOrder(newOrder); // Adiciona o novo pedido à lista de orders
+		orderRepository.save(order);
+		productRepository.save(product);
+		clientRepository.save(client);
+	}
 
-        // Salvar a transação para garantir que o relacionamento seja persistido
-        transactionRepository.save(transaction);
-    }
+	@Transactional
+	public void tradeOrder(Long id, Short quantity) {
+		Order order = findOrderByClientIdAndId(id);
+
+		validateOrder(order, quantity);
+
+		processTradeOrder(order, quantity);
+	}
+
+	private void validateOrder(Order order, int quantity) {
+		if (order.hasInsufficientQuantity(quantity))
+			throw new IllegalArgumentException("Quantidade inválida");
+
+		if (order.getStatus() != OrderStatus.ENTREGUE)
+			throw new IllegalArgumentException("pedido não está com status entregue");
+	}
+
+	private void processTradeOrder(Order order, int quantity) {
+		order.decreaseQuantity(quantity);
+		orderRepository.save(order);
+
+		Order newOrder = OrderMapper.toTradeOrder(order, quantity);
+		orderRepository.save(newOrder);
+
+		// Atualizar a transação, incluindo o novo pedido na coleção de orders
+		Transaction transaction = order.getTransaction(); // Obtém a transação do pedido
+															// existente
+		transaction.addOrder(newOrder); // Adiciona o novo pedido à lista de orders
+
+		// Salvar a transação para garantir que o relacionamento seja persistido
+		transactionRepository.save(transaction);
+	}
+
 }

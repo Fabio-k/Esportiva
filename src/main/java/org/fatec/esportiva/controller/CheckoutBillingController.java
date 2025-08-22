@@ -22,84 +22,105 @@ import java.util.List;
 @SessionAttributes("checkoutSession")
 @RequiredArgsConstructor
 public class CheckoutBillingController {
-    private final CreditCardService creditCardService;
-    private final CartEmptyValidator cartEmptyValidator;
-    private final ClientService clientService;
-    private final BillingService billingService;
-    private final PromotionalCouponService promotionalCouponService;
-    private final CurrencyService currencyService;
-    private final CheckoutSessionService checkoutSessionService;
 
-    @ModelAttribute
-    public void addTotalSummary(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
-        BigDecimal totalPrice = checkoutSessionService.calculateTotalPrice(checkoutSession);
-        BigDecimal totalExchangeVoucherPrice = checkoutSessionService.getExchangeVouchersTotalPrice(checkoutSession.getExchangeVoucherIds());
-        BigDecimal cartTotalPrice = checkoutSessionService.getCartTotalPrice();
+	private final CreditCardService creditCardService;
 
-        model.addAttribute("exchangeVoucherTotalPrice", currencyService.format(totalExchangeVoucherPrice));
-        model.addAttribute("productsTotalPrice", currencyService.format(cartTotalPrice));
-        model.addAttribute("cartTotalPrice", currencyService.format(totalPrice));
-    }
+	private final CartEmptyValidator cartEmptyValidator;
 
-    @GetMapping
-    public String getBilling(Model model, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
-        if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
-        cartEmptyValidator.validate();
-        List<CreditCardDto> creditCards = clientService.getClientCreditCards();
+	private final ClientService clientService;
 
-        PromotionalCouponResponseDto promotionalCouponResponseDto = promotionalCouponService.getPromotionalCouponOrReturnNull(checkoutSession.getPromotionalCouponCode());
-        model.addAttribute("promotionalCoupon", promotionalCouponResponseDto);
-        model.addAttribute("vouchers", clientService.getClientVouchers());
-        model.addAttribute("creditCard", new CreditCardDto());
-        model.addAttribute("creditCards", creditCards);
+	private final BillingService billingService;
 
-        return "checkout/billing/index";
-    }
+	private final PromotionalCouponService promotionalCouponService;
 
-    @GetMapping("/new")
-    public String newBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,Model model){
-        cartEmptyValidator.validate();
-        if(checkoutSession.getAddress() == null) return "redirect:/checkout/address";
+	private final CurrencyService currencyService;
 
-        model.addAttribute("creditCard", new CreditCardDto());
-        return "checkout/billing/new";
-    }
+	private final CheckoutSessionService checkoutSessionService;
 
-    @PostMapping("/credit_card/save")
-    public String saveCreditCard(@Valid @ModelAttribute("creditCard") CreditCardDto dto, BindingResult result, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession, @RequestParam(name = "saveCreditCard", required = false) boolean saveCreditCard, Model model){
-        cartEmptyValidator.validate();
-        if(result.hasErrors()){
-            model.addAttribute("creditCard", dto);
-            return "checkout/billing/new";
-        }
-        SplitCreditCardResponseDto savedCreditCard = creditCardService.createCreditCard(clientService.getAuthenticatedClient(), dto, saveCreditCard);
+	@ModelAttribute
+	public void addTotalSummary(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model) {
+		BigDecimal totalPrice = checkoutSessionService.calculateTotalPrice(checkoutSession);
+		BigDecimal totalExchangeVoucherPrice = checkoutSessionService
+			.getExchangeVouchersTotalPrice(checkoutSession.getExchangeVoucherIds());
+		BigDecimal cartTotalPrice = checkoutSessionService.getCartTotalPrice();
 
-        checkoutSession.getCreditCardPayments().add(savedCreditCard);
-        return "redirect:/checkout/billing";
-    }
+		model.addAttribute("exchangeVoucherTotalPrice", currencyService.format(totalExchangeVoucherPrice));
+		model.addAttribute("productsTotalPrice", currencyService.format(cartTotalPrice));
+		model.addAttribute("cartTotalPrice", currencyService.format(totalPrice));
+	}
 
-    @GetMapping("/split-cards")
-    public String splitCards(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model){
-        List<Long> clientCreditCardsIds = checkoutSession.getCreditCardPayments().stream().map(SplitCreditCardResponseDto::getId).toList();
+	@GetMapping
+	public String getBilling(Model model, @ModelAttribute("checkoutSession") CheckoutSession checkoutSession) {
+		if (checkoutSession.getAddress() == null)
+			return "redirect:/checkout/address";
+		cartEmptyValidator.validate();
+		List<CreditCardDto> creditCards = clientService.getClientCreditCards();
 
-        if(clientCreditCardsIds.size() < 2) return "redirect:/checkout/billing";
-        SplitCreditCardForm splitCreditCardForm = new SplitCreditCardForm();
-        splitCreditCardForm.getCreditCards().addAll(creditCardService.findAllByIdAndClientId(clientCreditCardsIds, clientService.getAuthenticatedClient().getId()));
+		PromotionalCouponResponseDto promotionalCouponResponseDto = promotionalCouponService
+			.getPromotionalCouponOrReturnNull(checkoutSession.getPromotionalCouponCode());
+		model.addAttribute("promotionalCoupon", promotionalCouponResponseDto);
+		model.addAttribute("vouchers", clientService.getClientVouchers());
+		model.addAttribute("creditCard", new CreditCardDto());
+		model.addAttribute("creditCards", creditCards);
 
-        model.addAttribute("creditCards", splitCreditCardForm);
-        return "/checkout/billing/split-cards";
-    }
+		return "checkout/billing/index";
+	}
 
-    @PostMapping("/save")
-    public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,
-                              @RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds,
-                              @RequestParam(name = "exchangeVouchers", required = false) List<Long> exchangeVoucherIds,
-                              @RequestParam(name = "promotionalCouponCode", required = false) String promotionalCouponCode
-    ){
-        billingService.savePaymentMethods(checkoutSession, exchangeVoucherIds, creditCardsIds, promotionalCouponCode);
+	@GetMapping("/new")
+	public String newBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model) {
+		cartEmptyValidator.validate();
+		if (checkoutSession.getAddress() == null)
+			return "redirect:/checkout/address";
 
-        if(checkoutSession.getCreditCardPayments().size() > 1) return "redirect:/checkout/billing/split-cards";
+		model.addAttribute("creditCard", new CreditCardDto());
+		return "checkout/billing/new";
+	}
 
-        return "redirect:/checkout/new";
-    }
+	@PostMapping("/credit_card/save")
+	public String saveCreditCard(@Valid @ModelAttribute("creditCard") CreditCardDto dto, BindingResult result,
+			@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,
+			@RequestParam(name = "saveCreditCard", required = false) boolean saveCreditCard, Model model) {
+		cartEmptyValidator.validate();
+		if (result.hasErrors()) {
+			model.addAttribute("creditCard", dto);
+			return "checkout/billing/new";
+		}
+		SplitCreditCardResponseDto savedCreditCard = creditCardService
+			.createCreditCard(clientService.getAuthenticatedClient(), dto, saveCreditCard);
+
+		checkoutSession.getCreditCardPayments().add(savedCreditCard);
+		return "redirect:/checkout/billing";
+	}
+
+	@GetMapping("/split-cards")
+	public String splitCards(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession, Model model) {
+		List<Long> clientCreditCardsIds = checkoutSession.getCreditCardPayments()
+			.stream()
+			.map(SplitCreditCardResponseDto::getId)
+			.toList();
+
+		if (clientCreditCardsIds.size() < 2)
+			return "redirect:/checkout/billing";
+		SplitCreditCardForm splitCreditCardForm = new SplitCreditCardForm();
+		splitCreditCardForm.getCreditCards()
+			.addAll(creditCardService.findAllByIdAndClientId(clientCreditCardsIds,
+					clientService.getAuthenticatedClient().getId()));
+
+		model.addAttribute("creditCards", splitCreditCardForm);
+		return "/checkout/billing/split-cards";
+	}
+
+	@PostMapping("/save")
+	public String saveBilling(@ModelAttribute("checkoutSession") CheckoutSession checkoutSession,
+			@RequestParam(name = "selectedCards", required = false) List<Long> creditCardsIds,
+			@RequestParam(name = "exchangeVouchers", required = false) List<Long> exchangeVoucherIds,
+			@RequestParam(name = "promotionalCouponCode", required = false) String promotionalCouponCode) {
+		billingService.savePaymentMethods(checkoutSession, exchangeVoucherIds, creditCardsIds, promotionalCouponCode);
+
+		if (checkoutSession.getCreditCardPayments().size() > 1)
+			return "redirect:/checkout/billing/split-cards";
+
+		return "redirect:/checkout/new";
+	}
+
 }

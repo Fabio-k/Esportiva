@@ -16,13 +16,16 @@ import java.util.Map;
 @SessionAttributes("checkoutSession")
 @RequiredArgsConstructor
 public class CheckoutBillingApiController {
-    private final BillingService billingService;
 
-    @PostMapping("/split-cards/save")
-    public ResponseEntity<Map<String, String>> saveSplitCardsPayment(@RequestBody List<SplitCreditCardDto> creditCards,
-                                                                     @ModelAttribute("checkoutSession") CheckoutSession checkoutSession){
-        if(creditCards.size() < 2) return ResponseEntity.badRequest().body(Map.of("erro", "falta atributos"));
-        billingService.saveSplitCardAmount(checkoutSession, creditCards);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
-    }
+	private final BillingService billingService;
+
+	@PostMapping("/split-cards/save")
+	public ResponseEntity<Map<String, String>> saveSplitCardsPayment(@RequestBody List<SplitCreditCardDto> creditCards,
+			@ModelAttribute("checkoutSession") CheckoutSession checkoutSession) {
+		if (creditCards.size() < 2)
+			return ResponseEntity.badRequest().body(Map.of("erro", "falta atributos"));
+		billingService.saveSplitCardAmount(checkoutSession, creditCards);
+		return ResponseEntity.status(HttpStatus.CREATED).body(null);
+	}
+
 }

@@ -12,17 +12,22 @@ import java.util.List;
 @Getter
 @Setter
 public class CheckoutSession implements Serializable {
-    private AddressResponseDto address;
-    private List<Long> exchangeVoucherIds;
-    private String promotionalCouponCode;
-    private List<SplitCreditCardResponseDto> creditCardPayments;
 
-    public CheckoutSession() {
-        this.exchangeVoucherIds = new ArrayList<>();
-        this.creditCardPayments = new ArrayList<>();
-    }
+	private AddressResponseDto address;
 
-    public Boolean isUsingCreditCard(Long id){
-        return creditCardPayments.stream().anyMatch(c -> c.getId().equals(id));
-    }
+	private List<Long> exchangeVoucherIds;
+
+	private String promotionalCouponCode;
+
+	private List<SplitCreditCardResponseDto> creditCardPayments;
+
+	public CheckoutSession() {
+		this.exchangeVoucherIds = new ArrayList<>();
+		this.creditCardPayments = new ArrayList<>();
+	}
+
+	public Boolean isUsingCreditCard(Long id) {
+		return creditCardPayments.stream().anyMatch(c -> c.getId().equals(id));
+	}
+
 }

@@ -19,49 +19,51 @@ import java.util.HashSet;
 @AllArgsConstructor
 @Builder
 public class AddressDto {
-    private Long id;
 
-    @NotBlank(message = "Frase de identificação não deve ficar em branco")
-    private String addressIdentificationPhrase;
+	private Long id;
 
-    @NotBlank(message = "CEP não pode ficar em branco")
-    @Pattern(regexp = "^[0-9]{8}$", message = "O CEP somente aceita 8 dígitos")
-    private String cep;
+	@NotBlank(message = "Frase de identificação não deve ficar em branco")
+	private String addressIdentificationPhrase;
 
-    @NotNull(message = "Tipo de residência não pode ficar em branco")
-    private ResidencyType residencyType;
+	@NotBlank(message = "CEP não pode ficar em branco")
+	@Pattern(regexp = "^[0-9]{8}$", message = "O CEP somente aceita 8 dígitos")
+	private String cep;
 
-    @NotNull(message = "Tipo de logradouro não pode ficar em branco")
-    private StreetType streetType;
+	@NotNull(message = "Tipo de residência não pode ficar em branco")
+	private ResidencyType residencyType;
 
-    @NotBlank(message = "Nome do logradouro não pode ficar em branco")
-    private String street;
+	@NotNull(message = "Tipo de logradouro não pode ficar em branco")
+	private StreetType streetType;
 
-    @NotBlank(message = "Número não pode ficar em branco")
-    @Pattern(regexp = "^[0-9]+$", message = "Número somente aceita dígitos")
-    private String number;
+	@NotBlank(message = "Nome do logradouro não pode ficar em branco")
+	private String street;
 
-    @NotBlank(message = "Bairro não pode ficar em branco")
-    private String neighborhood;
+	@NotBlank(message = "Número não pode ficar em branco")
+	@Pattern(regexp = "^[0-9]+$", message = "Número somente aceita dígitos")
+	private String number;
 
-    @NotBlank(message = "Cidade não pode ficar em branco")
-    private String city;
+	@NotBlank(message = "Bairro não pode ficar em branco")
+	private String neighborhood;
 
-    @NotBlank(message = "Estado não pode ficar em branco")
-    private String state;
+	@NotBlank(message = "Cidade não pode ficar em branco")
+	private String city;
 
-    @NotBlank(message = "País não pode ficar em branco")
-    private String country;
+	@NotBlank(message = "Estado não pode ficar em branco")
+	private String state;
 
-    private String observation;
+	@NotBlank(message = "País não pode ficar em branco")
+	private String country;
 
-    @Default
-    @NotEmpty(message = "Endereço deve pertencer ao menos a um tipo de residência")
-    private HashSet<AddressType> types = new HashSet<>();
+	private String observation;
 
-    public void setCep(String cep) {
-        if (cep != null) {
-            this.cep = cep.replaceAll("\\D", ""); // Remove tudo que não é número
-        }
-    }
+	@Default
+	@NotEmpty(message = "Endereço deve pertencer ao menos a um tipo de residência")
+	private HashSet<AddressType> types = new HashSet<>();
+
+	public void setCep(String cep) {
+		if (cep != null) {
+			this.cep = cep.replaceAll("\\D", ""); // Remove tudo que não é número
+		}
+	}
+
 }

@@ -11,8 +11,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/admin/logistic")
 public class AdminLogisticController {
 
-    @GetMapping
-    public String index(Model model) {
-        return "admin/logistic/index";
-    }
+	@GetMapping
+	public String index(Model model) {
+		return "admin/logistic/index";
+	}
+
 }

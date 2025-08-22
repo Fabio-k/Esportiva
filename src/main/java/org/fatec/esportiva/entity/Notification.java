@@ -14,26 +14,27 @@ import java.time.LocalDateTime;
 @Setter
 public class Notification {
 
-    public Notification(Client client, String message) {
-        this.client = client;
-        this.message = message;
-    }
+	public Notification(Client client, String message) {
+		this.client = client;
+		this.message = message;
+	}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "not_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "not_id")
+	private Long id;
 
-    @Column(name = "not_mensagem")
-    private String message;
+	@Column(name = "not_mensagem")
+	private String message;
 
-    @Column(name = "not_criado_em")
-    private LocalDateTime createdAt = LocalDateTime.now();
+	@Column(name = "not_criado_em")
+	private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "not_visto")
-    private Boolean isViewed = false;
+	@Column(name = "not_visto")
+	private Boolean isViewed = false;
 
-    @ManyToOne
-    @JoinColumn(name = "not_cli_id")
-    private Client client;
+	@ManyToOne
+	@JoinColumn(name = "not_cli_id")
+	private Client client;
+
 }

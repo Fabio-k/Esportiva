@@ -10,133 +10,137 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CheckoutPaymentPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
 
-    public CheckoutPaymentPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
+	private WebDriver driver;
 
-    public String getCreditCardNumber(int position) {
-        WebElement creditCardContainer = driver.findElement(By.id("creditCardList"));
+	private WebDriverWait wait;
 
-        List<WebElement> allCreditCards = creditCardContainer.findElements(By.xpath("./div"));
-        WebElement creditCard = allCreditCards.get(position);
+	public CheckoutPaymentPage(WebDriver driver) {
+		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+	}
 
-        WebElement label = creditCard.findElement(By.tagName("label"));
-        return label.getText();
-    }
+	public String getCreditCardNumber(int position) {
+		WebElement creditCardContainer = driver.findElement(By.id("creditCardList"));
 
-    public String getExchangeVoucherNumber(int position) {
-        WebElement exchageVoucherContainer = driver.findElement(By.id("exchangeVoucherList"));
+		List<WebElement> allCreditCards = creditCardContainer.findElements(By.xpath("./div"));
+		WebElement creditCard = allCreditCards.get(position);
 
-        List<WebElement> allExchangeVouchers = exchageVoucherContainer.findElements(By.xpath("./div"));
-        WebElement exchangeVoucher = allExchangeVouchers.get(position);
+		WebElement label = creditCard.findElement(By.tagName("label"));
+		return label.getText();
+	}
 
-        WebElement label = exchangeVoucher.findElement(By.tagName("label"));
-        return label.getText();
-    }
+	public String getExchangeVoucherNumber(int position) {
+		WebElement exchageVoucherContainer = driver.findElement(By.id("exchangeVoucherList"));
 
-    public String getPromotionVoucherCode() {
-        WebElement promotionVoucherCode = driver.findElement(By.id("discountCouponCode"));
+		List<WebElement> allExchangeVouchers = exchageVoucherContainer.findElements(By.xpath("./div"));
+		WebElement exchangeVoucher = allExchangeVouchers.get(position);
 
-        return promotionVoucherCode.getText();
-    }
+		WebElement label = exchangeVoucher.findElement(By.tagName("label"));
+		return label.getText();
+	}
 
-    public String getPromotionVoucherValue() {
-        WebElement promotionVoucherValue = driver.findElement(By.id("discountCouponValue"));
+	public String getPromotionVoucherCode() {
+		WebElement promotionVoucherCode = driver.findElement(By.id("discountCouponCode"));
 
-        return promotionVoucherValue.getText();
-    }
+		return promotionVoucherCode.getText();
+	}
 
-    public String getProductsTotalPrice() {
-        WebElement productsTotalPrice = driver.findElement(By.id("summaryProductsTotalPrice"));
+	public String getPromotionVoucherValue() {
+		WebElement promotionVoucherValue = driver.findElement(By.id("discountCouponValue"));
 
-        return productsTotalPrice.getText();
-    }
+		return promotionVoucherValue.getText();
+	}
 
-    public String getFreightValue() {
-        WebElement freight = driver.findElement(By.id("summaryFreight"));
+	public String getProductsTotalPrice() {
+		WebElement productsTotalPrice = driver.findElement(By.id("summaryProductsTotalPrice"));
 
-        return freight.getText();
-    }
+		return productsTotalPrice.getText();
+	}
 
-    public String getVouchersValue() {
-        WebElement vouchers = driver.findElement(By.id("summaryVouchers"));
+	public String getFreightValue() {
+		WebElement freight = driver.findElement(By.id("summaryFreight"));
 
-        return vouchers.getText();
-    }
+		return freight.getText();
+	}
 
-    public String getTotalPrice() {
-        WebElement totalPrice = driver.findElement(By.id("summaryTotalPrice"));
+	public String getVouchersValue() {
+		WebElement vouchers = driver.findElement(By.id("summaryVouchers"));
 
-        return totalPrice.getText();
-    }
+		return vouchers.getText();
+	}
 
-    public void selectCreditCard(int position) {
-        WebElement creditCardContainer = driver.findElement(By.id("creditCardList"));
+	public String getTotalPrice() {
+		WebElement totalPrice = driver.findElement(By.id("summaryTotalPrice"));
 
-        List<WebElement> allCreditCards = creditCardContainer.findElements(By.xpath("./label"));
+		return totalPrice.getText();
+	}
 
-        WebElement creditCard = allCreditCards.get(position);
-        //WebElement label = creditCard.findElement(By.tagName("label"));
-        creditCard.click();
-    }
+	public void selectCreditCard(int position) {
+		WebElement creditCardContainer = driver.findElement(By.id("creditCardList"));
 
-    public void selectExchangeVoucher(int position) {
-        WebElement exchageVoucherContainer = driver.findElement(By.id("exchangeVoucherList"));
+		List<WebElement> allCreditCards = creditCardContainer.findElements(By.xpath("./label"));
 
-        List<WebElement> allExchangeVouchers = exchageVoucherContainer.findElements(By.xpath("./label"));
+		WebElement creditCard = allCreditCards.get(position);
+		// WebElement label = creditCard.findElement(By.tagName("label"));
+		creditCard.click();
+	}
 
-        WebElement exchangeVoucher = allExchangeVouchers.get(position);
-        //WebElement label = exchangeVoucher.findElement(By.tagName("label"));
-        exchangeVoucher.click();
-    }
+	public void selectExchangeVoucher(int position) {
+		WebElement exchageVoucherContainer = driver.findElement(By.id("exchangeVoucherList"));
 
-    public void setPromotionVoucher(String promotionVoucher) {
-        WebElement promotionVoucherInput = driver.findElement(By.id("code"));
+		List<WebElement> allExchangeVouchers = exchageVoucherContainer.findElements(By.xpath("./label"));
 
-        promotionVoucherInput.clear();
-        promotionVoucherInput.sendKeys(promotionVoucher);
+		WebElement exchangeVoucher = allExchangeVouchers.get(position);
+		// WebElement label = exchangeVoucher.findElement(By.tagName("label"));
+		exchangeVoucher.click();
+	}
 
-        WebElement button = driver.findElement(By.id("applyDiscountButton"));
-        button.click();
-    }
+	public void setPromotionVoucher(String promotionVoucher) {
+		WebElement promotionVoucherInput = driver.findElement(By.id("code"));
 
-    public void closeErrorMessage() {
-        WebElement button = driver.findElement(By.id("errorMessageCloseButton"));
+		promotionVoucherInput.clear();
+		promotionVoucherInput.sendKeys(promotionVoucher);
 
-        button.click();
-    }
+		WebElement button = driver.findElement(By.id("applyDiscountButton"));
+		button.click();
+	}
 
-    public void newCreditCard() {
-        // Após inserir o produto no carrinho, você pode ir até ele
-        WebElement link = driver.findElement(By.linkText("Usar Novo cartão de crédito"));
-        String currentUrl = driver.getCurrentUrl();
+	public void closeErrorMessage() {
+		WebElement button = driver.findElement(By.id("errorMessageCloseButton"));
 
-        link.click();
+		button.click();
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void newCreditCard() {
+		// Após inserir o produto no carrinho, você pode ir até ele
+		WebElement link = driver.findElement(By.linkText("Usar Novo cartão de crédito"));
+		String currentUrl = driver.getCurrentUrl();
 
-    public void continueShopping(boolean expectedPass) {
-        WebElement button = driver.findElement(By.id("button-continue-shopping"));
-        String currentUrl = driver.getCurrentUrl();
+		link.click();
 
-        button.click();
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
 
-        // Só aguarda a transição de página se espera-se que ele passe
-        // Em caso de falhas não precisa aguardar
-        if (expectedPass) {
-            // Espera a nova página ser carregada, quando a URL atual fica inválida
-            wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-        }
-        // Fecha a mensagem de erro
-        else{
-            WebElement errorMessage = wait.until(ExpectedConditions.elementToBeClickable(By.id("errorMessageCloseButton")));
-            errorMessage.click();
-        }
-    }
+	public void continueShopping(boolean expectedPass) {
+		WebElement button = driver.findElement(By.id("button-continue-shopping"));
+		String currentUrl = driver.getCurrentUrl();
+
+		button.click();
+
+		// Só aguarda a transição de página se espera-se que ele passe
+		// Em caso de falhas não precisa aguardar
+		if (expectedPass) {
+			// Espera a nova página ser carregada, quando a URL atual fica inválida
+			wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+		}
+		// Fecha a mensagem de erro
+		else {
+			WebElement errorMessage = wait
+				.until(ExpectedConditions.elementToBeClickable(By.id("errorMessageCloseButton")));
+			errorMessage.click();
+		}
+	}
+
 }

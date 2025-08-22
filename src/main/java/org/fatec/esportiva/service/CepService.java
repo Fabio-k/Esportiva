@@ -11,12 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CepService {
-    private final CepRepository cepRepository;
 
-    @Transactional
-    public Cep findOrCreateByCep(AddressDto addressDto){
-        return cepRepository.findByCep(addressDto.getCep()).orElseGet(() ->
-                cepRepository.save(CepMapper.toCep(addressDto))
-        );
-    }
+	private final CepRepository cepRepository;
+
+	@Transactional
+	public Cep findOrCreateByCep(AddressDto addressDto) {
+		return cepRepository.findByCep(addressDto.getCep())
+			.orElseGet(() -> cepRepository.save(CepMapper.toCep(addressDto)));
+	}
+
 }

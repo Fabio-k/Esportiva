@@ -12,13 +12,23 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class AddressResponseDto {
-    private Long id;
-    private String addressIdentificationPhrase;
-    private String cep;
-    private String number;
-    private String street;
-    private String city;
-    private String state;
-    private BigDecimal freight;
-    private String formattedFreight;
+
+	private Long id;
+
+	private String addressIdentificationPhrase;
+
+	private String cep;
+
+	private String number;
+
+	private String street;
+
+	private String city;
+
+	private String state;
+
+	private BigDecimal freight;
+
+	private String formattedFreight;
+
 }

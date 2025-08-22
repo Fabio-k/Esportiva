@@ -16,32 +16,38 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-        @SuppressWarnings("unused")
-        @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                return http
-                                .csrf(AbstractHttpConfigurer::disable)
-                                .sessionManagement(session -> session
-                                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                                .authorizeHttpRequests(authorize -> authorize
-                                                .requestMatchers("/").permitAll()
-                                                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                                                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-                                                .requestMatchers("/login").permitAll()
-                                                .requestMatchers("/images/**").permitAll()
-                                                .requestMatchers("/js/**").permitAll()
-                                                .requestMatchers("/css/**").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/login/auth").permitAll()
-                                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                                .requestMatchers("/h2-console/**").permitAll()
-                                                .anyRequest().authenticated())
-                                                .formLogin(login -> login
-                                                    .loginPage("/login")
-                                                    .permitAll()
-                                                )
-                        .exceptionHandling(
-                                exception -> exception
-                                        .accessDeniedHandler(((request, response, accessDeniedException) -> response.sendRedirect("/login"))))
-                        .build();
-        }
+
+	@SuppressWarnings("unused")
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		return http.csrf(AbstractHttpConfigurer::disable)
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+			.authorizeHttpRequests(authorize -> authorize.requestMatchers("/")
+				.permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/products/**")
+				.permitAll()
+				.requestMatchers(HttpMethod.GET, "/products/**")
+				.permitAll()
+				.requestMatchers("/login")
+				.permitAll()
+				.requestMatchers("/images/**")
+				.permitAll()
+				.requestMatchers("/js/**")
+				.permitAll()
+				.requestMatchers("/css/**")
+				.permitAll()
+				.requestMatchers(HttpMethod.POST, "/login/auth")
+				.permitAll()
+				.requestMatchers("/admin/**")
+				.hasRole("ADMIN")
+				.requestMatchers("/h2-console/**")
+				.permitAll()
+				.anyRequest()
+				.authenticated())
+			.formLogin(login -> login.loginPage("/login").permitAll())
+			.exceptionHandling(exception -> exception
+				.accessDeniedHandler(((request, response, accessDeniedException) -> response.sendRedirect("/login"))))
+			.build();
+	}
+
 }

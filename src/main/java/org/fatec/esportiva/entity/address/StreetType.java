@@ -1,15 +1,17 @@
 package org.fatec.esportiva.entity.address;
 
 public enum StreetType {
-    RUA("Rua"), AVENIDA("Avenida"), PRACA("Praça"), VIELA("Viela"), RODOVIA("Rodovia"), OUTROS("Outros");
 
-    private final String displayName;
+	RUA("Rua"), AVENIDA("Avenida"), PRACA("Praça"), VIELA("Viela"), RODOVIA("Rodovia"), OUTROS("Outros");
 
-    StreetType(String displayName){
-        this.displayName = displayName;
-    }
+	private final String displayName;
 
-    public String getDisplayName() {
-        return displayName;
-    }
+	StreetType(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
 }

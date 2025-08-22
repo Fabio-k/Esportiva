@@ -11,30 +11,33 @@ import java.math.BigDecimal;
 
 @UtilityClass
 public class CreditCardMapper {
-    public CreditCard toCreditCard(CreditCardDto creditCardDto){
-        return CreditCard.builder()
-                .name(creditCardDto.getName())
-                .securityCode(creditCardDto.getSecurityCode())
-                .number(creditCardDto.getNumber())
-                .brand(creditCardDto.getBrand())
-                .build();
-    }
 
-    public CreditCardDto toCreditCardDto(CreditCard creditCard){
-        return CreditCardDto.builder()
-                .id(creditCard.getId())
-                .brand(creditCard.getBrand())
-                .securityCode(creditCard.getSecurityCode())
-                .name(creditCard.getName())
-                .number(creditCard.getNumber())
-                .build();
-    }
+	public CreditCard toCreditCard(CreditCardDto creditCardDto) {
+		return CreditCard.builder()
+			.name(creditCardDto.getName())
+			.securityCode(creditCardDto.getSecurityCode())
+			.number(creditCardDto.getNumber())
+			.brand(creditCardDto.getBrand())
+			.build();
+	}
 
-    public SplitCreditCardDto toSplitCreditCardDto(CreditCard creditCard, BigDecimal value){
-        return new SplitCreditCardDto(creditCard.getId(), StringUtils.maskCreditCardNumber(creditCard.getNumber()), value);
-    }
+	public CreditCardDto toCreditCardDto(CreditCard creditCard) {
+		return CreditCardDto.builder()
+			.id(creditCard.getId())
+			.brand(creditCard.getBrand())
+			.securityCode(creditCard.getSecurityCode())
+			.name(creditCard.getName())
+			.number(creditCard.getNumber())
+			.build();
+	}
 
-    public SplitCreditCardResponseDto toSplitCreditCardResponseDto(Long id, String number, BigDecimal value){
-        return new SplitCreditCardResponseDto(id, StringUtils.maskCreditCardNumber(number), StringUtils.format(value));
-    }
+	public SplitCreditCardDto toSplitCreditCardDto(CreditCard creditCard, BigDecimal value) {
+		return new SplitCreditCardDto(creditCard.getId(), StringUtils.maskCreditCardNumber(creditCard.getNumber()),
+				value);
+	}
+
+	public SplitCreditCardResponseDto toSplitCreditCardResponseDto(Long id, String number, BigDecimal value) {
+		return new SplitCreditCardResponseDto(id, StringUtils.maskCreditCardNumber(number), StringUtils.format(value));
+	}
+
 }

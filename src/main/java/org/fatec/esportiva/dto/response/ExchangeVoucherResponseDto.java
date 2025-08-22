@@ -10,11 +10,12 @@ import java.math.BigDecimal;
 @Setter
 public class ExchangeVoucherResponseDto {
 
-    private Long id;
+	private Long id;
 
-    private BigDecimal value;
+	private BigDecimal value;
 
-    private int quantity;
+	private int quantity;
 
-    private String formattedValue;
+	private String formattedValue;
+
 }

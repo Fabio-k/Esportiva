@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class SplitCreditCardForm {
-    private final List<SplitCreditCardDto> creditCards = new ArrayList<>();
+
+	private final List<SplitCreditCardDto> creditCards = new ArrayList<>();
 
 }

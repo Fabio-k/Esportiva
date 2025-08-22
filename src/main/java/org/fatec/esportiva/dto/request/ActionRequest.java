@@ -7,9 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ActionRequest {
-    private Long transactionId;
-    private Long orderId;
-    @NotNull
-    private Boolean isApproved;
-    private Boolean isReturnToStock;
+
+	private Long transactionId;
+
+	private Long orderId;
+
+	@NotNull
+	private Boolean isApproved;
+
+	private Boolean isReturnToStock;
+
 }

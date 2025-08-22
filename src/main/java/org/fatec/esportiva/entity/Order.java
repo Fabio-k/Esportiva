@@ -18,49 +18,50 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Table(name = "pedidos")
-public class Order implements totalPrice{
+public class Order implements totalPrice {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ped_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ped_id")
+	private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "ped_status")
-    private OrderStatus status;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ped_status")
+	private OrderStatus status;
 
-    @NotNull
-    @Column(name = "ped_quantidade")
-    private int quantity;
+	@NotNull
+	@Column(name = "ped_quantidade")
+	private int quantity;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "ped_tra_id")
-    private Transaction transaction;
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "ped_tra_id")
+	private Transaction transaction;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "ped_pro_id")
-    private totalPrice product;
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "ped_pro_id")
+	private totalPrice product;
 
-    public Boolean hasInsufficientQuantity(int tradedQuantity) {
-        return this.quantity < tradedQuantity;
-    }
+	public Boolean hasInsufficientQuantity(int tradedQuantity) {
+		return this.quantity < tradedQuantity;
+	}
 
-    public Boolean isBeingTraded() {
-        return status.isBeingTraded();
-    }
+	public Boolean isBeingTraded() {
+		return status.isBeingTraded();
+	}
 
-    public boolean isInDeliveryProcess() {
-        return status.isInDeliveryProcess();
-    }
+	public boolean isInDeliveryProcess() {
+		return status.isInDeliveryProcess();
+	}
 
-    @Override
-    public BigDecimal getTotalPrice() {
-        BigDecimal quantity = BigDecimal.valueOf(this.quantity);
-        return product.getTotalPrice().multiply(quantity);
-    }
+	@Override
+	public BigDecimal getTotalPrice() {
+		BigDecimal quantity = BigDecimal.valueOf(this.quantity);
+		return product.getTotalPrice().multiply(quantity);
+	}
 
-    public void decreaseQuantity(int quantity) {
-        this.quantity = this.quantity - quantity;
-    }
+	public void decreaseQuantity(int quantity) {
+		this.quantity = this.quantity - quantity;
+	}
+
 }

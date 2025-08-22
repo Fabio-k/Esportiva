@@ -14,14 +14,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/ai")
 @RequiredArgsConstructor
 public class AIApiController {
-    private final AiService aiService;
 
-    @PostMapping("/message")
-    public ResponseEntity<Map<String, Object>> sendAIMessage(@RequestBody AIDto aiDto) throws Exception {
-        String aiResponse = aiService.getRecommendationAnswer(aiDto.message());
+	private final AiService aiService;
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("reply", "AI: " + aiResponse);
-        return ResponseEntity.ok(response);
-    }
+	@PostMapping("/message")
+	public ResponseEntity<Map<String, Object>> sendAIMessage(@RequestBody AIDto aiDto) throws Exception {
+		String aiResponse = aiService.getRecommendationAnswer(aiDto.message());
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("reply", "AI: " + aiResponse);
+		return ResponseEntity.ok(response);
+	}
+
 }

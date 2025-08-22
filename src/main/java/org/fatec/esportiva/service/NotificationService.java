@@ -15,42 +15,48 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    private final NotificationRepository notificationRepository;
-    private final ClientService clientService;
 
-    public void notifyTradeAccepted(Order order){
-        String message = "A troca do produto " + order.getProduct().getName() + " foi aceita";
-        createNotification(order.getTransaction().getClient(), message);
-    }
+	private final NotificationRepository notificationRepository;
 
-    public void notifyCartTimeout(Client client){
-        String message = "Os itens do carrinho serão removidos em 5 minutos";
-        createNotification(client, message);
-    }
+	private final ClientService clientService;
 
-    private void createNotification(Client client, String message){
-        if(client == null) throw new IllegalArgumentException("Cliente não pode ser nulo");
-        if(message == null || message.trim().isEmpty()) throw new IllegalArgumentException("Mensagem não pode estar vazia");
-        Notification notification = new Notification(client, message);
-        notificationRepository.save(notification);
-    }
+	public void notifyTradeAccepted(Order order) {
+		String message = "A troca do produto " + order.getProduct().getName() + " foi aceita";
+		createNotification(order.getTransaction().getClient(), message);
+	}
 
-    public List<NotificationResponseDto> getNotifications() {
-        Client client = clientService.getAuthenticatedClient();
-        List<Notification> notifications = notificationRepository.findAllByClientOrderByCreatedAtDesc(client);
-        return notifications.stream().map(NotificationMapper::toNotificationResponseDto).toList();
-    }
+	public void notifyCartTimeout(Client client) {
+		String message = "Os itens do carrinho serão removidos em 5 minutos";
+		createNotification(client, message);
+	}
 
-    @Transactional
-    public void markAsViewed(List<Long> ids) {
-        if(ids == null || ids.isEmpty()) return;
-        Client client = clientService.getAuthenticatedClient();
-        List<Notification> notifications = notificationRepository.findAllByIdInAndClientId(ids, client.getId());
+	private void createNotification(Client client, String message) {
+		if (client == null)
+			throw new IllegalArgumentException("Cliente não pode ser nulo");
+		if (message == null || message.trim().isEmpty())
+			throw new IllegalArgumentException("Mensagem não pode estar vazia");
+		Notification notification = new Notification(client, message);
+		notificationRepository.save(notification);
+	}
 
-        for(Notification notification : notifications){
-            notification.setIsViewed(true);
-        }
+	public List<NotificationResponseDto> getNotifications() {
+		Client client = clientService.getAuthenticatedClient();
+		List<Notification> notifications = notificationRepository.findAllByClientOrderByCreatedAtDesc(client);
+		return notifications.stream().map(NotificationMapper::toNotificationResponseDto).toList();
+	}
 
-        notificationRepository.saveAll(notifications);
-    }
+	@Transactional
+	public void markAsViewed(List<Long> ids) {
+		if (ids == null || ids.isEmpty())
+			return;
+		Client client = clientService.getAuthenticatedClient();
+		List<Notification> notifications = notificationRepository.findAllByIdInAndClientId(ids, client.getId());
+
+		for (Notification notification : notifications) {
+			notification.setIsViewed(true);
+		}
+
+		notificationRepository.saveAll(notifications);
+	}
+
 }

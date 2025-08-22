@@ -6,7 +6,10 @@ import org.fatec.esportiva.dto.response.NotificationResponseDto;
 
 @UtilityClass
 public class NotificationMapper {
-    public NotificationResponseDto toNotificationResponseDto(Notification notification){
-        return new NotificationResponseDto(notification.getId(), notification.getMessage(), notification.getCreatedAt(), notification.getIsViewed());
-    }
+
+	public NotificationResponseDto toNotificationResponseDto(Notification notification) {
+		return new NotificationResponseDto(notification.getId(), notification.getMessage(), notification.getCreatedAt(),
+				notification.getIsViewed());
+	}
+
 }

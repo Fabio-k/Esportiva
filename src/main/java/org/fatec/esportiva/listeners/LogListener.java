@@ -16,52 +16,56 @@ import jakarta.persistence.PostUpdate;
 // Obs: Se usar o PrePersist e PreUpdate, ele gera uns 5 logs para cada commit, devido a cascata
 @Component
 public class LogListener {
-    private final LogRepository logRepository;
-    private AuthService authService;
 
-    // Para evitar o problema de importação circular, o @Lazy é adicionado na
-    // instanciação do objeto de Listener
-    public LogListener(@Lazy LogRepository logRepository, @Lazy AuthService authService) {
-        this.logRepository = logRepository;
-        this.authService = authService;
-    }
+	private final LogRepository logRepository;
 
-    public String getUser(){
-        try{
-            return authService.getAuthenticatedUser().getUsername();
-        }catch (Exception e){
-            return "system";
-        }
-    }
+	private AuthService authService;
 
-    // Detecta qualquer commit depois de acontecer do tipo INSERT
-    @PostPersist
-    public void afterInsert(Object entity) throws Exception {
-        Log log = new Log();
-        log.setUser(getUser());
-        log.setTimestamp(LocalDateTime.now());
-        log.setOperation("INSERT");
-        log.setOperationContent(entity.toString());
+	// Para evitar o problema de importação circular, o @Lazy é adicionado na
+	// instanciação do objeto de Listener
+	public LogListener(@Lazy LogRepository logRepository, @Lazy AuthService authService) {
+		this.logRepository = logRepository;
+		this.authService = authService;
+	}
 
-        saveLog(log);
-    }
+	public String getUser() {
+		try {
+			return authService.getAuthenticatedUser().getUsername();
+		}
+		catch (Exception e) {
+			return "system";
+		}
+	}
 
-    // Detecta qualquer commit depois de acontecer do tipo UPDATE
-    @PostUpdate
-    public void afterUpdate(Object entity) throws Exception {
-        Log log = new Log();
-        log.setUser(getUser());
-        log.setTimestamp(LocalDateTime.now());
-        log.setOperation("UPDATE");
-        log.setOperationContent(entity.toString());
+	// Detecta qualquer commit depois de acontecer do tipo INSERT
+	@PostPersist
+	public void afterInsert(Object entity) throws Exception {
+		Log log = new Log();
+		log.setUser(getUser());
+		log.setTimestamp(LocalDateTime.now());
+		log.setOperation("INSERT");
+		log.setOperationContent(entity.toString());
 
-        saveLog(log);
-    }
+		saveLog(log);
+	}
 
-    // @PreRemove // Detecta qualquer commit antes de acontecer do tipo DELETE
+	// Detecta qualquer commit depois de acontecer do tipo UPDATE
+	@PostUpdate
+	public void afterUpdate(Object entity) throws Exception {
+		Log log = new Log();
+		log.setUser(getUser());
+		log.setTimestamp(LocalDateTime.now());
+		log.setOperation("UPDATE");
+		log.setOperationContent(entity.toString());
 
-    // Salva na tabela Log. A solução final é usar o logRepository diretamente
-    private void saveLog(Log log) {
-        logRepository.save(log);
-    }
+		saveLog(log);
+	}
+
+	// @PreRemove // Detecta qualquer commit antes de acontecer do tipo DELETE
+
+	// Salva na tabela Log. A solução final é usar o logRepository diretamente
+	private void saveLog(Log log) {
+		logRepository.save(log);
+	}
+
 }

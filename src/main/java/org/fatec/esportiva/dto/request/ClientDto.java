@@ -23,79 +23,86 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class ClientDto {
-    private Long id;
 
-    // À-ÿ -> Permite inserir os caracteres com acentos, por exemplo: João
-    @NotBlank(message = "Nome não pode ficar em branco")
-    @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "O nome deve conter apenas letras e espaços")
-    private String name;
+	private Long id;
 
-    @NotBlank(message = "E-mail não pode ficar em branco")
-    @Email(message = "E-mail deve ser em um formato válido: <nome>@<domínio>")
-    @Pattern(regexp = "^(?!.*@esportiva).*", message = "O e-mail não deve ser do domínio 'esportiva'. Ele é reservado somente para os administradores!")
-    private String email;
+	// À-ÿ -> Permite inserir os caracteres com acentos, por exemplo: João
+	@NotBlank(message = "Nome não pode ficar em branco")
+	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "O nome deve conter apenas letras e espaços")
+	private String name;
 
-    @NotBlank(message = "CPF não pode ficar em branco")
-    @Pattern(regexp = "^[0-9]{11}$", message = "O CPF deve conter 11 dígitos numéricos")
-    private String cpf;
+	@NotBlank(message = "E-mail não pode ficar em branco")
+	@Email(message = "E-mail deve ser em um formato válido: <nome>@<domínio>")
+	@Pattern(regexp = "^(?!.*@esportiva).*",
+			message = "O e-mail não deve ser do domínio 'esportiva'. Ele é reservado somente para os administradores!")
+	private String email;
 
-    // Status nulo permite inicializar o cliente como ATIVO por padrão
-    // @NotNull(message = "Status não pode ficar em branco")
-    private UserStatus status;
+	@NotBlank(message = "CPF não pode ficar em branco")
+	@Pattern(regexp = "^[0-9]{11}$", message = "O CPF deve conter 11 dígitos numéricos")
+	private String cpf;
 
-    @NotNull(message = "Gênero não pode ficar em branco")
-    private Gender gender;
+	// Status nulo permite inicializar o cliente como ATIVO por padrão
+	// @NotNull(message = "Status não pode ficar em branco")
+	private UserStatus status;
 
-    @NotNull(message = "A data de nascimento não pode ficar em branco")
-    @Past(message = "A data de nascimento deve estar no passado")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateBirth;
+	@NotNull(message = "Gênero não pode ficar em branco")
+	private Gender gender;
 
-    @NotBlank(message = "O número de telefone não pode ficar em branco")
-    private String telephone;
+	@NotNull(message = "A data de nascimento não pode ficar em branco")
+	@Past(message = "A data de nascimento deve estar no passado")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dateBirth;
 
-    @NotNull(message = "O tipo de telefone não pode ficar em branco")
-    private PhoneType telephoneType;
+	@NotBlank(message = "O número de telefone não pode ficar em branco")
+	private String telephone;
 
-    private BigDecimal indexRanking;
+	@NotNull(message = "O tipo de telefone não pode ficar em branco")
+	private PhoneType telephoneType;
 
-    @Valid
-    @Default
-    private List<AddressDto> addresses = new ArrayList<>();
+	private BigDecimal indexRanking;
 
-    @Valid
-    @Default
-    private List<CreditCardDto> creditCards = new ArrayList<>();
+	@Valid
+	@Default
+	private List<AddressDto> addresses = new ArrayList<>();
 
-    @Valid
-    @Default
-    private List<ExchangeVoucherDto> exchangeVoucherDtos = new ArrayList<>();
+	@Valid
+	@Default
+	private List<CreditCardDto> creditCards = new ArrayList<>();
 
-    @AssertTrue(message = "Deve conter apenas um endereço de cobrança")
-    public boolean isOnlyOneBillingAddress() {
+	@Valid
+	@Default
+	private List<ExchangeVoucherDto> exchangeVoucherDtos = new ArrayList<>();
 
-        if (addresses == null) return true;
+	@AssertTrue(message = "Deve conter apenas um endereço de cobrança")
+	public boolean isOnlyOneBillingAddress() {
 
-        long countBillingType = addresses.stream().filter(addr -> addr.getTypes() != null && addr.getTypes().contains(AddressType.COBRANCA)).count();
+		if (addresses == null)
+			return true;
 
-        System.out.println("Validate this field: " + countBillingType);
-        return countBillingType == 1;
-    }
+		long countBillingType = addresses.stream()
+			.filter(addr -> addr.getTypes() != null && addr.getTypes().contains(AddressType.COBRANCA))
+			.count();
 
-    public String displayDateBirth() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return dateBirth.format(formatter);
-    }
+		System.out.println("Validate this field: " + countBillingType);
+		return countBillingType == 1;
+	}
 
-    public void setTelephone(String telefone) {
-        if (telefone != null) {
-            this.telephone = telefone.replaceAll("\\D", ""); // Remove tudo que não é número
-        }
-    }
+	public String displayDateBirth() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		return dateBirth.format(formatter);
+	}
 
-    public void setCpf(String cpf) {
-        if (cpf != null) {
-            this.cpf = cpf.replaceAll("\\D", ""); // Remove tudo que não é número
-        }
-    }
+	public void setTelephone(String telefone) {
+		if (telefone != null) {
+			this.telephone = telefone.replaceAll("\\D", ""); // Remove tudo que não é
+																// número
+		}
+	}
+
+	public void setCpf(String cpf) {
+		if (cpf != null) {
+			this.cpf = cpf.replaceAll("\\D", ""); // Remove tudo que não é número
+		}
+	}
+
 }

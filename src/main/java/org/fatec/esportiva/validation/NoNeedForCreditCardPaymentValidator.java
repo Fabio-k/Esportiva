@@ -9,16 +9,21 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 @Component
-public class NoNeedForCreditCardPaymentValidator implements CheckoutValidator{
-    @Autowired
-    private CheckoutSessionService checkoutSessionService;
+public class NoNeedForCreditCardPaymentValidator implements CheckoutValidator {
 
-    @Override
-    public void validate(CheckoutValidationContext context) {
-        CheckoutSession checkoutSession = context.getCheckoutSession();
-        if (checkoutSessionService.getCreditCardsDto(checkoutSession).isEmpty()) return;
+	@Autowired
+	private CheckoutSessionService checkoutSessionService;
 
-        if(checkoutSessionService.calculateTotalPrice(checkoutSession).compareTo(BigDecimal.ZERO) <= 0)
-            throw new CheckoutException("O pedido já está sendo totalmente pago através de descontos. Remova os cartões de crédito para continuar.", context.getRedirectPage());
-    }
+	@Override
+	public void validate(CheckoutValidationContext context) {
+		CheckoutSession checkoutSession = context.getCheckoutSession();
+		if (checkoutSessionService.getCreditCardsDto(checkoutSession).isEmpty())
+			return;
+
+		if (checkoutSessionService.calculateTotalPrice(checkoutSession).compareTo(BigDecimal.ZERO) <= 0)
+			throw new CheckoutException(
+					"O pedido já está sendo totalmente pago através de descontos. Remova os cartões de crédito para continuar.",
+					context.getRedirectPage());
+	}
+
 }

@@ -18,34 +18,32 @@ import java.util.List;
 @Getter
 @Setter
 public class Cart {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crr_id")
-    private Long id;
 
-    @OneToMany(mappedBy = "cart", orphanRemoval = true)
-    private List<CartItem> cartItems = new ArrayList<>();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "crr_id")
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "crr_cli_id")
-    private Client client;
+	@OneToMany(mappedBy = "cart", orphanRemoval = true)
+	private List<CartItem> cartItems = new ArrayList<>();
 
-    @Column(name = "crr_criado_em")
-    private LocalDateTime createdAt;
+	@ManyToOne
+	@JoinColumn(name = "crr_cli_id")
+	private Client client;
 
-    @Column(name = "crr_notificado")
-    private Boolean isNotified;
+	@Column(name = "crr_criado_em")
+	private LocalDateTime createdAt;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "produtos_removidos", joinColumns = @JoinColumn(name = "pre_crr_id"), inverseJoinColumns = @JoinColumn(name = "pre_pro_id"))
-    private List<Product> removedProducts = new ArrayList<>();
+	@Column(name = "crr_notificado")
+	private Boolean isNotified;
 
-    public BigDecimal getTotalPrice(){
-        return cartItems.stream()
-                .map(CartItem::getTotalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "produtos_removidos", joinColumns = @JoinColumn(name = "pre_crr_id"),
+			inverseJoinColumns = @JoinColumn(name = "pre_pro_id"))
+	private List<Product> removedProducts = new ArrayList<>();
+
+	public BigDecimal getTotalPrice() {
+		return cartItems.stream().map(CartItem::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+
 }

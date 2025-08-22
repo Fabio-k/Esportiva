@@ -11,21 +11,27 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 @Getter
 @Setter
 public class OrderResponseDto {
-    private Long id;
-    private ProductResponseDto product;
-    private Integer quantity;
-    private OrderStatus status;
-    private Integer totalProductQuantity;
 
-    public Boolean isSuccessfullyTraded(){
-        return status == OrderStatus.TROCADO || status == OrderStatus.TROCA_FINALIZADA;
-    }
+	private Long id;
 
-    public Boolean isTradeRefused(){
-        return status == OrderStatus.TROCA_RECUSADA;
-    }
+	private ProductResponseDto product;
 
-    public  Boolean isTradeAccepted(){
-        return status == OrderStatus.EM_TROCA;
-    }
+	private Integer quantity;
+
+	private OrderStatus status;
+
+	private Integer totalProductQuantity;
+
+	public Boolean isSuccessfullyTraded() {
+		return status == OrderStatus.TROCADO || status == OrderStatus.TROCA_FINALIZADA;
+	}
+
+	public Boolean isTradeRefused() {
+		return status == OrderStatus.TROCA_RECUSADA;
+	}
+
+	public Boolean isTradeAccepted() {
+		return status == OrderStatus.EM_TROCA;
+	}
+
 }

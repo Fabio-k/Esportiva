@@ -8,22 +8,24 @@ import org.fatec.esportiva.dto.response.TransactionResponseDto;
 
 @UtilityClass
 public class TransactionMapper {
-    public TransactionResponseDto toTransactionResponseDto(Transaction transaction) {
-        return TransactionResponseDto.builder()
-                .id(transaction.getId())
-                .status(transaction.getStatus())
-                .purchaseDate(transaction.getPurchaseDate().toLocalDate())
-                .orders(OrderMapper.toOrderByStatusResponseDto(transaction.getOrders()))
-                .build();
-    }
 
-    public TransactionDto toTransactionDto(Transaction transactions) {
-        return TransactionDto.builder()
-                .id(transactions.getId())
-                .purchaseDate(transactions.getPurchaseDate().toLocalDate())
-                .status(transactions.getStatus())
-                .client(transactions.getClient().getName())
-                .orders(transactions.getOrders())
-                .build();
-    }
+	public TransactionResponseDto toTransactionResponseDto(Transaction transaction) {
+		return TransactionResponseDto.builder()
+			.id(transaction.getId())
+			.status(transaction.getStatus())
+			.purchaseDate(transaction.getPurchaseDate().toLocalDate())
+			.orders(OrderMapper.toOrderByStatusResponseDto(transaction.getOrders()))
+			.build();
+	}
+
+	public TransactionDto toTransactionDto(Transaction transactions) {
+		return TransactionDto.builder()
+			.id(transactions.getId())
+			.purchaseDate(transactions.getPurchaseDate().toLocalDate())
+			.status(transactions.getStatus())
+			.client(transactions.getClient().getName())
+			.orders(transactions.getOrders())
+			.build();
+	}
+
 }

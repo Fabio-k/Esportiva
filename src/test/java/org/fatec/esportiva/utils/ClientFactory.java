@@ -10,22 +10,24 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ClientFactory {
-    public static Client defaultClient(){
-        Client client =  Client.builder()
-                .cpf("55544433322")
-                .name("tales")
-                .dateBirth(LocalDate.of(2012, 12, 12))
-                .email("tales@email.com")
-                .gender(Gender.MASCULINO)
-                .status(UserStatus.ATIVO)
-                .telephone("11999993333")
-                .telephoneType(PhoneType.TELEFONE)
-                .build();
 
-        Address address = AddressFactory.defaultAddress();
-        address.setClient(client);
-        client.setAddresses(List.of(address));
+	public static Client defaultClient() {
+		Client client = Client.builder()
+			.cpf("55544433322")
+			.name("tales")
+			.dateBirth(LocalDate.of(2012, 12, 12))
+			.email("tales@email.com")
+			.gender(Gender.MASCULINO)
+			.status(UserStatus.ATIVO)
+			.telephone("11999993333")
+			.telephoneType(PhoneType.TELEFONE)
+			.build();
 
-        return client;
-    }
+		Address address = AddressFactory.defaultAddress();
+		address.setClient(client);
+		client.setAddresses(List.of(address));
+
+		return client;
+	}
+
 }

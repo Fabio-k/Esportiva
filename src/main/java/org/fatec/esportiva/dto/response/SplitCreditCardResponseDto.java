@@ -10,7 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SplitCreditCardResponseDto {
-    private Long id;
-    private String number;
-    private String formattedPrice;
+
+	private Long id;
+
+	private String number;
+
+	private String formattedPrice;
+
 }

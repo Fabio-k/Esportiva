@@ -7,14 +7,14 @@ import org.fatec.esportiva.dto.response.CartItemResponseDto;
 
 @UtilityClass
 public class CartItemMapper {
-    public CartItemResponseDto toCartItemResponseDto(CartItem cartItem){
-        return new CartItemResponseDto(cartItem.getId(), cartItem.getQuantity(), ProductMapper.toProductResponseDto(cartItem.getProduct()));
-    }
 
-    public Order toOrder(CartItem cartItem){
-        return Order.builder()
-                .product(cartItem.getProduct())
-                .quantity(cartItem.getQuantity())
-                .build();
-    }
+	public CartItemResponseDto toCartItemResponseDto(CartItem cartItem) {
+		return new CartItemResponseDto(cartItem.getId(), cartItem.getQuantity(),
+				ProductMapper.toProductResponseDto(cartItem.getProduct()));
+	}
+
+	public Order toOrder(CartItem cartItem) {
+		return Order.builder().product(cartItem.getProduct()).quantity(cartItem.getQuantity()).build();
+	}
+
 }

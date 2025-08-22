@@ -10,20 +10,24 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Component
-public class CreditCardMinimumAmountValidator implements CheckoutValidator{
-    @Autowired
-    private CheckoutSessionService checkoutSessionService;
+public class CreditCardMinimumAmountValidator implements CheckoutValidator {
 
-    @Override
-    public void validate(CheckoutValidationContext context) {
-        CheckoutSession checkoutSession = context.getCheckoutSession();
-        if(checkoutSessionService.getTotalDiscount(checkoutSession).compareTo(BigDecimal.ZERO) > 0) return;
+	@Autowired
+	private CheckoutSessionService checkoutSessionService;
 
-        int numberOfCreditCards = checkoutSessionService.getCreditCardsDto(checkoutSession).size();
-        if (numberOfCreditCards == 0) return;
+	@Override
+	public void validate(CheckoutValidationContext context) {
+		CheckoutSession checkoutSession = context.getCheckoutSession();
+		if (checkoutSessionService.getTotalDiscount(checkoutSession).compareTo(BigDecimal.ZERO) > 0)
+			return;
 
-        BigDecimal totalPrice = checkoutSessionService.calculateTotalPrice(checkoutSession);
-        if (totalPrice.divide(BigDecimal.valueOf(numberOfCreditCards), RoundingMode.UP).compareTo(BigDecimal.TEN) < 0)
-            throw new ApiException("Cada cartão deve pagar pelo menos R$ 10,00.");
-    }
+		int numberOfCreditCards = checkoutSessionService.getCreditCardsDto(checkoutSession).size();
+		if (numberOfCreditCards == 0)
+			return;
+
+		BigDecimal totalPrice = checkoutSessionService.calculateTotalPrice(checkoutSession);
+		if (totalPrice.divide(BigDecimal.valueOf(numberOfCreditCards), RoundingMode.UP).compareTo(BigDecimal.TEN) < 0)
+			throw new ApiException("Cada cartão deve pagar pelo menos R$ 10,00.");
+	}
+
 }

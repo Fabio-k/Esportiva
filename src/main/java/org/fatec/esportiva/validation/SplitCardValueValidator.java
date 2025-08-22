@@ -11,27 +11,34 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Component
-public class SplitCardValueValidator{
-    @Autowired
-    private CheckoutSessionService checkoutSessionService;
-    public void validate(CheckoutValidationContext context, List<SplitCreditCardDto> splitCreditCardDtos) {
-        CheckoutSession checkoutSession = context.getCheckoutSession();
-        BigDecimal splitPaymentTotal = splitCreditCardDtos.stream().map(SplitCreditCardDto::getValue)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+public class SplitCardValueValidator {
 
-        splitCreditCardDtos.forEach(payment -> {
-            if (isLesThanTenAndNoVoucherApplied(payment, checkoutSession))
-                throw new ApiException("Cada cartão deve pagar pelo menos R$ 10,00.");
-            if(payment.getValue().compareTo(BigDecimal.ZERO) <= 0 ) throw new ApiException("Cartões devem pager valor acima de R$ 0,00");
-        });
+	@Autowired
+	private CheckoutSessionService checkoutSessionService;
 
-        BigDecimal result = checkoutSessionService.calculateTotalPrice(checkoutSession).subtract(splitPaymentTotal);
-        if(result.compareTo(BigDecimal.ZERO) < 0) throw new ApiException("Valor escolhido supera o valor a ser pago");
-        if(result.compareTo(BigDecimal.ZERO) > 0) throw new ApiException("Valor escolhido é insuficiente");
-    }
+	public void validate(CheckoutValidationContext context, List<SplitCreditCardDto> splitCreditCardDtos) {
+		CheckoutSession checkoutSession = context.getCheckoutSession();
+		BigDecimal splitPaymentTotal = splitCreditCardDtos.stream()
+			.map(SplitCreditCardDto::getValue)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 
-    private Boolean isLesThanTenAndNoVoucherApplied(SplitCreditCardDto payment, CheckoutSession checkoutSession){
-        BigDecimal totalDiscount = checkoutSessionService.getTotalDiscount(checkoutSession);
-        return payment.getValue().compareTo(BigDecimal.TEN) < 0 && totalDiscount.compareTo(BigDecimal.ZERO) == 0;
-    }
+		splitCreditCardDtos.forEach(payment -> {
+			if (isLesThanTenAndNoVoucherApplied(payment, checkoutSession))
+				throw new ApiException("Cada cartão deve pagar pelo menos R$ 10,00.");
+			if (payment.getValue().compareTo(BigDecimal.ZERO) <= 0)
+				throw new ApiException("Cartões devem pager valor acima de R$ 0,00");
+		});
+
+		BigDecimal result = checkoutSessionService.calculateTotalPrice(checkoutSession).subtract(splitPaymentTotal);
+		if (result.compareTo(BigDecimal.ZERO) < 0)
+			throw new ApiException("Valor escolhido supera o valor a ser pago");
+		if (result.compareTo(BigDecimal.ZERO) > 0)
+			throw new ApiException("Valor escolhido é insuficiente");
+	}
+
+	private Boolean isLesThanTenAndNoVoucherApplied(SplitCreditCardDto payment, CheckoutSession checkoutSession) {
+		BigDecimal totalDiscount = checkoutSessionService.getTotalDiscount(checkoutSession);
+		return payment.getValue().compareTo(BigDecimal.TEN) < 0 && totalDiscount.compareTo(BigDecimal.ZERO) == 0;
+	}
+
 }

@@ -12,11 +12,15 @@ import java.time.LocalDate;
 @RestController
 @RequiredArgsConstructor
 public class SalesHistoryController {
-    private final ProductHistoryService productHistoryService;
 
-    @GetMapping("/api/sales-history")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<SalesHistoryResponseDto> categories(@RequestParam Long id, @RequestParam Boolean isCategory, @RequestParam(required = false) LocalDate startDate, @RequestParam(required = false) LocalDate endDate){
-        return ResponseEntity.ok(productHistoryService.getCategoryOrProductHistoryById(id, isCategory, startDate, endDate));
-    }
+	private final ProductHistoryService productHistoryService;
+
+	@GetMapping("/api/sales-history")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<SalesHistoryResponseDto> categories(@RequestParam Long id, @RequestParam Boolean isCategory,
+			@RequestParam(required = false) LocalDate startDate, @RequestParam(required = false) LocalDate endDate) {
+		return ResponseEntity
+			.ok(productHistoryService.getCategoryOrProductHistoryById(id, isCategory, startDate, endDate));
+	}
+
 }

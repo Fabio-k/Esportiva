@@ -12,7 +12,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SplitCreditCardDto {
-    private Long id;
-    private String number;
-    private BigDecimal value;
+
+	private Long id;
+
+	private String number;
+
+	private BigDecimal value;
+
 }

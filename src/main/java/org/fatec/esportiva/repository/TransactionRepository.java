@@ -9,7 +9,11 @@ import org.fatec.esportiva.entity.enums.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    List<Transaction> findAllByStatus(OrderStatus status);
-    List<Transaction> findAllByClientOrderByPurchaseDateDesc(Client client);
-    Optional<Transaction> findByClientAndIdAndStatus(Client client, Long id, OrderStatus status);
+
+	List<Transaction> findAllByStatus(OrderStatus status);
+
+	List<Transaction> findAllByClientOrderByPurchaseDateDesc(Client client);
+
+	Optional<Transaction> findByClientAndIdAndStatus(Client client, Long id, OrderStatus status);
+
 }

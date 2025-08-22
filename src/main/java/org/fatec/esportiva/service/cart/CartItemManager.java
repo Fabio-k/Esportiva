@@ -13,27 +13,29 @@ import java.util.Optional;
 
 @Component
 public class CartItemManager {
-    public CartItem createAndValidateItem(Cart cart, CartItemRequestDto dto, ProductService productService){
-        if(dto.quantity() <= 0) throw new ApiException("Quantidade deve ser maior do que 0");
 
-        Product product = productService.updateQuantity(dto.id(), dto.quantity());
-        CartItem cartItem = new CartItem();
-        cartItem.setQuantity(dto.quantity());
-        cartItem.setProduct(product);
-        cartItem.setCart(cart);
+	public CartItem createAndValidateItem(Cart cart, CartItemRequestDto dto, ProductService productService) {
+		if (dto.quantity() <= 0)
+			throw new ApiException("Quantidade deve ser maior do que 0");
 
-        Optional<CartItem> optionalItem = getCartItemByProductId(cart.getCartItems(), cartItem.getProduct().getId());
-        if (optionalItem.isPresent()) {
-            CartItem existingItem = optionalItem.get();
-            existingItem.setQuantity((short) (cartItem.getQuantity() + existingItem.getQuantity()));
-            cartItem = existingItem;
-        }
+		Product product = productService.updateQuantity(dto.id(), dto.quantity());
+		CartItem cartItem = new CartItem();
+		cartItem.setQuantity(dto.quantity());
+		cartItem.setProduct(product);
+		cartItem.setCart(cart);
 
-        return cartItem;
-    }
+		Optional<CartItem> optionalItem = getCartItemByProductId(cart.getCartItems(), cartItem.getProduct().getId());
+		if (optionalItem.isPresent()) {
+			CartItem existingItem = optionalItem.get();
+			existingItem.setQuantity((short) (cartItem.getQuantity() + existingItem.getQuantity()));
+			cartItem = existingItem;
+		}
 
-    private Optional<CartItem> getCartItemByProductId(List<CartItem> cartItems, Long productId) {
-        return cartItems.stream().filter(item ->
-                item.getProduct().getId().equals(productId)).findFirst();
-    }
+		return cartItem;
+	}
+
+	private Optional<CartItem> getCartItemByProductId(List<CartItem> cartItems, Long productId) {
+		return cartItems.stream().filter(item -> item.getProduct().getId().equals(productId)).findFirst();
+	}
+
 }

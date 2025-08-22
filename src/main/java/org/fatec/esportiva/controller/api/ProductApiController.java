@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductApiController {
-    private final ProductService productService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long id){
-        ProductResponseDto product = productService.findProduct(id);
-        return ResponseEntity.ok(product);
-    }
+	private final ProductService productService;
+
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductResponseDto> getProduct(@PathVariable Long id) {
+		ProductResponseDto product = productService.findProduct(id);
+		return ResponseEntity.ok(product);
+	}
+
 }

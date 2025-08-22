@@ -18,20 +18,22 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class TransactionDto {
-    private Long id;
 
-    private LocalDate purchaseDate;
+	private Long id;
 
-    private OrderStatus status;
+	private LocalDate purchaseDate;
 
-    @Default
-    @JsonIgnore
-    private List<Order> orders = new ArrayList<>();
+	private OrderStatus status;
 
-    private String client;
+	@Default
+	@JsonIgnore
+	private List<Order> orders = new ArrayList<>();
 
-    public String displayEntryDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return purchaseDate.format(formatter);
-    }
+	private String client;
+
+	public String displayEntryDate() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		return purchaseDate.format(formatter);
+	}
+
 }

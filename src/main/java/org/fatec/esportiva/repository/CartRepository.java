@@ -9,7 +9,9 @@ import java.util.List;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    List<Cart> findByCreatedAtBefore(LocalDateTime createdAt);
-    List<Cart> findByCreatedAtBeforeAndIsNotifiedFalse(LocalDateTime createdAt);
-}
 
+	List<Cart> findByCreatedAtBefore(LocalDateTime createdAt);
+
+	List<Cart> findByCreatedAtBeforeAndIsNotifiedFalse(LocalDateTime createdAt);
+
+}

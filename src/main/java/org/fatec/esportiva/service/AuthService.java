@@ -13,32 +13,35 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
 
-    private final UserService userService;
+	private final UserService userService;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userService.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Usuário ou senha incorretos"));
-    }
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userService.findByEmail(username)
+			.orElseThrow(() -> new UsernameNotFoundException("Usuário ou senha incorretos"));
+	}
 
-    public void authenticateUser(UserDetails user, HttpServletRequest request){
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-        request.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
-    }
+	public void authenticateUser(UserDetails user, HttpServletRequest request) {
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null,
+				user.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authToken);
+		request.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+	}
 
-    public UserDetails getAuthenticatedUser(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(principal instanceof UserDetails)) {
-            throw new RuntimeException("Erro na autenticação");
-        }
-        return (UserDetails) principal;
-    }
+	public UserDetails getAuthenticatedUser() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (!(principal instanceof UserDetails)) {
+			throw new RuntimeException("Erro na autenticação");
+		}
+		return (UserDetails) principal;
+	}
 
-    public UserDetails getAuthenticatedUserOrReturnNull(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(principal instanceof UserDetails)) {
-            return null;
-        }
-        return (UserDetails) principal;
-    }
+	public UserDetails getAuthenticatedUserOrReturnNull() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (!(principal instanceof UserDetails)) {
+			return null;
+		}
+		return (UserDetails) principal;
+	}
+
 }

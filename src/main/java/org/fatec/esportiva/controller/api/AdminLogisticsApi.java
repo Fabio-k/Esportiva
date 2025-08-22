@@ -20,32 +20,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class AdminLogisticsApi {
 
-    private final TransactionService transactionService;
+	private final TransactionService transactionService;
 
-    private final OrderService orderService;
+	private final OrderService orderService;
 
-    @GetMapping("/admin/api/logistic")
-    public ResponseEntity<List<TransactionDto>> getAllItems() {
-        return ResponseEntity.ok().body(transactionService.getTransactionsAdmin());
-    }
+	@GetMapping("/admin/api/logistic")
+	public ResponseEntity<List<TransactionDto>> getAllItems() {
+		return ResponseEntity.ok().body(transactionService.getTransactionsAdmin());
+	}
 
-    @GetMapping("/admin/api/logistic/orders")
-    public ResponseEntity<List<OrderDto>> getAllInReturnItems() {
-        return ResponseEntity.ok().body(orderService.getOrders());
-    }
+	@GetMapping("/admin/api/logistic/orders")
+	public ResponseEntity<List<OrderDto>> getAllInReturnItems() {
+		return ResponseEntity.ok().body(orderService.getOrders());
+	}
 
-    @PatchMapping("/admin/api/logistic/action")
-    public ResponseEntity<Void> deliveryPipeline(@RequestBody ActionRequest req) {
+	@PatchMapping("/admin/api/logistic/action")
+	public ResponseEntity<Void> deliveryPipeline(@RequestBody ActionRequest req) {
 
-        if (req.getTransactionId() != null) {
-            transactionService.changeState(req.getTransactionId(), req.getIsApproved());
-        } else if (req.getOrderId() != null) {
-            orderService.changeState(req.getOrderId(), req.getIsApproved(), req.getIsReturnToStock());
+		if (req.getTransactionId() != null) {
+			transactionService.changeState(req.getTransactionId(), req.getIsApproved());
+		}
+		else if (req.getOrderId() != null) {
+			orderService.changeState(req.getOrderId(), req.getIsApproved(), req.getIsReturnToStock());
 
-        } else {
-            throw new ApiException("Ao aprovar uma transação/ordem, ambos os ID ficaram nulos");
-        }
+		}
+		else {
+			throw new ApiException("Ao aprovar uma transação/ordem, ambos os ID ficaram nulos");
+		}
 
-        return ResponseEntity.ok().build();
-    }
+		return ResponseEntity.ok().build();
+	}
+
 }

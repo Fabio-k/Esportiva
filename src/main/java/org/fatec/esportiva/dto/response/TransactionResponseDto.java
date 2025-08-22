@@ -12,33 +12,45 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class TransactionResponseDto {
-    private Long id;
 
-    private LocalDate purchaseDate;
+	private Long id;
 
-    private OrderStatus status;
+	private LocalDate purchaseDate;
 
-    private OrderByStatusResponseDto orders;
+	private OrderStatus status;
 
-    public Boolean isInProcessing(){
-        return status == OrderStatus.EM_PROCESSAMENTO;
-    }
+	private OrderByStatusResponseDto orders;
 
-    public Boolean isInTransit(){
-        return status == OrderStatus.EM_TRANSITO;
-    }
+	public Boolean isInProcessing() {
+		return status == OrderStatus.EM_PROCESSAMENTO;
+	}
 
-    public Boolean isDelivered(){
-        return status == OrderStatus.ENTREGUE;
-    }
+	public Boolean isInTransit() {
+		return status == OrderStatus.EM_TRANSITO;
+	}
 
-    public Boolean isCancelled() {return status == OrderStatus.COMPRA_CANCELADA;}
+	public Boolean isDelivered() {
+		return status == OrderStatus.ENTREGUE;
+	}
 
-    public Boolean isInTradeProcess() { return isInTrade() || isTraded();}
+	public Boolean isCancelled() {
+		return status == OrderStatus.COMPRA_CANCELADA;
+	}
 
-    public Boolean isInTrade(){return status == OrderStatus.EM_TROCA || status == OrderStatus.TROCADO;}
+	public Boolean isInTradeProcess() {
+		return isInTrade() || isTraded();
+	}
 
-    public Boolean isTraded(){return status == OrderStatus.TROCA_FINALIZADA;}
+	public Boolean isInTrade() {
+		return status == OrderStatus.EM_TROCA || status == OrderStatus.TROCADO;
+	}
 
-    public Boolean isOrdersInTrade(){return !orders.tradedOrders.isEmpty();}
+	public Boolean isTraded() {
+		return status == OrderStatus.TROCA_FINALIZADA;
+	}
+
+	public Boolean isOrdersInTrade() {
+		return !orders.tradedOrders.isEmpty();
+	}
+
 }

@@ -9,6 +9,9 @@ import java.util.List;
 
 @Getter
 public class SalesHistoryResponseDto {
-    private List<CategoryProductHistoryView> salesHistoryByDate = new ArrayList<>();
-    private List<CategoryProductStateView> salesHistoryByState = new ArrayList<>();
+
+	private List<CategoryProductHistoryView> salesHistoryByDate = new ArrayList<>();
+
+	private List<CategoryProductStateView> salesHistoryByState = new ArrayList<>();
+
 }

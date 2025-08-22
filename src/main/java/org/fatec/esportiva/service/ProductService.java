@@ -24,114 +24,135 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    private final ProductRepository productRepository;
-    private final ProductCategoryRepository productCategoryRepository;
-    private final ClientService clientService;
 
-    public List<ProductCategoryDto> getAllProducts(){
-        return productRepository.findAll().stream()
-                .map(product -> new ProductCategoryDto(product.getId(), product.getName())).toList();
-    }
+	private final ProductRepository productRepository;
 
-    @Transactional
-    public Product save(ProductDto productDto) {
-        Product product = ProductMapper.toProduct(productDto);
-        List<ProductCategory> categories = productCategoryRepository.findAllByIdIn(productDto.getProductCategoryIds());
+	private final ProductCategoryRepository productCategoryRepository;
 
-        product.setCategories(categories);
-        product.setEntryDate(LocalDate.now());
-        product.setStatus(ProductStatus.ATIVO);
+	private final ClientService clientService;
 
-        return productRepository.save(product);
-    }
+	public List<ProductCategoryDto> getAllProducts() {
+		return productRepository.findAll()
+			.stream()
+			.map(product -> new ProductCategoryDto(product.getId(), product.getName()))
+			.toList();
+	}
 
-    // costValue é tratado como int porque ele é usado como filtro. Para o usuário,
-    // basta usar valores inteiros
-    public List<ProductDto> getProducts(String name, ProductStatus inactivationCategory, int costValue,
-            String category) {
-        List<ProductDto> products = productRepository
-                .findWithFilter(name, inactivationCategory, costValue, category).stream()
-                .map(ProductMapper::toProductDto).toList();
-        return products;
-    }
+	@Transactional
+	public Product save(ProductDto productDto) {
+		Product product = ProductMapper.toProduct(productDto);
+		List<ProductCategory> categories = productCategoryRepository.findAllByIdIn(productDto.getProductCategoryIds());
 
-    public List<ProductResponseDto> getAllAvailableProducts(){
-        return productRepository.findAvailableProducts(ProductStatus.ATIVO).stream()
-                .map(ProductMapper::toProductResponseDto)
-                .toList();
-    }
+		product.setCategories(categories);
+		product.setEntryDate(LocalDate.now());
+		product.setStatus(ProductStatus.ATIVO);
 
-    public List<ProductResponseDto> getRecommendedProducts(){
-        if(!clientService.isClientAuthenticated()) return List.of();
-        List<Product> products = clientService.getClientProducts();
-        Set<Long> categoriesIds = new HashSet<>();
-        Set<Long> productIds = new HashSet<>();
-        products.forEach(product -> {
-            List<Long> productsCategoriesIds = product.getCategories().stream().map(ProductCategory::getId).toList();
-            categoriesIds.addAll(productsCategoriesIds);
-            productIds.add(product.getId());
-        });
+		return productRepository.save(product);
+	}
 
-        return productRepository.findRecommendedProducts(ProductStatus.ATIVO, categoriesIds, productIds)
-                .stream().limit(6).map(ProductMapper::toProductResponseDto).toList();
-    }
+	// costValue é tratado como int porque ele é usado como filtro. Para o usuário,
+	// basta usar valores inteiros
+	public List<ProductDto> getProducts(String name, ProductStatus inactivationCategory, int costValue,
+			String category) {
+		List<ProductDto> products = productRepository.findWithFilter(name, inactivationCategory, costValue, category)
+			.stream()
+			.map(ProductMapper::toProductDto)
+			.toList();
+		return products;
+	}
 
-    public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category) {
-        return productRepository
-                .findWithFilter(name, ProductStatus.ATIVO, maxValue, category).stream()
-                .map(ProductMapper::toProductResponseDto).toList();
-    }
+	public List<ProductResponseDto> getAllAvailableProducts() {
+		return productRepository.findAvailableProducts(ProductStatus.ATIVO)
+			.stream()
+			.map(ProductMapper::toProductResponseDto)
+			.toList();
+	}
 
-    public ProductResponseDto findProduct(Long id) {
-        return ProductMapper.toProductResponseDto(findById(id));
-    }
+	public List<ProductResponseDto> getRecommendedProducts() {
+		if (!clientService.isClientAuthenticated())
+			return List.of();
+		List<Product> products = clientService.getClientProducts();
+		Set<Long> categoriesIds = new HashSet<>();
+		Set<Long> productIds = new HashSet<>();
+		products.forEach(product -> {
+			List<Long> productsCategoriesIds = product.getCategories().stream().map(ProductCategory::getId).toList();
+			categoriesIds.addAll(productsCategoriesIds);
+			productIds.add(product.getId());
+		});
 
-    public AdminProductResponseDto findProductToAdminResponseDto(Long id){
-        Product product = findById(id);
-        List<ProductCategoryResponseDto> categories = product.getCategories().stream().map(category -> new ProductCategoryResponseDto(category.getId(), category.getName())).toList();
-        return ProductMapper.toAdminProductResponseDto(product, categories);
-    }
+		return productRepository.findRecommendedProducts(ProductStatus.ATIVO, categoriesIds, productIds)
+			.stream()
+			.limit(6)
+			.map(ProductMapper::toProductResponseDto)
+			.toList();
+	}
 
-    public Product findById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
-    }
+	public List<ProductResponseDto> findProductsSummary(String name, Integer maxValue, String category) {
+		return productRepository.findWithFilter(name, ProductStatus.ATIVO, maxValue, category)
+			.stream()
+			.map(ProductMapper::toProductResponseDto)
+			.toList();
+	}
 
-    public void deleteProduct(Product product) {
-        productRepository.delete(product);
-    }
+	public ProductResponseDto findProduct(Long id) {
+		return ProductMapper.toProductResponseDto(findById(id));
+	}
 
-    public Product updateQuantity(Long id, Short quantity) {
-        if(quantity < 0) throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
-        Product product;
+	public AdminProductResponseDto findProductToAdminResponseDto(Long id) {
+		Product product = findById(id);
+		List<ProductCategoryResponseDto> categories = product.getCategories()
+			.stream()
+			.map(category -> new ProductCategoryResponseDto(category.getId(), category.getName()))
+			.toList();
+		return ProductMapper.toAdminProductResponseDto(product, categories);
+	}
 
-        try {
-             product = findByIdAndStatus(id, ProductStatus.ATIVO);
-        }catch (EntityNotFoundException e){
-            throw new ApiException(e.getMessage());
-        }
+	public Product findById(Long id) {
+		return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+	}
 
-        int availableStock = product.getStockQuantity() - product.getBlockedQuantity();
-        if(availableStock < quantity){
-            throw new ApiException("Estoque insuficiente");
-        }
-        product.setBlockedQuantity(product.getBlockedQuantity() + quantity);
-        return productRepository.save(product);
-    }
+	public void deleteProduct(Product product) {
+		productRepository.delete(product);
+	}
 
-    public void returnBlockedProductQuantity(Long id, Short quantity){
-        if(quantity < 0) throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
-        Product product = findById(id);
-        if(product.getBlockedQuantity() < quantity) throw new IllegalArgumentException("Erro no estoque");
-        product.setBlockedQuantity(product.getBlockedQuantity() - quantity);
-        productRepository.save(product);
-    }
+	public Product updateQuantity(Long id, Short quantity) {
+		if (quantity < 0)
+			throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
+		Product product;
 
-    public void deleteClient(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
-    }
+		try {
+			product = findByIdAndStatus(id, ProductStatus.ATIVO);
+		}
+		catch (EntityNotFoundException e) {
+			throw new ApiException(e.getMessage());
+		}
 
-    private Product findByIdAndStatus(Long id, ProductStatus status){
-        return productRepository.findByIdAndStatus(id, status).orElseThrow(() -> new EntityNotFoundException("Produto não foi encontrado"));
-    }
+		int availableStock = product.getStockQuantity() - product.getBlockedQuantity();
+		if (availableStock < quantity) {
+			throw new ApiException("Estoque insuficiente");
+		}
+		product.setBlockedQuantity(product.getBlockedQuantity() + quantity);
+		return productRepository.save(product);
+	}
+
+	public void returnBlockedProductQuantity(Long id, Short quantity) {
+		if (quantity < 0)
+			throw new IllegalArgumentException("Quantidade deve ser maior do que zero");
+		Product product = findById(id);
+		if (product.getBlockedQuantity() < quantity)
+			throw new IllegalArgumentException("Erro no estoque");
+		product.setBlockedQuantity(product.getBlockedQuantity() - quantity);
+		productRepository.save(product);
+	}
+
+	public void deleteClient(Long id) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'deleteClient'");
+	}
+
+	private Product findByIdAndStatus(Long id, ProductStatus status) {
+		return productRepository.findByIdAndStatus(id, status)
+			.orElseThrow(() -> new EntityNotFoundException("Produto não foi encontrado"));
+	}
+
 }

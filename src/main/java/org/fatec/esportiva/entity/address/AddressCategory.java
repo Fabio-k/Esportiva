@@ -15,16 +15,18 @@ import java.util.Set;
 @Setter
 @Table(name = "categorias_end")
 public class AddressCategory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cae_id")
-    private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "cae_nome")
-    private AddressType addressType;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cae_id")
+	private Long id;
 
-    @Default
-    @ManyToMany(mappedBy = "addressCategories")
-    private Set<Address> addresses = new HashSet<>();
+	@Enumerated(EnumType.STRING)
+	@Column(name = "cae_nome")
+	private AddressType addressType;
+
+	@Default
+	@ManyToMany(mappedBy = "addressCategories")
+	private Set<Address> addresses = new HashSet<>();
+
 }

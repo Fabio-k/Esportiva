@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/promotionalCoupon")
 @RequiredArgsConstructor
 public class PromotionalCouponApiController {
-    private final PromotionalCouponService promotionalCouponService;
 
-    @GetMapping("/{code}")
-    public ResponseEntity<PromotionalCouponResponseDto> getPromotionalCoupon(@PathVariable String code){
-        return ResponseEntity.ok(promotionalCouponService.getPromotionalCoupon(code));
-    }
+	private final PromotionalCouponService promotionalCouponService;
+
+	@GetMapping("/{code}")
+	public ResponseEntity<PromotionalCouponResponseDto> getPromotionalCoupon(@PathVariable String code) {
+		return ResponseEntity.ok(promotionalCouponService.getPromotionalCoupon(code));
+	}
+
 }

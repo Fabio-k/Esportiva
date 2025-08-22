@@ -9,26 +9,26 @@ import org.fatec.esportiva.dto.response.ExchangeVoucherResponseDto;
 
 @UtilityClass
 public class ExchangeVoucherMapper {
-    public ExchangeVoucher toExchangeVoucher(Client client, ExchangeVoucherDto exchangeVoucherDto) {
-        return ExchangeVoucher.builder()
-                .value(exchangeVoucherDto.getValue())
-                .client(client)
-                .build();
-    }
 
-    public ExchangeVoucherDto toExchangeVoucherDto(ExchangeVoucher exchangeVoucher) {
-        return ExchangeVoucherDto.builder()
-                .id(exchangeVoucher.getId())
-                .value(exchangeVoucher.getValue())
-                .client(exchangeVoucher.getClient())
-                .build();
-    }
+	public ExchangeVoucher toExchangeVoucher(Client client, ExchangeVoucherDto exchangeVoucherDto) {
+		return ExchangeVoucher.builder().value(exchangeVoucherDto.getValue()).client(client).build();
+	}
 
-    public ExchangeVoucherResponseDto toExchangeVoucherResponseDto(ExchangeVoucher exchangeVoucher, String formattedValue) {
-        return ExchangeVoucherResponseDto.builder()
-                .id(exchangeVoucher.getId())
-                .value(exchangeVoucher.getValue())
-                .formattedValue(formattedValue)
-                .build();
-    }
+	public ExchangeVoucherDto toExchangeVoucherDto(ExchangeVoucher exchangeVoucher) {
+		return ExchangeVoucherDto.builder()
+			.id(exchangeVoucher.getId())
+			.value(exchangeVoucher.getValue())
+			.client(exchangeVoucher.getClient())
+			.build();
+	}
+
+	public ExchangeVoucherResponseDto toExchangeVoucherResponseDto(ExchangeVoucher exchangeVoucher,
+			String formattedValue) {
+		return ExchangeVoucherResponseDto.builder()
+			.id(exchangeVoucher.getId())
+			.value(exchangeVoucher.getValue())
+			.formattedValue(formattedValue)
+			.build();
+	}
+
 }

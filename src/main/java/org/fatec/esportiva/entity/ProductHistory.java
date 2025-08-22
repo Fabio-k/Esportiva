@@ -16,32 +16,34 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Immutable
 public class ProductHistory {
-    @Id
-    @Column(name = "id")
-    private Long id;
 
-    @Column(name = "cat_id")
-    private Long categoryId;
+	@Id
+	@Column(name = "id")
+	private Long id;
 
-    @Column(name = "cat_nome")
-    private String categoryName;
+	@Column(name = "cat_id")
+	private Long categoryId;
 
-    @Column(name = "pro_id")
-    private Long productId;
+	@Column(name = "cat_nome")
+	private String categoryName;
 
-    @Column(name = "pro_nome_produto")
-    private String productName;
+	@Column(name = "pro_id")
+	private Long productId;
 
-    @Column(name = "total_de_compras")
-    private Integer totalOrders;
+	@Column(name = "pro_nome_produto")
+	private String productName;
 
-    @Column(name = "tra_data_compra")
-    private LocalDateTime purchaseDate;
+	@Column(name = "total_de_compras")
+	private Integer totalOrders;
 
-    @Column(name = "cep_estado")
-    private String state;
+	@Column(name = "tra_data_compra")
+	private LocalDateTime purchaseDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "ped_status")
-    private OrderStatus status;
+	@Column(name = "cep_estado")
+	private String state;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ped_status")
+	private OrderStatus status;
+
 }

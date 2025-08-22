@@ -8,57 +8,60 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CheckoutSummaryPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
 
-    public CheckoutSummaryPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
+	private WebDriver driver;
 
-    public String getPromotionVoucherCode() {
-        WebElement promotionVoucherCode = driver.findElement(By.id("discountCouponCode"));
+	private WebDriverWait wait;
 
-        return promotionVoucherCode.getText();
-    }
+	public CheckoutSummaryPage(WebDriver driver) {
+		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+	}
 
-    public String getPromotionVoucherValue() {
-        WebElement promotionVoucherValue = driver.findElement(By.id("discountCouponValue"));
+	public String getPromotionVoucherCode() {
+		WebElement promotionVoucherCode = driver.findElement(By.id("discountCouponCode"));
 
-        return promotionVoucherValue.getText();
-    }
+		return promotionVoucherCode.getText();
+	}
 
-    public String getProductsTotalPrice() {
-        WebElement productsTotalPrice = driver.findElement(By.id("summaryProductsTotalPrice"));
+	public String getPromotionVoucherValue() {
+		WebElement promotionVoucherValue = driver.findElement(By.id("discountCouponValue"));
 
-        return productsTotalPrice.getText();
-    }
+		return promotionVoucherValue.getText();
+	}
 
-    public String getFreightValue() {
-        WebElement freight = driver.findElement(By.id("summaryFreight"));
+	public String getProductsTotalPrice() {
+		WebElement productsTotalPrice = driver.findElement(By.id("summaryProductsTotalPrice"));
 
-        return freight.getText();
-    }
+		return productsTotalPrice.getText();
+	}
 
-    public String getExchangeVouchersValue() {
-        WebElement vouchers = driver.findElement(By.id("summaryVouchers"));
+	public String getFreightValue() {
+		WebElement freight = driver.findElement(By.id("summaryFreight"));
 
-        return vouchers.getText();
-    }
+		return freight.getText();
+	}
 
-    public String getTotalPrice() {
-        WebElement totalPrice = driver.findElement(By.id("summaryTotalPrice"));
+	public String getExchangeVouchersValue() {
+		WebElement vouchers = driver.findElement(By.id("summaryVouchers"));
 
-        return totalPrice.getText();
-    }
+		return vouchers.getText();
+	}
 
-    public void confirmShopping() {
-        WebElement button = driver.findElement(By.id("button-confirm-shopping"));
-        String currentUrl = driver.getCurrentUrl();
+	public String getTotalPrice() {
+		WebElement totalPrice = driver.findElement(By.id("summaryTotalPrice"));
 
-        button.click();
+		return totalPrice.getText();
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void confirmShopping() {
+		WebElement button = driver.findElement(By.id("button-confirm-shopping"));
+		String currentUrl = driver.getCurrentUrl();
+
+		button.click();
+
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
+
 }

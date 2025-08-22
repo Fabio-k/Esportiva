@@ -14,37 +14,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/transactions")
 @RequiredArgsConstructor
 public class TransactionController {
-    private final TransactionService transactionService;
 
-    @GetMapping
-    public String getTransactions(Model model){
-        model.addAttribute("transactions", transactionService.getTransactions());
-        return "/orders/index";
-    }
+	private final TransactionService transactionService;
 
-    @GetMapping("/trade")
-    public String getTransactionsTrade(Model model){
-        model.addAttribute("transactions", transactionService.getTransactions());
-        return "/orders/tradeIndex";
-    }
+	@GetMapping
+	public String getTransactions(Model model) {
+		model.addAttribute("transactions", transactionService.getTransactions());
+		return "/orders/index";
+	}
 
-    @PatchMapping("/trade/{id}")
-    public String requestTrade(@PathVariable Long id, Model model){
-        transactionService.requestTrade(id);
-        TransactionResponseDto transaction = transactionService.getTransaction(id);
-        model.addAttribute("transaction", transaction);
-        return "redirect:/transactions/trade";
-    }
-    /*
-    @PatchMapping("/trade/{id}")
-    public ResponseEntity<String> requestTrade(@PathVariable Long id){
-        transactionService.requestTrade(id);
-        TransactionResponseDto transaction = transactionService.getTransaction(id);
-        Context context = new Context();
-        context.setVariable("transaction", transaction);
-        String turboStream = templateEngine.process("orders/turbo/transactionCard", context);
+	@GetMapping("/trade")
+	public String getTransactionsTrade(Model model) {
+		model.addAttribute("transactions", transactionService.getTransactions());
+		return "/orders/tradeIndex";
+	}
 
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "text/vnd.turbo-stream.html").body(turboStream);
-    }
-     */
+	@PatchMapping("/trade/{id}")
+	public String requestTrade(@PathVariable Long id, Model model) {
+		transactionService.requestTrade(id);
+		TransactionResponseDto transaction = transactionService.getTransaction(id);
+		model.addAttribute("transaction", transaction);
+		return "redirect:/transactions/trade";
+	}
+	/*
+	 * @PatchMapping("/trade/{id}") public ResponseEntity<String>
+	 * requestTrade(@PathVariable Long id){ transactionService.requestTrade(id);
+	 * TransactionResponseDto transaction = transactionService.getTransaction(id); Context
+	 * context = new Context(); context.setVariable("transaction", transaction); String
+	 * turboStream = templateEngine.process("orders/turbo/transactionCard", context);
+	 *
+	 * return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE,
+	 * "text/vnd.turbo-stream.html").body(turboStream); }
+	 */
+
 }

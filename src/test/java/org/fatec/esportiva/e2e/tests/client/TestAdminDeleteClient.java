@@ -12,38 +12,41 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class TestAdminDeleteClient extends E2E {
-    // Page Models
-    private LoginPage login;
-    private UserDashboardPage dashboard;
 
-    @BeforeEach
-    void beforeEach() {
-        browser = new ChromeDriver(options);
-        browser.get(baseUrl);
-        login = new LoginPage(browser);
-        dashboard = new UserDashboardPage(browser);
-    }
+	// Page Models
+	private LoginPage login;
 
-    @AfterEach
-    void afterEach() {
-        browser.quit();
-    }
+	private UserDashboardPage dashboard;
 
-    // @traceto(RF0023)
-    @Test
-    void adminDeleteClient() {
-        login.login("Fábio");
-        dashboard.deleteUser(2, true);
-        assertFalse(dashboard.isUserPresent(2));
-        sleepForVisualization();
-    }
+	@BeforeEach
+	void beforeEach() {
+		browser = new ChromeDriver(options);
+		browser.get(baseUrl);
+		login = new LoginPage(browser);
+		dashboard = new UserDashboardPage(browser);
+	}
 
-    // @traceto(RF0023)
-    @Test
-    void adminNotDeleteClient() {
-        login.login("Fábio");
-        dashboard.deleteUser(1, false);
-        assertEquals(dashboard.getUserName(1), "Carlos Silva");
-        sleepForVisualization();
-    }
+	@AfterEach
+	void afterEach() {
+		browser.quit();
+	}
+
+	// @traceto(RF0023)
+	@Test
+	void adminDeleteClient() {
+		login.login("Fábio");
+		dashboard.deleteUser(2, true);
+		assertFalse(dashboard.isUserPresent(2));
+		sleepForVisualization();
+	}
+
+	// @traceto(RF0023)
+	@Test
+	void adminNotDeleteClient() {
+		login.login("Fábio");
+		dashboard.deleteUser(1, false);
+		assertEquals(dashboard.getUserName(1), "Carlos Silva");
+		sleepForVisualization();
+	}
+
 }

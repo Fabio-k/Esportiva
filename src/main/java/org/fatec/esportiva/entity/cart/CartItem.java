@@ -18,29 +18,31 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class CartItem implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "itc_id")
-    private Long id;
 
-    @Column(name = "itc_quantidade")
-    @Min(0)
-    @Max(1000)
-    private Short quantity;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "itc_id")
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "itc_crr_id")
-    private Cart cart;
+	@Column(name = "itc_quantidade")
+	@Min(0)
+	@Max(1000)
+	private Short quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "itc_pro_id")
-    private Product product;
+	@ManyToOne
+	@JoinColumn(name = "itc_crr_id")
+	private Cart cart;
 
-    @Column(name = "itc_pro_data_inclusao")
-    private LocalDateTime inclusionTime;
+	@ManyToOne
+	@JoinColumn(name = "itc_pro_id")
+	private Product product;
 
-    public BigDecimal getTotalPrice(){
-        BigDecimal quantity = BigDecimal.valueOf(this.quantity);
-        return product.getTotalPrice().multiply(quantity);
-    }
+	@Column(name = "itc_pro_data_inclusao")
+	private LocalDateTime inclusionTime;
+
+	public BigDecimal getTotalPrice() {
+		BigDecimal quantity = BigDecimal.valueOf(this.quantity);
+		return product.getTotalPrice().multiply(quantity);
+	}
+
 }

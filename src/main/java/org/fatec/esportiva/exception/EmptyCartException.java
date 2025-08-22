@@ -1,4 +1,5 @@
 package org.fatec.esportiva.exception;
 
-public class EmptyCartException extends RuntimeException{
+public class EmptyCartException extends RuntimeException {
+
 }

@@ -15,13 +15,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/admin/logs")
 public class AdminLogController {
-    private final LogService logService;
 
-    @GetMapping
-    public String getLogs(Model model){
+	private final LogService logService;
 
-        List<LogDto> logs = logService.getLogs();
-        model.addAttribute("logs", logs);
-        return "admin/logs";
-    }
+	@GetMapping
+	public String getLogs(Model model) {
+
+		List<LogDto> logs = logService.getLogs();
+		model.addAttribute("logs", logs);
+		return "admin/logs";
+	}
+
 }

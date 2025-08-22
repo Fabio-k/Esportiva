@@ -8,11 +8,14 @@ import java.util.Locale;
 
 @Service
 public class CurrencyService {
-    @SuppressWarnings("deprecation")
-    private static final NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
-    public String format(BigDecimal price){
-        if(price == null) return numberFormat.format(BigDecimal.ZERO);
-        return numberFormat.format(price);
-    }
+	@SuppressWarnings("deprecation")
+	private static final NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
+	public String format(BigDecimal price) {
+		if (price == null)
+			return numberFormat.format(BigDecimal.ZERO);
+		return numberFormat.format(price);
+	}
+
 }

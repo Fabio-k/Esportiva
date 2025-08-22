@@ -13,24 +13,27 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final ClientRepository clientRepository;
-    private final AdminRepository adminRepository;
 
-    public Optional<UserDetails> findByEmail(String email) {
-        Optional<UserDetails> user = clientRepository.findUserByEmail(email);
+	private final ClientRepository clientRepository;
 
-        if (user.isEmpty()) {
-            user = adminRepository.findUserByEmail(email);
-        }
+	private final AdminRepository adminRepository;
 
-        return user;
-    }
+	public Optional<UserDetails> findByEmail(String email) {
+		Optional<UserDetails> user = clientRepository.findUserByEmail(email);
 
-    public List<UserDetails> getUsers() {
-        List<UserDetails> users = new ArrayList<>();
-        users.addAll(adminRepository.findAll());
-        users.addAll(clientRepository.findAll());
+		if (user.isEmpty()) {
+			user = adminRepository.findUserByEmail(email);
+		}
 
-        return users;
-    }
+		return user;
+	}
+
+	public List<UserDetails> getUsers() {
+		List<UserDetails> users = new ArrayList<>();
+		users.addAll(adminRepository.findAll());
+		users.addAll(clientRepository.findAll());
+
+		return users;
+	}
+
 }

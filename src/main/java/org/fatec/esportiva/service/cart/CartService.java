@@ -22,93 +22,99 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CartService {
-    private final ProductService productService;
-    private final ClientService clientService;
-    private final CartItemRepository cartItemRepository;
-    private final CartRepository cartRepository;
-    private final CartItemManager cartItemManager;
 
-    @Value("${cart.product.timeoutInMinutes}")
-    private int productTimeoutInMinutes;
+	private final ProductService productService;
 
-    @Transactional
-    public CartItemResponseDto addItem(CartItemRequestDto dto) {
-        Cart cart = clientService.getAuthenticatedClient().getCart();
+	private final ClientService clientService;
 
-        CartItem cartItem = cartItemManager.createAndValidateItem(cart, dto, productService);
+	private final CartItemRepository cartItemRepository;
 
-        cartItem = cartItemRepository.save(cartItem);
+	private final CartRepository cartRepository;
 
-        updateCartCreatedAt();
+	private final CartItemManager cartItemManager;
 
-        cart.getRemovedProducts().remove(cartItem.getProduct());
+	@Value("${cart.product.timeoutInMinutes}")
+	private int productTimeoutInMinutes;
 
-        return CartItemMapper.toCartItemResponseDto(cartItem);
-    }
+	@Transactional
+	public CartItemResponseDto addItem(CartItemRequestDto dto) {
+		Cart cart = clientService.getAuthenticatedClient().getCart();
 
-    @Transactional
-    public void removeItem(Long id, Short quantity, Cart cart) {
-        CartItem cartItem = findCartItemById(id);
-        if (quantity == null || cartItem.getQuantity() < quantity) {
-            quantity = cartItem.getQuantity();
-        }
-        cartItem.setQuantity((short) (cartItem.getQuantity() - quantity));
-        productService.returnBlockedProductQuantity(cartItem.getProduct().getId(), quantity);
-        updateCartCreatedAt(cart);
-        if (cartItem.getQuantity() == 0) {
-            cartItemRepository.delete(cartItem);
-            return;
-        }
-        cartItemRepository.save(cartItem);
-    }
+		CartItem cartItem = cartItemManager.createAndValidateItem(cart, dto, productService);
 
-    public void cleanCart() {
-        Cart cart = clientService.getAuthenticatedClient().getCart();
-        cart.getCartItems().clear();
-        cartRepository.save(cart);
-    }
+		cartItem = cartItemRepository.save(cartItem);
 
-    public BigDecimal getTotalCartPrice() {
-        Cart cart = clientService.getAuthenticatedClient().getCart();
-        return  cart.getTotalPrice();
-    }
+		updateCartCreatedAt();
 
-    public void setToNotified(Long id, Boolean isNotified) {
-        Cart cart = findCartById(id);
-        cart.setIsNotified(isNotified);
-        cartRepository.save(cart);
-    }
+		cart.getRemovedProducts().remove(cartItem.getProduct());
 
-    public void updateCartCreatedAt(Cart cart) {
-        if (cart == null) {
-            cart = clientService.getAuthenticatedClient().getCart();
-        }
-        cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
-        cartRepository.save(cart);
-    }
+		return CartItemMapper.toCartItemResponseDto(cartItem);
+	}
 
-    private void updateCartCreatedAt() {
-        Cart cart = clientService.getAuthenticatedClient().getCart();
-        cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
-        cartRepository.save(cart);
-    }
+	@Transactional
+	public void removeItem(Long id, Short quantity, Cart cart) {
+		CartItem cartItem = findCartItemById(id);
+		if (quantity == null || cartItem.getQuantity() < quantity) {
+			quantity = cartItem.getQuantity();
+		}
+		cartItem.setQuantity((short) (cartItem.getQuantity() - quantity));
+		productService.returnBlockedProductQuantity(cartItem.getProduct().getId(), quantity);
+		updateCartCreatedAt(cart);
+		if (cartItem.getQuantity() == 0) {
+			cartItemRepository.delete(cartItem);
+			return;
+		}
+		cartItemRepository.save(cartItem);
+	}
 
-    public void removeExpiredItem(Cart cart) {
-        Optional<CartItem> cartItem = cartItemRepository.findTopByCartIdOrderByInclusionTimeAsc(cart.getId());
-        cartItem.ifPresent(item -> {
-            cart.getRemovedProducts().add(item.getProduct());
-            cartRepository.save(cart);
-            cartItemRepository.delete(item);
-            productService.returnBlockedProductQuantity(item.getProduct().getId(), item.getQuantity());
-        });
-    }
+	public void cleanCart() {
+		Cart cart = clientService.getAuthenticatedClient().getCart();
+		cart.getCartItems().clear();
+		cartRepository.save(cart);
+	}
 
-    private CartItem findCartItemById(Long id) {
-        return cartItemRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Carrinho não encontrado"));
-    }
+	public BigDecimal getTotalCartPrice() {
+		Cart cart = clientService.getAuthenticatedClient().getCart();
+		return cart.getTotalPrice();
+	}
 
-    private Cart findCartById(Long id) {
-        return cartRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Carrinho não encontrado"));
-    }
+	public void setToNotified(Long id, Boolean isNotified) {
+		Cart cart = findCartById(id);
+		cart.setIsNotified(isNotified);
+		cartRepository.save(cart);
+	}
+
+	public void updateCartCreatedAt(Cart cart) {
+		if (cart == null) {
+			cart = clientService.getAuthenticatedClient().getCart();
+		}
+		cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
+		cartRepository.save(cart);
+	}
+
+	private void updateCartCreatedAt() {
+		Cart cart = clientService.getAuthenticatedClient().getCart();
+		cart.setCreatedAt(LocalDateTime.now().plusMinutes(productTimeoutInMinutes));
+		cartRepository.save(cart);
+	}
+
+	public void removeExpiredItem(Cart cart) {
+		Optional<CartItem> cartItem = cartItemRepository.findTopByCartIdOrderByInclusionTimeAsc(cart.getId());
+		cartItem.ifPresent(item -> {
+			cart.getRemovedProducts().add(item.getProduct());
+			cartRepository.save(cart);
+			cartItemRepository.delete(item);
+			productService.returnBlockedProductQuantity(item.getProduct().getId(), item.getQuantity());
+		});
+	}
+
+	private CartItem findCartItemById(Long id) {
+		return cartItemRepository.findById(id)
+			.orElseThrow(() -> new EntityNotFoundException("Carrinho não encontrado"));
+	}
+
+	private Cart findCartById(Long id) {
+		return cartRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Carrinho não encontrado"));
+	}
+
 }

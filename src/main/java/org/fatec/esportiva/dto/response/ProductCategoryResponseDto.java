@@ -8,6 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class ProductCategoryResponseDto {
-    private Long id;
-    private String name;
+
+	private Long id;
+
+	private String name;
+
 }

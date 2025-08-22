@@ -11,13 +11,17 @@ import java.util.List;
 
 @Component
 public class CartEmptyValidator {
-    @Autowired
-    private ClientService clientService;
-    public void validate(){
-        Cart cart = clientService.getAuthenticatedClient().getCart();
-        List<CartItem> cartItemList = cart.getCartItems();
 
-        if (!cartItemList.isEmpty() && cart.getRemovedProducts().isEmpty()) return;
-        throw new EmptyCartException();
-    }
+	@Autowired
+	private ClientService clientService;
+
+	public void validate() {
+		Cart cart = clientService.getAuthenticatedClient().getCart();
+		List<CartItem> cartItemList = cart.getCartItems();
+
+		if (!cartItemList.isEmpty() && cart.getRemovedProducts().isEmpty())
+			return;
+		throw new EmptyCartException();
+	}
+
 }

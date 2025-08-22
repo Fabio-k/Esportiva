@@ -15,24 +15,25 @@ import java.time.LocalDateTime;
 @Table(name = "logs")
 public class Log {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "log_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "log_id")
+	private Long id;
 
-    @NotNull
-    @Column(name = "log_usuario")
-    private String user;
+	@NotNull
+	@Column(name = "log_usuario")
+	private String user;
 
-    @NotNull
-    @Column(name = "log_data_hora")
-    private LocalDateTime timestamp;
+	@NotNull
+	@Column(name = "log_data_hora")
+	private LocalDateTime timestamp;
 
-    @NotNull
-    @Column(name = "log_operacao")
-    private String operation;
+	@NotNull
+	@Column(name = "log_operacao")
+	private String operation;
 
-    @NotNull
-    @Column(name = "log_conteudo_alteracao")
-    private String operationContent;
+	@NotNull
+	@Column(name = "log_conteudo_alteracao")
+	private String operationContent;
+
 }

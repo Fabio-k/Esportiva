@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CartMapper {
-    private final CurrencyService currencyService;
 
-    public CartResponseDto toCartResponseDto(Cart cart){
-        return new CartResponseDto(cart.getCartItems().stream()
-                .map(CartItemMapper::toCartItemResponseDto)
-                .toList(), currencyService, cart.getRemovedProducts().stream().map(ProductMapper::toProductResponseDto).toList()
-        );
-    }
+	private final CurrencyService currencyService;
+
+	public CartResponseDto toCartResponseDto(Cart cart) {
+		return new CartResponseDto(cart.getCartItems().stream().map(CartItemMapper::toCartItemResponseDto).toList(),
+				currencyService, cart.getRemovedProducts().stream().map(ProductMapper::toProductResponseDto).toList());
+	}
+
 }

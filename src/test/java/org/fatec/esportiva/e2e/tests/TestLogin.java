@@ -10,26 +10,28 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class TestLogin extends E2E {
-    // Page Models
-    private LoginPage login;
 
-    @BeforeEach
-    void beforeEach() {
-        browser = new ChromeDriver(options);
-        browser.get(baseUrl);
-        login = new LoginPage(browser);
-    }
+	// Page Models
+	private LoginPage login;
 
-    @AfterEach
-    void afterEach() {
-        browser.quit();
-    }
+	@BeforeEach
+	void beforeEach() {
+		browser = new ChromeDriver(options);
+		browser.get(baseUrl);
+		login = new LoginPage(browser);
+	}
 
-    @Test
-    void selectNoneUser() {
-        login.login("Selecione o usuário");
+	@AfterEach
+	void afterEach() {
+		browser.quit();
+	}
 
-        assertTrue(login.getErrorMessage());
-        sleepForVisualization();
-    }
+	@Test
+	void selectNoneUser() {
+		login.login("Selecione o usuário");
+
+		assertTrue(login.getErrorMessage());
+		sleepForVisualization();
+	}
+
 }

@@ -9,7 +9,11 @@ import org.fatec.esportiva.entity.session.CheckoutSession;
 @Getter
 @Setter
 public class CheckoutValidationContext {
-    private CheckoutSession checkoutSession;
-    private Long clientId;
-    private String redirectPage;
+
+	private CheckoutSession checkoutSession;
+
+	private Long clientId;
+
+	private String redirectPage;
+
 }

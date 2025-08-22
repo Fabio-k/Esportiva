@@ -29,128 +29,124 @@ import java.util.List;
 @Setter
 @Table(name = "clientes")
 public class Client implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cli_id")
-    private Long id;
 
-    @NotNull
-    @Column(name = "cli_nome")
-    private String name;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cli_id")
+	private Long id;
 
-    @NotNull
-    @Column(name = "cli_email", unique = true)
-    private String email;
+	@NotNull
+	@Column(name = "cli_nome")
+	private String name;
 
-    @NotNull
-    @Column(name = "cli_cpf")
-    private String cpf;
+	@NotNull
+	@Column(name = "cli_email", unique = true)
+	private String email;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @Column(name = "cli_status")
-    private UserStatus status;
+	@NotNull
+	@Column(name = "cli_cpf")
+	private String cpf;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @Column(name = "cli_genero")
-    private Gender gender;
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	@Column(name = "cli_status")
+	private UserStatus status;
 
-    @NotNull
-    @Column(name = "cli_data_nascimento")
-    private LocalDate dateBirth;
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	@Column(name = "cli_genero")
+	private Gender gender;
 
-    @NotNull
-    @Column(name = "cli_telefone")
-    private String telephone;
+	@NotNull
+	@Column(name = "cli_data_nascimento")
+	private LocalDate dateBirth;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @Column(name = "cli_telefone_tipo")
-    private PhoneType telephoneType;
+	@NotNull
+	@Column(name = "cli_telefone")
+	private String telephone;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addresses;
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	@Column(name = "cli_telefone_tipo")
+	private PhoneType telephoneType;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CreditCard> creditCards;
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Address> addresses;
 
-    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Cart cart = new Cart();
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CreditCard> creditCards;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ExchangeVoucher> exchangeVouchers;
+	@OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Cart cart = new Cart();
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Notification> notifications;
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ExchangeVoucher> exchangeVouchers;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactions = new ArrayList<>();
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Notification> notifications;
 
-    // O dado não será salvo no banco de dados, ele é derivado de suas vendas
-    @Transient
-    private BigDecimal indexRanking;
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Transaction> transactions = new ArrayList<>();
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
-    }
+	// O dado não será salvo no banco de dados, ele é derivado de suas vendas
+	@Transient
+	private BigDecimal indexRanking;
 
-    @Override
-    public String getPassword() {
-        return "";
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
+	}
 
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
+	@Override
+	public String getPassword() {
+		return "";
+	}
 
-    public BigDecimal calculateIndexRanking(){
-        // O índice do cliente é calculado como o valor médio de suas transações
-        // Assim dá para categorizar com um cliente que gasta mais ou menos dinheiro em média 
-        BigDecimal transactionsCount = BigDecimal.ZERO;
-        BigDecimal transactionTotal = BigDecimal.ZERO;
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
 
-        for (Transaction transaction : this.transactions) {
-            transactionTotal = transactionTotal.add(transaction.getTotalPrice());
-            transactionsCount = transactionsCount.add(BigDecimal.ONE);
-        }
+	public BigDecimal calculateIndexRanking() {
+		// O índice do cliente é calculado como o valor médio de suas transações
+		// Assim dá para categorizar com um cliente que gasta mais ou menos dinheiro em
+		// média
+		BigDecimal transactionsCount = BigDecimal.ZERO;
+		BigDecimal transactionTotal = BigDecimal.ZERO;
 
-        // Para evitar divisão por zero se o cliente não tem compras, retorna zero
-        if (transactionsCount.equals(BigDecimal.ZERO)){
-            return BigDecimal.ZERO;
-        }
-        else{
-            return transactionTotal.divide(transactionsCount, 2, RoundingMode.HALF_UP);
-        }
-    }
+		for (Transaction transaction : this.transactions) {
+			transactionTotal = transactionTotal.add(transaction.getTotalPrice());
+			transactionsCount = transactionsCount.add(BigDecimal.ONE);
+		}
 
-    @Override
-    public boolean isEnabled() {
-        return this.status == UserStatus.ATIVO;
-    }
+		// Para evitar divisão por zero se o cliente não tem compras, retorna zero
+		if (transactionsCount.equals(BigDecimal.ZERO)) {
+			return BigDecimal.ZERO;
+		}
+		else {
+			return transactionTotal.divide(transactionsCount, 2, RoundingMode.HALF_UP);
+		}
+	}
 
-    @Override
-    public String toString() {
-        return """
-                Cliente\n
-                Nome: %s\n
-                E-mail: %s\n
-                CPF: %s\n
-                Status: %s\n
-                Gênero: %s\n
-                Data de nascimento: %s\n
-                Telefone: %s\n
-                Tipo de telefone: %s
-                """.formatted(
-                name,
-                email,
-                cpf,
-                status.getDisplayName(),
-                gender.getDisplayName(),
-                dateBirth.toString(),
-                telephone,
-                telephoneType.getDisplayName());
-    }
+	@Override
+	public boolean isEnabled() {
+		return this.status == UserStatus.ATIVO;
+	}
+
+	@Override
+	public String toString() {
+		return """
+				Cliente\n
+				Nome: %s\n
+				E-mail: %s\n
+				CPF: %s\n
+				Status: %s\n
+				Gênero: %s\n
+				Data de nascimento: %s\n
+				Telefone: %s\n
+				Tipo de telefone: %s
+				""".formatted(name, email, cpf, status.getDisplayName(), gender.getDisplayName(), dateBirth.toString(),
+				telephone, telephoneType.getDisplayName());
+	}
+
 }

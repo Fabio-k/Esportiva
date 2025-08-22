@@ -9,31 +9,34 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CheckoutFinalPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
 
-    public CheckoutFinalPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
+	private WebDriver driver;
 
-    public void clickButtonSuccessShopping() {
-        WebElement button = driver.findElement(By.id("button-success"));
-        String currentUrl = driver.getCurrentUrl();
+	private WebDriverWait wait;
 
-        button.click();
+	public CheckoutFinalPage(WebDriver driver) {
+		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void clickButtonSuccessShopping() {
+		WebElement button = driver.findElement(By.id("button-success"));
+		String currentUrl = driver.getCurrentUrl();
 
-    public void clickButtonFailShopping() {
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("button-fail")));
-        String currentUrl = driver.getCurrentUrl();
+		button.click();
 
-        button.click();
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void clickButtonFailShopping() {
+		WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("button-fail")));
+		String currentUrl = driver.getCurrentUrl();
+
+		button.click();
+
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
+
 }

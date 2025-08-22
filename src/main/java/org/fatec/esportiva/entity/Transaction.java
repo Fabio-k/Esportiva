@@ -22,67 +22,64 @@ import org.fatec.esportiva.listeners.LogListener;
 @Getter
 @Setter
 @Table(name = "transacoes")
-public class Transaction implements totalPrice{
+public class Transaction implements totalPrice {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tra_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "tra_id")
+	private Long id;
 
-    @NotNull
-    @Column(name = "tra_data_compra")
-    private LocalDateTime purchaseDate;
+	@NotNull
+	@Column(name = "tra_data_compra")
+	private LocalDateTime purchaseDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tra_status")
-    private OrderStatus status;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "tra_status")
+	private OrderStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "tra_cli_id")
-    private Client client;
+	@ManyToOne
+	@JoinColumn(name = "tra_cli_id")
+	private Client client;
 
-    @ManyToOne
-    @JoinColumn(name = "tra_cep_id")
-    private Cep cep;
+	@ManyToOne
+	@JoinColumn(name = "tra_cep_id")
+	private Cep cep;
 
-    @Column(name = "tra_numero_endereco")
-    private String addressNumber;
+	@Column(name = "tra_numero_endereco")
+	private String addressNumber;
 
-    @Default
-    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders = new ArrayList<>();
+	@Default
+	@OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Order> orders = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return """
-                Transação\n
-                ID: %s\n
-                Status: %s\n
-                Data da compra: %s
-                """.formatted(
-                id,
-                status.getDisplayName(),
-                purchaseDate.toString());
-    }
+	@Override
+	public String toString() {
+		return """
+				Transação\n
+				ID: %s\n
+				Status: %s\n
+				Data da compra: %s
+				""".formatted(id, status.getDisplayName(), purchaseDate.toString());
+	}
 
-    @PrePersist
-    public void prePersist() {
-        if (purchaseDate == null) {
-            purchaseDate = LocalDateTime.now();
-        }
-    }
+	@PrePersist
+	public void prePersist() {
+		if (purchaseDate == null) {
+			purchaseDate = LocalDateTime.now();
+		}
+	}
 
+	@Override
+	public BigDecimal getTotalPrice() {
+		return orders.stream().map(Order::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
 
-    @Override
-    public BigDecimal getTotalPrice(){
-        return orders.stream().map(Order::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
+	public void addOrder(Order order) {
+		if (order == null) {
+			throw new IllegalArgumentException("pedido não pode ser nulo");
+		}
+		orders.add(order);
+		order.setTransaction(this);
+	}
 
-    public void addOrder(Order order){
-        if(order == null){
-            throw new IllegalArgumentException("pedido não pode ser nulo");
-        }
-        orders.add(order);
-        order.setTransaction(this);
-    }
 }

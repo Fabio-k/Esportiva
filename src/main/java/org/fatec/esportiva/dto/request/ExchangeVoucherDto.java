@@ -18,16 +18,18 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ExchangeVoucherDto {
-    private Long id;
 
-    @NotNull(message = "Valor do cupom de desconto não pode ficar em branco")
-    @Min(value = (long) 0.01, message = "Valor do cupom de desconto não pode ser negativo ou zero")
-    private BigDecimal value;
+	private Long id;
 
-    @NotNull(message = "Quantidade de cupons ficar em branco")
-    @Min(value = 1, message = "Quantidade no estoque não pode ser negativa ou zero")
-    private int quantity;
+	@NotNull(message = "Valor do cupom de desconto não pode ficar em branco")
+	@Min(value = (long) 0.01, message = "Valor do cupom de desconto não pode ser negativo ou zero")
+	private BigDecimal value;
 
-    @NotNull(message = "Todo cupom de desconto deve estar associado a um cliente")
-    private Client client;
+	@NotNull(message = "Quantidade de cupons ficar em branco")
+	@Min(value = 1, message = "Quantidade no estoque não pode ser negativa ou zero")
+	private int quantity;
+
+	@NotNull(message = "Todo cupom de desconto deve estar associado a um cliente")
+	private Client client;
+
 }

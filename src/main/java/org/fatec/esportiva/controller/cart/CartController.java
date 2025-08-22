@@ -13,17 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/cart")
 @RequiredArgsConstructor
 public class CartController {
-    private final ClientService clientService;
 
-    @Value("${cart.product.timeoutInMinutes}")
-    private Long timeoutInMinutes;
+	private final ClientService clientService;
 
-    @GetMapping
-    public String getCart(Model model) throws Exception{
-        CartResponseDto cartResponseDto = clientService.getCart();
-        model.addAttribute("removedProducts", cartResponseDto.removedProducts());
-        model.addAttribute("cartItems", cartResponseDto.items());
-        model.addAttribute("timeoutInMinutes", timeoutInMinutes);
-        return "cart";
-    }
+	@Value("${cart.product.timeoutInMinutes}")
+	private Long timeoutInMinutes;
+
+	@GetMapping
+	public String getCart(Model model) throws Exception {
+		CartResponseDto cartResponseDto = clientService.getCart();
+		model.addAttribute("removedProducts", cartResponseDto.removedProducts());
+		model.addAttribute("cartItems", cartResponseDto.items());
+		model.addAttribute("timeoutInMinutes", timeoutInMinutes);
+		return "cart";
+	}
+
 }

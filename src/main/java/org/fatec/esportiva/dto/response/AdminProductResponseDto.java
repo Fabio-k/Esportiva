@@ -16,19 +16,30 @@ import java.util.List;
 @Getter
 @Setter
 public class AdminProductResponseDto {
-    private Long id;
 
-    private String name;
-    private LocalDate entryDate;
-    private int stockQuantity;
-    private int blockedQuantity;
-    private BigDecimal costValue;
-    private BigDecimal salesPrice;
-    private ProductStatus inactivationCategory;
-    private String inactivationJustification;
-    private String description;
-    private String image;
+	private Long id;
 
-    @Builder.Default
-    private List<ProductCategoryResponseDto> categories = new ArrayList<>();
+	private String name;
+
+	private LocalDate entryDate;
+
+	private int stockQuantity;
+
+	private int blockedQuantity;
+
+	private BigDecimal costValue;
+
+	private BigDecimal salesPrice;
+
+	private ProductStatus inactivationCategory;
+
+	private String inactivationJustification;
+
+	private String description;
+
+	private String image;
+
+	@Builder.Default
+	private List<ProductCategoryResponseDto> categories = new ArrayList<>();
+
 }

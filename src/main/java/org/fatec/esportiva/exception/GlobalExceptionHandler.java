@@ -14,36 +14,38 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private static final Logger log = LogManager.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleIllegalArgumentException(IllegalArgumentException ex, Model model){
-        model.addAttribute("error", ex.getMessage());
-        return "error/custom-error";
-    }
+	private static final Logger log = LogManager.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(AiResponseException.class)
-    public ResponseEntity<String> handleAiResponseException(AiResponseException exception){
-        log.error("Erro no processamento da mensagem da IA: ", exception);
-        return ResponseEntity.badRequest().body("Não foi possível gerar a resposta tente novamente mais tarde");
-    }
+	@ExceptionHandler(IllegalArgumentException.class)
+	public String handleIllegalArgumentException(IllegalArgumentException ex, Model model) {
+		model.addAttribute("error", ex.getMessage());
+		return "error/custom-error";
+	}
 
-    @ExceptionHandler(CheckoutException.class)
-    public String handleCheckoutException(CheckoutException ex, RedirectAttributes redirectAttributes){
-        redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
-        return "redirect:" + ex.getRedirectPage();
-    }
+	@ExceptionHandler(AiResponseException.class)
+	public ResponseEntity<String> handleAiResponseException(AiResponseException exception) {
+		log.error("Erro no processamento da mensagem da IA: ", exception);
+		return ResponseEntity.badRequest().body("Não foi possível gerar a resposta tente novamente mais tarde");
+	}
 
-    @ExceptionHandler(EmptyCartException.class)
-    public String handleEmptyCartException(EmptyCartException ex){
-        return "redirect:/cart";
-    }
+	@ExceptionHandler(CheckoutException.class)
+	public String handleCheckoutException(CheckoutException ex, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+		return "redirect:" + ex.getRedirectPage();
+	}
 
-    @ExceptionHandler(ApiException.class)
-    public ResponseEntity<Object> handleApiException(ApiException ex){
-        Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now());
-        error.put("error", ex.getMessage());
-        return ResponseEntity.badRequest().body(error);
-    }
+	@ExceptionHandler(EmptyCartException.class)
+	public String handleEmptyCartException(EmptyCartException ex) {
+		return "redirect:/cart";
+	}
+
+	@ExceptionHandler(ApiException.class)
+	public ResponseEntity<Object> handleApiException(ApiException ex) {
+		Map<String, Object> error = new HashMap<>();
+		error.put("timestamp", LocalDateTime.now());
+		error.put("error", ex.getMessage());
+		return ResponseEntity.badRequest().body(error);
+	}
+
 }

@@ -11,71 +11,74 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CheckoutNewCardPage {
-    @SuppressWarnings("unused")
-    private WebDriver driver;
-    private WebDriverWait wait;
 
-    public CheckoutNewCardPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
+	@SuppressWarnings("unused")
+	private WebDriver driver;
 
-    public void saveCreditCardCheckbox(boolean check) {
-        WebElement checkbox = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("saveCreditCard")));
+	private WebDriverWait wait;
 
-        if (check) {
-            if (!checkbox.isSelected()) {
-                checkbox.click(); // Marca o checkbox
-            }
-        } else {
-            if (checkbox.isSelected()) {
-                checkbox.click(); // Desmarca o checkbox
-            }
-        }
-    }
+	public CheckoutNewCardPage(WebDriver driver) {
+		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+	}
 
-    public void setCreditCardName(String cardName) {
-        WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("creditCardName")));
+	public void saveCreditCardCheckbox(boolean check) {
+		WebElement checkbox = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("saveCreditCard")));
 
-        field.clear();
-        field.sendKeys(cardName);
-    }
+		if (check) {
+			if (!checkbox.isSelected()) {
+				checkbox.click(); // Marca o checkbox
+			}
+		}
+		else {
+			if (checkbox.isSelected()) {
+				checkbox.click(); // Desmarca o checkbox
+			}
+		}
+	}
 
-    public void setCreditCardNumber(String cardNumber) {
-        WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("creditCardNumber")));
+	public void setCreditCardName(String cardName) {
+		WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("creditCardName")));
 
-        field.clear();
-        field.sendKeys(cardNumber);
-    }
+		field.clear();
+		field.sendKeys(cardName);
+	}
 
-    public void setCreditCardCVV(String CVV) {
-        WebElement field = wait
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("creditCardSecurityCode")));
+	public void setCreditCardNumber(String cardNumber) {
+		WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("creditCardNumber")));
 
-        field.clear();
-        field.sendKeys(CVV);
-    }
+		field.clear();
+		field.sendKeys(cardNumber);
+	}
 
-    public void setCreditCardBrand(CreditCardBrand brand) {
-        // Encontra as opções e cria um objeto desse tipo
-        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("creditCardBrand")));
-        Select select = new Select(dropdown);
+	public void setCreditCardCVV(String CVV) {
+		WebElement field = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("creditCardSecurityCode")));
 
-        // Seleciona pelo texto que está visível nas opções
-        select.selectByValue(brand.name());
-    }
+		field.clear();
+		field.sendKeys(CVV);
+	}
 
-    public void continueShopping(boolean expectedPass) {
-        WebElement button = driver.findElement(By.className("primaryButton"));
-        String currentUrl = driver.getCurrentUrl();
+	public void setCreditCardBrand(CreditCardBrand brand) {
+		// Encontra as opções e cria um objeto desse tipo
+		WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("creditCardBrand")));
+		Select select = new Select(dropdown);
 
-        button.click();
+		// Seleciona pelo texto que está visível nas opções
+		select.selectByValue(brand.name());
+	}
 
-        // Só aguarda a transição de página se espera-se que ele passe
-        // Em caso de falhas não precisa aguardar
-        if (expectedPass) {
-            // Espera a nova página ser carregada, quando a URL atual fica inválida
-            wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-        }
-    }
+	public void continueShopping(boolean expectedPass) {
+		WebElement button = driver.findElement(By.className("primaryButton"));
+		String currentUrl = driver.getCurrentUrl();
+
+		button.click();
+
+		// Só aguarda a transição de página se espera-se que ele passe
+		// Em caso de falhas não precisa aguardar
+		if (expectedPass) {
+			// Espera a nova página ser carregada, quando a URL atual fica inválida
+			wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+		}
+	}
+
 }

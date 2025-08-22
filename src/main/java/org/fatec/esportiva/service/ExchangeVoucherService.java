@@ -15,47 +15,54 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ExchangeVoucherService {
-    private final ExchangeVoucherRepository exchangeVoucherRepository;
 
-    public void createExchangeVoucher(Client client, BigDecimal value){
-        ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
-        exchangeVoucher.setId(null);
-        exchangeVoucher.setValue(value);
-        exchangeVoucher.setClient(client);
-        exchangeVoucherRepository.save(exchangeVoucher);
-    }
+	private final ExchangeVoucherRepository exchangeVoucherRepository;
 
-    public void validateExchangeVoucherOwnership(List<Long> voucherIds, Long clientId){
-        List<ExchangeVoucher> vouchers = exchangeVoucherRepository.findAllByIdInAndClientIdAndIsUsedFalse(voucherIds, clientId);
-        if(voucherIds.size() != vouchers.size()) throw new IllegalArgumentException("Um ou mais vouchers não foram encontrados");
-    }
+	public void createExchangeVoucher(Client client, BigDecimal value) {
+		ExchangeVoucher exchangeVoucher = new ExchangeVoucher();
+		exchangeVoucher.setId(null);
+		exchangeVoucher.setValue(value);
+		exchangeVoucher.setClient(client);
+		exchangeVoucherRepository.save(exchangeVoucher);
+	}
 
-    public List<ExchangeVoucher> updateOrCreateExchangeVoucher(Client client,
-            List<ExchangeVoucherDto> exchangeVoucherDto) {
-        return exchangeVoucherDto.stream().map(c -> {
-            if (c.getId() != null) {
-                ExchangeVoucher exchangeVoucher = exchangeVoucherRepository.findById(c.getId())
-                        .orElseThrow(() -> new RuntimeException("Cupom de desconto não encontrado"));
-                exchangeVoucher.setValue(c.getValue());
+	public void validateExchangeVoucherOwnership(List<Long> voucherIds, Long clientId) {
+		List<ExchangeVoucher> vouchers = exchangeVoucherRepository.findAllByIdInAndClientIdAndIsUsedFalse(voucherIds,
+				clientId);
+		if (voucherIds.size() != vouchers.size())
+			throw new IllegalArgumentException("Um ou mais vouchers não foram encontrados");
+	}
 
-                return exchangeVoucher;
-            }
+	public List<ExchangeVoucher> updateOrCreateExchangeVoucher(Client client,
+			List<ExchangeVoucherDto> exchangeVoucherDto) {
+		return exchangeVoucherDto.stream().map(c -> {
+			if (c.getId() != null) {
+				ExchangeVoucher exchangeVoucher = exchangeVoucherRepository.findById(c.getId())
+					.orElseThrow(() -> new RuntimeException("Cupom de desconto não encontrado"));
+				exchangeVoucher.setValue(c.getValue());
 
-            return ExchangeVoucherMapper.toExchangeVoucher(client, c);
-        }).toList();
-    }
+				return exchangeVoucher;
+			}
 
-    public List<ExchangeVoucher> findAllById(List<Long> ids){
-        return exchangeVoucherRepository.findAllById(ids);
-    }
-    public List<ExchangeVoucher> findAllValidExchangeVouchersByClientId(Long clientId){return exchangeVoucherRepository.findAllByClientIdAndIsUsedFalse(clientId);}
+			return ExchangeVoucherMapper.toExchangeVoucher(client, c);
+		}).toList();
+	}
 
-    public void markAsUsedExchangeVouchers(List<Long> ids, Long clientId){
-        List<ExchangeVoucher> vouchers = exchangeVoucherRepository.findAllByIdInAndClientIdAndIsUsedFalse(ids, clientId);
-        for(ExchangeVoucher exchangeVoucher : vouchers){
-            exchangeVoucher.setIsUsed(true);
-        }
-        exchangeVoucherRepository.saveAll(vouchers);
-    }
+	public List<ExchangeVoucher> findAllById(List<Long> ids) {
+		return exchangeVoucherRepository.findAllById(ids);
+	}
+
+	public List<ExchangeVoucher> findAllValidExchangeVouchersByClientId(Long clientId) {
+		return exchangeVoucherRepository.findAllByClientIdAndIsUsedFalse(clientId);
+	}
+
+	public void markAsUsedExchangeVouchers(List<Long> ids, Long clientId) {
+		List<ExchangeVoucher> vouchers = exchangeVoucherRepository.findAllByIdInAndClientIdAndIsUsedFalse(ids,
+				clientId);
+		for (ExchangeVoucher exchangeVoucher : vouchers) {
+			exchangeVoucher.setIsUsed(true);
+		}
+		exchangeVoucherRepository.saveAll(vouchers);
+	}
 
 }

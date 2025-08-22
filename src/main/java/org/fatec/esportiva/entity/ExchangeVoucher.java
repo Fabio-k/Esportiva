@@ -18,31 +18,30 @@ import lombok.*;
 @Table(name = "cupons_troca")
 public class ExchangeVoucher {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ctr_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ctr_id")
+	private Long id;
 
-    @NotNull
-    @Column(name = "ctr_valor", precision = 10, scale = 2)
-    private BigDecimal value;
+	@NotNull
+	@Column(name = "ctr_valor", precision = 10, scale = 2)
+	private BigDecimal value;
 
-    @Column(name = "ctr_usado")
-    private Boolean isUsed = false;
+	@Column(name = "ctr_usado")
+	private Boolean isUsed = false;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "ctr_cli_id")
-    private Client client;
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "ctr_cli_id")
+	private Client client;
 
-    @Override
-    public String toString() {
-        return """
-                Cupom de troca\n
-                ID: %s\n
-                Valor: %s
-                """.formatted(
-                id,
-                value);
-    }
+	@Override
+	public String toString() {
+		return """
+				Cupom de troca\n
+				ID: %s\n
+				Valor: %s
+				""".formatted(id, value);
+	}
+
 }

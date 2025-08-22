@@ -19,50 +19,47 @@ import java.time.LocalDateTime;
 @Table(name = "cartoes_de_credito")
 public class CreditCard {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "car_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "car_id")
+	private Long id;
 
-    @NotNull
-    @Column(name = "car_numero")
-    private String number;
+	@NotNull
+	@Column(name = "car_numero")
+	private String number;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "car_bandeira")
-    private CreditCardBrand brand;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(name = "car_bandeira")
+	private CreditCardBrand brand;
 
-    @NotNull
-    @Column(name = "car_nome_impresso")
-    private String name;
+	@NotNull
+	@Column(name = "car_nome_impresso")
+	private String name;
 
-    @NotNull
-    @Column(name = "car_codigo_seguranca")
-    private String securityCode;
+	@NotNull
+	@Column(name = "car_codigo_seguranca")
+	private String securityCode;
 
-    @Column(name = "car_temporario")
-    private Boolean isTemporary;
+	@Column(name = "car_temporario")
+	private Boolean isTemporary;
 
-    @Column(name = "car_expira_em")
-    private LocalDateTime expireAt;
+	@Column(name = "car_expira_em")
+	private LocalDateTime expireAt;
 
-    @ManyToOne
-    @JoinColumn(name = "car_cli_id")
-    private Client client;
+	@ManyToOne
+	@JoinColumn(name = "car_cli_id")
+	private Client client;
 
-    @Override
-    public String toString() {
-        return """
-                Cartão de crédito\n
-                Nº cartão: %s\n
-                Bandeira: %s\n
-                Nome no cartão: %s\n
-                CVV: %s
-                """.formatted(
-                number,
-                brand.getDisplayName(),
-                name,
-                securityCode);
-    }
+	@Override
+	public String toString() {
+		return """
+				Cartão de crédito\n
+				Nº cartão: %s\n
+				Bandeira: %s\n
+				Nome no cartão: %s\n
+				CVV: %s
+				""".formatted(number, brand.getDisplayName(), name, securityCode);
+	}
+
 }

@@ -8,13 +8,14 @@ import java.util.List;
 
 public class TransactionFactory {
 
-    public static Transaction defaultTransaction(Cep cep){
+	public static Transaction defaultTransaction(Cep cep) {
 
-        return Transaction.builder()
-                .cep(cep)
-                .orders(List.of())
-                .addressNumber("111")
-                .status(OrderStatus.EM_PROCESSAMENTO)
-                .build();
-    }
+		return Transaction.builder()
+			.cep(cep)
+			.orders(List.of())
+			.addressNumber("111")
+			.status(OrderStatus.EM_PROCESSAMENTO)
+			.build();
+	}
+
 }

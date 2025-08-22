@@ -9,31 +9,39 @@ import org.fatec.esportiva.service.transaction.TransactionService;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-
 @Service
 @RequiredArgsConstructor
 public class CheckoutService {
-    private final CartService cartService;
-    private final ExchangeVoucherService exchangeVoucherService;
-    private final ClientService clientService;
-    private final TransactionService transactionService;
-    private final CheckoutSessionService checkoutSessionService;
 
-    @Transactional
-    public void processCheckout(CheckoutSession checkoutSession, Model model){
+	private final CartService cartService;
 
-        Transaction transaction = transactionService.generateTransaction(checkoutSession.getAddress().getId());
-        try{
-            checkoutSessionService.validatePayment(checkoutSession);
-            exchangeVoucherService.validateExchangeVoucherOwnership(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());
-        } catch (IllegalArgumentException e){
-            model.addAttribute("errorMessage", e.getMessage());
-            transactionService.denyTransaction(transaction);
-        }
+	private final ExchangeVoucherService exchangeVoucherService;
 
-        exchangeVoucherService.markAsUsedExchangeVouchers(checkoutSession.getExchangeVoucherIds(), clientService.getAuthenticatedClient().getId());
-        checkoutSessionService.generateExchangeVoucher(checkoutSession);
-        cartService.cleanCart();
-        checkoutSessionService.clearCheckoutSession(checkoutSession);
-    }
+	private final ClientService clientService;
+
+	private final TransactionService transactionService;
+
+	private final CheckoutSessionService checkoutSessionService;
+
+	@Transactional
+	public void processCheckout(CheckoutSession checkoutSession, Model model) {
+
+		Transaction transaction = transactionService.generateTransaction(checkoutSession.getAddress().getId());
+		try {
+			checkoutSessionService.validatePayment(checkoutSession);
+			exchangeVoucherService.validateExchangeVoucherOwnership(checkoutSession.getExchangeVoucherIds(),
+					clientService.getAuthenticatedClient().getId());
+		}
+		catch (IllegalArgumentException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			transactionService.denyTransaction(transaction);
+		}
+
+		exchangeVoucherService.markAsUsedExchangeVouchers(checkoutSession.getExchangeVoucherIds(),
+				clientService.getAuthenticatedClient().getId());
+		checkoutSessionService.generateExchangeVoucher(checkoutSession);
+		cartService.cleanCart();
+		checkoutSessionService.clearCheckoutSession(checkoutSession);
+	}
+
 }

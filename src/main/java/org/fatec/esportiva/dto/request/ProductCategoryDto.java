@@ -13,8 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class ProductCategoryDto {
-    private Long id;
 
-    @NotBlank(message = "Nome da categoria do produto não pode ficar em branco")
-    private String name;
+	private Long id;
+
+	@NotBlank(message = "Nome da categoria do produto não pode ficar em branco")
+	private String name;
+
 }

@@ -7,5 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AddressRepository extends JpaRepository<Address, Long> {
-    List<Address> findByTemporaryTrueAndExpiredAtBefore(LocalDateTime createdAt);
+
+	List<Address> findByTemporaryTrueAndExpiredAtBefore(LocalDateTime createdAt);
+
 }

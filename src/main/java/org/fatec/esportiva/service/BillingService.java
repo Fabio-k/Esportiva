@@ -13,51 +13,68 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BillingService {
-    private final CartEmptyValidator cartEmptyValidator;
-    private final ExchangeVoucherService exchangeVoucherService;
-    private final PromotionalCouponService promotionalCouponService;
-    private final ClientService clientService;
-    private final CheckoutSessionService checkoutService;
-    private final CreditCardService creditCardService;
-    private final CreditCardMinimumAmountValidator creditCardMinimumAmountValidator;
-    private final UnusedExchangeVouchersValidator unusedExchangeVouchersValidator;
-    private final SplitCardValueValidator splitCardValueValidator;
-    private final NoNeedForCreditCardPaymentValidator creditCardPaymentValidator;
 
+	private final CartEmptyValidator cartEmptyValidator;
 
-    public void savePaymentMethods(CheckoutSession checkoutSession, List<Long> exchangeVoucherIds, List<Long> creditCardsIds, String promotionalCouponCode){
-        cartEmptyValidator.validate();
+	private final ExchangeVoucherService exchangeVoucherService;
 
-        checkoutSession.getExchangeVoucherIds().clear();
-        if(exchangeVoucherIds != null) {
-            exchangeVoucherService.validateExchangeVoucherOwnership(exchangeVoucherIds, clientService.getAuthenticatedClient().getId());
-            checkoutSession.setExchangeVoucherIds(exchangeVoucherIds);
-        }
-        PromotionalCouponResponseDto promotionalCoupon = promotionalCouponService.getPromotionalCouponOrReturnNull(promotionalCouponCode);
-        if(promotionalCoupon != null) {
-            checkoutSession.setPromotionalCouponCode(promotionalCoupon.code());
-        }
+	private final PromotionalCouponService promotionalCouponService;
 
-        checkoutSession.getCreditCardPayments().clear();
-        if(creditCardsIds != null){
-            Long clientId = clientService.getAuthenticatedClient().getId();
-            List<SplitCreditCardResponseDto> splitCreditCardResponseDtos = creditCardsIds.stream().map(id -> creditCardService.findByIdAndUserId(id, clientId)).toList();
-            checkoutSession.getCreditCardPayments().addAll(splitCreditCardResponseDtos);
-        }
+	private final ClientService clientService;
 
-        CheckoutValidationContext context = new CheckoutValidationContext(checkoutSession, null, "/checkout/billing");
-        creditCardPaymentValidator.validate(context);
-        creditCardMinimumAmountValidator.validate(context);
-        unusedExchangeVouchersValidator.validate(context);
-        checkoutService.validateInsufficientPayment(checkoutSession);
-    }
+	private final CheckoutSessionService checkoutService;
 
-    public void saveSplitCardAmount(CheckoutSession checkoutSession, List<SplitCreditCardDto> splitPayment){
-        checkoutSession.getCreditCardPayments().clear();
-        CheckoutValidationContext context = new CheckoutValidationContext(checkoutSession, null, "/checkout/billing/split-cards");
-        creditCardMinimumAmountValidator.validate(context);
-        splitCardValueValidator.validate(context, splitPayment);
-        List<SplitCreditCardResponseDto> splitCreditCardResponseDtos = creditCardService.getSplitCreditCardResponseDto(splitPayment, clientService.getAuthenticatedClient().getId());
-        checkoutSession.getCreditCardPayments().addAll(splitCreditCardResponseDtos);
-    }
+	private final CreditCardService creditCardService;
+
+	private final CreditCardMinimumAmountValidator creditCardMinimumAmountValidator;
+
+	private final UnusedExchangeVouchersValidator unusedExchangeVouchersValidator;
+
+	private final SplitCardValueValidator splitCardValueValidator;
+
+	private final NoNeedForCreditCardPaymentValidator creditCardPaymentValidator;
+
+	public void savePaymentMethods(CheckoutSession checkoutSession, List<Long> exchangeVoucherIds,
+			List<Long> creditCardsIds, String promotionalCouponCode) {
+		cartEmptyValidator.validate();
+
+		checkoutSession.getExchangeVoucherIds().clear();
+		if (exchangeVoucherIds != null) {
+			exchangeVoucherService.validateExchangeVoucherOwnership(exchangeVoucherIds,
+					clientService.getAuthenticatedClient().getId());
+			checkoutSession.setExchangeVoucherIds(exchangeVoucherIds);
+		}
+		PromotionalCouponResponseDto promotionalCoupon = promotionalCouponService
+			.getPromotionalCouponOrReturnNull(promotionalCouponCode);
+		if (promotionalCoupon != null) {
+			checkoutSession.setPromotionalCouponCode(promotionalCoupon.code());
+		}
+
+		checkoutSession.getCreditCardPayments().clear();
+		if (creditCardsIds != null) {
+			Long clientId = clientService.getAuthenticatedClient().getId();
+			List<SplitCreditCardResponseDto> splitCreditCardResponseDtos = creditCardsIds.stream()
+				.map(id -> creditCardService.findByIdAndUserId(id, clientId))
+				.toList();
+			checkoutSession.getCreditCardPayments().addAll(splitCreditCardResponseDtos);
+		}
+
+		CheckoutValidationContext context = new CheckoutValidationContext(checkoutSession, null, "/checkout/billing");
+		creditCardPaymentValidator.validate(context);
+		creditCardMinimumAmountValidator.validate(context);
+		unusedExchangeVouchersValidator.validate(context);
+		checkoutService.validateInsufficientPayment(checkoutSession);
+	}
+
+	public void saveSplitCardAmount(CheckoutSession checkoutSession, List<SplitCreditCardDto> splitPayment) {
+		checkoutSession.getCreditCardPayments().clear();
+		CheckoutValidationContext context = new CheckoutValidationContext(checkoutSession, null,
+				"/checkout/billing/split-cards");
+		creditCardMinimumAmountValidator.validate(context);
+		splitCardValueValidator.validate(context, splitPayment);
+		List<SplitCreditCardResponseDto> splitCreditCardResponseDtos = creditCardService
+			.getSplitCreditCardResponseDto(splitPayment, clientService.getAuthenticatedClient().getId());
+		checkoutSession.getCreditCardPayments().addAll(splitCreditCardResponseDtos);
+	}
+
 }

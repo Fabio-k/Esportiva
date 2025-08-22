@@ -11,6 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserLoginRequest {
-    @NotBlank(message = "Escolha um usuário")
-    private String email;
+
+	@NotBlank(message = "Escolha um usuário")
+	private String email;
+
 }

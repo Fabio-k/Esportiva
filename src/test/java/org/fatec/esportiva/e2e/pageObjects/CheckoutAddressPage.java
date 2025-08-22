@@ -10,56 +10,59 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CheckoutAddressPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
 
-    public CheckoutAddressPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
+	private WebDriver driver;
 
-    public String getProductValue() {
-        WebElement productValue = driver.findElement(By.id("productsValue"));
-        return productValue.getText();
-    }
+	private WebDriverWait wait;
 
-    public String getFreight() {
-        WebElement freight = driver.findElement(By.id("freight"));
-        return freight.getText();
-    }
+	public CheckoutAddressPage(WebDriver driver) {
+		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+	}
 
-    public String getTotalPrice() {
-        WebElement totalPrice = driver.findElement(By.id("totalPrice"));
-        return totalPrice.getText();
-    }
+	public String getProductValue() {
+		WebElement productValue = driver.findElement(By.id("productsValue"));
+		return productValue.getText();
+	}
 
-    public void selectAddress(int position){
-        WebElement addressContainer = driver.findElement(By.id("address-list"));
-        // Encontra todos os itens e retorna somente um da posição desejada
-        List<WebElement> allAddress = addressContainer.findElements(By.cssSelector(".card.addressCard"));
-        WebElement address = allAddress.get(position);
+	public String getFreight() {
+		WebElement freight = driver.findElement(By.id("freight"));
+		return freight.getText();
+	}
 
-        address.click();
-    }
+	public String getTotalPrice() {
+		WebElement totalPrice = driver.findElement(By.id("totalPrice"));
+		return totalPrice.getText();
+	}
 
-    public void newAddress() {
-        // Após inserir o produto no carrinho, você pode ir até ele
-        WebElement link = driver.findElement(By.linkText("Usar Novo Endereço"));
-        String currentUrl = driver.getCurrentUrl();
+	public void selectAddress(int position) {
+		WebElement addressContainer = driver.findElement(By.id("address-list"));
+		// Encontra todos os itens e retorna somente um da posição desejada
+		List<WebElement> allAddress = addressContainer.findElements(By.cssSelector(".card.addressCard"));
+		WebElement address = allAddress.get(position);
 
-        link.click();
+		address.click();
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void newAddress() {
+		// Após inserir o produto no carrinho, você pode ir até ele
+		WebElement link = driver.findElement(By.linkText("Usar Novo Endereço"));
+		String currentUrl = driver.getCurrentUrl();
 
-    public void continueShopping() {
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("button-continue-shopping")));
-        String currentUrl = driver.getCurrentUrl();
+		link.click();
 
-        button.click();
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void continueShopping() {
+		WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("button-continue-shopping")));
+		String currentUrl = driver.getCurrentUrl();
+
+		button.click();
+
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
+
 }

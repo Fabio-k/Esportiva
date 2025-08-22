@@ -9,121 +9,125 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CartAllProductsPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
 
-    public CartAllProductsPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    }
+	private WebDriver driver;
 
-    public void refreshPage(){
-        // Simula o "F5" do navegador
-        driver.navigate().refresh();
-    }
+	private WebDriverWait wait;
 
-    public void returnMainPage() {
-        WebElement button = driver.findElement(By.id("button-return"));
-        String currentUrl = driver.getCurrentUrl();
+	public CartAllProductsPage(WebDriver driver) {
+		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+	}
 
-        button.click();
+	public void refreshPage() {
+		// Simula o "F5" do navegador
+		driver.navigate().refresh();
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void returnMainPage() {
+		WebElement button = driver.findElement(By.id("button-return"));
+		String currentUrl = driver.getCurrentUrl();
 
-    public void continueShopping() {
-        WebElement button = driver.findElement(By.id("button-continue-shopping"));
-        String currentUrl = driver.getCurrentUrl();
+		button.click();
 
-        button.click();
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
 
-        // Espera a nova página ser carregada, quando a URL atual fica inválida
-        wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
-    }
+	public void continueShopping() {
+		WebElement button = driver.findElement(By.id("button-continue-shopping"));
+		String currentUrl = driver.getCurrentUrl();
 
-    public boolean isCartEmpty() {
-        List<WebElement> h1Tags = driver.findElements(By.tagName("h1"));
+		button.click();
 
-        // Iterar sobre as tags <h1> para verificar o texto
-        for (WebElement h1Tag : h1Tags) {
-            if (h1Tag.getText().equals("Carrinho vazio")) {
-                return true;
-            }
-        }
+		// Espera a nova página ser carregada, quando a URL atual fica inválida
+		wait.until(webDriver -> !webDriver.getCurrentUrl().equals(currentUrl));
+	}
 
-        return false;
-    }
+	public boolean isCartEmpty() {
+		List<WebElement> h1Tags = driver.findElements(By.tagName("h1"));
 
-    public String getItemName(int position) {
-        WebElement item = findItem(position);
-        WebElement pElement = item.findElement(By.tagName("p"));
-        return pElement.getText();
-    }
+		// Iterar sobre as tags <h1> para verificar o texto
+		for (WebElement h1Tag : h1Tags) {
+			if (h1Tag.getText().equals("Carrinho vazio")) {
+				return true;
+			}
+		}
 
-    public String getItemQuantity(int position) {
-        WebElement item = findItem(position);
-        WebElement button = item.findElement(By.id("quantityItem"));
-        return button.getText();
-    }
+		return false;
+	}
 
-    public String getItemTotalValue(int position) {
-        WebElement item = findItem(position);
-        WebElement totalPrice = item.findElement(By.className("itemTotalPrice"));
-        return totalPrice.getText();
-    }
+	public String getItemName(int position) {
+		WebElement item = findItem(position);
+		WebElement pElement = item.findElement(By.tagName("p"));
+		return pElement.getText();
+	}
 
-    public String getTotalPrice() {
-        WebElement totalPrice = driver.findElement(By.id("totalPrice"));
-        return totalPrice.getText();
-    }
+	public String getItemQuantity(int position) {
+		WebElement item = findItem(position);
+		WebElement button = item.findElement(By.id("quantityItem"));
+		return button.getText();
+	}
 
-    public void increaseButton(int position, int clickTimes) {
-        WebElement item = findItem(position);
-        WebElement button = item.findElement(By.id("increaseButton"));
+	public String getItemTotalValue(int position) {
+		WebElement item = findItem(position);
+		WebElement totalPrice = item.findElement(By.className("itemTotalPrice"));
+		return totalPrice.getText();
+	}
 
-        for (int i = 0; i < clickTimes; i++) {
-            button.click();
-        }
-        // Tempo extra para carregar os botões e o javascript
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            System.out.println("A pausa foi interrompida!");
-            e.printStackTrace();
-        }
-    }
+	public String getTotalPrice() {
+		WebElement totalPrice = driver.findElement(By.id("totalPrice"));
+		return totalPrice.getText();
+	}
 
-    public void decreaseButton(int position, int clickTimes) {
-        WebElement item = findItem(position);
-        WebElement button = item.findElement(By.id("decreaseButton"));
+	public void increaseButton(int position, int clickTimes) {
+		WebElement item = findItem(position);
+		WebElement button = item.findElement(By.id("increaseButton"));
 
-        for (int i = 0; i < clickTimes; i++) {
-            button.click();
-        }
-        // Tempo extra para carregar os botões e o javascript
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            System.out.println("A pausa foi interrompida!");
-            e.printStackTrace();
-        }
-    }
+		for (int i = 0; i < clickTimes; i++) {
+			button.click();
+		}
+		// Tempo extra para carregar os botões e o javascript
+		try {
+			Thread.sleep(500);
+		}
+		catch (InterruptedException e) {
+			System.out.println("A pausa foi interrompida!");
+			e.printStackTrace();
+		}
+	}
 
-    public void removeButton(int position) {
-        WebElement item = findItem(position);
-        WebElement removeButton = item.findElement(By.xpath("//span[text()='Remover']"));
+	public void decreaseButton(int position, int clickTimes) {
+		WebElement item = findItem(position);
+		WebElement button = item.findElement(By.id("decreaseButton"));
 
-        removeButton.click();
-    }
+		for (int i = 0; i < clickTimes; i++) {
+			button.click();
+		}
+		// Tempo extra para carregar os botões e o javascript
+		try {
+			Thread.sleep(500);
+		}
+		catch (InterruptedException e) {
+			System.out.println("A pausa foi interrompida!");
+			e.printStackTrace();
+		}
+	}
 
-    private WebElement findItem(int position) {
-        WebElement allItens = driver.findElement(By.id("itemList"));
+	public void removeButton(int position) {
+		WebElement item = findItem(position);
+		WebElement removeButton = item.findElement(By.xpath("//span[text()='Remover']"));
 
-        // Encontra todos os itens e retorna somente um da posição desejada
-        List<WebElement> elementos = allItens.findElements(By.cssSelector(".itemCard"));
+		removeButton.click();
+	}
 
-        return elementos.get(position);
-    }
+	private WebElement findItem(int position) {
+		WebElement allItens = driver.findElement(By.id("itemList"));
+
+		// Encontra todos os itens e retorna somente um da posição desejada
+		List<WebElement> elementos = allItens.findElements(By.cssSelector(".itemCard"));
+
+		return elementos.get(position);
+	}
 
 }

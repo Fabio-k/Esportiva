@@ -26,99 +26,109 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TransactionService {
-    private final ClientService clientService;
-    private final TransactionRepository transactionRepository;
-    private final OrderService orderService;
-    private final ProductService productService;
-    private final ExchangeVoucherService exchangeVoucherService;
-    private final TransactionStateFactory transactionStateFactory;
-    private final AddressService addressService;
 
-    public List<TransactionResponseDto> getTransactions() {
-        return transactionRepository.findAllByClientOrderByPurchaseDateDesc(clientService.getAuthenticatedClient())
-                .stream().map(TransactionMapper::toTransactionResponseDto).toList();
-    }
+	private final ClientService clientService;
 
-    public List<TransactionResponseDto> getTransactions(long id) {
-        return transactionRepository.findAllByClientOrderByPurchaseDateDesc(clientService.findClient(id))
-                .stream().map(TransactionMapper::toTransactionResponseDto).toList();
-    }
+	private final TransactionRepository transactionRepository;
 
-    public List<TransactionDto> getTransactionsAdmin() {
-        return transactionRepository.findAll()
-                .stream().map(TransactionMapper::toTransactionDto).toList();
-    }
+	private final OrderService orderService;
 
-    public TransactionResponseDto getTransaction(Long id) {
-        return TransactionMapper.toTransactionResponseDto(findById(id));
-    }
+	private final ProductService productService;
 
-    public Transaction findById(Long id) {
-        return transactionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("transação não encontrada"));
-    }
+	private final ExchangeVoucherService exchangeVoucherService;
 
-    @Transactional
-    public Transaction generateTransaction(Long addressId) {
-        Address address = addressService.findById(addressId);
-        Cep cep = address.getCep();
-        String addressNumber = address.getNumber();
-        Client client = clientService.getAuthenticatedClient();
-        Transaction transaction = Transaction.builder()
-                .client(client)
-                .status(OrderStatus.EM_PROCESSAMENTO)
-                .purchaseDate(LocalDateTime.now())
-                .cep(cep)
-                .addressNumber(addressNumber)
-                .build();
+	private final TransactionStateFactory transactionStateFactory;
 
-        List<Order> orders = client.getCart().getCartItems().stream()
-                .map(cartItem -> {
-                    Order order = CartItemMapper.toOrder(cartItem);
-                    order.setTransaction(transaction);
-                    order.setStatus(OrderStatus.EM_PROCESSAMENTO);
-                    return order;
-                }).toList();
+	private final AddressService addressService;
 
-        transaction.setOrders(orders);
+	public List<TransactionResponseDto> getTransactions() {
+		return transactionRepository.findAllByClientOrderByPurchaseDateDesc(clientService.getAuthenticatedClient())
+			.stream()
+			.map(TransactionMapper::toTransactionResponseDto)
+			.toList();
+	}
 
-        return transactionRepository.save(transaction);
-    }
+	public List<TransactionResponseDto> getTransactions(long id) {
+		return transactionRepository.findAllByClientOrderByPurchaseDateDesc(clientService.findClient(id))
+			.stream()
+			.map(TransactionMapper::toTransactionResponseDto)
+			.toList();
+	}
 
-    // Máquina de estados que controla a transições conforme cada aprovação
-    public void changeState(long id, boolean approve) {
-        Transaction transaction = findById(id);
-        OrderStatus status = transaction.getStatus();
-        TransactionContext context = new TransactionContext(orderService, exchangeVoucherService);
+	public List<TransactionDto> getTransactionsAdmin() {
+		return transactionRepository.findAll().stream().map(TransactionMapper::toTransactionDto).toList();
+	}
 
-        TransactionState handler = transactionStateFactory.getHandler(status);
+	public TransactionResponseDto getTransaction(Long id) {
+		return TransactionMapper.toTransactionResponseDto(findById(id));
+	}
 
-        if (approve)
-            handler.approve(transaction, context);
-        else
-            handler.reprove(transaction, context);
+	public Transaction findById(Long id) {
+		return transactionRepository.findById(id)
+			.orElseThrow(() -> new EntityNotFoundException("transação não encontrada"));
+	}
 
-        transactionRepository.save(transaction);
-    }
+	@Transactional
+	public Transaction generateTransaction(Long addressId) {
+		Address address = addressService.findById(addressId);
+		Cep cep = address.getCep();
+		String addressNumber = address.getNumber();
+		Client client = clientService.getAuthenticatedClient();
+		Transaction transaction = Transaction.builder()
+			.client(client)
+			.status(OrderStatus.EM_PROCESSAMENTO)
+			.purchaseDate(LocalDateTime.now())
+			.cep(cep)
+			.addressNumber(addressNumber)
+			.build();
 
-    @Transactional
-    public void denyTransaction(Transaction transaction) {
-        List<Order> orders = transaction.getOrders();
+		List<Order> orders = client.getCart().getCartItems().stream().map(cartItem -> {
+			Order order = CartItemMapper.toOrder(cartItem);
+			order.setTransaction(transaction);
+			order.setStatus(OrderStatus.EM_PROCESSAMENTO);
+			return order;
+		}).toList();
 
-        orders.forEach(order -> {
-            productService.returnBlockedProductQuantity(order.getProduct().getId(), (short) order.getQuantity());
-        });
+		transaction.setOrders(orders);
 
-        transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
-    }
+		return transactionRepository.save(transaction);
+	}
 
-    public void requestTrade(Long id) {
-        Client client = clientService.getAuthenticatedClient();
-        Transaction transaction = transactionRepository.findByClientAndIdAndStatus(client, id, OrderStatus.ENTREGUE)
-                .orElseThrow(() -> new EntityNotFoundException("Transação não encontrada"));
-        List<Order> orders = new ArrayList<>(transaction.getOrders());
-        for (Order order : orders) {
-            orderService.tradeOrder(order.getId(), (short) order.getQuantity());
-        }
-    }
+	// Máquina de estados que controla a transições conforme cada aprovação
+	public void changeState(long id, boolean approve) {
+		Transaction transaction = findById(id);
+		OrderStatus status = transaction.getStatus();
+		TransactionContext context = new TransactionContext(orderService, exchangeVoucherService);
+
+		TransactionState handler = transactionStateFactory.getHandler(status);
+
+		if (approve)
+			handler.approve(transaction, context);
+		else
+			handler.reprove(transaction, context);
+
+		transactionRepository.save(transaction);
+	}
+
+	@Transactional
+	public void denyTransaction(Transaction transaction) {
+		List<Order> orders = transaction.getOrders();
+
+		orders.forEach(order -> {
+			productService.returnBlockedProductQuantity(order.getProduct().getId(), (short) order.getQuantity());
+		});
+
+		transaction.setStatus(OrderStatus.COMPRA_CANCELADA);
+	}
+
+	public void requestTrade(Long id) {
+		Client client = clientService.getAuthenticatedClient();
+		Transaction transaction = transactionRepository.findByClientAndIdAndStatus(client, id, OrderStatus.ENTREGUE)
+			.orElseThrow(() -> new EntityNotFoundException("Transação não encontrada"));
+		List<Order> orders = new ArrayList<>(transaction.getOrders());
+		for (Order order : orders) {
+			orderService.tradeOrder(order.getId(), (short) order.getQuantity());
+		}
+	}
+
 }

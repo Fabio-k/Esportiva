@@ -18,32 +18,33 @@ import java.util.List;
 @Setter
 @Table(name = "administrador")
 public class Admin implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "adm_id")
-    private Long id;
 
-    @NotNull
-    @Column(name = "adm_nome")
-    private String name;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "adm_id")
+	private Long id;
 
-    @NotNull
-    @Column(name = "adm_email")
-    private String email;
+	@NotNull
+	@Column(name = "adm_nome")
+	private String name;
 
+	@NotNull
+	@Column(name = "adm_email")
+	private String email;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+	}
 
-    @Override
-    public String getPassword() {
-        return "";
-    }
+	@Override
+	public String getPassword() {
+		return "";
+	}
 
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+
 }

@@ -9,7 +9,9 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-    List<Notification> findAllByClientOrderByCreatedAtDesc(Client client);
 
-    List<Notification> findAllByIdInAndClientId(List<Long> ids, Long clientId);
+	List<Notification> findAllByClientOrderByCreatedAtDesc(Client client);
+
+	List<Notification> findAllByIdInAndClientId(List<Long> ids, Long clientId);
+
 }

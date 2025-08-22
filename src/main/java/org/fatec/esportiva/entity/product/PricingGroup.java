@@ -18,20 +18,21 @@ import java.math.BigDecimal;
 @Table(name = "grupo_precificacao")
 public class PricingGroup {
 
-    @Id
-    @Column(name = "grp_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@Column(name = "grp_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @NotNull
-    @Column(name = "grp_nome")
-    private String name;
+	@NotNull
+	@Column(name = "grp_nome")
+	private String name;
 
-    @NotNull
-    @Column(name = "grp_margem_lucro", precision = 10, scale = 2)
-    private BigDecimal profitMargin;
+	@NotNull
+	@Column(name = "grp_margem_lucro", precision = 10, scale = 2)
+	private BigDecimal profitMargin;
 
-    @Default
-    @OneToMany(mappedBy = "pricingGroup", cascade = CascadeType.ALL)
-    private List<Product> products = new ArrayList<>();
+	@Default
+	@OneToMany(mappedBy = "pricingGroup", cascade = CascadeType.ALL)
+	private List<Product> products = new ArrayList<>();
+
 }

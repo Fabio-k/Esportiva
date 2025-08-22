@@ -25,156 +25,172 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class ClientService {
-    private final AddressService addressService;
-    private final ClientRepository clientRepository;
-    private final CreditCardService creditCardService;
-    private final ExchangeVoucherService exchangeVoucherService;
-    private final AuthService authService;
-    private final CurrencyService currencyService;
-    private final FreightService freightService;
-    private final CartMapper cartMapper;
 
-    @Transactional
-    public Client save(ClientDto clientDto) {
-        Client client = ClientMapper.toUser(clientDto);
-        client.setAddresses(addressService.createAddresses(client, clientDto.getAddresses()));
-        client.setCreditCards(creditCardService.createCreditCards(client, clientDto.getCreditCards()));
-        client.setStatus(UserStatus.ATIVO);
+	private final AddressService addressService;
 
-        return clientRepository.save(client);
-    }
+	private final ClientRepository clientRepository;
 
-    @Transactional
-    public Client update(Long id, ClientDto userDto) {
-        Client existingUser = this.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        existingUser.setName(userDto.getName());
-        existingUser.setEmail(userDto.getEmail());
-        existingUser.setCpf(userDto.getCpf());
-        existingUser.setGender(userDto.getGender());
-        existingUser.setStatus(userDto.getStatus());
-        existingUser.setDateBirth(userDto.getDateBirth());
-        existingUser.setTelephoneType(userDto.getTelephoneType());
-        existingUser.setTelephone(userDto.getTelephone());
+	private final CreditCardService creditCardService;
 
-        List<Address> updatedAddresses = addressService.updateOrCreateAddress(existingUser, userDto.getAddresses());
-        List<CreditCard> updatedCreditCards = creditCardService.updateOrCreateCreditCards(existingUser,
-                userDto.getCreditCards());
-        List<ExchangeVoucher> updatedExchangeVoucher = exchangeVoucherService
-                .updateOrCreateExchangeVoucher(existingUser, userDto.getExchangeVoucherDtos());
+	private final ExchangeVoucherService exchangeVoucherService;
 
-        existingUser.getAddresses().clear();
-        existingUser.getAddresses().addAll(updatedAddresses);
+	private final AuthService authService;
 
-        existingUser.getCreditCards().clear();
-        existingUser.getCreditCards().addAll(updatedCreditCards);
+	private final CurrencyService currencyService;
 
-        existingUser.getExchangeVouchers().clear();
-        existingUser.getExchangeVouchers().addAll(updatedExchangeVoucher);
+	private final FreightService freightService;
 
-        return clientRepository.save(existingUser);
-    }
+	private final CartMapper cartMapper;
 
-    public List<ClientDto> getClients(String name, String email, String cpf, UserStatus status, Gender gender) {
-        String formattedName = normalize(name) == null ? null : "%" + name + "%";
-        String formattedEmail = normalize(email) == null ? null : "%" + email + "%";
-        List<ClientDto> clients = clientRepository
-                .findWithFilter(formattedName, formattedEmail, normalize(cpf), status, gender).stream()
-                .map(ClientMapper::toUserDto).toList();
-        return clients;
-    }
+	@Transactional
+	public Client save(ClientDto clientDto) {
+		Client client = ClientMapper.toUser(clientDto);
+		client.setAddresses(addressService.createAddresses(client, clientDto.getAddresses()));
+		client.setCreditCards(creditCardService.createCreditCards(client, clientDto.getCreditCards()));
+		client.setStatus(UserStatus.ATIVO);
 
-    public Client findClient(Long id) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        return client;
-    }
+		return clientRepository.save(client);
+	}
 
-    public Client getAuthenticatedClient(){
-        UserDetails userDetails = authService.getAuthenticatedUser();
-        return clientRepository.findClientByEmail(userDetails.getUsername()).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-    }
+	@Transactional
+	public Client update(Long id, ClientDto userDto) {
+		Client existingUser = this.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		existingUser.setName(userDto.getName());
+		existingUser.setEmail(userDto.getEmail());
+		existingUser.setCpf(userDto.getCpf());
+		existingUser.setGender(userDto.getGender());
+		existingUser.setStatus(userDto.getStatus());
+		existingUser.setDateBirth(userDto.getDateBirth());
+		existingUser.setTelephoneType(userDto.getTelephoneType());
+		existingUser.setTelephone(userDto.getTelephone());
 
-    public Boolean isClientAuthenticated(){
-        UserDetails userDetails = authService.getAuthenticatedUserOrReturnNull();
-        if(userDetails == null) return false;
-        Optional<Client> optionalClient = clientRepository.findClientByEmail(userDetails.getUsername());
-        return optionalClient.isPresent();
-    }
+		List<Address> updatedAddresses = addressService.updateOrCreateAddress(existingUser, userDto.getAddresses());
+		List<CreditCard> updatedCreditCards = creditCardService.updateOrCreateCreditCards(existingUser,
+				userDto.getCreditCards());
+		List<ExchangeVoucher> updatedExchangeVoucher = exchangeVoucherService
+			.updateOrCreateExchangeVoucher(existingUser, userDto.getExchangeVoucherDtos());
 
-    public Optional<Client> findById(Long id) {
-        return clientRepository.findById(id);
-    }
+		existingUser.getAddresses().clear();
+		existingUser.getAddresses().addAll(updatedAddresses);
 
-    public CartResponseDto getCart(){
-        Cart cart = getAuthenticatedClient().getCart();
+		existingUser.getCreditCards().clear();
+		existingUser.getCreditCards().addAll(updatedCreditCards);
 
-        return cartMapper.toCartResponseDto(cart);
-    }
+		existingUser.getExchangeVouchers().clear();
+		existingUser.getExchangeVouchers().addAll(updatedExchangeVoucher);
 
-    public List<ExchangeVoucherResponseDto> getClientVouchers(){
-        List<ExchangeVoucher> validExchangeVouchers = exchangeVoucherService.findAllValidExchangeVouchersByClientId(getAuthenticatedClient().getId());
-        return  validExchangeVouchers.stream()
-                .map(voucher -> ExchangeVoucherMapper.toExchangeVoucherResponseDto(voucher, currencyService.format(voucher.getValue())))
-                .toList();
-    }
+		return clientRepository.save(existingUser);
+	}
 
-    public List<AddressResponseDto> getClientAddresses(){
-        return getAuthenticatedClient().getAddresses().stream()
-                .map(address -> {
-                    BigDecimal freight = freightService.calculate(address.getCep().getState(), getCart().items());
-                    return AddressMapper.toAddressDtoResponse(address, freight, currencyService.format(freight));
-                })
-                .toList();
-    }
+	public List<ClientDto> getClients(String name, String email, String cpf, UserStatus status, Gender gender) {
+		String formattedName = normalize(name) == null ? null : "%" + name + "%";
+		String formattedEmail = normalize(email) == null ? null : "%" + email + "%";
+		List<ClientDto> clients = clientRepository
+			.findWithFilter(formattedName, formattedEmail, normalize(cpf), status, gender)
+			.stream()
+			.map(ClientMapper::toUserDto)
+			.toList();
+		return clients;
+	}
 
-    public List<CartItemResponseDto> getClientCartItems(){
-        return getAuthenticatedClient().getCart().getCartItems()
-                .stream().map(CartItemMapper::toCartItemResponseDto).toList();
-    }
+	public Client findClient(Long id) {
+		Client client = clientRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		return client;
+	}
 
-    public List<CreditCardDto> getClientCreditCards() {
-        return getAuthenticatedClient().getCreditCards().stream()
-                .map(CreditCardMapper::toCreditCardDto).toList();
-    }
+	public Client getAuthenticatedClient() {
+		UserDetails userDetails = authService.getAuthenticatedUser();
+		return clientRepository.findClientByEmail(userDetails.getUsername())
+			.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+	}
 
-    public void deleteClient(Client user) {
-        clientRepository.delete(user);
-    }
+	public Boolean isClientAuthenticated() {
+		UserDetails userDetails = authService.getAuthenticatedUserOrReturnNull();
+		if (userDetails == null)
+			return false;
+		Optional<Client> optionalClient = clientRepository.findClientByEmail(userDetails.getUsername());
+		return optionalClient.isPresent();
+	}
 
-    /**
-     * Obtém todos os produtos do cliente que se enquadrem no order.isInDeliveryProcess
-     * @return map K: nome do produto V: quantidade do produto que foi adiquirida
-     */
-    public Map<String, Integer> getClientHistory(){
-        Map<String, Integer> productHistory = new HashMap<>();
-        List<Order> orders = getClientOrders();
+	public Optional<Client> findById(Long id) {
+		return clientRepository.findById(id);
+	}
 
-        for(Order order : orders){
-            if(!order.isInDeliveryProcess()) continue;
-            String productName = order.getProduct().getName();
-            Integer productQuantity = order.getQuantity();
-            productHistory.put(productName, productHistory.getOrDefault(productName, 0) + productQuantity);
-        }
+	public CartResponseDto getCart() {
+		Cart cart = getAuthenticatedClient().getCart();
 
-        return productHistory;
-    }
+		return cartMapper.toCartResponseDto(cart);
+	}
 
-    public List<Product> getClientProducts(){
-        List<Product> products = new ArrayList<>();
-        List<Order> orders = getClientOrders();
+	public List<ExchangeVoucherResponseDto> getClientVouchers() {
+		List<ExchangeVoucher> validExchangeVouchers = exchangeVoucherService
+			.findAllValidExchangeVouchersByClientId(getAuthenticatedClient().getId());
+		return validExchangeVouchers.stream()
+			.map(voucher -> ExchangeVoucherMapper.toExchangeVoucherResponseDto(voucher,
+					currencyService.format(voucher.getValue())))
+			.toList();
+	}
 
-        for(Order order : orders){
-            products.add(order.getProduct());
-        }
-        return products;
-    }
+	public List<AddressResponseDto> getClientAddresses() {
+		return getAuthenticatedClient().getAddresses().stream().map(address -> {
+			BigDecimal freight = freightService.calculate(address.getCep().getState(), getCart().items());
+			return AddressMapper.toAddressDtoResponse(address, freight, currencyService.format(freight));
+		}).toList();
+	}
 
-    private List<Order> getClientOrders(){
-        List<Order> orders = new ArrayList<>();
-        getAuthenticatedClient().getTransactions().forEach(transaction -> orders.addAll(transaction.getOrders()));
-        return orders;
-    }
+	public List<CartItemResponseDto> getClientCartItems() {
+		return getAuthenticatedClient().getCart()
+			.getCartItems()
+			.stream()
+			.map(CartItemMapper::toCartItemResponseDto)
+			.toList();
+	}
 
-    private String normalize(String value) {
-        return (value == null || value.trim().isEmpty()) ? null : value;
-    }
+	public List<CreditCardDto> getClientCreditCards() {
+		return getAuthenticatedClient().getCreditCards().stream().map(CreditCardMapper::toCreditCardDto).toList();
+	}
+
+	public void deleteClient(Client user) {
+		clientRepository.delete(user);
+	}
+
+	/**
+	 * Obtém todos os produtos do cliente que se enquadrem no order.isInDeliveryProcess
+	 * @return map K: nome do produto V: quantidade do produto que foi adiquirida
+	 */
+	public Map<String, Integer> getClientHistory() {
+		Map<String, Integer> productHistory = new HashMap<>();
+		List<Order> orders = getClientOrders();
+
+		for (Order order : orders) {
+			if (!order.isInDeliveryProcess())
+				continue;
+			String productName = order.getProduct().getName();
+			Integer productQuantity = order.getQuantity();
+			productHistory.put(productName, productHistory.getOrDefault(productName, 0) + productQuantity);
+		}
+
+		return productHistory;
+	}
+
+	public List<Product> getClientProducts() {
+		List<Product> products = new ArrayList<>();
+		List<Order> orders = getClientOrders();
+
+		for (Order order : orders) {
+			products.add(order.getProduct());
+		}
+		return products;
+	}
+
+	private List<Order> getClientOrders() {
+		List<Order> orders = new ArrayList<>();
+		getAuthenticatedClient().getTransactions().forEach(transaction -> orders.addAll(transaction.getOrders()));
+		return orders;
+	}
+
+	private String normalize(String value) {
+		return (value == null || value.trim().isEmpty()) ? null : value;
+	}
+
 }

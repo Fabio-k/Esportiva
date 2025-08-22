@@ -11,47 +11,50 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
 
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-    }
+	private WebDriver driver;
 
-    public void login(String userName) {
-        // Encontra as opções e cria um objeto desse tipo
-        driver.get("http://localhost:8080/login");
-        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("users")));
-        Select select = new Select(dropdown);
+	private WebDriverWait wait;
 
-        // Seleciona pelo texto que está visível nas opções
-        select.selectByVisibleText(userName);
+	public LoginPage(WebDriver driver) {
+		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+	}
 
-        // Acha o botão e clica nele
-        WebElement submitButton = driver.findElement(By.id("submitButton"));
-        submitButton.click();
+	public void login(String userName) {
+		// Encontra as opções e cria um objeto desse tipo
+		driver.get("http://localhost:8080/login");
+		WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("users")));
+		Select select = new Select(dropdown);
 
-        // Espera a nova página ser carregada, quando o botão fica 'inválido'
-        wait.until(ExpectedConditions.stalenessOf(submitButton));
-    }
+		// Seleciona pelo texto que está visível nas opções
+		select.selectByVisibleText(userName);
 
-    public Boolean getErrorMessage() {
-        try {
-            WebElement erro = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("error")));
+		// Acha o botão e clica nele
+		WebElement submitButton = driver.findElement(By.id("submitButton"));
+		submitButton.click();
 
-            // Verifique a mensagem de erro da seleção de usuários
-            if (erro.getText().equals("Escolha um usuário")) {
-                return true;
-            } else {
-                return false;
-            }
+		// Espera a nova página ser carregada, quando o botão fica 'inválido'
+		wait.until(ExpectedConditions.stalenessOf(submitButton));
+	}
 
-        }
-        // Se o elemento não aparecer, o Selenium dá um Timeout
-        catch (TimeoutException e) {
-            return false;
-        }
-    }
+	public Boolean getErrorMessage() {
+		try {
+			WebElement erro = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("error")));
+
+			// Verifique a mensagem de erro da seleção de usuários
+			if (erro.getText().equals("Escolha um usuário")) {
+				return true;
+			}
+			else {
+				return false;
+			}
+
+		}
+		// Se o elemento não aparecer, o Selenium dá um Timeout
+		catch (TimeoutException e) {
+			return false;
+		}
+	}
 
 }

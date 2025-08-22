@@ -1,16 +1,17 @@
 package org.fatec.esportiva.entity.enums;
 
 public enum UserStatus {
-    ATIVO("Ativo"),
-    INATIVO("Inativo");
 
-    private final String displayName;
+	ATIVO("Ativo"), INATIVO("Inativo");
 
-    UserStatus(String displayName){
-        this.displayName = displayName;
-    }
+	private final String displayName;
 
-    public String getDisplayName() {
-        return displayName;
-    }
+	UserStatus(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
 }
