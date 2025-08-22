@@ -40,7 +40,7 @@ public class Order implements totalPrice {
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "ped_pro_id")
-	private totalPrice product;
+	private Product product;
 
 	public Boolean hasInsufficientQuantity(int tradedQuantity) {
 		return this.quantity < tradedQuantity;
