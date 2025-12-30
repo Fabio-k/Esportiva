@@ -1,4 +1,15 @@
 services:
+  esportiva:
+    build: .
+    container_name: esportiva_app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: unless-stopped
+    mem_limit: 1200m
+    depends_on:
+      - database
   database:
     image: postgres:16
     volumes:
@@ -10,5 +21,6 @@ services:
       - POSTGRES_DB=esportiva_db
     ports:
       - 5432:5432
+    restart: unless-stopped
 volumes:
   pgdata:
