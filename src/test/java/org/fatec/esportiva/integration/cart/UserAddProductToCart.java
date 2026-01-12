@@ -1,7 +1,7 @@
 package org.fatec.esportiva.integration.cart;
 
 import org.fatec.esportiva.entity.product.PricingGroup;
-import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.inventory.domain.Product;
 import org.fatec.esportiva.entity.product.ProductCategory;
 import org.fatec.esportiva.entity.product.ProductStatus;
 import org.fatec.esportiva.integration.Integration;

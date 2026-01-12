@@ -7,7 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.fatec.esportiva.dto.request.ProductCategoryDto;
 import org.fatec.esportiva.dto.response.AdminProductResponseDto;
 import org.fatec.esportiva.dto.response.ProductCategoryResponseDto;
-import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.inventory.domain.Product;
 import org.fatec.esportiva.entity.product.ProductCategory;
 import org.fatec.esportiva.entity.product.ProductStatus;
 import org.fatec.esportiva.exception.ApiException;

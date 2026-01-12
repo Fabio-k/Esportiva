@@ -1,6 +1,6 @@
 package org.fatec.esportiva.utils;
 
-import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.inventory.domain.Product;
 import org.fatec.esportiva.entity.product.ProductCategory;
 
 import java.util.List;

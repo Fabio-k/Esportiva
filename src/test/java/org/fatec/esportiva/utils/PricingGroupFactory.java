@@ -1,7 +1,7 @@
 package org.fatec.esportiva.utils;
 
 import org.fatec.esportiva.entity.product.PricingGroup;
-import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.inventory.domain.Product;
 
 import java.math.BigDecimal;
 import java.util.List;

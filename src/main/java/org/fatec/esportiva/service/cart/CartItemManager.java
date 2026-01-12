@@ -3,7 +3,7 @@ package org.fatec.esportiva.service.cart;
 import org.fatec.esportiva.dto.request.CartItemRequestDto;
 import org.fatec.esportiva.entity.cart.Cart;
 import org.fatec.esportiva.entity.cart.CartItem;
-import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.inventory.domain.Product;
 import org.fatec.esportiva.exception.ApiException;
 import org.fatec.esportiva.service.ProductService;
 import org.springframework.stereotype.Component;

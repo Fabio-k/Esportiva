@@ -5,7 +5,7 @@ import org.fatec.esportiva.entity.Order;
 import org.fatec.esportiva.entity.Transaction;
 import org.fatec.esportiva.entity.address.Cep;
 import org.fatec.esportiva.entity.enums.OrderStatus;
-import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.inventory.domain.Product;
 import org.fatec.esportiva.repository.*;
 import org.fatec.esportiva.utils.*;
 import org.junit.jupiter.api.Test;

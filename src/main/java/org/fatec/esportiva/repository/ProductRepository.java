@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.fatec.esportiva.entity.product.Product;
+import org.fatec.esportiva.inventory.domain.Product;
 import org.fatec.esportiva.entity.product.ProductStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

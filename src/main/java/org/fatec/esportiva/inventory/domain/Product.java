@@ -1,4 +1,4 @@
-package org.fatec.esportiva.entity.product;
+package org.fatec.esportiva.inventory.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,11 +11,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fatec.esportiva.entity.product.PricingGroup;
+import org.fatec.esportiva.entity.product.ProductCategory;
+import org.fatec.esportiva.entity.product.ProductStatus;
 import org.fatec.esportiva.entity.totalPrice;
 import org.fatec.esportiva.listeners.LogListener;
 
 @Entity
-@EntityListeners(LogListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -25,9 +27,8 @@ import org.fatec.esportiva.listeners.LogListener;
 public class Product implements totalPrice {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "pro_id")
-	private Long id;
+	private ProductId id;
 
 	@NotNull
 	@Column(name = "pro_nome_produto")

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.Builder.Default;
+import org.fatec.esportiva.inventory.domain.Product;
 
 @Entity
 @AllArgsConstructor
